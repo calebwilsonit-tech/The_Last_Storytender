@@ -29,23 +29,51 @@ func _init() -> void:
 	blurb = "Chunky cel-shaded characters with heavy ink outlines, from the reference sheets."
 
 func kinds() -> Array:
-	return ["storytender"]
+	return ["storytender", "garrick", "pip", "maud", "bare", "mite", "slug", "dangler", "censor", "ellipsis"]
 
 func draw_character(ci: CanvasItem, kind: String, ctx: Dictionary) -> bool:
 	match kind:
 		"storytender":
 			_storytender(ci, ctx)
 			return true
+		"garrick", "pip", "maud":
+			_person(ci, kind, ctx)
+			return true
+		"bare", "mite", "slug", "dangler", "censor", "ellipsis":
+			_enemy(ci, kind, ctx)
+			return true
 	return false
+
+func _enemy(ci: CanvasItem, kind: String, ctx: Dictionary) -> void:
+	_z = float(ctx.get("scale", 1.0))
+	_origin = ctx.get("origin", Vector2.ZERO)
+	_mirror = float(ctx.get("face", 1.0))
+	var r := K.Rec.new()
+	r.inner = 1.0
+	r.outer = 1.9
+	CelEnemies.build(r, kind, ctx)
+	_flush(ci, r)
+	_mirror = 1.0
+
+func _person(ci: CanvasItem, kind: String, ctx: Dictionary) -> void:
+	var sp: Dictionary = CelPeople.spec(kind)
+	_z = float(ctx.get("scale", 1.0)) * float(sp.get("k", 1.0))
+	_origin = ctx.get("origin", Vector2.ZERO)
+	var r := K.Rec.new()
+	r.inner = 1.0
+	r.outer = 1.9
+	CelPeople.build(r, sp, _phi(ctx), float(ctx.get("t", 0.0)), ctx)
+	_flush(ci, r)
 
 # --- transform plumbing ---------------------------------------------------------------------------
 var _z := 1.0
 var _origin := Vector2.ZERO
+var _mirror := 1.0            # -1 draws a right-facing figure facing left
 
 func _apply(ci: CanvasItem, xf: Dictionary) -> void:
 	var pv: Vector2 = xf["pivot"]
 	var sx: float = xf.get("sx", 1.0)
-	ci.draw_set_transform(_origin + pv * _z, float(xf["rot"]), Vector2(sx * _z, _z))
+	ci.draw_set_transform(_origin + Vector2(pv.x * _mirror, pv.y) * _z, float(xf["rot"]) * _mirror, Vector2(sx * _mirror * _z, _z))
 
 func _flush(ci: CanvasItem, r: K.Rec) -> void:
 	r.flush(ci, func(xf): _apply(ci, xf))

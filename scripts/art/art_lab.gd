@@ -70,6 +70,25 @@ func _cells() -> Array:
 			out.append(["sword swing", "storytender", _m(base, {"dir": Vector2(1, 0.4).normalized(), "swing": 0.5, "weapon": "sword"})])
 			out.append(["quill, S", "storytender", _m(base, {"dir": Vector2(0, 1), "weapon": "quill"})])
 			out.append(["crumpled", "storytender", _m(base, {"crumpled": true})])
+		"friends":
+			var base2 := {"restored": 1.0}
+			for who in ["garrick", "pip", "maud"]:
+				out.append([who + " S", who, _m(base2, {"dir": Vector2(0, 1)})])
+				out.append([who + " SE", who, _m(base2, {"dir": Vector2(1, 1).normalized()})])
+				out.append([who + " W", who, _m(base2, {"dir": Vector2(-1, 0)})])
+				out.append([who + " N", who, _m(base2, {"dir": Vector2(0, -1)})])
+			out.append(["garrick missing", "garrick", _m(base2, {"dir": Vector2(0, 1), "restored": 0.0})])
+			out.append(["garrick half", "garrick", _m(base2, {"dir": Vector2(0, 1), "restored": 0.5})])
+			out.append(["garrick tearful", "garrick", _m(base2, {"dir": Vector2(0, 1), "tearful": true})])
+			out.append(["maud missing", "maud", _m(base2, {"dir": Vector2(0, 1), "restored": 0.0})])
+		"errors":
+			for k in ["bare", "mite", "slug", "dangler", "censor", "ellipsis"]:
+				out.append([k, k, {"face": 1.0, "proof": 0.0, "state": "idle"}])
+			for k in ["bare", "slug", "dangler"]:
+				out.append([k + " proofread", k, {"face": 1.0, "proof": 1.0, "state": "idle"}])
+			out.append(["bare windup", "bare", {"face": 1.0, "proof": 0.0, "state": "windup"}])
+			out.append(["bare facing left", "bare", {"face": -1.0, "proof": 0.0, "state": "idle"}])
+			out.append(["mite hurt", "mite", {"face": 1.0, "flash": 0.2}])
 	return out
 
 func _m(a: Dictionary, b: Dictionary) -> Dictionary:

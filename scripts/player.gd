@@ -64,6 +64,7 @@ var _stun := 0.0
 var _trail: Array[Dictionary] = []   # dash afterimages {pos, age}
 
 func _ready() -> void:
+	add_to_group("player")
 	ink = max_ink
 	ink_changed.emit(ink, max_ink)
 	lantern_changed.emit(lantern_energy, LANTERN_MAX)

@@ -53,6 +53,69 @@ func _draw() -> void:
 		draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
 	draw_set_transform(Vector2(0, breathe * 0.3 - lift), 0.0, Vector2(s, s))
 
+	var art := Skins.art()
+	var drawn := false
+	if art != null:
+		var ctx := {"t": _t, "restored": r, "tearful": tearful, "dir": _look_dir(), "origin": Vector2(0, breathe * 0.3 - lift), "scale": 1.0}
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		drawn = art.draw_character(self, art_key(), ctx)
+		draw_set_transform(Vector2(0, breathe * 0.3 - lift), 0.0, Vector2(s, s))
+	if not drawn:
+		_draw_body_original(r, pen, s, breathe)
+	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
+
+	# Missing: television-static speckle across the silhouette, purple glitch tears,
+	# and a swirl of corruption circling the figure.
+	if r < 0.98:
+		draw_set_transform(Vector2(0, breathe * 0.3 - lift), 0.0, Vector2(s, s))
+		var m := 1.0 - r
+		var rng := RandomNumberGenerator.new()
+		rng.seed = int(_t * 9.0) * 7919 + int(_seed * 1000.0)
+		for i in 90:
+			var p := Vector2(rng.randf_range(-17.0, 17.0), rng.randf_range(-64.0, 0.0))
+			if not _in_body(p):
+				continue
+			var v := rng.randf()
+			var col := Color.WHITE if v > 0.5 else (Palette.GLITCH if v > 0.38 else Color.BLACK)
+			draw_rect(Rect2(p, Vector2(2.2, 2.2)), Color(col, m * 0.85))
+		for j in 2:
+			if rng.randf() > 0.45:
+				var y := rng.randf_range(-60.0, -4.0)
+				draw_rect(Rect2(-18.0 + rng.randf_range(-6.0, 6.0), y, rng.randf_range(10.0, 26.0), 2.0), Color(Palette.GLITCH, m * 0.9))
+		for a in 3:
+			var ang := _t * 1.4 + a * TAU / 3.0
+			draw_arc(Vector2(0, -30), 26.0 + a * 4.0, ang, ang + 1.3, 10, Color(Palette.GLITCH, m * 0.55), 2.0, true)
+
+	# Lorem ipsum: placeholder words drift up off the head until they're written in.
+	if r < 0.98:
+		draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
+		var font := ThemeDB.fallback_font
+		var idx := int(_t * 0.9 + _seed * 10.0) % Story.LOREM.size()
+		var rise := fmod(_t * 0.9 + _seed * 10.0, 1.0)
+		var a := (1.0 - r) * (1.0 - rise) * 0.9
+		draw_string(font, Vector2(-22, -82 - rise * 14.0), Story.LOREM[idx], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color(Palette.PENCIL.darkened(0.2), a))
+
+
+## The person this NPC is, for art styles: garrick / pip / maud, or a generic kind.
+func art_key() -> String:
+	if npc_id != "":
+		return npc_id
+	return {Kind.BLACKSMITH: "garrick", Kind.CHILD: "pip", Kind.BAKER: "maud"}.get(kind, "garrick")
+
+var _face_cur := Vector2(0, 1)
+
+## People turn to look at the Storytender when close, otherwise they face the camera.
+func _look_dir() -> Vector2:
+	var want := Vector2(0, 1)
+	var pl := get_tree().get_first_node_in_group("player") if is_inside_tree() else null
+	if pl != null and pl is Node2D:
+		var d: Vector2 = (pl as Node2D).global_position - global_position
+		if d.length() < 260.0 and d.length() > 4.0:
+			want = d.normalized()
+	_face_cur = _face_cur.lerp(want, 0.08).normalized() if _face_cur.lerp(want, 0.08).length() > 0.05 else want
+	return _face_cur
+
+func _draw_body_original(r: float, pen: Color, s: float, breathe: float) -> void:
 	var shirt := Palette.RUST
 	var skin := Color("e9b58f")
 	match kind:
@@ -106,35 +169,3 @@ func _draw() -> void:
 		var drip := fmod(_t * 0.5, 1.0)
 		draw_circle(head_c + Vector2(6.5, 4.0 + drip * 14.0), 2.3 - drip, Color(Palette.TEAR, 0.95 * (1.0 - drip * 0.6)))
 		draw_line(head_c + Vector2(6.5, 2.0), head_c + Vector2(6.5, 4.0 + drip * 14.0), Color(Palette.TEAR, 0.5), 1.4)
-	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
-
-	# Missing: television-static speckle across the silhouette, purple glitch tears,
-	# and a swirl of corruption circling the figure.
-	if r < 0.98:
-		draw_set_transform(Vector2(0, breathe * 0.3 - lift), 0.0, Vector2(s, s))
-		var m := 1.0 - r
-		var rng := RandomNumberGenerator.new()
-		rng.seed = int(_t * 9.0) * 7919 + int(_seed * 1000.0)
-		for i in 90:
-			var p := Vector2(rng.randf_range(-17.0, 17.0), rng.randf_range(-64.0, 0.0))
-			if not _in_body(p):
-				continue
-			var v := rng.randf()
-			var col := Color.WHITE if v > 0.5 else (Palette.GLITCH if v > 0.38 else Color.BLACK)
-			draw_rect(Rect2(p, Vector2(2.2, 2.2)), Color(col, m * 0.85))
-		for j in 2:
-			if rng.randf() > 0.45:
-				var y := rng.randf_range(-60.0, -4.0)
-				draw_rect(Rect2(-18.0 + rng.randf_range(-6.0, 6.0), y, rng.randf_range(10.0, 26.0), 2.0), Color(Palette.GLITCH, m * 0.9))
-		for a in 3:
-			var ang := _t * 1.4 + a * TAU / 3.0
-			draw_arc(Vector2(0, -30), 26.0 + a * 4.0, ang, ang + 1.3, 10, Color(Palette.GLITCH, m * 0.55), 2.0, true)
-
-	# Lorem ipsum: placeholder words drift up off the head until they're written in.
-	if r < 0.98:
-		draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
-		var font := ThemeDB.fallback_font
-		var idx := int(_t * 0.9 + _seed * 10.0) % Story.LOREM.size()
-		var rise := fmod(_t * 0.9 + _seed * 10.0, 1.0)
-		var a := (1.0 - r) * (1.0 - rise) * 0.9
-		draw_string(font, Vector2(-22, -82 - rise * 14.0), Story.LOREM[idx], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color(Palette.PENCIL.darkened(0.2), a))

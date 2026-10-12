@@ -241,6 +241,55 @@ static func draw_body(e: Enemy) -> void:
 		Enemy.Kind.CENSOR: _draw_censor(e)
 		Enemy.Kind.ELLIPSIS: _draw_ellipsis(e)
 
+## Everything that is not the body: word labels, bolts, the censor's bar, telegraph rings. Used when an art
+## style draws the bodies, so the gameplay marks stay identical in every style.
+static func draw_overlay(e: Enemy) -> void:
+	match e.kind:
+		Enemy.Kind.BARE:
+			e.draw_bare_labels()
+		Enemy.Kind.SLUG:
+			_draw_word_pair(e)
+		Enemy.Kind.DANGLER:
+			var t := e._t
+			for b: Dictionary in e.x["bolts"]:
+				var off: Vector2 = Vector2(b["pos"]) - e.position
+				var bp := Vector2(off.x, off.y)
+				e.draw_circle(bp, 9.0, Color(1.0, 0.45, 0.35, 0.3))
+				var font := ThemeDB.get_default_theme().default_font
+				e.draw_string_outline(font, bp + Vector2(-14, 4), "ing", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 15, 5, Color(Palette.OUTLINE, 0.9))
+				e.draw_string(font, bp + Vector2(-14, 4), "ing", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 15, Color("ffb9a8"))
+			_draw_word_pair(e)
+		Enemy.Kind.CENSOR:
+			var t2 := e._t
+			var bob := sin(t2 * 2.0) * 1.5
+			var sgn := 1.0 if e._facing.x >= 0.0 else -1.0
+			var bar_up := float(e.x["bar_t"]) <= 0.0
+			var bw := 40.0 if bar_up else 8.0
+			if bar_up or fmod(t2 * 6.0, 1.0) < 0.5 or float(e.x["bar_t"]) > 1.2:
+				var rect := Rect2(Vector2(4.0 * sgn - bw * 0.5, -58.0 + bob), Vector2(bw, 16.0))
+				e.draw_rect(rect, Color(0.02, 0.02, 0.04))
+				e.draw_rect(rect, Color("e4dcf7"), false, 2.0)
+			var font2 := ThemeDB.get_default_theme().default_font
+			if bar_up:
+				e.draw_string(font2, Vector2(-17, -46 + bob), "[CENSORED]", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 9, Color(1, 1, 1, 0.55))
+			var st := float(e.x["strip"])
+			if st > 0.05:
+				e.draw_arc(Vector2(0, -50 + bob), 22.0, -PI / 2.0, -PI / 2.0 + TAU * clampf(st / 1.1, 0.0, 1.0), 20, Palette.CYAN, 3.0, true)
+			if e._state == "windup":
+				e.draw_string(font2, Vector2(8, -88), "!", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 30, Color("ff6a5c"))
+		Enemy.Kind.ELLIPSIS:
+			var ph: String = e.x["phase"]
+			if ph == "gone":
+				var a := clampf(float(e.x["t"]) / 0.45, 0.0, 1.0)
+				for i in 3:
+					e.draw_circle(Vector2(-16 + i * 16, -16), 6.0, Color(1, 1, 1, 0.12 * a))
+			elif ph == "tele":
+				var k := 1.0 - clampf(float(e.x["t"]) / 0.6, 0.0, 1.0)
+				e.draw_set_transform(Vector2(0, -e.elev), 0.0, Vector2(1, 0.5))
+				e.draw_arc(Vector2.ZERO, 52.0, 0.0, TAU, 28, Color(1.0, 0.35, 0.3, 0.35 + 0.5 * k), 3.0, true)
+				e.draw_circle(Vector2.ZERO, 52.0 * k, Color(1.0, 0.35, 0.3, 0.15))
+				e.draw_set_transform(Vector2(0, -e.elev), 0.0, Vector2.ONE)
+
 ## Things that lie on the ground (the slug's trail) are drawn before the body.
 static func draw_ground(e: Enemy) -> void:
 	if e.kind == Enemy.Kind.SLUG:

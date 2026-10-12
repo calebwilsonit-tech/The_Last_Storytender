@@ -115,6 +115,7 @@ class Rec extends RefCounted:
 	var inner := 1.1
 	var outer := 2.2
 	var depth := 0.0           # painter's order: smaller = further from the camera
+	var out := Color("14111a")   # outline colour (ghostly graphite for people who are still missing)
 
 	func at(pivot: Vector2, rot: float, sx := 1.0) -> void:
 		xf = {"pivot": pivot, "rot": rot, "sx": sx}
@@ -125,6 +126,10 @@ class Rec extends RefCounted:
 	func piece(pts: PackedVector2Array, fill: Color, shade := 0.42, rim := true, flash := 0.0, outline := true, soft_corners := 0) -> void:
 		if soft_corners > 0:
 			pts = CelKit.soft(pts, soft_corners)
+		if Geometry2D.triangulate_polygon(pts).is_empty():
+			if OS.get_environment("ART_DEBUG") != "":
+				print("bad polygon ", fill, " ", pts)
+			return
 		parts.append({"pts": pts, "fill": fill, "shade": shade, "rim": rim, "flash": flash, "xf": xf, "outline": outline})
 		order.append(["part", parts.size() - 1, depth, order.size()])
 
@@ -145,7 +150,7 @@ class Rec extends RefCounted:
 				continue
 			apply_xf.call(p["xf"])
 			for bp in Geometry2D.offset_polygon(p["pts"], outer, Geometry2D.JOIN_ROUND):
-				ci.draw_colored_polygon(bp, OUT)
+				ci.draw_colored_polygon(bp, out)
 		order.sort_custom(func(a, b): return a[2] < b[2] or (a[2] == b[2] and a[3] < b[3]))
 		for o in order:
 			if o[0] == "part":
@@ -156,20 +161,22 @@ class Rec extends RefCounted:
 				ci.draw_colored_polygon(pts, base)
 				var shade: float = p["shade"]
 				if shade > 0.0:
+					# cel shadow: a crescent along the edges that face away from the light
 					var c := CelKit.centroid(pts)
-					var r := CelKit.radius_of(pts, c)
-					var n := -CelKit.LIGHT
-					var t := n.orthogonal()
-					var off := r * (0.5 - shade)
-					var half := PackedVector2Array([c + n * off + t * 400.0, c + n * off - t * 400.0, c + n * (off + 400.0) - t * 400.0, c + n * (off + 400.0) + t * 400.0])
-					for pr in Geometry2D.intersect_polygons(pts, half):
-						ci.draw_colored_polygon(pr, CelKit.shade_of(base))
+					var rr := CelKit.radius_of(pts, c)
+					var thick := clampf(rr * shade * 0.6, 1.2, 7.0)
+					var lifted := PackedVector2Array()
+					for q in pts:
+						lifted.append(q + CelKit.LIGHT * thick)
+					for pr in Geometry2D.clip_polygons(pts, lifted):
+						if not Geometry2D.is_polygon_clockwise(pr) or true:
+							ci.draw_colored_polygon(pr, CelKit.shade_of(base))
 				if p["rim"]:
 					CelKit._rim(ci, pts, CelKit.lit_of(base), inner)
 				if p["outline"]:
 					var loop := pts.duplicate()
 					loop.append(pts[0])
-					ci.draw_polyline(loop, Color(OUT, 0.9), inner, true)
+					ci.draw_polyline(loop, Color(out, 0.9), inner, true)
 			else:
 				var op: Dictionary = ops[o[1]]
 				apply_xf.call(op["xf"])

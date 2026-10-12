@@ -395,7 +395,14 @@ func _draw() -> void:
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))
 	EnemyKinds.draw_ground(self)
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
-	if kind == Kind.BARE:
+	var art := Skins.art()
+	var styled := false
+	if art != null and _dead_t < 0.0:
+		styled = art.draw_character(self, String(Kind.keys()[kind]).to_lower(), _art_ctx())
+		draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
+	if styled:
+		EnemyKinds.draw_overlay(self)
+	elif kind == Kind.BARE:
 		_draw_bare()
 	elif kind == Kind.MITE:
 		_draw_mite()
@@ -434,6 +441,33 @@ func _poly(pts: PackedVector2Array, fill: Color, w: float = 2.6) -> void:
 	var loop := pts.duplicate()
 	loop.append(pts[0])
 	draw_polyline(loop, Palette.OUTLINE, w, true)
+
+## What an art style needs to know to draw this Error.
+func _art_ctx() -> Dictionary:
+	var d := {
+		"t": _t, "state": _state, "face": _face, "proof": _proof, "friendly": friendly, "flash": _flash, "seed": _seed,
+		"origin": Vector2(0, -elev), "scale": 1.0, "hp": hp / maxf(max_hp, 0.001),
+	}
+	if x.has("phase"):
+		d["phase"] = x["phase"]
+	if x.has("pinned"):
+		d["pinned"] = float(x["pinned"]) > 0.0
+	if x.has("tele"):
+		d["tele"] = x["tele"]
+	return d
+
+## The Proofreader's marks over a Bare: the misspelling, and the correction fading in as light lands.
+func draw_bare_labels() -> void:
+	draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
+	var font := ThemeDB.get_default_theme().default_font
+	var word := "Bear" if friendly else "Bare"
+	var col := Palette.CYAN if friendly else Color("ff6a5c")
+	draw_string_outline(font, Vector2(-17, -86), word, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 17, 5, Color(Palette.OUTLINE, 0.8))
+	draw_string(font, Vector2(-17, -86), word, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 17, col)
+	if not friendly and _proof > 0.05:
+		draw_string_outline(font, Vector2(-17, -102), "Bear", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 17, 5, Color(Palette.OUTLINE, 0.8 * _proof))
+		draw_string(font, Vector2(-17, -102), "Bear", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 17, Color(Palette.CYAN, _proof))
+		draw_line(Vector2(-19, -92), Vector2(18, -92), Color("ff6a5c", _proof), 2.0)
 
 func _draw_bare() -> void:
 	var skin := Color("c9a89d")
