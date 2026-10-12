@@ -1,0 +1,53 @@
+class_name SideProofMap
+extends RefCounted
+## The Proof Room. 'm' floor  '#' plot hole  P start  E way out  x y z  redacted plaques  s t u  sentence stones  g gate  R redaction bar  k reward.
+
+const ROWS: Array[String] = [
+	"                                                            ",
+	"                                                            ",
+	"                                                            ",
+	"                      mmmmmm###mmmmmmm                      ",
+	"   mmmmmxmmmymmmzmm   mmmmmm###mmmmmmm   mmmmmmmmmmmmmmm    ",
+	"   mEmmmmmmmmmmmmmm   mmmmmm###mmmmmmm   mmmmmmmmmmmmmmm    ",
+	"   mmmmmmmmmmmmmmmm   mmmmmm###mmmmmmm   mmmmmmmmmmmmmmm    ",
+	"   mmmmmmmmmmmmmmmm   mmmmmm###mmmmmmm   mmmmmmmmmmmmmmm    ",
+	"   mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm    ",
+	"   mmPmmmmmmmmmmmmmmgmmmmmmmmmmmmmmmmmmRmmmmmmmmmmmmkmmm    ",
+	"   mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm    ",
+	"   mmmmmmmmmmmmmmmm   mmmmmm###mmmmmmm   mmmmmmmmmmmmmmm    ",
+	"   mmmmsmmmtmmmummm   mmmmmm###mmmmmmm   mmmmmmmmmmmmmmm    ",
+	"   mmmmmmmmmmmmmmmm   mmmmmm###mmmmmmm   mmmmmmmmmmmmmmm    ",
+	"   mmmmmmmmmmmmmmmm   mmmmmm###mmmmmmm   mmmmmmmmmmmmmmm    ",
+	"                      mmmmmm###mmmmmmm                      ",
+	"                                                            ",
+	"                                                            ",
+	"                                                            ",
+	"                                                            ",
+	"                                                            ",
+	"                                                            ",
+]
+
+const HEIGHTS: Array[String] = [
+	"                                                            ",
+	"                                                            ",
+	"                                                            ",
+	"                      0000000000000000                      ",
+	"   0000000000000000   0000000000000000   000000000000000    ",
+	"   0000000000000000   0000000000000000   000000000000000    ",
+	"   0000000000000000   0000000000000000   000000000000000    ",
+	"   0000000000000000   0000000000000000   000000000000000    ",
+	"   00000000000000000000000000000000000000000000000111110    ",
+	"   0000000000000000000000000000000000000000000000e111110    ",
+	"   00000000000000000000000000000000000000000000000111110    ",
+	"   0000000000000000   0000000000000000   000000000000000    ",
+	"   0000000000000000   0000000000000000   000000000000000    ",
+	"   0000000000000000   0000000000000000   000000000000000    ",
+	"   0000000000000000   0000000000000000   000000000000000    ",
+	"                      0000000000000000                      ",
+	"                                                            ",
+	"                                                            ",
+	"                                                            ",
+	"                                                            ",
+	"                                                            ",
+	"                                                            ",
+]

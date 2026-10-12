@@ -1,0 +1,53 @@
+class_name SideWeighingMap
+extends RefCounted
+## The Weighing Room. 'm' floor  '#' plot hole  P start  E way out  a..e f j  weighing plates  g h i  gates  k reward.
+
+const ROWS: Array[String] = [
+	"                                                                ",
+	"                                                                ",
+	"                                                                ",
+	"                                                                ",
+	"                  mmmmmmmmmmmmmm                                ",
+	"                  mmmmmmmmmmcmmm   mmmmm###mmmmmm               ",
+	"   mmmmmmmmmmmm   mmmmmmmmmmmmmm   mmmmm###mmmmmm   mmmmmmmmm   ",
+	"   mEmmmmmmmamm   mmmmmmmmmmmmmm   mmmmm###mmmmmm   mmmmmmmmm   ",
+	"   mmmmmmmmmmmm   mmmmmmmmmmmmmm   mmmmm###mmmmmm   mmmmmmmmm   ",
+	"   mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm   ",
+	"   mmPmmmmmmmmmmgmmmmmmmmemmmmmmmhmmmmfmmmmmmjmmmmimmmmmmmkmm   ",
+	"   mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm   ",
+	"   mmmbmmmmmmmm   mmmmmmmmmmmmmm   mmmmm###mmmmmm   mmmmmmmmm   ",
+	"   mmmmmmmmmmmm   mmmmmmmmmmmmmm   mmmmm###mmmmmm   mmmmmmmmm   ",
+	"   mmmmmmmmmmmm   mmmmmmmmmmmmmm   mmmmm###mmmmmm   mmmmmmmmm   ",
+	"                  mmmmdmmmmmmmmm   mmmmm###mmmmmm               ",
+	"                  mmmmmmmmmmmmmm                                ",
+	"                                                                ",
+	"                                                                ",
+	"                                                                ",
+	"                                                                ",
+	"                                                                ",
+]
+
+const HEIGHTS: Array[String] = [
+	"                                                                ",
+	"                                                                ",
+	"                                                                ",
+	"                                                                ",
+	"                  00000000111110                                ",
+	"                  00000000111110   00000000000000               ",
+	"   000000011110   00000000111110   00000000000000   000000000   ",
+	"   000000011110   0000000000n000   00000000000000   000000000   ",
+	"   000000011110   00000000000000   00000000000000   000000000   ",
+	"   00000000n0000000000000000000000000000000000000000000000000   ",
+	"   0000000000000000000000000000000000000000000000000000000000   ",
+	"   0000000000000000000000000000000000000000000000000000000000   ",
+	"   000000000000   00000000000000   00000000000000   000000000   ",
+	"   000000000000   0000s000000000   00000000000000   000000000   ",
+	"   000000000000   00111110000000   00000000000000   000000000   ",
+	"                  00111110000000   00000000000000               ",
+	"                  00111110000000                                ",
+	"                                                                ",
+	"                                                                ",
+	"                                                                ",
+	"                                                                ",
+	"                                                                ",
+]
