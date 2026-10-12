@@ -8,8 +8,8 @@ signal damaged(fraction: float)
 signal defeated
 signal unjammed
 
-var hp := 60.0
-var max_hp := 60.0
+var hp := 90.0
+var max_hp := 90.0
 var vulnerable := false
 var elev := 0.0
 var hit_r := 40.0

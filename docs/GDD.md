@@ -247,7 +247,7 @@ Thistledown's Editor. Unlocked when Garrick, Pip and Maud are all restored: a te
 **Signature verb: the Clipboard (cut / copy / paste).** No other NPC, memory or boss uses it.
 - He telegraphs a cut line (red dashes on the mat, about 3 s, 3.8 s on Story), then snips. Unpatched cells along the line become pits for about 11 s (8 s on Story) and the paper then heals. Each snip leaves clippings (max 4 on the mat).
 - Strike a clipping with the Quill (or press E) to put its shape on the clipboard (HUD). Aim and press **V** to paste it 96 px ahead as a taped patch (valid placement shows green, invalid red). A patch cannot be cut and lasts about 18 s (26 s on Story).
-- A cut line that crosses a patch **jams his shears** for 5.5 s (7 s on Story). Only while jammed can the Quill hurt him (60 hp). Nothing else damages him.
+- A cut line that crosses a patch **jams his shears** for 5.5 s (7 s on Story). Only while jammed can the Quill hurt him (90 hp). Nothing else damages him.
 - Phase 1: one thin line. Phase 2 (below 66%): width-2 lines plus two Mites. Phase 3 (below 33%): two lines at once plus Mites and a Bare.
 - Finale: Wick the tailor remembers; reward is the **Thimble** amulet (armor +0.08, dash cooldown -0.15), flag `scissor_done`, +60 Mnemosynth. The player returns to the square and the whole town is published (restoration wave radius 2600, region reads "Published Chapter").
 

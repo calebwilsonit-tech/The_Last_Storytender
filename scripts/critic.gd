@@ -23,6 +23,7 @@ var lift := 0.0
 var _t := 0.0
 var _cd := 3.0
 var _tele := 0.0
+var _volley := 0
 var _word: Dictionary = {}
 var _stun := 0.0
 var _flash := 0.0
@@ -83,8 +84,10 @@ func _fire() -> void:
 		return
 	var base: Vector2 = d.normalized()
 	var spread: Array = [0.0]
+	_volley += 1
 	if layers >= 3:
-		spread = [-0.28, 0.28]
+		# Alternate: a flanking pair (stand still and it misses), then a single shot straight at you.
+		spread = [-0.28, 0.28] if _volley % 2 == 0 else [0.0]
 	elif layers == 2:
 		spread = [-0.35, 0.0, 0.35]
 	for a: float in spread:
