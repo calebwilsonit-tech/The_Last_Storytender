@@ -19,6 +19,8 @@ func _near(p: Vector2) -> bool:
 	d.y *= 2.0
 	return d.length() < RADIUS and absf(floor_ref.height_at(p) - floor_ref.height_at(position)) < 0.6
 
+var _gate := RedrawGate.new()
+
 func _process(delta: float) -> void:
 	_t += delta
 	var now := _held_by_player()
@@ -30,7 +32,8 @@ func _process(delta: float) -> void:
 	if now != pressed:
 		pressed = now
 		toggled.emit(pressed)
-	queue_redraw()
+	if _gate.ok(delta, self):
+		queue_redraw()
 
 func _draw() -> void:
 	var art := Skins.art()

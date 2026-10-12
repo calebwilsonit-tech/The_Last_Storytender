@@ -77,6 +77,8 @@ func hurt(dmg: float, _dir: Vector2 = Vector2.ZERO) -> void:
 func _fury() -> float:
 	return 0.7 if hp < max_hp * 0.5 else 1.0
 
+var _gate := RedrawGate.new()
+
 func _process(delta: float) -> void:
 	_t += delta
 	_flash = maxf(_flash - delta, 0.0)
@@ -92,7 +94,8 @@ func _process(delta: float) -> void:
 			return
 	elif active and target:
 		_tick(delta)
-	queue_redraw()
+	if _gate.ok(delta, self):
+		queue_redraw()
 
 func _tick(delta: float) -> void:
 	# The shoulder follows you; warmth (the Lantern) slows it, and a rest slows it more.

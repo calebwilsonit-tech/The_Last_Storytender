@@ -72,8 +72,14 @@ func _process(delta: float) -> void:
 			_skip = not _skip
 			if _skip:
 				return
+	if kind != Kind.TREE and Settings.art_style != "default":
+		_gate.hz = 3.0 if STILL_KINDS.has(kind) and not occupied else RedrawGate.HZ
+		if not _gate.ok(delta, self):
+			return
 	queue_redraw()
 
+const STILL_KINDS := [Kind.HOUSE, Kind.SIGN, Kind.CHAIR, Kind.GATE, Kind.OVEN, Kind.PORTAL, Kind.ANVIL]
+var _gate := RedrawGate.new()
 var _skip := false
 var _drawn_once := false
 

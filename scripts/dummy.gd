@@ -22,13 +22,16 @@ func hurt(_dmg: float, dir_ground: Vector2) -> void:
 		_splats.append({"pos": Vector2.from_angle(randf() * TAU) * randf_range(6.0, 20.0) + Vector2(0, -34), "r": randf_range(1.6, 3.4), "age": 0.0})
 	struck.emit()
 
+var _gate := RedrawGate.new()
+
 func _process(delta: float) -> void:
 	_t += delta
 	_wobble = maxf(_wobble - delta * 1.6, 0.0)
 	for s in _splats:
 		s.age += delta
 	_splats = _splats.filter(func(s): return s.age < 1.2)
-	queue_redraw()
+	if _wobble > 0.0 or not _splats.is_empty() or _gate.ok(delta, self):
+		queue_redraw()
 
 func _draw() -> void:
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))

@@ -42,6 +42,8 @@ func _step(g: Vector2, spd: float, delta: float) -> void:
 	if walkable.has(c) and not floor_ref.block_cells.has(c) and floor_ref.cells.get(c, "") != "#":
 		position = np
 
+var _gate := RedrawGate.new()
+
 func _process(delta: float) -> void:
 	_t += delta
 	match state:
@@ -67,7 +69,8 @@ func _process(delta: float) -> void:
 			if _respawn_t <= 0.0:
 				state = "wander"
 				_fade = 1.0
-	queue_redraw()
+	if _gate.ok(delta, self):
+		queue_redraw()
 
 func _try_sit() -> void:
 	for c in chairs:

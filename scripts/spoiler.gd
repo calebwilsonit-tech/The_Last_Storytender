@@ -82,6 +82,8 @@ func defeat() -> void:
 	active = false
 	text_ttl = 0.0
 
+var _gate := RedrawGate.new()
+
 func _process(delta: float) -> void:
 	_t += delta
 	_flash = maxf(_flash - delta, 0.0)
@@ -101,7 +103,8 @@ func _process(delta: float) -> void:
 			if _cd <= 0.0:
 				_cd = interval * (0.7 if reckoning and hp < max_hp * 0.5 else 1.0)
 				speak.emit()
-	queue_redraw()
+	if _gate.ok(delta, self):
+		queue_redraw()
 
 func _page(side: float, flap: float, col: Color) -> void:
 	# One open page, hinged at the spine and swept up by `flap`.

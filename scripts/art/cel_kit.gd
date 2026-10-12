@@ -126,12 +126,13 @@ class Rec extends RefCounted:
 
 	func piece(pts: PackedVector2Array, fill: Color, shade := 0.42, rim := true, flash := 0.0, outline := true, soft_corners := 0) -> void:
 		if soft_corners > 0:
-			pts = CelKit.soft(pts, soft_corners)
-		if Geometry2D.triangulate_polygon(pts).is_empty():
+			pts = CelKit.soft_cached(pts, soft_corners)
+		var g := CelKit.geo(pts, outer, shade)
+		if not g["ok"]:
 			if OS.get_environment("ART_DEBUG") != "":
 				print("bad polygon ", fill, " ", pts)
 			return
-		parts.append({"pts": pts, "fill": fill, "shade": shade, "rim": rim, "flash": flash, "xf": xf, "outline": outline})
+		parts.append({"pts": pts, "fill": fill, "shade": shade, "rim": rim, "flash": flash, "xf": xf, "outline": outline, "geo": g})
 		order.append(["part", parts.size() - 1, depth, order.size()])
 
 	func op(fn: Callable) -> void:
@@ -150,7 +151,7 @@ class Rec extends RefCounted:
 			if not p["outline"]:
 				continue
 			apply_xf.call(p["xf"])
-			for bp in Geometry2D.offset_polygon(p["pts"], outer, Geometry2D.JOIN_ROUND):
+			for bp in p["geo"]["back"]:
 				ci.draw_colored_polygon(bp, Color(out, out.a * alpha))
 		order.sort_custom(func(a, b): return a[2] < b[2] or (a[2] == b[2] and a[3] < b[3]))
 		for o in order:
@@ -164,15 +165,9 @@ class Rec extends RefCounted:
 				var shade: float = p["shade"]
 				if shade > 0.0:
 					# cel shadow: a crescent along the edges that face away from the light
-					var c := CelKit.centroid(pts)
-					var rr := CelKit.radius_of(pts, c)
-					var thick := clampf(rr * shade * 0.6, 1.2, 7.0)
-					var lifted := PackedVector2Array()
-					for q in pts:
-						lifted.append(q + CelKit.LIGHT * thick)
-					for pr in Geometry2D.clip_polygons(pts, lifted):
-						if not Geometry2D.is_polygon_clockwise(pr) or true:
-							ci.draw_colored_polygon(pr, CelKit.shade_of(base))
+					var sc := CelKit.shade_of(base)
+					for pr in p["geo"]["cres"]:
+						ci.draw_colored_polygon(pr, sc)
 				if p["rim"]:
 					CelKit._rim(ci, pts, CelKit.lit_of(base), inner)
 				if p["outline"]:
@@ -184,6 +179,45 @@ class Rec extends RefCounted:
 				apply_xf.call(op["xf"])
 				(op["fn"] as Callable).call(ci)
 
+
+## Geometry that only depends on a shape's outline (validity, silhouette backing, shadow crescent) is
+## cached by the shape's points, so figures that hold a pose, and every static prop, cost nothing after
+## the first frame. Moving figures miss the cache, which is why their redraw rate is throttled instead.
+static var _geo: Dictionary = {}
+
+static func geo(pts: PackedVector2Array, outer: float, shade: float) -> Dictionary:
+	var key := hash([pts, outer, shade])
+	var hit = _geo.get(key)
+	if hit != null:
+		return hit
+	var g := {"ok": not Geometry2D.triangulate_polygon(pts).is_empty(), "back": [], "cres": []}
+	if g["ok"]:
+		g["back"] = Geometry2D.offset_polygon(pts, outer, Geometry2D.JOIN_ROUND)
+		if shade > 0.0:
+			var c := centroid(pts)
+			var rr := radius_of(pts, c)
+			var thick := clampf(rr * shade * 0.6, 1.2, 7.0)
+			var lifted := PackedVector2Array()
+			for q in pts:
+				lifted.append(q + LIGHT * thick)
+			g["cres"] = Geometry2D.clip_polygons(pts, lifted)
+	if _geo.size() > 6000:
+		_geo.clear()
+	_geo[key] = g
+	return g
+
+static var _soft: Dictionary = {}
+
+static func soft_cached(pts: PackedVector2Array, iterations: int) -> PackedVector2Array:
+	var key := hash([pts, iterations])
+	var hit = _soft.get(key)
+	if hit != null:
+		return hit
+	var out := soft(pts, iterations)
+	if _soft.size() > 6000:
+		_soft.clear()
+	_soft[key] = out
+	return out
 
 ## Chaikin corner cutting: turns a blocky polygon into a soft, rounded one with the same silhouette.
 static func soft(pts: PackedVector2Array, iterations := 2, keep := 0.25) -> PackedVector2Array:

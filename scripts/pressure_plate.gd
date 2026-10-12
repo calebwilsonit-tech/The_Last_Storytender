@@ -12,6 +12,8 @@ var elev := 0.0
 var pressed := false
 var _t := 0.0
 
+var _gate := RedrawGate.new()
+
 func _process(delta: float) -> void:
 	_t += delta
 	var w := 0
@@ -22,7 +24,8 @@ func _process(delta: float) -> void:
 	if now != pressed:
 		pressed = now
 		toggled.emit(pressed)
-	queue_redraw()
+	if _gate.ok(delta, self):
+		queue_redraw()
 
 func _draw() -> void:
 	var art := Skins.art()

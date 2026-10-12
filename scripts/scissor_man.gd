@@ -62,6 +62,8 @@ func hurt(dmg: float, _dir: Vector2 = Vector2.ZERO) -> void:
 		vulnerable = false
 		defeated.emit()
 
+var _gate := RedrawGate.new()
+
 func _process(delta: float) -> void:
 	_t += delta
 	_flash = maxf(_flash - delta, 0.0)
@@ -89,7 +91,8 @@ func _process(delta: float) -> void:
 		s["p"] += s["v"] * delta
 		s["a"] += delta
 	_sparks = _sparks.filter(func(s): return s["a"] < 0.5)
-	queue_redraw()
+	if _gate.ok(delta, self):
+		queue_redraw()
 
 func _blade(origin: Vector2, ang: float, length: float, col: Color) -> void:
 	var d := Vector2.from_angle(ang)

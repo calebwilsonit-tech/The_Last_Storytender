@@ -13,6 +13,7 @@ var lift := 0.0             # elevation of the cell it stands on, in px
 var tearful := false        # a single ink-blue tear for the emotional beat
 var _t := 0.0
 var _seed := 0.0
+var _gate := RedrawGate.new()
 
 func _ready() -> void:
 	_seed = position.x * 0.01 + position.y * 0.017
@@ -23,7 +24,8 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_t += delta
-	queue_redraw()
+	if _gate.ok(delta, self):
+		queue_redraw()
 
 func restoration() -> float:
 	return GameState.restored_for(npc_id, global_position)

@@ -153,6 +153,8 @@ func _ground_to(p: Vector2) -> Vector2:
 func _move(dir_ground: Vector2, spd: float) -> void:
 	velocity = Vector2(dir_ground.x, dir_ground.y * 0.5) * spd
 
+var _gate := RedrawGate.new()
+
 func _physics_process(delta: float) -> void:
 	_t += delta
 	_flash = maxf(_flash - delta, 0.0)
@@ -192,7 +194,8 @@ func _physics_process(delta: float) -> void:
 	if absf(velocity.x) > 6.0:
 		_face = signf(velocity.x)
 	move_and_slide()
-	queue_redraw()
+	if _gate.ok(delta, self):
+		queue_redraw()
 
 func _can_see_target() -> bool:
 	if target == null or target.is_crumpled or target.is_falling:

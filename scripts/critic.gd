@@ -179,6 +179,8 @@ func dissolve() -> void:
 	_tele = 0.0
 	active = false
 
+var _gate := RedrawGate.new()
+
 func _process(delta: float) -> void:
 	_t += delta
 	_flash = maxf(_flash - delta, 0.0)
@@ -206,7 +208,8 @@ func _process(delta: float) -> void:
 				_word = WORDS[randi() % WORDS.size()]
 				_tele = 0.85
 				_cd = 1.7 + (3 - layers) * 0.6    # quieter with every memory held up
-	queue_redraw()
+	if _gate.ok(delta, self):
+		queue_redraw()
 
 ## Speed of its words: a little slower as it quiets, scaled by difficulty.
 func bolt_speed() -> float:
