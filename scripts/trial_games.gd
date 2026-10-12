@@ -9,15 +9,19 @@ const WORDS := "bake bale ball band bane bank bare bark barn base bash bass bath
 
 const GAME_NAMES := {
 	"proofread": "Proofread", "sort": "Alphabetize", "anagram": "Unscramble", "sentence": "Rebuild the Sentence",
-	"ladder": "Word Ladder", "typewriter": "Typewriter Trial", "cipher": "Cipher Wheel",
+	"ladder": "Word Ladder", "typewriter": "Typewriter Trial", "rhythm": "Dictation Beat", "cipher": "Cipher Wheel",
 }
 ## Which games can appear at which tier.
 const BY_TIER := {
 	1: ["proofread", "sort", "anagram"],
 	2: ["proofread", "sort", "anagram", "sentence", "ladder"],
-	3: ["sentence", "anagram", "ladder", "typewriter", "cipher"],
-	4: ["ladder", "typewriter", "cipher", "sentence"],
+	3: ["sentence", "anagram", "ladder", "typewriter", "rhythm", "cipher"],
+	4: ["ladder", "typewriter", "rhythm", "cipher", "sentence"],
 }
+
+## True when a controller is connected: the Typewriter then shows a letter grid (more time, more
+## mistakes allowed). Real key presses still work in either mode.
+static var pad_mode := false
 
 static func make(kind: String, tier: int, seed_v: int) -> Base:
 	var g: Base
@@ -28,6 +32,7 @@ static func make(kind: String, tier: int, seed_v: int) -> Base:
 		"sentence": g = SentenceGame.new()
 		"ladder": g = Ladder.new()
 		"typewriter": g = Typewriter.new()
+		"rhythm": g = Rhythm.new()
 		_: g = Cipher.new()
 	g.kind = kind
 	g.tier = tier
@@ -36,11 +41,9 @@ static func make(kind: String, tier: int, seed_v: int) -> Base:
 	return g
 
 ## Picks the game for a vault: the same vault always plays the same game. On a controller the
-## typing game is skipped (it needs a keyboard).
+## typing game is skipped (real key presses still work with a pad connected).
 static func pick(tier: int, seed_v: int, keyboard: bool) -> String:
 	var opts: Array = (BY_TIER[tier] as Array).duplicate()
-	if not keyboard:
-		opts.erase("typewriter")
 	return opts[absi(seed_v) % opts.size()]
 
 # =============================================================================================
@@ -587,20 +590,55 @@ class Typewriter extends Base:
 	var pos := 0
 	var mistakes := 0
 	var max_mistakes := 5
+	var pad := false
+	var grid := ["ABCDEFGHI", "JKLMNOPQR", "STUVWXYZ'", "_,.-?!"]
+	var gx := 0
+	var gy := 0
 	func setup() -> void:
+		pad = TrialGames.pad_mode
 		var key := 3 if tier <= 3 else 4
 		var pool: Array = TrialGames.PHRASES[key]
 		phrase = pool[rng.randi() % pool.size()]
 		time_limit = 24.0 if key == 3 else 30.0
 		time_left = time_limit
 		max_mistakes = 5 if key == 3 else 4
+		if pad:
+			time_limit += 14.0
+			time_left = time_limit
+			max_mistakes += 2
 		tries = max_mistakes
 		max_tries = max_mistakes
 	func help() -> String:
+		if pad:
+			return "Spell the line with the letter grid (move, then confirm), before the bar runs out. Mistakes: %d allowed." % max_mistakes
 		return "Type the line exactly, before the bar runs out. Mistakes: %d allowed." % max_mistakes
+	func _type(ch: String) -> void:
+		if ch.to_lower() == phrase[pos].to_lower():
+			pos += 1
+			if pos >= phrase.length():
+				_win("Typed in %.1f seconds." % (time_limit - time_left))
+		else:
+			mistakes += 1
+			lose_try("Wrong key.")
+	func click_index(i: int) -> void:
+		gy = clampi(i / 10, 0, grid.size() - 1)
+		gx = clampi(i % 10, 0, (grid[gy] as String).length() - 1)
+		_type_cell()
+	func _type_cell() -> void:
+		var c: String = (grid[gy] as String)[gx]
+		_type(" " if c == "_" else c)
 	func input(ev: InputEvent) -> void:
 		if solved or failed:
 			return
+		if pad and not (ev is InputEventKey):
+			var d := MenuInput.nav(ev)
+			if d != Vector2i.ZERO:
+				gy = clampi(gy + d.y, 0, grid.size() - 1)
+				gx = clampi(gx + d.x, 0, (grid[gy] as String).length() - 1)
+				return
+			if MenuInput.accept(ev) and not (ev is InputEventKey):
+				_type_cell()
+				return
 		if ev is InputEventKey and ev.pressed and not ev.echo and ev.unicode > 0:
 			var ch := String.chr(ev.unicode)
 			if ch.to_lower() == phrase[pos].to_lower():
@@ -631,7 +669,130 @@ class Typewriter extends Base:
 				ci.draw_rect(Rect2(x - 2.0, y - 36.0, maxf(ts.x, 14.0) + 4.0, 46.0), Color(Palette.GOLD, 0.4))
 			ci.draw_string(font, Vector2(x, y), ch if ch != " " else " ", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 34, col)
 			x += maxf(ts.x, 10.0)
-		ci.draw_string(font, a.position + Vector2(0, 200), "Mistakes: %d / %d" % [mistakes, max_mistakes], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 22, Color(Palette.INK, 0.65))
+		ci.draw_string(font, a.position + Vector2(0, 130), "Mistakes: %d / %d" % [mistakes, max_mistakes], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 22, Color(Palette.INK, 0.65))
+		rects.clear()
+		if pad:
+			var cs := 44.0
+			var gx0 := a.position.x + (a.size.x - cs * 9.0) * 0.5
+			for r in grid.size():
+				for c in (grid[r] as String).length():
+					var ch: String = (grid[r] as String)[c]
+					var cell := Rect2(gx0 + c * cs, a.position.y + 150.0 + r * cs, cs - 4.0, cs - 4.0)
+					var sel := r == gy and c == gx
+					tile(ci, font, cell, "␣" if ch == "_" else ch, Color("f6efd8") if not sel else Color("f2d88a"), Palette.GOLD.darkened(0.15) if sel else Palette.INK_BROWN, 22)
+					rects.append({"r": cell, "i": r * 10 + c})
+
+# =============================================================================================
+# Dictation Beat: the controller-friendly cousin of the Typewriter. Notes fall down four lanes;
+# press that direction as a note crosses the line. Works with d-pad, stick, WASD, arrows or mouse.
+class Rhythm extends Base:
+	const TRAVEL := 1.7
+	const WINDOW := 0.3
+	const LANE_NAMES := ["<", "v", "^", ">"]
+	var notes: Array = []        # {lane, t, state} state 0 pending, 1 hit, 2 missed
+	var clock := 0.0
+	var flash := {}              # lane -> seconds of highlight
+	func setup() -> void:
+		var count := 14 if tier <= 3 else 18
+		var gap := 0.85 if tier <= 3 else 0.68
+		max_tries = 4 if tier <= 3 else 3
+		tries = max_tries
+		clock = -1.2
+		var t := 1.0
+		var last := -1
+		for i in count:
+			var lane := rng.randi() % 4
+			if lane == last and rng.randf() < 0.6:
+				lane = (lane + 1 + rng.randi() % 3) % 4
+			last = lane
+			notes.append({"lane": lane, "t": t, "state": 0})
+			t += gap
+		message = ""
+	func help() -> String:
+		return "Hit each falling note with its direction as it crosses the line. %d misses allowed." % max_tries
+	func input(ev: InputEvent) -> void:
+		if ev is InputEventKey and ev.echo:
+			return
+		var d := MenuInput.nav(ev)
+		if d == Vector2i.ZERO:
+			return
+		var lane := 0
+		if d.x < 0: lane = 0
+		elif d.y > 0: lane = 1
+		elif d.y < 0: lane = 2
+		else: lane = 3
+		press(lane)
+	func click(pos: Vector2) -> void:
+		for h: Dictionary in rects:
+			if (h["r"] as Rect2).has_point(pos):
+				press(int(h["i"]))
+				return
+	func press(lane: int) -> void:
+		if solved or failed:
+			return
+		flash[lane] = 0.15
+		var best := -1
+		var best_d := WINDOW
+		for i in notes.size():
+			var n: Dictionary = notes[i]
+			if int(n["state"]) != 0 or int(n["lane"]) != lane:
+				continue
+			var dt := absf(float(n["t"]) - clock)
+			if dt <= best_d:
+				best_d = dt
+				best = i
+		if best >= 0:
+			notes[best]["state"] = 1
+			message = ""
+			_check_done()
+		else:
+			lose_try("Off the beat.")
+	func tick(delta: float) -> void:
+		super.tick(delta)
+		if solved or failed:
+			return
+		clock += delta
+		for k in flash.keys():
+			flash[k] = float(flash[k]) - delta
+		for n: Dictionary in notes:
+			if int(n["state"]) == 0 and clock > float(n["t"]) + WINDOW:
+				n["state"] = 2
+				lose_try("Missed one.")
+				if failed:
+					return
+		_check_done()
+	func _check_done() -> void:
+		if solved or failed:
+			return
+		for n: Dictionary in notes:
+			if int(n["state"]) == 0:
+				return
+		_win("Right on the beat.")
+	func auto_solve() -> void:
+		for n: Dictionary in notes:
+			n["state"] = 1
+		_check_done()
+	func draw(ci: Control, a: Rect2, font: Font, _head: Font) -> void:
+		rects.clear()
+		var lane_w := minf(110.0, a.size.x / 4.0 - 10.0)
+		var x0 := a.position.x + (a.size.x - lane_w * 4.0 - 30.0) * 0.5
+		var top := a.position.y
+		var line_y := a.end.y - 40.0
+		for l in 4:
+			var r := Rect2(x0 + l * (lane_w + 10.0), top, lane_w, a.size.y)
+			ci.draw_rect(r, Color(0.23, 0.16, 0.11, 0.12 + (0.2 if float(flash.get(l, 0.0)) > 0.0 else 0.0)))
+			rects.append({"r": r, "i": l})
+			tile(ci, font, Rect2(r.position.x + 4.0, line_y - 8.0, lane_w - 8.0, 46.0), LANE_NAMES[l], Color("f6efd8"), Palette.GOLD.darkened(0.15), 26)
+			for n: Dictionary in notes:
+				if int(n["lane"]) != l or int(n["state"]) == 1:
+					continue
+				var f := 1.0 - (float(n["t"]) - clock) / TRAVEL
+				if f < 0.0 or f > 1.15:
+					continue
+				var y := lerpf(top + 10.0, line_y + 15.0, f)
+				var col := Color("c9822b") if int(n["state"]) == 0 else Color("b8402f")
+				ci.draw_circle(Vector2(r.position.x + lane_w * 0.5, y), 20.0, col)
+				ci.draw_circle(Vector2(r.position.x + lane_w * 0.5, y), 20.0, Palette.INK_BROWN, false, 3.0)
 
 # =============================================================================================
 # Cipher wheel: turn the wheel until the message reads.

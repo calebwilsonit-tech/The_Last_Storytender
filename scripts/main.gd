@@ -129,6 +129,7 @@ func _attempt_trial(id: String, stone: SentenceStone, cell: Vector2i, tier: int)
 		_trial = VaultTrial.new()
 		add_child(_trial)
 	var seed_v := cell.x * 7919 + cell.y * 104729 + tier
+	TrialGames.pad_mode = not Input.get_connected_joypads().is_empty()
 	var kind := TrialGames.pick(tier, seed_v, Input.get_connected_joypads().is_empty())
 	var g := TrialGames.make(kind, tier, seed_v + int(Time.get_ticks_msec() % 9973))
 	_trial.open(g)

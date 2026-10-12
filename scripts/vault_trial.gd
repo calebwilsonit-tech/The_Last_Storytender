@@ -104,7 +104,7 @@ func _paint() -> void:
 	# timer bar
 	if game.time_limit > 0.0:
 		var f := clampf(game.time_left / game.time_limit, 0.0, 1.0)
-		var bar := Rect2(panel.position.x + 200, panel.end.y - 40, 300, 14)
+		var bar := Rect2(panel.position.x + 50 + game.max_tries * 34, panel.end.y - 40, 280, 14)
 		_view.draw_rect(bar, Color(0, 0, 0, 0.2))
 		_view.draw_rect(Rect2(bar.position, Vector2(bar.size.x * f, bar.size.y)), Color("c9822b") if f > 0.25 else Color("b8402f"))
 	_view.draw_string(_head, panel.position + Vector2(panel.size.x - 160, panel.size.y - 22), "Esc: walk away", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 20, Palette.INK_BROWN)
