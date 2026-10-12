@@ -64,13 +64,21 @@ def site_flat(cx, cy, rad, lv):
             return False
     return True
 
+def too_close_to_site(x, y, gap=10):
+    """Sites need room: plates, stones and stairs of one must never land in another's footprint."""
+    for sd in SITES.values():
+        sx, sy = sd["chest"]
+        if max(abs(sx - x), abs(sy - y)) < gap:
+            return True
+    return False
+
 def find_flat(cx, cy, rad, lv, search=26):
     for d in range(search):
         for dy in range(-d, d + 1):
             for dx in range(-d, d + 1):
                 if max(abs(dx), abs(dy)) != d:
                     continue
-                if site_flat(cx + dx, cy + dy, rad, lv):
+                if site_flat(cx + dx, cy + dy, rad, lv) and not too_close_to_site(cx + dx, cy + dy):
                     return (cx + dx, cy + dy)
     return None
 
