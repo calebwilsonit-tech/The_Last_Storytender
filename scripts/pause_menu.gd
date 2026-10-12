@@ -68,11 +68,13 @@ func _on_chosen(id: String) -> void:
 			_view.hide()
 			_settings.open()
 		"title":
+			GameState.prepare_exit()
 			GameState.save_game()
 			Telemetry.flush()
 			close()
 			Transition.go("res://scenes/title.tscn")
 		"quit":
+			GameState.prepare_exit()
 			GameState.save_game()
 			Telemetry.flush()
 			get_tree().quit()

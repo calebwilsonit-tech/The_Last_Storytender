@@ -155,6 +155,7 @@ func _touch_post(id: String) -> void:
 	for w: Dictionary in PrologueMap.WAYPOINTS:
 		if w["id"] == id:
 			wp = w
+	GameState.last_post = id
 	if not GameState.waypoint_lit(id):
 		GameState.set_flag("wp_" + id)
 		_posts[id].variant = 1
@@ -194,6 +195,7 @@ func _on_travel_requested(id: String) -> void:
 func travel_to(id: String) -> void:
 	for wp: Dictionary in PrologueMap.WAYPOINTS:
 		if wp["id"] == id and GameState.waypoint_lit(id):
+			GameState.last_post = id
 			GameState.spawn_cell = Vector2i(int(wp["cell"][0]), int(wp["cell"][1])) + Vector2i(0, 1)
 			Transition.go("res://scenes/main.tscn", Palette.PAPER_LIGHT)
 			return
@@ -327,12 +329,30 @@ func _add_npc(ch: String, cell: Vector2i) -> void:
 			_register(n, func(): return "Speak", _talk_maud)
 
 func _notification(what: int) -> void:
-	# Remember where you were if the game is closed mid-walk.
+	# If the game is closed mid-walk, you come back beside the nearest lantern post.
 	if what == NOTIFICATION_WM_CLOSE_REQUEST and _player and is_instance_valid(_player):
-		GameState.spawn_cell = _floor.cell_at(_player.position)
+		_record_exit_post()
 		GameState.save_game()
 
+## Saving and leaving: the next session starts beside the post closest to where you stopped.
+func _record_exit_post() -> void:
+	if _player == null or not is_instance_valid(_player):
+		return
+	var here := _floor.cell_at(_player.position)
+	var best_d := INF
+	for wp: Dictionary in PrologueMap.WAYPOINTS:
+		var c := Vector2i(int(wp["cell"][0]), int(wp["cell"][1]))
+		var dd := Vector2(c - here).length()
+		if dd < best_d:
+			best_d = dd
+			GameState.spawn_cell = c + Vector2i(0, 1)
+
+func _exit_tree() -> void:
+	if GameState.before_exit == Callable(self, "_record_exit_post"):
+		GameState.before_exit = Callable()
+
 func _level_ready() -> void:
+	GameState.before_exit = Callable(self, "_record_exit_post")
 	_floor.static_world = true      # the overworld ground never changes: no safety repaints
 	_setup_chunks()
 	Settings.quality_changed.connect(_setup_chunks)
@@ -602,8 +622,12 @@ func _room_name(cell: Vector2i) -> String:
 		return "Garrick's Terrace"
 	return PrologueMap.region_name(cell)
 
-## You wake at the nearest lit lantern post, or at the start if you have not lit one.
+## You wake at the last lantern post you rested at (or travelled to), else the nearest lit one, else the start.
 func _checkpoint_for(cell: Vector2i) -> Vector2:
+	if GameState.last_post != "" and GameState.waypoint_lit(GameState.last_post):
+		for wp: Dictionary in PrologueMap.WAYPOINTS:
+			if wp["id"] == GameState.last_post:
+				return Iso.to_screen(Vector2(int(wp["cell"][0]), int(wp["cell"][1])) + Vector2(0, 1))
 	var best := Vector2.ZERO
 	var best_d := INF
 	for wp: Dictionary in PrologueMap.WAYPOINTS:

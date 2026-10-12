@@ -31,7 +31,10 @@ func _ready() -> void:
 	Settings.quality_changed.connect(func(): _stale = true; _drawn_once = false)
 	var poly := CollisionPolygon2D.new()
 	match kind:
-		Kind.TREE, Kind.SIGN:
+		Kind.TREE:
+			# wide enough that the gap between two neighbouring trees is narrower than the Storytender
+			poly.polygon = Iso.diamond(Vector2.ZERO, 0.76)
+		Kind.SIGN:
 			poly.polygon = Iso.diamond(Vector2.ZERO, 0.45)
 		Kind.HOUSE, Kind.FORGE:
 			poly.polygon = Iso.diamond(Vector2.ZERO, 1.8)

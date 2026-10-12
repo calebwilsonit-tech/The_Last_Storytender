@@ -387,14 +387,29 @@ func _update_occlusion(delta: float) -> void:
 	var list: Array = []
 	if on:
 		var pl := _floor.level(pc)
+		# Only ground that is actually drawn over the Storytender fades. A raised cell covers the
+		# convex shape swept from its top face down to the level the player stands on, so test
+		# whether the player's head or chest lies inside that shape. (Fading everything in front,
+		# as before, left big see-through blocks of cliff hanging over houses and ground.)
+		var feet := _player.position + Vector2(0, -_player.elev)
+		var probes := [feet + Vector2(0, -34), feet + Vector2(0, -20), feet + Vector2(0, -6)]
 		for dx in range(0, 4):
 			for dy in range(0, 4):
 				if dx == 0 and dy == 0:
 					continue
 				var c := pc + Vector2i(dx, dy)
-				if _floor.cells.has(c) and (_floor.level(c) > pl or (_floor.stairs.has(c) and _floor.level(c) + 1 > pl)):
-					if _floor.level(c) > pl:
+				if not _floor.cells.has(c) or _floor.level(c) <= pl:
+					continue
+				var lc := float(_floor.level(c))
+				var hull_pts := PackedVector2Array()
+				for corner in [Vector2(-0.5, -0.5), Vector2(0.5, -0.5), Vector2(0.5, 0.5), Vector2(-0.5, 0.5)]:
+					hull_pts.append(Iso.pt(Vector2(c) + corner, lc))
+					hull_pts.append(Iso.pt(Vector2(c) + corner, float(pl)))
+				var hull := Geometry2D.convex_hull(hull_pts)
+				for pr: Vector2 in probes:
+					if Geometry2D.is_point_in_polygon(pr, hull):
 						list.append(c)
+						break
 	_floor.set_fade(list)
 	# tall props in front of the player
 	var pp := _player.position
