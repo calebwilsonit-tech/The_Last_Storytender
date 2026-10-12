@@ -10,6 +10,10 @@ static func _p(c: Vector2, u: float, pts: Array) -> PackedVector2Array:
 	return out
 
 static func _o(ci: CanvasItem, pts: PackedVector2Array, fill: Color, w: float = 2.0) -> void:
+	if Settings.art_style == "cel" and not Geometry2D.triangulate_polygon(pts).is_empty():
+		# Ink Cel: heavy contour, one cel shadow, thin rim light
+		CelKit.piece(ci, pts, fill, 0.36, true, maxf(w, 2.0) + 0.3)
+		return
 	ci.draw_colored_polygon(pts, fill)
 	var loop := pts.duplicate()
 	loop.append(pts[0])

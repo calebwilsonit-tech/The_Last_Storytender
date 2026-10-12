@@ -19,6 +19,10 @@ func _draw() -> void:
 		draw_item(self, item_id, size * 0.5, icon_size)
 
 static func _o(ci: CanvasItem, pts: PackedVector2Array, fill: Color, w: float = 2.2) -> void:
+	if Settings.art_style == "cel" and not Geometry2D.triangulate_polygon(pts).is_empty():
+		# Ink Cel: heavy contour, one cel shadow, thin rim light
+		CelKit.piece(ci, pts, fill, 0.36, true, maxf(w, 2.0) + 0.3)
+		return
 	ci.draw_colored_polygon(pts, fill)
 	var loop := pts.duplicate()
 	loop.append(pts[0])
