@@ -75,3 +75,6 @@ Gameplay overlays (telegraph rings, word labels, health bars, jam timer, pools o
 - The Storytender's ghost-echo, word bolts and a few effects are still original art.
 - Collage and Pixel styles are stubs.
 - Performance: Ink Cel issues roughly 1.5x the canvas commands of the original art (draw calls are similar). Plan if needed: bake static figures (NPCs, bosses at rest) to textures the way trees already are.
+
+## Overworld puzzle props: weathered storybook
+Chests are leather-bound tomes with a gilt clasp strap (open: cover swung up, warm light off the pages). Gates and spine walls are upright books with gilt bands and a ribbon-and-seal lock. Sentence stones are loose pages with a folded corner on a small lectern of stacked books. Palette: oxblood, navy, moss, ochre leather; cream pages; gilt accents.

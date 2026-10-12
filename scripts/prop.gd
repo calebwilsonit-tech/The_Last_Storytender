@@ -593,14 +593,18 @@ func _draw_post() -> void:
 	if lit:
 		draw_circle(lamp, 4.0, Color(1, 1, 1, 0.95))
 
-# --- The Margin Gate: bound pages with a full-stop lock ----------------------------------------------
+# --- The Margin Gate: a doorway of upright books with a full-stop seal -----------------------------
 func _draw_gate() -> void:
 	_shadow(30.0)
 	var open_ := variant == 1
-	var stone := Color("5a6478")
+	var wood := Color("6a4a30")
+	var ink := Palette.OUTLINE
 	for sx in [-34.0, 34.0]:
-		DrawKit.shape(self, PackedVector2Array([Vector2(sx - 7, 0), Vector2(sx + 7, 0), Vector2(sx + 6, -96), Vector2(sx - 6, -96)]), stone, Palette.OUTLINE, 2.4, _seed + sx)
-	DrawKit.shape(self, PackedVector2Array([Vector2(-44, -96), Vector2(44, -96), Vector2(40, -108), Vector2(-40, -108)]), stone.lightened(0.06), Palette.OUTLINE, 2.4, _seed + 2.0)
+		DrawKit.shape(self, PackedVector2Array([Vector2(sx - 7, 0), Vector2(sx + 7, 0), Vector2(sx + 6, -96), Vector2(sx - 6, -96)]), wood, ink, 2.4, _seed + sx)
+		for k in 4:
+			draw_line(Vector2(sx - 5, -14 - k * 22), Vector2(sx + 5, -14 - k * 22), Color(ink, 0.3), 1.2)
+	DrawKit.shape(self, PackedVector2Array([Vector2(-44, -96), Vector2(44, -96), Vector2(40, -108), Vector2(-40, -108)]), wood.lightened(0.08), ink, 2.4, _seed + 2.0)
+	var cols := [Color("8e3b32"), Color("2f5d7a"), Color("5b7a3a"), Color("8a6a2f"), Color("5a3a6a"), Color("7a3b2e")]
 	if open_:
 		var pulse := 0.5 + 0.5 * sin(_t * 1.6)
 		draw_rect(Rect2(-27, -94, 54, 94), Color(1, 1, 1, 0.55 + 0.2 * pulse))
@@ -610,34 +614,48 @@ func _draw_gate() -> void:
 	else:
 		for i in 6:
 			var x0 := -27.0 + i * 9.0
-			var q := PackedVector2Array([Vector2(x0, 0), Vector2(x0 + 9, 0), Vector2(x0 + 9, -94), Vector2(x0, -94)])
-			DrawKit.shape(self, q, Color("f1e7cd") if i % 2 == 0 else Color("e3d6b4"), Palette.OUTLINE, 1.6, _seed + i)
-		draw_line(Vector2(-27, -62), Vector2(27, -62), Color("a8483f"), 4.0)
-		draw_line(Vector2(-27, -30), Vector2(27, -30), Color("a8483f"), 4.0)
-		draw_circle(Vector2(0, -46), 8.0, Palette.INK)
+			var top := -94.0 + (3.0 if i % 3 == 1 else 0.0)
+			var q := PackedVector2Array([Vector2(x0, 0), Vector2(x0 + 9, 0), Vector2(x0 + 9, top), Vector2(x0, top)])
+			DrawKit.shape(self, q, cols[i % cols.size()], ink, 1.8, _seed + i)
+			for by in [-18.0, -72.0]:
+				draw_line(Vector2(x0 + 1, by), Vector2(x0 + 8, by), Color("e8c86a", 0.85), 1.4)
+		draw_line(Vector2(-27, -50), Vector2(27, -50), Color("d9cfa8"), 5.0)
+		draw_line(Vector2(-27, -50), Vector2(27, -50), ink, 1.0)
+		draw_circle(Vector2(0, -50), 10.0, Color("a8483f"))
+		draw_arc(Vector2(0, -50), 10.0, 0.0, TAU, 14, ink, 2.0)
+		draw_circle(Vector2(0, -50), 3.5, ink)
 
-# --- A treasure chest (variant 1 = already opened) -----------------------------------------------
+# --- A treasure chest: a big leather-bound tome, strapped shut (variant 1 = already opened) ------------
 func _draw_chest() -> void:
-	_shadow(20.0)
+	_shadow(22.0)
 	var opened := variant == 1
-	var wood := Color("a9743f")
-	var dark := Color("6e4824")
+	var leather := Color("7a3b2e")
+	var worn := Color("93523f")
+	var page := Color("f1e7cd")
 	var ink := Color("2a1b0f")
-	var body := PackedVector2Array([Vector2(-17, 0), Vector2(17, 0), Vector2(17, -17), Vector2(-17, -17)])
-	DrawKit.shape(self, body, wood, ink, 2.4, _seed)
-	# metal bands
-	for bx in [-9.0, 9.0]:
-		draw_rect(Rect2(bx - 2.5, -17, 5, 17), Color("c9b27a"))
-		draw_rect(Rect2(bx - 2.5, -17, 5, 17), ink, false, 1.4)
+	var gilt := Color("d9b45a")
+	DrawKit.shape(self, PackedVector2Array([Vector2(-21, 0), Vector2(21, 0), Vector2(21, -7), Vector2(-21, -7)]), leather, ink, 2.4, _seed)
+	DrawKit.shape(self, PackedVector2Array([Vector2(-19, -7), Vector2(19, -7), Vector2(19, -17), Vector2(-19, -17)]), page, ink, 2.0, _seed + 1.0)
+	for k in 3:
+		draw_line(Vector2(-17, -9.5 - k * 3), Vector2(17, -9.5 - k * 3), Color(ink, 0.22), 1.0)
 	if opened:
-		# lid tipped back, a glow inside
-		var lid := PackedVector2Array([Vector2(-17, -17), Vector2(17, -17), Vector2(14, -34), Vector2(-14, -34)])
-		DrawKit.shape(self, lid, dark, ink, 2.4, _seed + 1.0)
-		draw_rect(Rect2(-14, -20, 28, 3), Color(1.0, 0.92, 0.55, 0.5))
+		var cover := PackedVector2Array([Vector2(-21, -17), Vector2(21, -17), Vector2(17, -38), Vector2(-17, -38)])
+		DrawKit.shape(self, cover, leather.darkened(0.15), ink, 2.4, _seed + 2.0)
+		draw_rect(Rect2(-13, -34, 26, 2), Color(gilt, 0.7))
+		draw_rect(Rect2(-15, -20, 30, 3), Color(1.0, 0.92, 0.55, 0.55))
+		for k in 3:
+			draw_line(Vector2(-10 + k * 10, -20), Vector2(-12 + k * 12, -30), Color(1.0, 0.92, 0.55, 0.3), 2.0)
 	else:
-		var lid2 := PackedVector2Array([Vector2(-18, -17), Vector2(18, -17), Vector2(16, -27), Vector2(-16, -27)])
-		DrawKit.shape(self, lid2, wood.lightened(0.08), ink, 2.4, _seed + 1.0)
-		draw_rect(Rect2(-3, -23, 6, 8), Color("e6c15a"))
-		draw_rect(Rect2(-3, -23, 6, 8), ink, false, 1.4)
+		var cover2 := PackedVector2Array([Vector2(-21, -17), Vector2(21, -17), Vector2(21, -26), Vector2(-21, -26)])
+		DrawKit.shape(self, cover2, worn, ink, 2.4, _seed + 2.0)
+		draw_rect(Rect2(-21, -26, 6, 9), leather.darkened(0.2))
+		draw_rect(Rect2(-21, -26, 42, 9), ink, false, 2.0)
+		for cx in [-19.0, 19.0]:
+			draw_rect(Rect2(cx - 2, -25, 4, 3), gilt)
+		draw_line(Vector2(-12, -23.5), Vector2(12, -23.5), Color(gilt, 0.65), 1.4)
+		draw_rect(Rect2(-3.5, -30, 7, 21), Color("5b2b22"))
+		draw_rect(Rect2(-3.5, -30, 7, 21), ink, false, 1.6)
+		draw_circle(Vector2(0, -21), 3.6, gilt)
+		draw_arc(Vector2(0, -21), 3.6, 0.0, TAU, 12, ink, 1.4)
 		if Settings.gfx_on("glow"):
 			draw_circle(Vector2(0, -20), 22.0 + sin(_t * 3.0) * 2.0, Color(Palette.GOLD, 0.07))

@@ -65,8 +65,16 @@ func _draw() -> void:
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))
 	draw_circle(Vector2.ZERO, 16.0, Color(0, 0, 0, 0.25))
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
-	draw_rect(Rect2(-3, -lift + 10.0, 6, lift - 10.0), Palette.WOOD)
-	draw_rect(Rect2(-3, -lift + 10.0, 6, lift - 10.0), Palette.OUTLINE, false, 2.0)
+	# a little wooden lectern: tapered post on a stack of three old books
+	var wood := Color("6a4a30")
+	DrawKit.shape(self, PackedVector2Array([Vector2(-4, -lift + 14.0), Vector2(4, -lift + 14.0), Vector2(5, -12), Vector2(-5, -12)]), wood, Palette.OUTLINE, 2.0, 1.0)
+	for i in 3:
+		var bw := 24.0 - i * 3.0
+		var bc: Color = [Color("8e3b32"), Color("2f5d7a"), Color("5b7a3a")][i]
+		draw_rect(Rect2(-bw * 0.5, -4.0 * (i + 1), bw, 4.0), bc)
+		draw_rect(Rect2(-bw * 0.5, -4.0 * (i + 1), bw, 4.0), Palette.OUTLINE, false, 1.6)
+	draw_rect(Rect2(-14, -lift + 12.0, 28, 4), wood)
+	draw_rect(Rect2(-14, -lift + 12.0, 28, 4), Palette.OUTLINE, false, 1.6)
 	# The tablet.
 	var good := is_good()
 	var tint := Color("d9efd0") if good else Color("f6dcc8")
@@ -75,6 +83,11 @@ func _draw() -> void:
 	draw_rect(Rect2(r.position - Vector2(5, 5), r.size + Vector2(10, 10)), Color(glow, 0.20 + _flash * 0.5))
 	draw_rect(r, tint)
 	draw_rect(r, Palette.OUTLINE, false, 3.0)
+	# a folded corner and a ribbon, so it reads as a loose page
+	var fc := r.position + Vector2(r.size.x, r.size.y)
+	draw_colored_polygon(PackedVector2Array([fc, fc + Vector2(-11, 0), fc + Vector2(0, -11)]), tint.darkened(0.12))
+	draw_line(fc + Vector2(-11, 0), fc + Vector2(0, -11), Palette.OUTLINE, 1.6)
+	draw_line(r.position + Vector2(10, 0), r.position + Vector2(10, -8), Color("a8483f"), 3.0)
 	for k in 2:
 		draw_line(r.position + Vector2(6, 10 + k * 14), r.position + Vector2(r.size.x - 6, 10 + k * 14), Color(Palette.INK_BROWN, 0.08), 1.0)
 	var x := r.position.x + 14.0

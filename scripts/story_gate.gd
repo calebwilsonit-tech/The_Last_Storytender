@@ -62,10 +62,12 @@ func _draw() -> void:
 		var t1 := float(i + 1) / n
 		var a0 := pa.lerp(pb, t0)
 		var a1 := pa.lerp(pb, t1)
-		var q := PackedVector2Array([a0, a1, a1 + Vector2(0, -height), a0 + Vector2(0, -height)])
+		var hh := height - (4.0 if i % 3 == 1 else 0.0)   # uneven tops, like books on a shelf
+		var q := PackedVector2Array([a0, a1, a1 + Vector2(0, -hh), a0 + Vector2(0, -hh)])
 		draw_colored_polygon(q, cols[i % cols.size()])
 		draw_polyline(PackedVector2Array([q[0], q[1], q[2], q[3], q[0]]), Palette.OUTLINE, 2.2, true)
-		draw_line(q[3].lerp(q[0], 0.3), q[2].lerp(q[1], 0.3), Color("e8c86a", 0.8), 1.4)
+		for f in [0.2, 0.8]:
+			draw_line(q[0].lerp(q[3], f), q[1].lerp(q[2], f), Color("e8c86a", 0.8), 1.4)
 	# Padlock.
 	if not is_open:
 		var m := (pa + pb) * 0.5 + Vector2(0, -height * 0.5)
