@@ -106,6 +106,9 @@ func _draw() -> void:
 	draw_string(_head, Vector2(220, 82), "Graphics", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 44, Palette.INK)
 	draw_string(_head, Vector2(220, 112), "Trade looks for speed. Each option shows how much it helps a slow computer.", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 18, Color(Palette.INK, 0.6))
 	draw_line(Vector2(220, 124), Vector2(PANEL.end.x - 40.0, 124), Color(Palette.INK, 0.5), 2.0)
+	var gpu := Settings.adapter_name()
+	if gpu != "":
+		draw_string(_head, Vector2(PANEL.end.x - 40.0 - 330.0, 82), "Graphics chip: %s" % gpu.left(34), HORIZONTAL_ALIGNMENT_LEFT, 330.0, 15, Color(Palette.INK, 0.5))
 	for i in _count():
 		var y := _row_y(i)
 		if i == _row:

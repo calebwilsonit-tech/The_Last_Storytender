@@ -84,11 +84,22 @@ func ground_move_threshold() -> float:
 func ground_idle_interval() -> float:
 	return [2.0, 1.0, 0.5][clampi(g("refresh"), 0, 2)]
 
+## Pick a starting preset for this computer. Windows does not report a hi-DPI scale to Godot, so
+## judge by the screen's pixel count, its DPI and the graphics chip instead.
 func _detect_preset() -> int:
 	if DisplayServer.get_name() == "headless":
 		return 2
-	var scale := DisplayServer.screen_get_scale()
-	return 1 if (scale > 1.4 or OS.get_name() == "macOS") else 2
+	var big_screen := DisplayServer.screen_get_size().y >= 1400 or DisplayServer.screen_get_dpi() >= 140 or DisplayServer.screen_get_scale() > 1.4
+	var gpu := adapter_name().to_lower()
+	var integrated := gpu.contains("intel") or gpu.contains("uhd") or gpu.contains("iris") or gpu.contains("radeon graphics") or gpu.contains("vega")
+	if big_screen and integrated:
+		return 0 if gpu.contains("uhd 6") or gpu.contains("hd graphics") else 1
+	if big_screen or integrated or OS.get_name() == "macOS":
+		return 1
+	return 2
+
+func adapter_name() -> String:
+	return RenderingServer.get_video_adapter_name()
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
