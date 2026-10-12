@@ -61,6 +61,12 @@ func _enter(mode: String) -> void:
 	if not visible:
 		visible = true
 		get_tree().paused = true
+	if mode == "level" and not GameState.has_flag("levels_intro"):
+		# The first time the system is shown you get a handful of points to play with.
+		GameState.set_flag("levels_intro")
+		GameState.free_points += GameState.FREE_POINTS
+		_say("\"%d free points,\" says the Narrator. \"On the house. Choose carefully: after these, every point costs more than the last.\"" % GameState.FREE_POINTS)
+		_quip_t = 7.0
 	_view.queue_redraw()
 
 func close() -> void:
@@ -136,6 +142,8 @@ func _activate() -> void:
 		"level":
 			if GameState.attr(id) >= GameState.ATTR_CAP:
 				_say("That one is as strong as it gets.")
+			elif GameState.level() >= GameState.LEVEL_CAP:
+				_say("Level 100. The draft is as revised as it will ever be.")
 			elif GameState.spend_point(id):
 				_say("%s rises to %d. You are now Level %d." % [GameState.ATTRS[id][0], GameState.attr(id), GameState.level()])
 				Telemetry.log_event("level_up", {"attr": id, "level": GameState.level()})
@@ -282,7 +290,7 @@ func _paint_hub() -> void:
 	var base := PANEL.position + Vector2(60, 130)
 	_txt("Every lantern post keeps a page of the Index.", base + Vector2(0, -8), 22, Palette.INK_BROWN, _ital)
 	var rows := [
-		["level", "Revise Your Draft", "Spend Mnemosynth to grow stronger, sturdier, quicker or wiser."],
+		["level", "Revise Your Draft", ("%d free points to spend!" % GameState.free_points) if GameState.free_points > 0 else ("Spend Mnemosynth to grow stronger, sturdier, quicker or wiser." if GameState.has_flag("levels_intro") else "Something new: grow stronger, sturdier, quicker or wiser.")],
 		["workbench", "The Workbench", "Turn scraps into something better."],
 		["shop", "The Narrator's Stall", "Spend and sell Mnemosynth. He narrates every sale."],
 		["travel", "The Map", "Walk the page to any post you have lit."],
@@ -299,7 +307,7 @@ func _paint_hub() -> void:
 			_view.draw_circle(r.position + Vector2(-24, r.size.y * 0.5), 8.0, Palette.GOLD)
 		_txt(rows[i][1], r.position + Vector2(28, 30), 30, Palette.INK)
 		_txt(rows[i][2], r.position + Vector2(28, 56), 19, Color(Palette.INK, 0.65), _ital)
-	_view.draw_string(_font, PANEL.position + Vector2(PANEL.size.x - 330, PANEL.size.y - 22), "Level %d   ·   Rank %d" % [GameState.level(), GameState.rank()], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 18, Color(Palette.INK, 0.5))
+	_view.draw_string(_font, PANEL.position + Vector2(PANEL.size.x - 330, PANEL.size.y - 22), "Level %d / %d   ·   Rank %d" % [GameState.level(), GameState.LEVEL_CAP, GameState.rank()], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 18, Color(Palette.INK, 0.5))
 
 func _paint_level() -> void:
 	var ids := _ids()
@@ -323,10 +331,11 @@ func _paint_level() -> void:
 	var y := PANEL.position.y + 120.0
 	_txt(String(GameState.ATTRS[key][0]), Vector2(x, y + 20), 36, Palette.INK)
 	_view.draw_multiline_string(_head, Vector2(x, y + 60), "Each point: " + String(GameState.ATTRS[key][1]) + ".", HORIZONTAL_ALIGNMENT_LEFT, 440.0, 22, 4, Color(Palette.INK, 0.9))
-	_txt("Level %d" % GameState.level(), Vector2(x, y + 190), 40, Palette.INK)
+	_txt("Level %d / %d" % [GameState.level(), GameState.LEVEL_CAP], Vector2(x, y + 190), 40, Palette.INK)
 	var cost := GameState.level_cost()
-	var ok := GameState.mnemosynth >= cost and GameState.attr(key) < GameState.ATTR_CAP
-	_txt("Next point costs %d Mnemosynth" % cost, Vector2(x, y + 230), 24, Color("3f7a3a") if ok else Color("a8402f"))
+	var free := GameState.free_points > 0
+	var ok := (free or GameState.mnemosynth >= cost) and GameState.attr(key) < GameState.ATTR_CAP
+	_txt("Free points left: %d" % GameState.free_points if free else "Next point costs %d Mnemosynth" % cost, Vector2(x, y + 230), 24, Color("3f7a3a") if ok else Color("a8402f"))
 	_txt("You have %d" % GameState.mnemosynth, Vector2(x, y + 260), 20, Color(Palette.INK, 0.6), _ital)
 	_txt("Current bonus from points:", Vector2(x, y + 310), 20, Palette.INK_BROWN, _ital)
 	var lines: PackedStringArray = []
@@ -336,9 +345,9 @@ func _paint_level() -> void:
 		if absf(a) > 0.0001:
 			fx[s] = a
 	if GameState.attr("ink") > 0:
-		lines.append("+%d maximum ink" % (4 * GameState.attr("ink")))
-	if GameState.attr("wit") >= 5:
-		lines.append("+%d tries in Vault Trials" % (GameState.attr("wit") / 5))
+		lines.append("+%d maximum ink" % (3 * GameState.attr("ink")))
+	if GameState.attr("wit") >= 8:
+		lines.append("+%d tries in Vault Trials" % (GameState.attr("wit") / 8))
 	var txt := ItemCatalog.fx_text(fx)
 	if txt != "":
 		lines.append(txt)
