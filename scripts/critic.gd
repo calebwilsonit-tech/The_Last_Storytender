@@ -5,6 +5,7 @@ extends Node2D
 ## Storytender holds up the memories it was built to drown out.
 
 signal fired(word: String, fx: String, origin: Vector2, dir: Vector2)
+signal pool_requested(at: Vector2)   # a patch of floor is about to be cut with red ink
 
 const WORDS := [
 	{"w": "Derivative!", "fx": "slow"},
@@ -63,21 +64,34 @@ func _process(delta: float) -> void:
 			if _cd <= 0.0:
 				_word = WORDS[randi() % WORDS.size()]
 				_tele = 0.85
-				_cd = 1.9 + (3 - layers) * 1.0    # quieter with every memory held up
+				_cd = 1.7 + (3 - layers) * 0.6    # quieter with every memory held up
 	queue_redraw()
 
+## Speed of its words: a little slower as it quiets, scaled by difficulty.
+func bolt_speed() -> float:
+	return (190.0 - (3 - layers) * 10.0) * GameState.bolt_speed_mult()
+
 func _fire() -> void:
-	var d := target.position - position
+	var from := position
+	var tp := target.position
+	# Lead the shot: aim where you are going, not where you are.
+	var dist := from.distance_to(tp)
+	var tv: Vector2 = target.get("velocity") if target.get("velocity") != null else Vector2.ZERO
+	var aim: Vector2 = tp + tv * (dist / maxf(bolt_speed(), 1.0))
+	var d: Vector2 = aim - from
 	if d == Vector2.ZERO:
 		return
-	var base := d.normalized()
+	var base: Vector2 = d.normalized()
 	var spread: Array = [0.0]
 	if layers >= 3:
-		spread = [-0.32, 0.32]
+		spread = [-0.28, 0.28]
 	elif layers == 2:
-		spread = [0.0, 0.5]
+		spread = [-0.35, 0.0, 0.35]
 	for a: float in spread:
-		fired.emit(_word["w"], _word["fx"], position, base.rotated(a))
+		fired.emit(_word["w"], _word["fx"], from, base.rotated(a))
+	# With fewer layers it can no longer hurl as many words, but it cuts the floor instead.
+	if layers <= 2:
+		pool_requested.emit(aim)
 
 func _draw() -> void:
 	var fade := 1.0

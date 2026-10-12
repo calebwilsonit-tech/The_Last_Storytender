@@ -157,3 +157,20 @@ Mnemosynth is the currency and also refuels the Lantern.
 
 ### Restoration is now per-NPC
 Each restored NPC blooms color outward from them (Garrick, then Pip, then Maud). The full "Published Chapter" restoration is reserved for the Editor fight.
+
+---
+## 15. Difficulty & Tuning Pass (implemented v2.6)
+Why: an honest review found nothing could really threaten the player (free respawn, a dodge-only Critic, stacking armor, one-throw crowd clears, infinite lantern, no resource pressure).
+
+**Difficulty setting (binder, or press D):** *Normal* (default) and *Story* (gentler: 60% enemy damage, full ink after crumpling, no Mnemosynth loss, slower bolts, longer Spoiler windows, 8 fall damage).
+**Death cost (Normal):** crumpling loses 15% of your Mnemosynth (dropped as crystals where you fell, recoverable), restores 50 ink, and wakes you at the start of the current room with 2s of grace. The room's Errors reset (but not right on top of you); boss progress is mostly kept (the Spoiler recovers one sentence; the Critic keeps your remembered shards). Falling costs 15 (Story 8) and never kills.
+**Combat:** Bare 9 hp / faster (86) / shorter windup (0.45s); Mite faster (150) and hits for 6; Errors drift back into the Plains over time.
+**Gear & items:** Hardcover -30% (was -35%), Oxford Comma +0.5s grace (was +0.8), total armor capped at 50%. Eraser Crumbs: 5 damage, smaller radius, Garrick gives 2. Lantern drains faster (24/s); crystals refuel less (12). A proofread Bare gives an Ink Vial 60% of the time (always in Story).
+**The Critic:** leads its shots (aims where you're going), fires 2 / 3 / 1 words by phase, and from the second phase also cuts the floor with red ink pools (damage over time). Slightly faster words; still quieter with every memory, but no longer dodge-by-walking.
+**The Spoiler:** window shrinks from 5.0s to 3.2s as you rewrite; stones sit at least 4 tiles away; speaks every 6.5s (Story 8); wolf events spawn 3 Mites.
+**Playtest log:** every session records deaths per room, damage by source, time per scene and boss events to a JSON file. **F10** saves it and shows the path. It lives in the game's user-data folder under `playtest/` (Windows: `%APPDATA%\Godot\app_userdata\The Last Storytender\playtest\`).
+
+### Known gaps (not yet tuned)
+- Mnemosynth has nothing to spend on until the Narrator shop exists.
+- Only two enemy types; the tall shadow "Censor" (ranged) from the enemy sheet is the next addition.
+- All numbers are from reading code and automated runs. Real tuning needs the playtest log.

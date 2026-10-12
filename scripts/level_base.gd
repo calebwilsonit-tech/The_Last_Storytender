@@ -21,6 +21,7 @@ var _dialogue: DialogueBox
 var _inventory: InventoryScreen
 
 var _start := Vector2.ZERO
+var _map_start := Vector2.ZERO     # the map's own start cell, ignoring return-spawn overrides
 var _safe_pos := Vector2.ZERO
 var _interactables: Array[Dictionary] = []   # {node, prompt: Callable, action: Callable, range: float}
 var _fell_once := false
@@ -57,9 +58,22 @@ func _handle_cue(_cue: String) -> void:
 func _spawn_override() -> Vector2i:
 	return Vector2i(-1, -1)
 
+## Name of the room/area a cell belongs to (for the playtest log).
+func _room_name(_cell: Vector2i) -> String:
+	return ""
+
+## Where you wake up after being crumpled (normal difficulty): the start of the current room.
+func _checkpoint_for(_cell: Vector2i) -> Vector2:
+	return _start
+
+## Reset the room's enemies / hazards after a death.
+func _on_death_reset() -> void:
+	pass
+
 # --- Lifecycle ---------------------------------------------------------------------
 func _ready() -> void:
 	GameState.in_dialogue = false
+	Telemetry.enter_scene(String(name))
 	_build_background()
 	_floor = IsoFloor.new()
 	add_child(_floor)
@@ -109,6 +123,7 @@ func _load_map() -> void:
 				"P":
 					_floor.cells[cell] = "."
 					_start = Iso.to_screen(Vector2(cell))
+					_map_start = _start
 	var ov := _spawn_override()
 	if ov != Vector2i(-1, -1):
 		_start = Iso.to_screen(Vector2(ov))
@@ -236,6 +251,7 @@ func _process(delta: float) -> void:
 	mat.set_shader_parameter("screen_size", view)
 	mat.set_shader_parameter("scroll", _camera.get_screen_center_position() - view * 0.5)
 	_track_cell()
+	Telemetry.enter_room(_room_name(_floor.cell_at(_player.position)))
 	_update_prompt()
 	_collect_crystals()
 	_level_process(delta)
@@ -264,6 +280,7 @@ func _give_item(id: String, n: int = 1) -> void:
 func use_item(id: String) -> void:
 	if id == "" or GameState.count(id) <= 0 or _player.is_crumpled or _player.is_falling or GameState.in_dialogue:
 		return
+	Telemetry.log_event("item", {"id": id})
 	match id:
 		"eraser_crumbs":
 			var reach := 150.0
@@ -305,7 +322,7 @@ func _collect_crystals() -> void:
 		if _dist(c.position, _player.position) < 30.0 and absf(c.lift - _player.elev) < 20.0:
 			_crystals.erase(c)
 			GameState.add_mnemosynth(5)
-			_player.refuel(18.0)          # the Lantern burns Mnemosynth
+			_player.refuel(12.0)          # the Lantern burns Mnemosynth
 			var tw := create_tween()
 			tw.tween_property(c, "modulate:a", 0.0, 0.25)
 			tw.tween_callback(c.queue_free)
@@ -339,7 +356,9 @@ func _add_enemy(kind: Enemy.Kind, cell: Vector2i) -> Enemy:
 
 func _on_proofread(e: Enemy) -> void:
 	drop_crystals(e.position, 6)
-	_give_item("ink_vial")
+	Telemetry.log_event("proofread")
+	if GameState.is_story() or randf() < 0.6:
+		_give_item("ink_vial")
 	_hud.toast("Proofread: Bare → Bear")
 	if not _first_proofread:
 		_first_proofread = true
@@ -404,6 +423,10 @@ func _update_prompt() -> void:
 	_hud.set_prompt(it["prompt"].call() if not it.is_empty() else "")
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("debug_report"):
+		Telemetry.flush()
+		_hud.toast("Playtest report saved: %s" % Telemetry.report_path() if Telemetry.enabled else "Playtest log is disabled")
+		return
 	if event.is_action_pressed("debug_reset"):
 		GameState.reset_all()
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
@@ -429,14 +452,34 @@ func _say(lines: Array) -> void:
 
 # --- Falling / crumpling ----------------------------------------------------------------
 func _on_player_fell() -> void:
-	_player.take_damage(10.0, false)
+	_player.take_damage(GameState.fall_damage(), false, "fall")
+	Telemetry.log_event("fall")
 	_player.respawn_at(_safe_pos)
 	if not _fell_once:
 		_fell_once = true
 		_hud.narrate(Story.FALL_FIRST, false, 4.0)
 
 func _on_player_crumpled() -> void:
+	var cell := _floor.cell_at(_player.position)
+	Telemetry.log_event("death", {"room": _room_name(cell), "ink_lost": 0})
 	_hud.narrate(Story.CRUMPLED, false, 4.0)
+	var where := _player.position
 	await get_tree().create_timer(2.2).timeout
-	_player.restore_ink(60.0)
-	_player.respawn_at(_safe_pos)
+	if GameState.is_story():
+		# Story mode: stand right back up where it is safe, no penalty.
+		_player.restore_ink(GameState.crumple_ink())
+		_player.respawn_at(_safe_pos)
+		return
+	# Normal: the page is crumpled. You lose some Mnemosynth (left where you fell) and
+	# start the current room again.
+	var lost := (int(GameState.mnemosynth * 0.15) / 5) * 5
+	if lost > 0:
+		GameState.mnemosynth -= lost
+		GameState.mnemosynth_changed.emit(GameState.mnemosynth)
+		drop_crystals(where, lost / 5)
+		_hud.toast("You lost %d Mnemosynth. It lies where you fell." % lost)
+	_player.restore_ink(GameState.crumple_ink())
+	var cp := _checkpoint_for(cell)
+	_player.respawn_at(cp)
+	_safe_pos = cp
+	_on_death_reset()

@@ -12,7 +12,7 @@ signal dashed
 signal hit_landed
 
 const LANTERN_MAX := 100.0
-const LANTERN_DRAIN := 20.0       # per second while shining
+const LANTERN_DRAIN := 24.0       # per second while shining
 const LANTERN_REGEN := 14.0       # per second after a short delay
 const BEAM_RANGE := 175.0
 const BEAM_HALF := 0.63           # radians (~36 deg)
@@ -112,7 +112,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	if Input.is_action_just_pressed("debug_damage"):
-		take_damage(12.0)
+		take_damage(12.0, true, "debug")
 	if Input.is_action_just_pressed("debug_heal"):
 		restore_ink(100.0)
 
@@ -238,13 +238,14 @@ func _process(delta: float) -> void:
 		_look = lerpf(_look, signf(velocity.x), 1.0 - exp(-10.0 * delta))
 	queue_redraw()
 
-func take_damage(amount: float, lethal: bool = true) -> void:
+func take_damage(amount: float, lethal: bool = true, source: String = "") -> void:
 	if is_crumpled or (_invuln > 0.0 and lethal):
 		return
 	if lethal:
-		amount *= 1.0 - clampf(GameState.equipped_stat("armor"), 0.0, 0.8)
+		amount *= 1.0 - clampf(GameState.equipped_stat("armor"), 0.0, 0.5)
 		_invuln = 0.9 + GameState.equipped_stat("invuln")
 	ink = maxf(ink - amount, 0.0 if lethal else 1.0)
+	Telemetry.log_event("damage", {"src": source if source != "" else ("fall" if not lethal else "other"), "amt": snappedf(amount, 0.1), "ink": snappedf(ink, 0.1)})
 	for i in int(amount / 3.0) + 2:
 		_splats.append({
 			"pos": Vector2.from_angle(randf() * TAU) * randf_range(8.0, 34.0) * Vector2(1, 0.5),
@@ -274,6 +275,7 @@ func fall() -> void:
 	fell.emit()
 
 func respawn_at(pos: Vector2) -> void:
+	_invuln = maxf(_invuln, 2.0)   # a moment to get your bearings
 	position = pos
 	velocity = Vector2.ZERO
 	scale = Vector2.ONE

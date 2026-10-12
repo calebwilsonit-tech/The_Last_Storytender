@@ -7,7 +7,7 @@ signal exploded(pos: Vector2)
 
 const FLY := 0.5
 const FUSE := 0.45
-const RADIUS := 105.0
+const RADIUS := 85.0
 
 var start := Vector2.ZERO
 var goal := Vector2.ZERO
@@ -51,7 +51,7 @@ func _explode() -> void:
 		var dg := Vector2(d.x, d.y * 2.0)
 		var rad: float = e.get("hit_r") if e.get("hit_r") != null else 16.0
 		if dg.length() < RADIUS + rad:
-			e.hurt(8.0, dg.normalized() if dg.length() > 1.0 else Vector2.RIGHT)
+			e.hurt(5.0, dg.normalized() if dg.length() > 1.0 else Vector2.RIGHT)
 	exploded.emit(position)
 
 func _draw() -> void:

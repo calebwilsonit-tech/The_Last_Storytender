@@ -44,7 +44,7 @@ func _ready() -> void:
 	_t = _seed * 7.0
 	_home = position
 	if kind == Kind.BARE:
-		hp = 7.0
+		hp = 9.0
 		hit_r = 22.0
 	else:
 		hp = 2.0
@@ -183,16 +183,16 @@ func _hostile_tick(delta: float, slow: float) -> void:
 				_state = "return"
 				return
 			if kind == Kind.BARE:
-				_move(dirg, 68.0 * slow)
+				_move(dirg, 86.0 * slow)
 				if dist < 80.0 and _cd <= 0.0 and slow == 1.0:
 					_state = "windup"
-					_st = 0.55
+					_st = 0.45
 					_lunge = dirg
 			else:
 				var jitter := dirg.orthogonal() * sin(_t * 9.0 + _seed) * 0.6
-				_move((dirg + jitter).normalized(), 125.0 * slow)
+				_move((dirg + jitter).normalized(), 150.0 * slow)
 				if dist < 28.0 and _cd <= 0.0:
-					target.take_damage(5.0)
+					target.take_damage(6.0 * GameState.enemy_dmg_mult(), true, "mite")
 					target.knockback(dirg, 150.0)
 					_cd = 0.9
 		"windup":
@@ -206,7 +206,7 @@ func _hostile_tick(delta: float, slow: float) -> void:
 			_move(_lunge, 340.0)
 			if not _hit_done and target and dist < 40.0:
 				_hit_done = true
-				target.take_damage(12.0)
+				target.take_damage(12.0 * GameState.enemy_dmg_mult(), true, "bare")
 				target.knockback(_lunge, 280.0)
 			if _st <= 0.0:
 				_state = "recover"

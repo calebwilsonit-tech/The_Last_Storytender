@@ -109,6 +109,12 @@ func _draw_mark(cell: Vector2i, z: float) -> void:
 		for seg in [[Vector2(-14, -3), Vector2(-2, 2)], [Vector2(-2, 2), Vector2(8, -4)], [Vector2(8, -4), Vector2(15, 3)], [Vector2(-2, 2), Vector2(2, 9)]]:
 			draw_line(c + seg[0], c + seg[1], Color("ff5a3c", a), 2.4)
 		draw_colored_polygon(_quad(cell, z), Color(1.0, 0.35, 0.2, 0.10 + 0.08 * sin(t * 12.0)))
+	elif m["kind"] == "ink":
+		var pulse := 0.8 + 0.2 * sin(t * 6.0)
+		draw_colored_polygon(_quad(cell, z), Color(Palette.CRITIC_RED, 0.55 * pulse))
+		for i in 4:
+			var o := Vector2(-16 + i * 10.0, sin(t * 3.0 + i) * 4.0)
+			draw_circle(c + o, 3.0 + sin(t * 4.0 + i), Color(Palette.CRITIC_DARK, 0.9))
 	elif m["kind"] == "flower":
 		for i in 5:
 			var o := Vector2(-18 + i * 9.0, (i % 2) * 6.0 - 3.0)

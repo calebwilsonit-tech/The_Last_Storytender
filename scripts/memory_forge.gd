@@ -14,6 +14,8 @@ var _remembered := 0
 var _boss_started := false
 var _finale_started := false
 var _leaving := false
+var _pools: Array[Dictionary] = []   # {cells, t, phase}
+var _pool_tick := 0.0
 var _slow_t := 0.0
 var _dim_t := 0.0
 
@@ -91,6 +93,7 @@ func _level_ready() -> void:
 	_player.lantern_power = 1.7
 	_critic.target = _player
 	_critic.fired.connect(_on_critic_fired)
+	_critic.pool_requested.connect(_on_pool)
 	_hud.set_objective(Story.MEMORY_OBJECTIVE % 0)
 	_hud.set_region("The Blacksmith's Regret")
 	await get_tree().create_timer(2.6).timeout
@@ -101,6 +104,7 @@ func _level_process(delta: float) -> void:
 	if not _boss_started and _floor.cell_at(_player.position).x >= ARENA_X and not GameState.in_dialogue:
 		_start_boss()
 	_check_bolts()
+	_tick_pools(delta)
 	if _slow_t > 0.0:
 		_slow_t -= delta
 		if _slow_t <= 0.0:
@@ -125,7 +129,7 @@ func _on_critic_fired(word: String, fx: String, origin: Vector2, dir: Vector2) -
 	b.fx = fx
 	b.floor_ref = _floor
 	b.position = origin
-	b.vel = dir * (165.0 - (3 - _critic.layers) * 20.0)
+	b.vel = dir * _critic.bolt_speed()
 	_actors.add_child(b)
 
 func _check_bolts() -> void:
@@ -136,7 +140,7 @@ func _check_bolts() -> void:
 			continue
 		if absf(_floor.height_at(b.position) - _floor.height_at(_player.position)) > 0.7:
 			continue
-		_player.take_damage(9.0)
+		_player.take_damage(9.0 * GameState.enemy_dmg_mult(), true, "critic_word")
 		_hud.debuff(b.word)
 		match b.fx:
 			"slow":
@@ -152,8 +156,10 @@ func _clear_bolts() -> void:
 		b.queue_free()
 
 func _remember(shard: Prop) -> void:
+	Telemetry.log_event("boss", {"boss": "critic", "what": "remembered", "n": _remembered + 1})
 	_critic.active = false
 	_clear_bolts()
+	_clear_pools()
 	_slow_t = 0.0
 	_player.speed_mult = 1.0
 	await _say(Story.shard_memory(shard.variant))
@@ -200,6 +206,57 @@ func _take_sword() -> void:
 		create_tween().tween_property(_sword, "modulate:a", 0.0, 0.8)
 	await get_tree().create_timer(3.4).timeout
 	_leave()
+
+# --- Red ink pools: the Critic's "cuts" on the floor ---------------------------------------------
+func _on_pool(at: Vector2) -> void:
+	var center := _floor.cell_at(at)
+	var cells: Array[Vector2i] = []
+	for dx in range(-1, 2):
+		for dy in range(-1, 2):
+			var c := center + Vector2i(dx, dy)
+			if _floor.cells.get(c, "") == "m" and not _floor.stairs.has(c) and _floor.level(c) == 0:
+				cells.append(c)
+	if cells.is_empty():
+		return
+	for c in cells:
+		_floor.marks[c] = {"kind": "crack", "t": 0.0}
+	_pools.append({"cells": cells, "t": 1.3, "phase": "warn"})
+
+func _tick_pools(delta: float) -> void:
+	_pool_tick = maxf(_pool_tick - delta, 0.0)
+	for pool in _pools.duplicate():
+		pool["t"] = float(pool["t"]) - delta
+		if pool["phase"] == "warn" and pool["t"] <= 0.0:
+			pool["phase"] = "active"
+			pool["t"] = 4.0
+			for c in pool["cells"]:
+				_floor.marks[c] = {"kind": "ink", "t": 0.0}
+		elif pool["phase"] == "active":
+			if _pool_tick <= 0.0 and not _player.is_falling and pool["cells"].has(_floor.cell_at(_player.position)):
+				_pool_tick = 0.6
+				_player.take_damage(6.0 * GameState.enemy_dmg_mult(), true, "ink_pool")
+			if pool["t"] <= 0.0:
+				for c in pool["cells"]:
+					_floor.marks.erase(c)
+				_pools.erase(pool)
+
+func _clear_pools() -> void:
+	for pool in _pools:
+		for c in pool["cells"]:
+			_floor.marks.erase(c)
+	_pools.clear()
+
+func _room_name(cell: Vector2i) -> String:
+	return "The Forge" if cell.x >= ARENA_X else "Antechamber"
+
+func _checkpoint_for(cell: Vector2i) -> Vector2:
+	return Iso.to_screen(Vector2(13, 12)) if cell.x >= ARENA_X else _map_start
+
+func _on_death_reset() -> void:
+	_clear_bolts()
+	_clear_pools()
+	_slow_t = 0.0
+	_player.speed_mult = 1.0
 
 # --- Leaving --------------------------------------------------------------------------
 func _portal_prompt() -> String:

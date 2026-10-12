@@ -10,14 +10,13 @@ const OVERWORLD := "res://scenes/main.tscn"
 const RETURN_CELL := Vector2i(26, 13)
 const BRIDGE_CELLS: Array[Vector2i] = [Vector2i(11, 17), Vector2i(12, 17), Vector2i(13, 17)]
 const WOLF_SLEEP := 18.0
-const SPOILER_WINDOW := 5.0
 const REGIONS := {
 	"WEST": Vector2i(32, 2), "EAST": Vector2i(39, 2), "NORTH": Vector2i(36, 1),
 	"SOUTH": Vector2i(36, 4), "MIDDLE": Vector2i(36, 3),
 }
 const WOLF_SIDES := {
-	"WEST": [Vector2i(31, 3), Vector2i(31, 2)], "EAST": [Vector2i(40, 3), Vector2i(40, 4)],
-	"NORTH": [Vector2i(35, 0), Vector2i(37, 0)],
+	"WEST": [Vector2i(31, 3), Vector2i(31, 2), Vector2i(31, 4)], "EAST": [Vector2i(40, 3), Vector2i(40, 4), Vector2i(40, 2)],
+	"NORTH": [Vector2i(35, 0), Vector2i(37, 0), Vector2i(36, 0)],
 }
 
 var _enemy_spawns: Array[Dictionary] = []
@@ -198,7 +197,8 @@ func _tick_wolves(delta: float) -> void:
 	if _wolves_t <= 0.0 or not is_instance_valid(_stone_wolves):
 		return
 	_wolves_t -= delta
-	_stone_wolves.ttl = maxf(_wolves_t, 0.0) * SPOILER_WINDOW / WOLF_SLEEP
+	_stone_wolves.ttl_max = WOLF_SLEEP
+	_stone_wolves.ttl = maxf(_wolves_t, 0.0)
 	if _wolves_t <= 0.0:
 		_stone_wolves.index = 0
 		_hud.narrate(Story.PIP_WOLVES_WAKE, false, 3.0)
@@ -228,9 +228,15 @@ func _start_boss() -> void:
 	_boss_started = true
 	_busy = true
 	await _say(Story.pip_boss_intro())
+	_spoiler.interval = 8.0 if GameState.is_story() else 6.5
 	_spoiler.active = true
+	Telemetry.log_event("boss", {"boss": "spoiler", "what": "start"})
 	_hud.set_objective(Story.PIP_OBJECTIVES[3] % 0)
 	_busy = false
+
+## How long you have to rewrite a spoiler: shrinks as the Spoiler warms up.
+func _window() -> float:
+	return maxf(5.0 - 0.45 * _rewrites, 3.2) + GameState.spoiler_window_bonus()
 
 func _free_arena_cell(avoid: Vector2i, min_dist: float) -> Vector2i:
 	var pool := _arena_cells.duplicate()
@@ -274,26 +280,30 @@ func _spawn_spoiler_event() -> void:
 		center = cells[0]
 		prefix = "Wolves from the %s" % region_name
 		options = ["ATTACK", "NAP"]
-	var at := _free_arena_cell(center, 3.0)
+	var window := _window()
+	var at := _free_arena_cell(center, 4.0)
 	var st := SentenceStone.new()
 	st.prefix = prefix
 	st.options = PackedStringArray(options)
 	st.suffix = "."
 	st.position = Iso.to_screen(Vector2(at))
 	st.elev = _lift_at(at)
-	st.ttl = SPOILER_WINDOW
+	st.ttl_max = window
+	st.ttl = window
 	_actors.add_child(st)
 	_register(st, func(): return "Rewrite" if not st.locked else "", func(): st.rewrite(), 80.0)
-	var hz := {"kind": kind, "cells": cells, "stone": st, "t": SPOILER_WINDOW, "phase": "warn", "orig": {}}
+	var hz := {"kind": kind, "cells": cells, "stone": st, "t": window, "phase": "warn", "orig": {}}
 	_hazards.append(hz)
 	for c in cells:
 		_floor.marks[c] = {"kind": "crack", "t": 0.0}
-	_spoiler.announce("%s %s." % [prefix, options[0]], SPOILER_WINDOW - 0.5)
+	_spoiler.announce("%s %s." % [prefix, options[0]], window - 0.5)
+	Telemetry.log_event("boss", {"boss": "spoiler", "what": "spoke", "kind": kind, "window": snappedf(window, 0.1)})
 	st.rewritten.connect(func(s: SentenceStone, idx: int): _on_spoiler_stone(hz, s, idx))
 
 func _on_spoiler_stone(hz: Dictionary, stone: SentenceStone, idx: int) -> void:
 	if hz["phase"] != "warn" or idx != 1:
 		return
+	Telemetry.log_event("boss", {"boss": "spoiler", "what": "rewritten", "n": _rewrites + 1})
 	hz["phase"] = "rewritten"
 	hz["t"] = 8.0
 	stone.locked = true
@@ -346,6 +356,7 @@ func _tick_hazards(delta: float) -> void:
 					_hazards.erase(hz)
 
 func _trigger(hz: Dictionary) -> void:
+	Telemetry.log_event("boss", {"boss": "spoiler", "what": "came_true", "kind": hz["kind"]})
 	var st: SentenceStone = hz["stone"]
 	if is_instance_valid(st):
 		st.locked = true
@@ -399,6 +410,48 @@ func _turn_the_page() -> void:
 	_hud.set_objective("")
 	await get_tree().create_timer(3.0).timeout
 	_leave()
+
+# --- Rooms, checkpoints and dying -------------------------------------------------------------------
+func _room_name(cell: Vector2i) -> String:
+	return ["Front Matter", "The Dark Wood", "The Tall Tower", "The Last Page"][_room_for(cell)]
+
+func _checkpoint_for(cell: Vector2i) -> Vector2:
+	match _room_for(cell):
+		0: return _map_start
+		1: return Iso.to_screen(Vector2(14, 16))
+		2: return Iso.to_screen(Vector2(31, 15))
+		_: return Iso.to_screen(Vector2(35, 7))
+
+func _on_death_reset() -> void:
+	var room := _room_for(_floor.cell_at(_player.position))
+	# The room's Errors return, but your rewrites stay.
+	for e in get_tree().get_nodes_in_group("enemies"):
+		if is_instance_valid(e) and _room_for(_floor.cell_at(e.position)) == room:
+			e.queue_free()
+	_room2_enemies.clear()
+	for sp in _enemy_spawns:
+		if _room_for(sp["cell"]) == room and _dist(Iso.to_screen(Vector2(sp["cell"])), _player.position) > 380.0:
+			var e := _add_enemy(sp["kind"], sp["cell"])
+			if room == 1:
+				_room2_enemies.append(e)
+	if room == 1:
+		_wolves_t = 0.0
+		if is_instance_valid(_stone_wolves):
+			_stone_wolves.index = 0
+	if _boss_started and not _finale_done:
+		# The Spoiler's hazards reset, and it recovers one sentence.
+		for hz in _hazards:
+			for c in hz["cells"]:
+				_floor.cells[c] = hz["orig"].get(c, "p")
+				_floor.marks.erase(c)
+			if is_instance_valid(hz["stone"]):
+				hz["stone"].queue_free()
+		_hazards.clear()
+		_rewrites = maxi(_rewrites - 1, 0)
+		_spoiler.certainty = 5 - _rewrites
+		_spoiler._cd = 3.0
+		_hud.set_objective(Story.PIP_OBJECTIVES[3] % _rewrites)
+		Telemetry.log_event("boss", {"boss": "spoiler", "what": "player_died", "rewrites": _rewrites})
 
 # --- Leaving --------------------------------------------------------------------------------------------
 func _leave() -> void:

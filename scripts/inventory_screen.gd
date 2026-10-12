@@ -19,6 +19,7 @@ var _scroll := 0
 var _hover := -1
 var _buttons: Array[Dictionary] = []   # {rect, label, act}
 var _slot_rects := {}                   # "binding"/"amulet" -> Rect2
+var _diff_rect := Rect2()
 var _font: Font
 var _ital: Font
 
@@ -103,6 +104,9 @@ func _input(event: InputEvent) -> void:
 		_primary()
 	elif event is InputEventKey and event.pressed and event.keycode == KEY_Q:
 		_set_quick()
+	elif event is InputEventKey and event.pressed and event.keycode == KEY_D:
+		GameState.toggle_difficulty()
+		_view.queue_redraw()
 	else:
 		return
 	get_viewport().set_input_as_handled()
@@ -150,6 +154,10 @@ func _on_gui(event: InputEvent) -> void:
 			if i == _sel:
 				_primary()
 			_sel = i
+			_view.queue_redraw()
+			return
+		if _diff_rect.has_point(event.position):
+			GameState.toggle_difficulty()
 			_view.queue_redraw()
 			return
 		for b in _buttons:
@@ -253,6 +261,12 @@ func _paint_left() -> void:
 	]
 	for i in lines.size():
 		_txt(lines[i], Vector2(108, 546 + i * 24), 18, Color(ink, 0.9))
+	# Difficulty: Story is gentle (no death penalty); Normal asks you to take care.
+	_diff_rect = Rect2(372, 548, 220, 32)
+	_view.draw_rect(_diff_rect, Palette.INK_BROWN)
+	_view.draw_rect(_diff_rect, Palette.INK, false, 2.0)
+	_txt("Difficulty: %s" % ("Story" if GameState.is_story() else "Normal"), Vector2(384, 570), 19, Palette.PAPER_LIGHT)
+	_wrap("Story: gentler, no penalty for crumpling." if GameState.is_story() else "Normal: crumpling costs Mnemosynth and restarts the room.  (D)", Vector2(372, 598), 220.0, 13, Color(Palette.INK, 0.65), true)
 	_txt("Layer 0 · The Sketch      Layer 2 · Bindings      Layer 4 · Tools", Vector2(108, 648), 14, Color(ink, 0.45), true)
 
 func _pct(x: float) -> String:

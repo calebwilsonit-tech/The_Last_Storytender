@@ -15,6 +15,8 @@ var _strikes := 0
 var _lantern_time := 0.0
 var _redactor_hinted := false
 var _enemies_out := false
+var _respawn_t := 0.0
+var _spawn_kinds: Array[Dictionary] = []
 var _forge: Prop
 var _garrick: Npc
 var _pip_npc: Npc
@@ -138,6 +140,7 @@ func _start_intro() -> void:
 		await get_tree().create_timer(5.6).timeout
 
 func _level_process(delta: float) -> void:
+	_tick_respawns(delta)
 	_update_region()
 	_hint_redactor()
 	if _tutorial == 3 and _player.lantern_on:
@@ -262,17 +265,56 @@ func _finish_lesson() -> void:
 	await _say(Story.garrick_lesson_end())
 	_busy = false
 	_give_item("hardcover_binding")
-	_give_item("eraser_crumbs", 3)
+	_give_item("eraser_crumbs", 2)
 	_hud.narrate(Story.BINDER_HINT, false, 5.0)
 	_hud.narrate(Story.REDACTION_NOTICED, false, 4.5)
 	_spawn_enemies()
 
-func _spawn_enemies() -> void:
+func _spawn_enemies(avoid: Vector2 = Vector2(INF, INF)) -> void:
 	if _enemies_out:
 		return
 	_enemies_out = true
 	for sp in _enemy_spawns:
+		# After a death, nothing re-appears right on top of where you wake up.
+		if avoid.x != INF and _dist(Iso.to_screen(Vector2(sp["cell"])), avoid) < 520.0:
+			continue
 		_add_enemy(sp["kind"], sp["cell"])
+
+# Areas for the playtest log, and where you wake up after being crumpled.
+func _room_name(cell: Vector2i) -> String:
+	if cell.x < IsoFloor.PLAINS_X_LIMIT:
+		return "Glade" if (cell.x <= 8 and cell.y >= 18) else "Prologue Plains"
+	return "Garrick's Terrace" if (cell.x >= 28 and cell.y >= 13) else "Thistledown"
+
+func _checkpoint_for(cell: Vector2i) -> Vector2:
+	if cell.x < IsoFloor.PLAINS_X_LIMIT:
+		return _map_start
+	return Iso.to_screen(Vector2(23, 13))
+
+func _on_death_reset() -> void:
+	for e in get_tree().get_nodes_in_group("enemies"):
+		e.queue_free()
+	_enemies_out = false
+	if GameState.has_flag("lesson_done"):
+		_spawn_enemies(_player.position)
+
+# Errors drift back in over time, so the Plains never stay empty.
+func _tick_respawns(delta: float) -> void:
+	if not _enemies_out:
+		return
+	_respawn_t += delta
+	if _respawn_t < 75.0:
+		return
+	_respawn_t = 0.0
+	var alive := get_tree().get_nodes_in_group("enemies").size()
+	if alive >= _enemy_spawns.size() * 0.6:
+		return
+	var pool := _enemy_spawns.duplicate()
+	pool.shuffle()
+	for sp in pool:
+		if _dist(Iso.to_screen(Vector2(sp["cell"])), _player.position) > 550.0:
+			_add_enemy(sp["kind"], sp["cell"])
+			return
 
 func _hint_redactor() -> void:
 	if _redactor_hinted or _redactor == null or not is_instance_valid(_redactor):

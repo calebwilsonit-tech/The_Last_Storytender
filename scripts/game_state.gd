@@ -19,6 +19,7 @@ var in_dialogue := false
 var inventory: Dictionary = {}                     # item id -> count
 var equipment: Dictionary = {"binding": "", "amulet": ""}
 var quick_slot := ""                               # consumable bound to the F key
+var difficulty := "normal"                        # "story" (gentle) or "normal"
 
 const SAVE_PATH := "user://savegame.json"
 var autosave_enabled := true
@@ -79,6 +80,31 @@ func publish_town() -> void:
 	town_published = true
 	set_flag("town_published")
 
+# --- Difficulty ------------------------------------------------------------------------------
+func is_story() -> bool:
+	return difficulty == "story"
+
+func enemy_dmg_mult() -> float:
+	return 0.6 if is_story() else 1.0
+
+func crumple_ink() -> float:
+	return 100.0 if is_story() else 50.0
+
+func bolt_speed_mult() -> float:
+	return 0.85 if is_story() else 1.0
+
+func spoiler_window_bonus() -> float:
+	return 1.5 if is_story() else 0.0
+
+func fall_damage() -> float:
+	return 8.0 if is_story() else 15.0
+
+func toggle_difficulty() -> void:
+	difficulty = "normal" if is_story() else "story"
+	inventory_changed.emit()
+	save_game()
+	Telemetry.log_event("difficulty", {"to": difficulty})
+
 # --- Items ---------------------------------------------------------------------------------
 func count(id: String) -> int:
 	return int(inventory.get(id, 0))
@@ -134,7 +160,7 @@ func save_game() -> void:
 		"v": 1, "mnemosynth": mnemosynth, "ink": ink, "flags": flags.keys(),
 		"inventory": inventory, "equipment": equipment, "quick_slot": quick_slot,
 		"sources": sources.map(func(src): return {"id": src["id"], "x": src["origin"].x, "y": src["origin"].y, "r": src["radius"]}),
-		"town_published": town_published,
+		"town_published": town_published, "difficulty": difficulty,
 		"spawn": [spawn_cell.x, spawn_cell.y],
 	}
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -163,6 +189,7 @@ func load_game() -> bool:
 	for sd in data.get("sources", []):
 		sources.append({"id": str(sd["id"]), "origin": Vector2(float(sd["x"]), float(sd["y"])), "radius": float(sd["r"])})
 	town_published = bool(data.get("town_published", false))
+	difficulty = str(data.get("difficulty", "normal"))
 	var sp: Array = data.get("spawn", [-1, -1])
 	spawn_cell = Vector2i(int(sp[0]), int(sp[1]))
 	return true

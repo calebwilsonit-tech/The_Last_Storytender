@@ -11,6 +11,7 @@ var options: PackedStringArray = []
 var suffix := "."
 var index := 0
 var locked := false           # once true, the sentence can no longer be changed
+var ttl_max := 5.0            # what a full timer bar represents
 var ttl := -1.0               # > 0 for the Spoiler's ephemeral sentences (seconds left)
 var elev := 0.0
 var hit_r := 24.0
@@ -89,4 +90,4 @@ func _draw() -> void:
 	if ttl >= 0.0 and not locked:
 		# Time left before this sentence comes true.
 		var w := r.size.x
-		draw_rect(Rect2(r.position + Vector2(0, r.size.y + 4), Vector2(w * clampf(ttl / 5.0, 0.0, 1.0), 4)), Color(Palette.CRITIC_RED, 0.9))
+		draw_rect(Rect2(r.position + Vector2(0, r.size.y + 4), Vector2(w * clampf(ttl / ttl_max, 0.0, 1.0), 4)), Color(Palette.CRITIC_RED, 0.9))

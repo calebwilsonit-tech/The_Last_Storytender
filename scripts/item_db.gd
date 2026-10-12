@@ -6,7 +6,7 @@ extends RefCounted
 const ITEMS := {
 	"eraser_crumbs": {
 		"name": "Eraser Crumbs", "type": "consumable",
-		"desc": "Throw it. Rubs out every Error in a small radius.",
+		"desc": "Throw it. Rubs out Errors in a small radius (5 damage).",
 		"flavor": "Everything starts as a mistake someone rubbed out.",
 	},
 	"ink_vial": {
@@ -16,9 +16,9 @@ const ITEMS := {
 	},
 	"hardcover_binding": {
 		"name": "Hardcover Binding", "type": "binding",
-		"desc": "Heavy plates cut from book covers. -35% damage taken, but slower.",
+		"desc": "Heavy plates cut from book covers. -30% damage taken, but slower.",
 		"flavor": "You can judge it by its cover. Everyone does.",
-		"fx": {"armor": 0.35, "speed": -0.10},
+		"fx": {"armor": 0.30, "speed": -0.10},
 	},
 	"softcover_binding": {
 		"name": "Softcover Binding", "type": "binding",
@@ -28,9 +28,9 @@ const ITEMS := {
 	},
 	"oxford_comma": {
 		"name": "The Oxford Comma", "type": "amulet",
-		"desc": "A pause before you take the next hit: much longer invulnerability after being struck.",
+		"desc": "A pause before you take the next hit: a little extra grace after being struck.",
 		"flavor": "A small pause, and all the difference.",
-		"fx": {"invuln": 0.8},
+		"fx": {"invuln": 0.5},
 	},
 	"void_ink": {
 		"name": "Void Ink", "type": "material",
