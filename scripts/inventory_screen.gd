@@ -239,7 +239,8 @@ func _paint_left() -> void:
 	_txt("Lantern", Vector2(442, 424), 19, Color("1f6b87"))
 	_wrap("Beam of narrative importance.", Vector2(442, 442), 150.0, 15, Color(ink, 0.8), true)
 	var quill := GameState.has_flag("has_quill")
-	_txt("Quill" if quill else "Quill (not yet forged)", Vector2(442, 486), 19, Color("1f6b87") if quill else Color(ink, 0.45))
+	var sword := GameState.has_flag("has_sword") and not quill
+	_txt("Quill" if quill else ("The First Sword" if sword else "Quill (not yet forged)"), Vector2(442, 486), 19, Color("1f6b87") if quill else Color(ink, 0.45))
 	if quill:
 		_wrap("Rewrites what it touches.", Vector2(442, 504), 150.0, 15, Color(ink, 0.8), true)
 	# Stats from equipment.

@@ -81,7 +81,7 @@ func noise_radius() -> float:
 	return r
 
 func can_attack() -> bool:
-	return GameState.has_flag("has_quill")
+	return GameState.has_flag("has_quill") or GameState.has_flag("has_sword")   # Garrick's First Sword counts until the Quill is forged
 
 func _input(event: InputEvent) -> void:
 	if not preview and GameState.has_flag("format_mark") and not GameState.in_dialogue:

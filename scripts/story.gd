@@ -202,9 +202,17 @@ static func critic_reckoning() -> Array:
 		line("", "It is still the Critic, and it is still very loud. But you held up what it was built to drown out, and now it has a shape, and shapes can be struck. Raise the Quill.", "action"),
 	]
 
+const FORGE_SWORD_OBJECTIVE := "Something small and crooked is lying on the floor ahead. Take it."
+
+static func forge_sword_start() -> Array:
+	return [
+		line("", "A sword lies in the first room, small and plain and a little crooked, as if somebody put it down for a moment and never came back.", "action"),
+		line("", "It is warm. It does not feel like a weapon. It feels like something that was meant to be carried out of here. Take it, and keep it safe.", "action"),
+	]
+
 static func memory_sword() -> Array:
 	return [
-		line("", "The sword is small, and plain, and a little crooked. It is warm, as if someone has only just let go of it.", "action"),
+		line("", "The sword in your hand is still small, and still a little crooked, and you have never been so sure of a thing.", "action"),
 		line("", "Far above the frozen flame, an old man is holding a hammer and does not know why. You know why now.", "action"),
 	]
 
