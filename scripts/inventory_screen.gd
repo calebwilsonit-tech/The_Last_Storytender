@@ -245,6 +245,8 @@ func _paint_left() -> void:
 		"Move speed    %s" % _pct(spd),
 		"Dash cooldown   %s" % _pct(dash),
 		"Grace after a hit   %.1fs" % (0.9 + inv),
+		"Quill damage   %s     Reach   %s" % [_pct(GameState.equipped_stat("dmg")), _pct(GameState.equipped_stat("reach"))],
+		"Lantern burn   %s     Ink regen   %.1f/s" % [_pct(GameState.equipped_stat("lantern_eff")), GameState.equipped_stat("regen")],
 	]
 	for i in lines.size():
 		_txt(lines[i], Vector2(108, 546 + i * 24), 18, Color(ink, 0.9))

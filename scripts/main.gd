@@ -72,6 +72,8 @@ func _open_chest(chest: Prop, cell: Vector2i) -> void:
 	GameState.add_renown(5)
 	chest.variant = 1
 	var reward: String = PrologueMap.CHESTS.get("%d,%d" % [cell.x, cell.y], "mnemo:20")
+	if reward.begins_with("tier:"):
+		reward = TrialPrizes.roll(int(reward.substr(5)), cell)
 	var parts := reward.split(":")
 	if parts[0] == "mnemo":
 		GameState.add_mnemosynth(int(parts[1]))
@@ -95,9 +97,9 @@ func _spawn_riddle_stone(cell: Vector2i) -> void:
 	st.position = Iso.to_screen(Vector2(cell))
 	st.elev = _lift_at(cell)
 	_actors.add_child(st)
-	_register(st, func(): return "Rewrite" if not st.locked else "", func(): st.rewrite(), 80.0)
+	var tier := int(rd.get("tier", 1))
+	_register(st, func(): return ("Attempt the trial  " + "★".repeat(tier)) if not st.locked else "", func(): _attempt_trial(id, st, cell, tier), 80.0)
 	_riddle_stones[id] = st
-	st.rewritten.connect(func(s: SentenceStone, idx: int): _on_riddle(id, s, idx))
 	if GameState.has_flag("riddle_" + id):
 		st.index = st.options.size() - 1
 		st.locked = true
@@ -118,11 +120,31 @@ func _spawn_riddle_gate(cell: Vector2i) -> void:
 	if GameState.has_flag("riddle_" + id):
 		gate.open()
 
+var _trial: VaultTrial
+
+func _attempt_trial(id: String, stone: SentenceStone, cell: Vector2i, tier: int) -> void:
+	if stone.locked or (_trial != null and _trial.is_open()):
+		return
+	if _trial == null:
+		_trial = VaultTrial.new()
+		add_child(_trial)
+	var seed_v := cell.x * 7919 + cell.y * 104729 + tier
+	var kind := TrialGames.pick(tier, seed_v, Input.get_connected_joypads().is_empty())
+	var g := TrialGames.make(kind, tier, seed_v + int(Time.get_ticks_msec() % 9973))
+	_trial.open(g)
+	var won: bool = await _trial.finished
+	Telemetry.log_event("trial", {"id": id, "kind": kind, "tier": tier, "won": won})
+	if won:
+		_on_riddle(id, stone, stone.options.size() - 1)
+	else:
+		_hud.toast("The words slip away. Try again whenever you like.")
+
 func _on_riddle(id: String, stone: SentenceStone, idx: int) -> void:
 	if idx != stone.options.size() - 1:
 		return
+	stone.index = stone.options.size() - 1
 	stone.locked = true
-	GameState.add_renown(8)
+	GameState.add_renown(4 + 4 * int((PrologueMap.RIDDLES[id] as Dictionary).get("tier", 1)))
 	GameState.set_flag("riddle_" + id)
 	if _riddle_gates.has(id):
 		_riddle_gates[id].open()

@@ -431,6 +431,32 @@ func use_item(id: String) -> void:
 			_player.ink = minf(_player.ink + 60.0, _player.max_ink)
 			_player.ink_changed.emit(_player.ink, _player.max_ink)
 			_hud.toast("A warm loaf. You feel looked after.")
+		"ink_flask":
+			if _player.ink >= _player.max_ink - 0.5:
+				_hud.toast("Your ink is already full")
+				return
+			GameState.remove_item(id)
+			_player.ink = _player.max_ink
+			_player.ink_changed.emit(_player.ink, _player.max_ink)
+			_hud.toast("Ink flask: all your ink is back")
+		"lantern_oil":
+			if _player.lantern_energy >= 99.0:
+				_hud.toast("The Lantern is already full")
+				return
+			GameState.remove_item(id)
+			_player.refuel(100.0)
+			_hud.toast("The Lantern burns bright")
+		"sticky_note":
+			var stuck := 0
+			for e in get_tree().get_nodes_in_group("enemies"):
+				if is_instance_valid(e) and _dist(e.position, _player.position) < 240.0 and not e.friendly:
+					e.sleep_for(6.0)
+					stuck += 1
+			if stuck == 0:
+				_hud.toast("Nothing nearby to stick")
+				return
+			GameState.remove_item(id)
+			_hud.toast("Stuck %d Error%s to the page" % [stuck, "" if stuck == 1 else "s"])
 		"ink_vial":
 			if _player.ink >= _player.max_ink - 0.5:
 				_hud.toast("Your ink is already full")

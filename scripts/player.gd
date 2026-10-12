@@ -26,6 +26,7 @@ const ARC_HALF := 1.2             # radians (~68 deg)
 @export var max_ink := 100.0
 
 var ink := 100.0
+var _regen_emit := 0.0
 var is_crumpled := false
 var is_falling := false
 var floor_ref: IsoFloor
@@ -100,6 +101,13 @@ func _input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	if preview:
 		return
+	var regen := GameState.equipped_stat("regen")
+	if regen > 0.0 and ink < max_ink and not is_crumpled:
+		ink = minf(ink + regen * delta, max_ink)
+		_regen_emit -= delta
+		if _regen_emit <= 0.0:
+			_regen_emit = 0.25
+			ink_changed.emit(ink, max_ink)
 	_atk_cd = maxf(_atk_cd - delta, 0.0)
 	_dash_cd = maxf(_dash_cd - delta, 0.0)
 	_combo_t -= delta
@@ -171,8 +179,8 @@ func _strike() -> void:
 		_combo = 1
 	_combo_t = 0.75
 	var finisher := _combo == 3
-	var dmg := 3.5 if finisher else 2.0
-	var reach := REACH + (16.0 if finisher else 0.0)
+	var dmg := (3.5 if finisher else 2.0) * (1.0 + GameState.equipped_stat("dmg"))
+	var reach := (REACH + (16.0 if finisher else 0.0)) * (1.0 + GameState.equipped_stat("reach"))
 	_atk_cd = 0.5 if finisher else 0.3
 	_swing = 1.0
 	_swing_dir = aim_ground
@@ -216,7 +224,7 @@ func knockback(dir_ground: Vector2, force: float) -> void:
 func _set_lantern(want: bool, delta: float) -> void:
 	lantern_on = want
 	if want:
-		lantern_energy = maxf(lantern_energy - LANTERN_DRAIN * delta, 0.0)
+		lantern_energy = maxf(lantern_energy - LANTERN_DRAIN * delta * maxf(0.1, 1.0 + GameState.equipped_stat("lantern_eff")), 0.0)
 		_lantern_delay = 0.9
 		for n in get_tree().get_nodes_in_group("lightable"):
 			if not is_instance_valid(n):

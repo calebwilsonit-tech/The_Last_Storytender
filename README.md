@@ -49,3 +49,6 @@ Settings > Graphics has presets (Low / Balanced / High, chosen for your computer
 
 ## Enemies, Renown and chests
 Six kinds of Error (Bare, Mite, Run-on, Dangling Modifier, Censor, Ellipsis), unlocked as the story advances. Renown (Rank, under the Mnemosynth counter) rises from beating enemies, chests, riddle gates, exploring and restoring people; the Margin Gate needs 220. See GDD section 22.
+
+## Vault Trials
+The locked vaults on the overworld are word-game trials (proofreading, alphabetizing, unscrambling, sentence rebuilding, word ladders, typing, ciphers). Harder trials (1 to 4 stars) pay better prizes. See GDD section 23.

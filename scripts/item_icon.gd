@@ -80,5 +80,74 @@ static func draw_item(ci: CanvasItem, id: String, c: Vector2, sz: float) -> void
 		"bookmark":
 			_o(ci, PackedVector2Array([c + Vector2(-6, -16) * u, c + Vector2(6, -16) * u, c + Vector2(6, 14) * u, c + Vector2(0, 8) * u, c + Vector2(-6, 14) * u]), Palette.CRITIC_RED.lightened(0.15))
 			ci.draw_line(c + Vector2(0, -14) * u, c + Vector2(0, 4) * u, Color(1, 1, 1, 0.3), 1.6)
+		"ink_flask":
+			_o(ci, PackedVector2Array([c + Vector2(-5, -16) * u, c + Vector2(5, -16) * u, c + Vector2(5, -6) * u, c + Vector2(13, 8) * u, c + Vector2(10, 15) * u, c + Vector2(-10, 15) * u, c + Vector2(-13, 8) * u, c + Vector2(-5, -6) * u]), Color("1f1b3a"))
+			_o(ci, PackedVector2Array([c + Vector2(-6, -19) * u, c + Vector2(6, -19) * u, c + Vector2(6, -15) * u, c + Vector2(-6, -15) * u]), Palette.WOOD, 1.8)
+			ci.draw_arc(c + Vector2(0, 8) * u, 5.0 * u, PI * 0.1, PI * 0.9, 8, Palette.CYAN, 2.0, true)
+			ci.draw_line(c + Vector2(-7, 4) * u, c + Vector2(-9, 11) * u, Color(1, 1, 1, 0.35), 2.0)
+		"lantern_oil":
+			_o(ci, PackedVector2Array([c + Vector2(-9, -6) * u, c + Vector2(9, -6) * u, c + Vector2(11, 14) * u, c + Vector2(-11, 14) * u]), Color("e2a63c"))
+			_o(ci, PackedVector2Array([c + Vector2(-3, -15) * u, c + Vector2(3, -15) * u, c + Vector2(3, -6) * u, c + Vector2(-3, -6) * u]), Color("c9ced8"), 1.8)
+			ci.draw_circle(c + Vector2(0, 4) * u, 4.0 * u, Color(1, 0.95, 0.7, 0.9))
+			ci.draw_arc(c + Vector2(0, -16) * u, 5.0 * u, PI, TAU, 8, Palette.CYAN, 1.8, true)
+		"sticky_note":
+			_o(ci, PackedVector2Array([c + Vector2(-13, -13) * u, c + Vector2(13, -13) * u, c + Vector2(13, 6) * u, c + Vector2(5, 14) * u, c + Vector2(-13, 14) * u]), Color("f6e27a"))
+			_o(ci, PackedVector2Array([c + Vector2(5, 14) * u, c + Vector2(13, 6) * u, c + Vector2(5, 6) * u]), Color("d8c25a"), 1.6)
+			for i in 3:
+				ci.draw_line(c + Vector2(-8, -6 + i * 5) * u, c + Vector2(6 - i * 3, -6 + i * 5) * u, Color(Palette.INK, 0.5), 1.4)
+		"paperback_binding":
+			_o(ci, PackedVector2Array([c + Vector2(-14, -8) * u, c + Vector2(-4, -15) * u, c + Vector2(10, -13) * u, c + Vector2(15, 0) * u, c + Vector2(11, 14) * u, c + Vector2(-11, 14) * u]), Color("e6d6a6"))
+			ci.draw_polyline(PackedVector2Array([c + Vector2(-10, -4) * u, c + Vector2(-3, -10) * u, c + Vector2(8, -9) * u, c + Vector2(11, 0) * u]), Color(Palette.INK, 0.35), 1.6)
+			ci.draw_line(c + Vector2(-12, -2) * u, c + Vector2(-12, 12) * u, Color(0, 0, 0, 0.35), 2.0)
+			_o(ci, PackedVector2Array([c + Vector2(10, -13) * u, c + Vector2(15, 0) * u, c + Vector2(8, -2) * u]), Color("cdb98a"), 1.4)
+		"leatherbound_binding":
+			_o(ci, PackedVector2Array([c + Vector2(-15, -6) * u, c + Vector2(-6, -15) * u, c + Vector2(10, -15) * u, c + Vector2(16, -4) * u, c + Vector2(12, 14) * u, c + Vector2(-10, 14) * u]), Color("4a2f22"))
+			ci.draw_polyline(PackedVector2Array([c + Vector2(-11, -4) * u, c + Vector2(-4, -11) * u, c + Vector2(8, -11) * u, c + Vector2(12, -3) * u, c + Vector2(9, 10) * u, c + Vector2(-7, 10) * u, c + Vector2(-11, -4) * u]), Color("d8b45e"), 1.8)
+			for p in [Vector2(-6, -7), Vector2(6, -7), Vector2(0, 6)]:
+				ci.draw_circle(c + p * u, 2.0 * u, Color("d8b45e"))
+		"gilded_binding":
+			_o(ci, PackedVector2Array([c + Vector2(-15, -6) * u, c + Vector2(-6, -15) * u, c + Vector2(10, -15) * u, c + Vector2(16, -4) * u, c + Vector2(12, 14) * u, c + Vector2(-10, 14) * u]), Color("d8b45e"))
+			ci.draw_polyline(PackedVector2Array([c + Vector2(-10, -3) * u, c + Vector2(-4, -10) * u, c + Vector2(8, -10) * u, c + Vector2(11, -2) * u, c + Vector2(8, 9) * u, c + Vector2(-6, 9) * u, c + Vector2(-10, -3) * u]), Color("8a6a22"), 1.6)
+			ci.draw_circle(c, 4.0 * u, Color("5ad0e8"))
+			ci.draw_arc(c, 4.0 * u, 0.0, TAU, 10, Palette.OUTLINE, 1.6, true)
+			ci.draw_line(c + Vector2(-12, -1) * u, c + Vector2(-9, -12) * u, Color(1, 1, 1, 0.6), 1.8)
+		"highlighter":
+			_o(ci, PackedVector2Array([c + Vector2(-14, 8) * u, c + Vector2(-6, 14) * u, c + Vector2(12, -8) * u, c + Vector2(4, -14) * u]), Color("f4e04a"))
+			_o(ci, PackedVector2Array([c + Vector2(-14, 8) * u, c + Vector2(-6, 14) * u, c + Vector2(-9, 16) * u, c + Vector2(-17, 12) * u]), Color("d9a52a"), 1.6)
+			ci.draw_line(c + Vector2(-12, 16) * u, c + Vector2(12, 16) * u, Color(0.96, 0.88, 0.3, 0.7), 4.0 * u)
+		"margin_note":
+			_o(ci, PackedVector2Array([c + Vector2(-12, -14) * u, c + Vector2(12, -14) * u, c + Vector2(12, 14) * u, c + Vector2(-12, 14) * u]), Color("f4ecd6"))
+			ci.draw_line(c + Vector2(-6, -14) * u, c + Vector2(-6, 14) * u, Color("d96a5c"), 1.6)
+			for i in 4:
+				ci.draw_line(c + Vector2(-2, -8 + i * 5) * u, c + Vector2(9, -8 + i * 5) * u, Color(Palette.INK, 0.4), 1.2)
+			ci.draw_string(ThemeDB.get_default_theme().default_font, c + Vector2(-11, 0) * u, "!", HORIZONTAL_ALIGNMENT_LEFT, -1.0, int(14 * u), Color("d96a5c"))
+		"index_tab":
+			_o(ci, PackedVector2Array([c + Vector2(-12, -8) * u, c + Vector2(-4, -8) * u, c + Vector2(-2, -15) * u, c + Vector2(8, -15) * u, c + Vector2(10, -8) * u, c + Vector2(12, -8) * u, c + Vector2(12, 14) * u, c + Vector2(-12, 14) * u]), Color("5fb0a0"))
+			ci.draw_line(c + Vector2(-6, 0) * u, c + Vector2(6, 0) * u, Color(1, 1, 1, 0.5), 1.6)
+			ci.draw_line(c + Vector2(-6, 5) * u, c + Vector2(3, 5) * u, Color(1, 1, 1, 0.5), 1.6)
+		"red_pen":
+			_o(ci, PackedVector2Array([c + Vector2(-13, 9) * u, c + Vector2(-9, 13) * u, c + Vector2(13, -9) * u, c + Vector2(9, -13) * u]), Color("c8483f"))
+			_o(ci, PackedVector2Array([c + Vector2(-13, 9) * u, c + Vector2(-9, 13) * u, c + Vector2(-16, 16) * u]), Color("2b2b3a"), 1.6)
+			ci.draw_line(c + Vector2(-2, 2) * u, c + Vector2(4, -4) * u, Color(1, 1, 1, 0.45), 1.8)
+		"footnote":
+			ci.draw_circle(c + Vector2(0, -2) * u, 12.0 * u, Color("f4ecd6"))
+			ci.draw_arc(c + Vector2(0, -2) * u, 12.0 * u, 0.0, TAU, 18, Palette.OUTLINE, 2.4, true)
+			ci.draw_string(ThemeDB.get_default_theme().default_font, c + Vector2(-4, 3) * u, "1", HORIZONTAL_ALIGNMENT_LEFT, -1.0, int(18 * u), Palette.INK)
+			ci.draw_line(c + Vector2(0, 10) * u, c + Vector2(0, 17) * u, Palette.OUTLINE, 2.0)
+		"bookmark_charm":
+			_o(ci, PackedVector2Array([c + Vector2(-5, -17) * u, c + Vector2(5, -17) * u, c + Vector2(5, 4) * u, c + Vector2(0, 0) * u, c + Vector2(-5, 4) * u]), Palette.CRITIC_RED.lightened(0.15))
+			var st := PackedVector2Array()
+			for k in 10:
+				var a := -PI / 2.0 + k * PI / 5.0
+				st.append(c + Vector2(0, 8) * u + Vector2(cos(a), sin(a)) * (8.0 if k % 2 == 0 else 3.6) * u)
+			_o(ci, st, Palette.GOLD, 1.6)
+		"first_edition":
+			_o(ci, PackedVector2Array([c + Vector2(-13, -13) * u, c + Vector2(11, -13) * u, c + Vector2(13, 13) * u, c + Vector2(-11, 13) * u]), Color("6b2f2a"))
+			ci.draw_polyline(PackedVector2Array([c + Vector2(-9, -9) * u, c + Vector2(8, -9) * u, c + Vector2(9, 9) * u, c + Vector2(-8, 9) * u, c + Vector2(-9, -9) * u]), Color("d8b45e"), 1.6)
+			var st2 := PackedVector2Array()
+			for k in 10:
+				var a2 := -PI / 2.0 + k * PI / 5.0
+				st2.append(c + Vector2(0, 0) * u + Vector2(cos(a2), sin(a2)) * (6.0 if k % 2 == 0 else 2.6) * u)
+			_o(ci, st2, Color("d8b45e"), 1.4)
 		_:
 			ci.draw_circle(c, 10.0 * u, Palette.PENCIL)

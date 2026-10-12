@@ -211,7 +211,7 @@ def make_ring(x, y, side):
         RING.discard((px, py))
     return (x + ox, y + oy)
 
-def riddle_vault(cx, cy, side, prefix, options, suffix):
+def riddle_vault(cx, cy, side, prefix, options, suffix, tier=1):
     site = stamp_site(cx, cy)
     if not site:
         print("no site for riddle near", cx, cy)
@@ -219,7 +219,7 @@ def riddle_vault(cx, cy, side, prefix, options, suffix):
     x, y = site
     gate = make_ring(x, y, side)
     rows[y][x] = 'q'
-    CHESTS["%d,%d" % (x, y)] = next_reward()
+    CHESTS["%d,%d" % (x, y)] = "tier:%d" % tier
     rows[gate[1]][gate[0]] = 'U'
     # the stone stands outside the opening, off to one side
     sx, sy = {'e': (gate[0] + 2, gate[1] + 2), 'w': (gate[0] - 2, gate[1] + 2), 's': (gate[0] + 2, gate[1] + 2), 'n': (gate[0] + 2, gate[1] - 2)}[side]
@@ -231,7 +231,7 @@ def riddle_vault(cx, cy, side, prefix, options, suffix):
     rows[sy][sx] = 'S'
     axis = [0, 1] if side in 'ew' else [1, 0]
     RIDDLES["r%d" % len(RIDDLES)] = {"stone": [sx, sy], "gate": list(gate), "axis": axis, "chest": [x, y],
-                                       "prefix": prefix, "options": options, "suffix": suffix}
+                                       "prefix": prefix, "options": options, "suffix": suffix, "tier": tier}
 
 def hidden_cache(cx, cy, side):
     """Same clearing, but its opening is covered by a Redaction bar: hold the Lantern to read it away."""
@@ -245,11 +245,12 @@ def hidden_cache(cx, cy, side):
     CHESTS["%d,%d" % (x, y)] = next_reward()
     rows[gate[1]][gate[0]] = 'R'
 
-riddle_vault(34, 62, 'e', "The gate is", ["LOCKED", "RUSTED", "UNLATCHED"], ".")
-riddle_vault(58, 27, 'w', "Behind this gate is", ["NOTHING", "A TRAP", "TREASURE"], ".")
-riddle_vault(32, 87, 'e', "The lock was never", ["FIXED", "BROKEN", "INSTALLED"], ".")
-riddle_vault(92, 83, 'w', "Whoever lives here is", ["OUT", "ASLEEP", "EXPECTING YOU"], ".")
-riddle_vault(98, 22, 's', "The wall is", ["SOLID", "PAINTED ON", "A DOOR"], ".")
+riddle_vault(34, 62, 'e', "The gate is", ["LOCKED", "RUSTED", "UNLATCHED"], ".", 1)
+riddle_vault(58, 27, 'w', "Behind this gate is", ["NOTHING", "A TRAP", "TREASURE"], ".", 2)
+riddle_vault(32, 87, 'e', "The lock was never", ["FIXED", "BROKEN", "INSTALLED"], ".", 2)
+riddle_vault(92, 83, 'w', "Whoever lives here is", ["OUT", "ASLEEP", "EXPECTING YOU"], ".", 3)
+riddle_vault(98, 22, 's', "The wall is", ["SOLID", "PAINTED ON", "A DOOR"], ".", 3)
+riddle_vault(80, 52, 'w', "The last page is", ["BLANK", "TORN OUT", "STILL BEING WRITTEN"], ".", 4)
 hidden_cache(22, 44, 's')
 hidden_cache(34, 15, 'n')
 hidden_cache(46, 92, 'n')
