@@ -23,6 +23,7 @@ var _camera: Camera2D
 var _hud: Hud
 var _dialogue: DialogueBox
 var _inventory: InventoryScreen
+var _index: IndexHub
 var _pause: PauseMenu
 var _world_map: WorldMap
 var _chunks: GroundChunks
@@ -294,6 +295,9 @@ func _build_ui() -> void:
 	add_child(_inventory)
 	_pause = PauseMenu.new()
 	add_child(_pause)
+	_index = IndexHub.new()
+	add_child(_index)
+	_index.map_requested.connect(_open_map)
 	_world_map = WorldMap.new()
 	var map_layer := CanvasLayer.new()
 	map_layer.layer = 55
@@ -409,6 +413,8 @@ func use_item(id: String) -> void:
 		return
 	Telemetry.log_event("item", {"id": id})
 	match id:
+		"pocket_workbench":
+			_index.open_craft()
 		"eraser_crumbs":
 			var reach := 150.0
 			var goal := _player.position + Vector2(_player.aim_ground.x, _player.aim_ground.y * 0.5) * reach
@@ -648,10 +654,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		GameState.reset_all()
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 		return
-	if event.is_action_pressed("ui_cancel") and not GameState.in_dialogue and not _inventory.is_open() and not _pause.is_open():
+	if event.is_action_pressed("ui_cancel") and not GameState.in_dialogue and not _inventory.is_open() and not _index.is_open() and not _pause.is_open():
 		_pause.open()
 		return
-	if event.is_action_pressed("map") and not GameState.in_dialogue and not _inventory.is_open() and not _pause.is_open() and not _world_map.is_open():
+	if event.is_action_pressed("map") and not GameState.in_dialogue and not _inventory.is_open() and not _index.is_open() and not _pause.is_open() and not _world_map.is_open():
 		_open_map()
 		return
 	if event.is_action_pressed("inventory") and not _busy and not GameState.in_dialogue and not _player.is_falling:

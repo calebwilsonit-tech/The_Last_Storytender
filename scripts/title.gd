@@ -3,6 +3,7 @@ extends Node2D
 ## difficulty, which is then fixed for that save.
 
 const GAME_SCENE := "res://scenes/main.tscn"
+const INTRO_SCENE := "res://scenes/intro_book.tscn"
 const PARCHMENT := preload("res://shaders/parchment.gdshader")
 
 var _menu: MenuColumn
@@ -94,7 +95,7 @@ func _on_chosen(id: String) -> void:
 			_show_difficulty()
 		"story", "normal":
 			GameState.new_game(id)
-			Transition.go(GAME_SCENE)
+			Transition.go(INTRO_SCENE, Color("14111a"))
 		"back":
 			_show_main()
 		"settings":

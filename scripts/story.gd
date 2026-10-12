@@ -16,10 +16,12 @@ static func line(who: String, text: String, style: String = "speech", cue: Strin
 	return d
 
 # ---- Narration (floating text, not blocking) ---------------------------------
+const INTRO_WAKE := "Page forty-one. The pencil lines are still wet."
 const INTRO: Array[String] = [
 	"Once, there was a world that someone forgot to finish.",
 	"And in its margins, a small drawing woke up.",
 ]
+const INDEX_FIRST := "Every lantern post keeps a page of the Index: a bench to mend things on, a stall run by a voice, and a map of everywhere you have been."
 const FALL_FIRST := "And so the Storytender learned that plot holes are, in fact, holes."
 const CRUMPLED := "A crumpled page can be smoothed. That is the whole trick of it."
 const SILENCE_WHISPER := "you are so tired.   rest.   it is only white, and white is gentle."

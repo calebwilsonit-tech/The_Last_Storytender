@@ -152,6 +152,12 @@ static func draw(ci: CanvasItem, shape: String, c: Vector2, u: float, c1: Color,
 		"bookmark":
 			_o(ci, _p(c, u, [Vector2(-6, -17), Vector2(6, -17), Vector2(6, 15), Vector2(0, 8), Vector2(-6, 15)]), c1)
 			ci.draw_polygon(_star(c + Vector2(0, -6) * u, 4.4 * u, 1.8 * u), PackedColorArray([c2]))
+		"bench":
+			_o(ci, _p(c, u, [Vector2(-15, -4), Vector2(15, -4), Vector2(15, 2), Vector2(-15, 2)]), c1)
+			_o(ci, _p(c, u, [Vector2(-12, 2), Vector2(-8, 2), Vector2(-9, 14), Vector2(-13, 14)]), c2, 1.6)
+			_o(ci, _p(c, u, [Vector2(12, 2), Vector2(8, 2), Vector2(9, 14), Vector2(13, 14)]), c2, 1.6)
+			_o(ci, _p(c, u, [Vector2(-8, -12), Vector2(-2, -12), Vector2(-2, -4), Vector2(-8, -4)]), c2, 1.6)
+			ci.draw_line(c + Vector2(4, -14) * u, c + Vector2(10, -5) * u, line, 3.0)
 		"spiral":
 			var pts := PackedVector2Array()
 			for k in 40:

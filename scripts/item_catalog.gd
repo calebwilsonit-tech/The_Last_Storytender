@@ -148,6 +148,9 @@ const ITEMS := {
 	"lucky_clover": {"name": "Lucky Clover", "type": "amulet", "rarity": "rare", "price": 90,
 		"flavor": "Four leaves. Someone got to the fifth and stopped.", "fx": {"luck": 0.30},
 		"icon": {"s": "leaf", "c": "5aca6a", "c2": "2f7a3a"}},
+	"pocket_workbench": {"name": "Pocket Workbench", "type": "key", "rarity": "uncommon", "price": 150,
+		"desc": "A folding bench, a tiny vice and a surprising number of pliers. Use it from the Binder to craft anywhere.", "flavor": "Every lantern post has a bench. This one has legs.",
+		"icon": {"s": "bench", "c": "b8a07a", "c2": "6a4a30"}},
 	"authors_pen": {"name": "The Author's Pen", "type": "amulet", "rarity": "legendary", "price": 500,
 		"flavor": "It still remembers how it all began.", "fx": {"dmg": 0.30, "reach": 0.20, "regen": 0.8},
 		"icon": {"s": "pen", "c": "f2c24b", "c2": "26324a"}},
@@ -170,6 +173,12 @@ const RECIPES := {
 	"library_binding": {"needs": {"cloth_binding": 1, "silver_thread": 2, "wax_seal": 1}, "gives": 1},
 	"vellum_binding": {"needs": {"library_binding": 1, "gold_leaf": 3, "blank_page": 1}, "gives": 1},
 	"illuminated_binding": {"needs": {"vellum_binding": 1, "phoenix_ember": 1, "marginalia_dust": 3, "gold_leaf": 4}, "gives": 1},
+	"pocket_workbench": {"needs": {"paper_scrap": 8, "glue_stub": 3, "loose_thread": 4, "wax_seal": 1}, "gives": 1},
+	"warm_loaf": {"needs": {"honey_biscuit": 2, "herbal_tea": 1}, "gives": 1},
+	"memory_jar": {"needs": {"marginalia_dust": 2, "gold_leaf": 1}, "gives": 1},
+	"lucky_clover": {"needs": {"clover_press": 4, "silver_thread": 1}, "gives": 1},
+	"lamplighter_match": {"needs": {"pencil_shaving": 6, "phoenix_ember": 1}, "gives": 1},
+	"time_in_a_bottle": {"needs": {"marginalia_dust": 3, "void_pearl": 1, "clarity_tonic": 1}, "gives": 1},
 	"tin_bell": {"needs": {"paper_clip": 1, "wax_seal": 1}, "gives": 1},
 	"silver_ribbon": {"needs": {"silver_thread": 3, "loose_thread": 2}, "gives": 1},
 	"phoenix_draught": {"needs": {"phoenix_ember": 1, "clarity_tonic": 1}, "gives": 1},
@@ -177,8 +186,41 @@ const RECIPES := {
 }
 
 ## What the later-game shop would stock (drop chances live in DropTables).
-const SHOP_STOCK := ["herbal_tea", "honey_biscuit", "clarity_tonic", "ghost_pepper_ink", "reader_digest", "memory_jar",
-	"cloth_binding", "dust_jacket", "paper_clip", "rubber_band", "tin_bell", "reading_glasses", "bookworm_charm", "margin_doodle"]
+## The Narrator's Stall: [item id, minimum Rank]. Better stock opens up as your Rank rises.
+const SHOP_STOCK := [
+	["ink_vial", 1], ["honey_biscuit", 1], ["herbal_tea", 1], ["eraser_crumbs", 1], ["paper_clip", 1], ["rubber_band", 1], ["pocket_workbench", 1],
+	["warm_loaf", 2], ["clarity_tonic", 2], ["ghost_pepper_ink", 2], ["tin_bell", 2], ["cloth_binding", 2], ["lantern_oil", 2],
+	["reading_glasses", 3], ["bookworm_charm", 3], ["margin_doodle", 3], ["dust_jacket", 3], ["reader_digest", 3], ["sticky_note", 3],
+	["ink_flask", 4], ["memory_jar", 4], ["lucky_clover", 4], ["library_binding", 4], ["silver_ribbon", 4], ["cartographer_compass", 4],
+	["vellum_binding", 5], ["hourglass_of_drafts", 5], ["censors_monocle", 5], ["phoenix_draught", 5], ["time_in_a_bottle", 5],
+]
+
+## What the Narrator will pay for something you carry, in Mnemosynth.
+static func sell_price(id: String) -> int:
+	return maxi(1, int(buy_price(id) * 0.4))
+
+static func buy_price(id: String) -> int:
+	var d := ItemDB.info(id)
+	if d.has("price"):
+		return int(d["price"])
+	return {"consumable": 12, "binding": 40, "amulet": 35, "material": 6}.get(d["type"], 20)
+
+static func can_craft(id: String) -> bool:
+	for need: String in RECIPES[id]["needs"]:
+		if GameState.count(need) < int(RECIPES[id]["needs"][need]):
+			return false
+	return true
+
+## Spends the ingredients and gives the result. Returns false if something is missing.
+static func craft(id: String) -> bool:
+	if not RECIPES.has(id) or not can_craft(id):
+		return false
+	for need: String in RECIPES[id]["needs"]:
+		GameState.remove_item(need, int(RECIPES[id]["needs"][need]))
+		if GameState.is_equipped(need) and GameState.count(need) <= 0:
+			GameState.toggle_equip(need)
+	GameState.add_item(id, int(RECIPES[id].get("gives", 1)))
+	return true
 
 const RARITY_COLORS := {
 	"common": Color("8a8070"), "uncommon": Color("4a9a5a"), "rare": Color("4a7ac8"),

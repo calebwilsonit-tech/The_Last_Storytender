@@ -185,6 +185,11 @@ func _touch_post(id: String) -> void:
 	_player.restore_ink(100.0)
 	_player.refuel(100.0)
 	GameState.save_game()
+	if not GameState.has_flag("index_seen"):
+		GameState.set_flag("index_seen")
+		_hud.narrate(Story.INDEX_FIRST, false, 5.0)
+		await get_tree().create_timer(1.0).timeout
+	_index.open_hub()
 
 func _touch_gate() -> void:
 	var need: int = GameState.GATE_RENOWN["margin_gate"]
@@ -364,7 +369,24 @@ func _level_ready() -> void:
 		GameState.set_flag("intro_done")
 		_start_intro()
 
+## After the storybook: the doodle is inked in, stretches up off the page and stands.
+func _wake_up() -> void:
+	GameState.in_dialogue = true
+	_player.scale = Vector2(1.7, 0.04)
+	_player.modulate.a = 0.0
+	_hud.narrate(Story.INTRO_WAKE, false, 3.0)
+	await get_tree().create_timer(1.6).timeout
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(_player, "modulate:a", 1.0, 0.9)
+	tw.tween_property(_player, "scale", Vector2.ONE, 1.6).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	await tw.finished
+	camera_shake(0.25, 3.0)
+	await get_tree().create_timer(0.5).timeout
+	GameState.in_dialogue = false
+
 func _start_intro() -> void:
+	if GameState.has_flag("book_seen"):
+		await _wake_up()
 	await get_tree().create_timer(1.2).timeout
 	await _hud.tutorial("move")
 	for t in Story.INTRO:

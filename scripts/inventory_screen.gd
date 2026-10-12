@@ -124,6 +124,10 @@ func _primary() -> void:
 			use_requested.emit(id)
 		"binding", "amulet":
 			GameState.toggle_equip(id)
+		"key":
+			if id == "pocket_workbench":
+				close()
+				use_requested.emit(id)
 	_view.queue_redraw()
 
 func _set_quick() -> void:
