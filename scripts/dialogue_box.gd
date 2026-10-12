@@ -9,6 +9,7 @@ const CPS := 42.0
 
 var _panel: PanelContainer
 var _name_tab: PanelContainer
+var _tab_style: StyleBoxFlat
 var _name_label: Label
 var _text: RichTextLabel
 var _hint: Label
@@ -46,7 +47,8 @@ func _ready() -> void:
 
 	_name_tab = PanelContainer.new()
 	_name_tab.position = Vector2(150, 0)
-	_name_tab.add_theme_stylebox_override("panel", _box(Palette.INK_BROWN, Palette.INK, 2, 6, 8))
+	_tab_style = _box(Palette.INK_BROWN, Palette.INK, 2, 6, 8)
+	_name_tab.add_theme_stylebox_override("panel", _tab_style)
 	root.add_child(_name_tab)
 	_name_label = Label.new()
 	_name_label.add_theme_font_size_override("font_size", 24)
@@ -103,6 +105,7 @@ func play(lines: Array, on_cue: Callable = Callable()) -> void:
 func _show_line(l: Dictionary) -> void:
 	var who: String = l.get("who", "")
 	var style: String = l.get("style", "speech")
+	_tab_style.bg_color = l.get("tint", Palette.INK_BROWN)
 	_name_tab.visible = who != ""
 	_name_label.text = who
 	var body: String = l["text"]

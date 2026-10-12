@@ -22,6 +22,18 @@ const FROZEN := Color("bfe8f0")
 const RUST := Color("a8553a")
 const TEAR := Color("7fb3e0")
 const SILENCE := Color("9a98b8")
+const CYAN := Color("6fe3ff")           # restored / remembered glow, the Lantern
+const CYAN_DEEP := Color("2b8fb3")
+const GLITCH := Color("8a4fd0")         # Redaction corruption
+const STATIC_GRAY := Color("9c9ca8")
+const OUTLINE := Color("14111a")        # character outlines: thick, near-black
+const CLOAK := Color("84694a")
+const CLOAK_DARK := Color("5c4833")
+const TUNIC := Color("b39b76")
+const TROUSERS := Color("62708a")
+const LEATHER := Color("5a3c28")
+const CRITIC_RED := Color("a3211f")
+const CRITIC_DARK := Color("3d0a10")
 
 ## Blend a color toward grayscale. r = 0 -> fully faded, 1 -> full color.
 static func ghostify(c: Color, r: float) -> Color:

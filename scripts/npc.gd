@@ -28,17 +28,28 @@ func restoration() -> float:
 	return GameState.restored_at(global_position)
 
 func _fill(c: Color, r: float) -> Color:
-	var f := Palette.ghostify(c, r)
-	f.a = r
-	return f
+	# Missing: desaturated toward static gray. Restored: the full cel color.
+	return Palette.ghostify(c, r).lerp(Palette.STATIC_GRAY, (1.0 - r) * 0.35)
+
+func _in_body(p: Vector2) -> bool:
+	var t := (p - Vector2(0, -26)) / Vector2(15, 16)
+	var h := (p - Vector2(0, -50)) / Vector2(12, 12)
+	return t.length() < 1.0 or h.length() < 1.0 or (absf(p.x) < 9.0 and p.y > -12.0 and p.y < 0.0)
 
 func _draw() -> void:
 	var r := restoration()
-	var pen := Palette.PENCIL.lerp(Palette.INK, r)
+	var pen := Palette.STATIC_GRAY.lightened(0.35).lerp(Palette.OUTLINE, r)
 	var s := 0.78 if kind == Kind.CHILD else 1.0
 	var breathe := sin(_t * 2.0) * 1.2
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
 	draw_circle(Vector2.ZERO, 16.0 * s, Color(0.15, 0.1, 0.05, 0.2))
+	if r > 0.02:
+		# Restored: a soft cyan glow haloing the whole figure (as in the character sheets).
+		draw_set_transform(Vector2(0, -lift - 30.0 * s), 0.0, Vector2(s, s))
+		var pulse := 0.85 + 0.15 * sin(_t * 1.6)
+		for k in 4:
+			draw_colored_polygon(DrawKit.ellipse(Vector2.ZERO, 22.0 + k * 7.0, 36.0 + k * 8.0, 24), Color(Palette.CYAN, (0.17 - k * 0.035) * r * pulse))
+		draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
 	draw_set_transform(Vector2(0, breathe * 0.3 - lift), 0.0, Vector2(s, s))
 
 	var shirt := Palette.RUST
@@ -84,15 +95,43 @@ func _draw() -> void:
 	draw_circle(head_c + Vector2(-4.5 + look, -1), 1.8, pen)
 	draw_circle(head_c + Vector2(4.5 + look, -1), 1.8, pen)
 	var smile := 0.2 + 0.7 * r
-	draw_arc(head_c + Vector2(look * 0.5, 5.5 if kind != Kind.BLACKSMITH else 8.0), 4.5, 0.4, PI - 0.4, 8, pen, 1.6 + 0.0 * smile, true)
+	# Solemn by default: a level mouth for the adults, a small smile only for the child.
+	var my := 5.5 if kind != Kind.BLACKSMITH else 8.5
+	if kind == Kind.CHILD:
+		draw_arc(head_c + Vector2(look * 0.5, my - 1.0), 3.5, 0.5, PI - 0.5, 8, pen, 1.8, true)
+	else:
+		draw_line(head_c + Vector2(look * 0.5 - 3.0, my), head_c + Vector2(look * 0.5 + 3.0, my + 0.5 * smile - 0.3), pen, 1.8)
 	if tearful:
 		var drip := fmod(_t * 0.5, 1.0)
 		draw_circle(head_c + Vector2(6.5, 4.0 + drip * 14.0), 2.3 - drip, Color(Palette.TEAR, 0.95 * (1.0 - drip * 0.6)))
 		draw_line(head_c + Vector2(6.5, 2.0), head_c + Vector2(6.5, 4.0 + drip * 14.0), Color(Palette.TEAR, 0.5), 1.4)
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
 
+	# Missing: television-static speckle across the silhouette, purple glitch tears,
+	# and a swirl of corruption circling the figure.
+	if r < 0.98:
+		draw_set_transform(Vector2(0, breathe * 0.3 - lift), 0.0, Vector2(s, s))
+		var m := 1.0 - r
+		var rng := RandomNumberGenerator.new()
+		rng.seed = int(_t * 9.0) * 7919 + int(_seed * 1000.0)
+		for i in 90:
+			var p := Vector2(rng.randf_range(-17.0, 17.0), rng.randf_range(-64.0, 0.0))
+			if not _in_body(p):
+				continue
+			var v := rng.randf()
+			var col := Color.WHITE if v > 0.5 else (Palette.GLITCH if v > 0.38 else Color.BLACK)
+			draw_rect(Rect2(p, Vector2(2.2, 2.2)), Color(col, m * 0.85))
+		for j in 2:
+			if rng.randf() > 0.45:
+				var y := rng.randf_range(-60.0, -4.0)
+				draw_rect(Rect2(-18.0 + rng.randf_range(-6.0, 6.0), y, rng.randf_range(10.0, 26.0), 2.0), Color(Palette.GLITCH, m * 0.9))
+		for a in 3:
+			var ang := _t * 1.4 + a * TAU / 3.0
+			draw_arc(Vector2(0, -30), 26.0 + a * 4.0, ang, ang + 1.3, 10, Color(Palette.GLITCH, m * 0.55), 2.0, true)
+
 	# Lorem ipsum: placeholder words drift up off the head until they're written in.
 	if r < 0.98:
+		draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
 		var font := ThemeDB.fallback_font
 		var idx := int(_t * 0.9 + _seed * 10.0) % Story.LOREM.size()
 		var rise := fmod(_t * 0.9 + _seed * 10.0, 1.0)

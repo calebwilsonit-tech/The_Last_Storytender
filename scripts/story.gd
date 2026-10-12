@@ -7,10 +7,12 @@ extends RefCounted
 
 const LOREM := ["Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit"]
 
-static func line(who: String, text: String, style: String = "speech", cue: String = "") -> Dictionary:
+static func line(who: String, text: String, style: String = "speech", cue: String = "", tint = null) -> Dictionary:
 	var d := {"who": who, "text": text, "style": style}
 	if cue != "":
 		d["cue"] = cue
+	if tint is Color:
+		d["tint"] = tint
 	return d
 
 # ---- Narration (floating text, not blocking) ---------------------------------
@@ -22,6 +24,7 @@ const FALL_FIRST := "And so the Storytender learned that plot holes are, in fact
 const CRUMPLED := "A crumpled page can be smoothed. That is the whole trick of it."
 const SILENCE_WHISPER := "you are so tired.   rest.   it is only white, and white is gentle."
 const RESTORED_NARRATION := "And the ink flowed back."
+const RETURNED := "The sword is heavy the way a promise is heavy. Somebody should hear that it's been kept."
 const SWORD_NARRATION := "It was never a weapon. It was a promise somebody made to the dark."
 
 # ---- Signs -------------------------------------------------------------------
@@ -37,26 +40,26 @@ static func town_sign() -> Array:
 		line("", "Population: ████.   Founded: ████.   Please enjoy your ████.", "sign"),
 	]
 
-# ---- The Sword ---------------------------------------------------------------
-static func pickup_sword() -> Array:
-	return [
-		line("", "A sword, lying in the grass as if it had fallen out of someone's memory.", "action"),
-		line("", "The blade is only half drawn. It is cold, and somehow exactly the right weight.", "action"),
-	]
-
 # ---- Garrick (the Retired Hero / Blacksmith) ----------------------------------
 static func garrick_ghost() -> Array:
 	return [
 		line("Lorem Ipsum", "Lorem ipsum dolor sit amet...", "speech"),
 		line("Lorem Ipsum", "...consectetur. Horseshoe? Horseshoe.", "speech"),
 		line("", "He is not a person right now. He is a placeholder holding a hammer.", "action"),
-		line("", "Somewhere out in the Plains, the first thing he ever made is waiting to be remembered.", "action"),
+		line("", "But the forge behind him is holding something, too. Its fire is frozen in a single moment. He cannot let go of it, and he cannot remember it.", "action"),
 	]
 
 static func garrick_ghost_repeat() -> Array:
 	return [
 		line("Lorem Ipsum", "Lorem... ipsum...", "speech"),
-		line("", "Somewhere out in the Plains, a sword is waiting.", "action"),
+		line("", "The frozen flame in his forge is still waiting. Touch it.", "action"),
+	]
+
+static func forge_flame() -> Array:
+	return [
+		line("", "The flame is frozen mid-lick. One moment, held so long it has gone cold.", "action"),
+		line("", "Far inside it, small as a coin, a boy is swinging a hammer.", "action"),
+		line("", "You hold up the lantern. The flame leans toward the light, as if it has been waiting for someone to ask.", "action"),
 	]
 
 static func garrick_restoration() -> Array:
@@ -97,4 +100,82 @@ static func maud_restored() -> Array:
 	return [
 		line("Maud", "I couldn't remember my own recipe. Turns out it was only ever bread, and someone to feed.", "speech"),
 		line("Maud", "Here. Don't tell the Narrator I gave you the heel. It's the best part.", "speech"),
+	]
+
+# ---- The Blacksmith's Regret (Garrick's memory) -------------------------------
+const MEMORY_INTRO := "Inside the flame, it is always the same afternoon."
+const MEMORY_SHARD_NARRATION: Array[String] = [
+	"One memory held up to the light. The voice is quieter.",
+	"Two. The forge is beginning to thaw at the edges.",
+	"Three.",
+]
+const MEMORY_SWORD_NARRATION := "The memory lets go of you gently, the way a hand lets go of a hand."
+const MEMORY_OBJECTIVE := "Hold up the memories: %d / 3"
+
+static func _y(text: String) -> Dictionary:
+	return line("Young Garrick", text, "speech", "", Palette.CYAN_DEEP)
+
+static func _wren(text: String) -> Dictionary:
+	return line("Wren", text, "speech", "", Palette.CYAN_DEEP)
+
+static func _critic(text: String, cue: String = "") -> Dictionary:
+	return line("The Critic", text, "speech", cue, Palette.CRITIC_RED)
+
+static func boss_intro() -> Array:
+	return [
+		line("", "The air is cold and perfectly still. Sparks hang where they flew, each one wrapped in frost. Nothing here has moved in a very long time.", "action"),
+		_critic("Derivative."),
+		_critic("Overwrought. Overlong. A sword? How original."),
+		line("", "The voice comes from a pool of red ink beside the anvil. It is rising.", "action"),
+		line("", "Three memories glow on the high ground around the forge: small, and warm, and the voice is very loud. Hold them up to the light.", "action"),
+	]
+
+static func shard_memory(idx: int) -> Array:
+	match idx:
+		1:
+			return [
+				line("", "The shard sinks into the lantern's light, and the forge remembers.", "action"),
+				_y("Crooked. Again."),
+				_y("Twice I've bent it. The Author keeps writing me clumsy."),
+				_wren("It looks like a river!"),
+				_y("A river's not a sword, Wren."),
+				_wren("Could be both."),
+				line("", "Behind the memory the red voice shrieks DERIVATIVE, and for the first time it sounds a little afraid.", "action"),
+			]
+		2:
+			return [
+				line("", "Night. A small figure is awake in the dark, holding her blanket like a shield.", "action"),
+				_wren("Garrick? Will you stay till I fall asleep?"),
+				_y("Is it the thing under the bed again?"),
+				_wren("It has teeth."),
+				_y("Then I'll make you something. A sword."),
+				_wren("Swords are for monsters."),
+				_y("A hero's sword makes the dark afraid of her."),
+				_wren("Then I'll hold it very tight."),
+			]
+		_:
+			return [
+				line("", "Dawn, nearly. The forge is loud and warm. A boy who has not slept brings the hammer down one last time.", "action"),
+				_y("Come on. Third time."),
+				line("", "The blade rings. It is not perfect. There is a slight, stubborn bend near the tip.", "action"),
+				_y("...There."),
+				_wren("...is it straight?"),
+				_y("No. It's yours."),
+				line("", "In the dark above the forge, the red voice says very quietly, It was never good enough. And it does not sound like a critic. It sounds like a boy who was tired.", "action"),
+			]
+
+static func critic_finale() -> Array:
+	return [
+		_critic("...It's crooked."),
+		_critic("It was always crooked. I told him so every night. Nobody should carry a crooked sword."),
+		line("", "You raise the lantern. In its light the blade on the anvil is bent near the tip, and it is the most beautiful thing in the room.", "action"),
+		_critic("...Oh."),
+		_critic("She never once asked for it straight.", "dissolve"),
+		line("", "The red ink lets go. It runs down the anvil and sinks into the floor like rain into a field.", "action"),
+	]
+
+static func memory_sword() -> Array:
+	return [
+		line("", "The sword is small, and plain, and a little crooked. It is warm, as if someone has only just let go of it.", "action"),
+		line("", "Far above the frozen flame, an old man is holding a hammer and does not know why. You know why now.", "action"),
 	]

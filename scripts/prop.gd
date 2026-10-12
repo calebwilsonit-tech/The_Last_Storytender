@@ -3,11 +3,12 @@ extends StaticBody2D
 ## Procedurally inked scenery. Objects with `ghost = true` begin as graphite
 ## pencil sketches and fill with color as the restoration wave reaches them.
 
-enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD }
+enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE }
 
 var kind: Kind = Kind.TREE
 var ghost := false
 var variant := 0
+var done := false          # a spent memory shard
 var lift := 0.0            # elevation of the cell it stands on, in px
 var _t := 0.0
 var _seed := 0.0
@@ -21,6 +22,8 @@ func _ready() -> void:
 			poly.polygon = Iso.diamond(Vector2.ZERO, 0.45)
 		Kind.HOUSE, Kind.FORGE:
 			poly.polygon = Iso.diamond(Vector2.ZERO, 1.8)
+		Kind.ANVIL, Kind.FIGURE:
+			poly.polygon = Iso.diamond(Vector2.ZERO, 0.55)
 		_:
 			poly = null
 	if poly:
@@ -45,10 +48,14 @@ func _draw() -> void:
 	match kind:
 		Kind.TREE: _draw_tree()
 		Kind.HOUSE: _draw_house(r, false)
-		Kind.FORGE: _draw_house(r, true)
+		Kind.FORGE: _draw_house(r, true, 0.0 if variant == 99 else -1.0)
 		Kind.CRYSTAL: _draw_crystal()
 		Kind.SIGN: _draw_sign()
 		Kind.SWORD: _draw_sword()
+		Kind.SHARD: _draw_shard()
+		Kind.ANVIL: _draw_anvil()
+		Kind.PORTAL: _draw_portal()
+		Kind.FIGURE: _draw_figure()
 
 func _shadow(rx: float) -> void:
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
@@ -73,7 +80,9 @@ func _draw_tree() -> void:
 		draw_arc(p, 4.0, PI * 0.1, PI * 0.9, 6, Palette.GRASS_DARK, 1.5, true)
 
 # --- House / forge ------------------------------------------------------------
-func _draw_house(r: float, forge: bool) -> void:
+func _draw_house(r: float, forge: bool, flame_r: float = -1.0) -> void:
+	if flame_r < 0.0:
+		flame_r = r
 	var pen := Palette.PENCIL.lerp(Palette.INK, r)
 	var pw := 2.0
 	_shadow(54.0)
@@ -117,7 +126,7 @@ func _draw_house(r: float, forge: bool) -> void:
 	var chim := PackedVector2Array([cp, cp + Vector2(12, 6), cp + Vector2(12, -16), cp + Vector2(0, -22)])
 	DrawKit.shape(self, chim, _fill(Color("9c6b55"), r), pen, 1.8, _seed + 4.0)
 	if forge:
-		_draw_forge_fire(DrawKit.face(door, 0.5, 0.0), r)
+		_draw_forge_fire(DrawKit.face(door, 0.5, 0.0), flame_r)
 	# [REDACTED]: a black censor bar over the doorway until the page is restored.
 	if r < 1.0 and not forge:
 		var bar := DrawKit.face_quad(right, 0.18, 0.28, 0.78, 0.5)
@@ -196,3 +205,102 @@ func _draw_sword() -> void:
 		var ph := fmod(_t * 0.5 + i * 0.37, 1.0)
 		var p := Vector2(-16 + i * 9, -8 - ph * 34.0)
 		draw_circle(p, 1.8, Color(Palette.GOLD, (1.0 - ph) * 0.9))
+
+# --- Memory shard (a remembered moment, waiting to be held up to the Lantern) -----------
+func _draw_shard() -> void:
+	_shadow(11.0)
+	if done:
+		draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
+		draw_arc(Vector2.ZERO, 12.0, 0.0, TAU, 20, Color(Palette.CYAN, 0.28), 2.0, true)
+		draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
+		return
+	var bob := sin(_t * 2.0) * 4.0
+	var c := Vector2(0, -34 + bob)
+	for rad in [40.0, 28.0, 17.0]:
+		draw_circle(c, rad, Color(Palette.CYAN, 0.075))
+	var w := 8.0 + 3.0 * sin(_t * 1.6)
+	var pts := PackedVector2Array([c + Vector2(0, -17), c + Vector2(w, -5), c + Vector2(w * 0.7, 10), c + Vector2(0, 17), c + Vector2(-w * 0.7, 10), c + Vector2(-w, -5)])
+	DrawKit.shape(self, pts, Color(Palette.CYAN, 0.95), Palette.OUTLINE, 2.4, _seed)
+	draw_colored_polygon(PackedVector2Array([c + Vector2(0, -15), c + Vector2(w * 0.55, -5), c + Vector2(0, 2)]), Color(1, 1, 1, 0.55))
+	# Ground ring pulsing outward, and motes of memory rising.
+	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
+	var ring := fmod(_t * 0.6, 1.0)
+	draw_arc(Vector2.ZERO, 8.0 + ring * 26.0, 0.0, TAU, 24, Color(Palette.CYAN, (1.0 - ring) * 0.5), 2.0, true)
+	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
+	for i in 4:
+		var ph := fmod(_t * 0.45 + i * 0.27, 1.0)
+		draw_circle(Vector2(-12 + i * 8, -20 - ph * 44.0), 1.6, Color(Palette.CYAN, (1.0 - ph) * 0.9))
+
+# --- Frozen anvil: the hammer and sparks hang in the air, mid-strike ---------------------
+func _draw_anvil() -> void:
+	_shadow(24.0)
+	var iron := Color("5a6070")
+	var base := PackedVector2Array([Vector2(-12, 0), Vector2(12, 0), Vector2(9, -10), Vector2(-9, -10)])
+	DrawKit.shape(self, base, iron.darkened(0.2), Palette.OUTLINE, 2.4, _seed)
+	DrawKit.shape(self, PackedVector2Array([Vector2(-7, -10), Vector2(7, -10), Vector2(5, -20), Vector2(-5, -20)]), iron.darkened(0.1), Palette.OUTLINE, 2.4, _seed + 1.0)
+	var top := PackedVector2Array([Vector2(-22, -20), Vector2(16, -20), Vector2(24, -26), Vector2(-14, -29), Vector2(-24, -25)])
+	DrawKit.shape(self, top, iron, Palette.OUTLINE, 2.4, _seed + 2.0)
+	draw_line(Vector2(-16, -24), Vector2(12, -25), Color(1, 1, 1, 0.35), 2.0)
+	# Hammer frozen above the anvil, slightly wobbling in frost-light.
+	var hc := Vector2(2, -66 + sin(_t * 0.9) * 0.8)
+	DrawKit.line(self, hc + Vector2(-16, 18), hc + Vector2(12, -10), Palette.WOOD, 4.5, _seed + 3.0, 0.3)
+	DrawKit.shape(self, PackedVector2Array([hc + Vector2(6, -22), hc + Vector2(26, -6), hc + Vector2(18, 4), hc + Vector2(-2, -12)]), Color("8e95a6"), Palette.OUTLINE, 2.4, _seed + 4.0)
+	# Sparks hanging in the air, each wrapped in a bead of frost.
+	for i in 16:
+		var a := TAU * i / 16.0 + _seed
+		var rr := 14.0 + fmod(i * 7.3, 26.0)
+		var p := Vector2(cos(a) * rr * 1.2, -34 - fmod(i * 11.0, 46.0) - sin(a) * rr * 0.25)
+		var tw := 0.6 + 0.4 * sin(_t * 2.0 + i)
+		draw_circle(p, 4.5, Color(Palette.CYAN, 0.10 * tw))
+		draw_colored_polygon(PackedVector2Array([p + Vector2(0, -3), p + Vector2(2, 0), p + Vector2(0, 3), p + Vector2(-2, 0)]), Color("ffb347", 0.95))
+
+# --- Memory portal (entrance / exit) --------------------------------------------------------
+func _draw_portal() -> void:
+	_shadow(22.0)
+	var stone := Color("5a6478")
+	# Stone frame.
+	DrawKit.shape(self, PackedVector2Array([Vector2(-26, 0), Vector2(-18, 0), Vector2(-18, -70), Vector2(-26, -70)]), stone, Palette.OUTLINE, 2.4, _seed)
+	DrawKit.shape(self, PackedVector2Array([Vector2(18, 0), Vector2(26, 0), Vector2(26, -70), Vector2(18, -70)]), stone.darkened(0.15), Palette.OUTLINE, 2.4, _seed + 1.0)
+	DrawKit.shape(self, PackedVector2Array([Vector2(-30, -70), Vector2(30, -70), Vector2(30, -80), Vector2(-30, -80)]), stone.lightened(0.05), Palette.OUTLINE, 2.4, _seed + 2.0)
+	var c := Vector2(0, -36)
+	for rad in [38.0, 28.0, 18.0]:
+		draw_circle(c, rad, Color(Palette.CYAN, 0.08))
+	draw_circle(c, 24.0, Color(0.04, 0.05, 0.12, 0.92))
+	for arm in 5:
+		var pts := PackedVector2Array()
+		var a0 := arm * TAU / 5.0 + _t * 1.6
+		for k in 14:
+			var rr := 2.0 + k * 1.75
+			var a := a0 + rr * 0.14
+			pts.append(c + Vector2(cos(a), sin(a)) * rr)
+		draw_polyline(pts, Color(Palette.CYAN if arm % 2 == 0 else Palette.GLITCH, 0.9), 2.6, true)
+
+# --- Frozen figures of the remembered past (young Garrick, Wren) ---------------------------
+func _draw_figure() -> void:
+	_shadow(12.0)
+	var shimmer := 0.55 + 0.12 * sin(_t * 3.0)
+	var fill := Color(0.45, 0.8, 0.95, shimmer)
+	var edge := Color(Palette.CYAN, 0.95)
+	var s := 1.0 if variant == 0 else 0.62
+	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(s, s))
+	for k in 3:
+		draw_colored_polygon(DrawKit.ellipse(Vector2(0, -34), 24.0 + k * 6.0, 42.0 + k * 7.0, 20), Color(Palette.CYAN, 0.05))
+	# Legs, body, head.
+	DrawKit.shape(self, PackedVector2Array([Vector2(-8, 0), Vector2(8, 0), Vector2(7, -16), Vector2(-7, -16)]), fill, edge, 2.2, _seed)
+	DrawKit.shape(self, PackedVector2Array([Vector2(-11, -16), Vector2(11, -16), Vector2(9, -42), Vector2(-9, -42)]), fill, edge, 2.2, _seed + 1.0)
+	draw_circle(Vector2(0, -52), 10.0, fill)
+	draw_arc(Vector2(0, -52), 10.0, 0.0, TAU, 20, edge, 2.2, true)
+	if variant == 0:
+		# Young Garrick: arm raised, hammer overhead, forever about to strike.
+		DrawKit.line(self, Vector2(8, -38), Vector2(18, -62), edge, 4.0, _seed + 2.0, 0.3)
+		DrawKit.shape(self, PackedVector2Array([Vector2(12, -72), Vector2(30, -64), Vector2(26, -56), Vector2(8, -64)]), fill, edge, 2.2, _seed + 3.0)
+	else:
+		# Wren: wrapped in a blanket, holding a tiny lantern against the dark.
+		DrawKit.shape(self, PackedVector2Array([Vector2(-13, -40), Vector2(13, -40), Vector2(15, -6), Vector2(-15, -6)]), Color(fill, shimmer * 0.7), edge, 2.2, _seed + 2.0)
+		draw_circle(Vector2(12, -30), 3.5, Color(1, 0.9, 0.6, 0.95))
+		draw_circle(Vector2(12, -30), 10.0, Color(1, 0.9, 0.6, 0.18))
+	# Scanline gaps: the memory is a recording, and it is slightly worn.
+	for i in 9:
+		var y := -62.0 + i * 7.0
+		draw_line(Vector2(-18, y), Vector2(18, y), Color(0.04, 0.06, 0.12, 0.25), 1.0)
+	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)

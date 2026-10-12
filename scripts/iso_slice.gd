@@ -45,6 +45,17 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 	var r := _restoration(cell, kind)
 	var line_col := Palette.PENCIL.lerp(Palette.INK_BROWN, r)
 	var checker := (cell.x + cell.y) % 2 == 0
+	if kind == "m":
+		# Memory floor: cold slate with faint cyan seams, frozen embers hanging above.
+		draw_colored_polygon(d, Color("46566e") if checker else Color("3e4d64"))
+		var ml := d.duplicate()
+		ml.append(d[0])
+		draw_polyline(ml, Color(Palette.CYAN, 0.22), 1.4, true)
+		if _h(cell.x, cell.y, 40) > 0.82:
+			var q := _p(Vector2(cell), z) + Vector2((_h(cell.x, cell.y, 41) - 0.5) * 30.0, (_h(cell.x, cell.y, 42) - 0.5) * 12.0 - 20.0)
+			draw_circle(q, 5.0, Color(Palette.CYAN, 0.10))
+			draw_circle(q, 1.6, Color("ffb347", 0.95))
+		return
 	if kind == ".":
 		draw_colored_polygon(d, Color(Palette.GRASS, 0.34 if checker else 0.26))
 	else:
@@ -113,7 +124,7 @@ func _cliff(a: Vector2, b: Vector2, depth: float, kind: String, side: int, void_
 	var q := PackedVector2Array([a, b, b + Vector2(0, depth), a + Vector2(0, depth)])
 	var base := Color(0.93, 0.86, 0.68)             # stacked pages at the world's edge
 	if not void_edge:
-		base = Color("a98458") if kind == "." else Color("cbb28a")
+		base = Color("a98458") if kind == "." else (Color("34415a") if kind == "m" else Color("cbb28a"))
 	if side == 1:
 		base = base.darkened(0.18)
 	if kind == "," and not void_edge:

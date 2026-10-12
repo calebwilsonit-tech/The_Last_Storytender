@@ -14,9 +14,21 @@ var _narr_tween: Tween
 var _toast_tween: Tween
 var _region_tween: Tween
 var _region_text := ""
+var _objective: Label
+var _dim: ColorRect
+var _debuff: Label
+var _debuff_tween: Tween
+var _labels: Array[Label] = []
+var _dark := false
 
 func _ready() -> void:
 	layer = 10
+	# Full-screen darkening used by the Critic's "Boring!" debuff.
+	_dim = ColorRect.new()
+	_dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_dim.color = Color(0.02, 0.0, 0.05, 0.0)
+	add_child(_dim)
 	bottle = InkBottle.new()
 	bottle.position = Vector2(20, 14)
 	add_child(bottle)
@@ -54,6 +66,13 @@ func _ready() -> void:
 	_narr.add_theme_constant_override("outline_size", 8)
 	add_child(_narr)
 
+	_objective = _label(22, Palette.INK_BROWN)
+	_objective.position = Vector2(104, 92)
+	_objective.visible = false
+	_debuff = _label(40, Color("ff6a5c"))
+	_debuff.position = Vector2(440, 200)
+	_debuff.modulate.a = 0.0
+
 	_help = _label(15, Color(Palette.INK_BROWN, 0.7))
 	_help.text = "WASD move  ·  E speak / take  ·  F1 test damage  ·  F2 heal"
 	_help.position = Vector2(20, 690)
@@ -66,6 +85,7 @@ func _label(size: int, col: Color) -> Label:
 	l.add_theme_constant_override("outline_size", 6)
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(l)
+	_labels.append(l)
 	return l
 
 func set_ink(cur: float, mx: float) -> void:
@@ -105,7 +125,7 @@ func toast(text: String) -> void:
 
 ## Narrator (warm, italic) or Silence (cold, small, whispered). Non-blocking.
 func narrate(text: String, silence: bool = false, hold: float = 4.0) -> void:
-	var col := Palette.SILENCE if silence else Palette.INK_BROWN
+	var col := Palette.SILENCE if silence else (Palette.PAPER_LIGHT if _dark else Palette.INK_BROWN)
 	_narr.add_theme_color_override("default_color", col)
 	_narr.text = "[center][i]%s[/i][/center]" % text
 	if _narr_tween:
@@ -116,3 +136,34 @@ func narrate(text: String, silence: bool = false, hold: float = 4.0) -> void:
 	_narr_tween.tween_interval(hold)
 	_narr_tween.tween_property(_narr, "modulate:a", 0.0, 1.6)
 	await _narr_tween.finished
+
+func set_objective(text: String) -> void:
+	_objective.visible = text != ""
+	_objective.text = text
+
+func set_dim(a: float) -> void:
+	_dim.color.a = clampf(a, 0.0, 0.8)
+
+## Flash the word that just hit you.
+func debuff(text: String) -> void:
+	_debuff.text = text
+	_debuff.position.x = 640.0 - _debuff.get_minimum_size().x * 0.5
+	if _debuff_tween:
+		_debuff_tween.kill()
+	_debuff_tween = create_tween()
+	_debuff.modulate.a = 1.0
+	_debuff_tween.tween_interval(0.5)
+	_debuff_tween.tween_property(_debuff, "modulate:a", 0.0, 0.8)
+
+## Light text on a dark page (used inside memories).
+func set_dark(on: bool) -> void:
+	_dark = on
+	var fg := Palette.PAPER_LIGHT if on else Palette.INK_BROWN
+	var halo := Color(0.02, 0.03, 0.07, 0.92) if on else Color(Palette.PAPER_LIGHT, 0.9)
+	for l in _labels:
+		if l == _debuff:
+			continue
+		l.add_theme_color_override("font_color", fg)
+		l.add_theme_color_override("font_outline_color", halo)
+	_narr.add_theme_color_override("font_outline_color", halo)
+	_mnemo.add_theme_color_override("font_color", Palette.GOLD.lightened(0.2))

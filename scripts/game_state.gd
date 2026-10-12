@@ -8,6 +8,8 @@ const RESTORE_DURATION := 7.0
 const WAVE_SOFT_EDGE := 190.0     # px of ink "bleeding in" at the wave front
 
 var mnemosynth := 0
+var ink := 100.0                  # carried between scenes
+var spawn_cell := Vector2i(-1, -1)  # where the overworld should place the player (-1 = map start)
 var flags: Dictionary = {}
 var in_dialogue := false
 

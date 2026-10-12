@@ -5,6 +5,14 @@ Redaction touches is told in cold graphite pencil; everything a Storytender
 restores is told in warm ink and watercolor. The player should *feel* the color
 come back.
 
+## Reference sheets
+The target look is in `docs/art_reference/` (character sheets, NPC missing/restored pairs, enemies, tiles, props). Key rules pulled from them:
+- **Characters:** thick near-black outline, muted cel colors, chunky simplified proportions, solemn faces. The Storytender is a hooded wanderer with a shadowed face, scroll-topped backpack and a glowing cyan lantern. "Cool, not silly."
+- **Missing vs restored NPCs:** *missing* = grainy static-filled gray silhouette with purple glitch; *restored* = full color with a soft **cyan glow** around the figure. Implemented in `scripts/npc.gd`.
+- **Corruption:** purple swirls and tearing glitch; **memory / the Lantern:** cyan.
+- **Paper-doll pieces:** characters are built from separate parts (head, torso, arms, legs, cloak, backpack, lantern) so gear can be swapped (hardcover/softcover armor, alternate outfits). The procedural character already draws in those layers.
+- **Environment:** 32x32 paper-cutout tiles, blocky trees and rocks, corrupted variants.
+
 ## Visual language
 | State | Line | Fill | Feel |
 |---|---|---|---|

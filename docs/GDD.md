@@ -21,7 +21,7 @@
 ## 4. Core Loop: The Editors' Purge
 1. **Exploration** — the Unwritten Wilds; plot holes are literal void pits.
 2. **The Ghost Town (Drafts)** — wireframe/sketch-only, no color; NPCs are "Lorem ipsum" placeholders.
-3. **The Story Realm (Flashback)** — dungeon inside a memory. Example: *The Blacksmith's Regret* (frozen forge fire; find the First Sword; boss **The Critic**, red ink that shouts debuffing words: "Derivative!", "Boring!", "Slow Paced!").
+3. **The Story Realm (Flashback)** *(built: see below)* — dungeon inside a memory. Example: *The Blacksmith's Regret* (frozen forge fire; find the First Sword; boss **The Critic**, red ink that shouts debuffing words: "Derivative!", "Boring!", "Slow Paced!").
 4. **Restoration** — ink flows back, color returns, town becomes a "Published Chapter" (safe zone).
 
 ## 5. Entities
@@ -45,3 +45,11 @@ Prologue Plains (tutorial; green, well-written) · Plot-Twist Peaks (geometry sh
 2. **The Draft** — Prologue Plains + first Ghost Town.
 3. **The Revision** — Coherence system (audio/visual glitches).
 4. **The Publishing** — Boss fights, finalize narrative arc.
+
+---
+## Implemented: The Blacksmith's Regret (first Story Realm)
+Touch the frozen flame in Garrick's forge to enter his memory. The inside is a cold slate forge where every spark hangs in the air, frozen mid-flight.
+
+**Design decision (added to the doc's outline):** The Critic cannot be killed with a blade. It is Garrick's *own* inner voice, a boss made of red ink that shouts discouraging words ("Derivative!", "Boring!", "Overwritten.") as projectiles. Each word hits for damage plus a debuff (slow, or the screen dims). To win you reach three memory shards on raised terraces around the forge and hold each up to the Lantern. Each memory plays as a short scene (Young Garrick and Wren) and strips one ink layer from The Critic, making it quieter and slower. After the third, The Critic dissolves and the First Sword is waiting on the anvil. The beat: you don't defeat self-doubt, you out-remember it.
+
+Back in the overworld the sword restores Thistledown as before.
