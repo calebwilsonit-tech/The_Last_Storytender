@@ -45,7 +45,9 @@ var _dough_hinted := false
 func _dungeon_extras() -> Array:
 	return [
 		{"kind": "post", "cell": Vector2i(6, 17)},
-		{"kind": "vault", "cell": Vector2i(22, 15), "tier": 3},
+		{"kind": "vault", "cell": Vector2i(8, 16), "tier": 1},
+		{"kind": "vault", "cell": Vector2i(22, 15), "tier": 2},
+		{"kind": "vault", "cell": Vector2i(39, 16), "tier": 3},
 		{"kind": "post", "cell": Vector2i(38, 12)},
 	]
 

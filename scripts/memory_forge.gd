@@ -32,7 +32,9 @@ var _room_seen := {}
 func _dungeon_extras() -> Array:
 	return [
 		{"kind": "post", "cell": Vector2i(16, 11)},
+		{"kind": "vault", "cell": Vector2i(7, 12), "tier": 1},
 		{"kind": "vault", "cell": Vector2i(22, 10), "tier": 2},
+		{"kind": "vault", "cell": Vector2i(33, 10), "tier": 3},
 		{"kind": "post", "cell": Vector2i(38, 12)},
 	]
 

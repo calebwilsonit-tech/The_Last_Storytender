@@ -642,7 +642,7 @@ func _dungeon_vault(cell: Vector2i, tier: int) -> void:
 	var key := "vault_%s_%d_%d" % [String(name), cell.x, cell.y]
 	var chest := _add_prop(Prop.Kind.CHEST, cell, false, 1 if GameState.has_flag(key) else 0)
 	_floor.blockers[cell] = true
-	_register(chest, func(): return "" if GameState.has_flag(key) else ("Open the locked chest  " + "★".repeat(tier)), func():
+	_register(chest, func(): return "" if GameState.has_flag(key) else ("Word trial: open the locked chest  " + "★".repeat(tier)), func():
 		if GameState.has_flag(key):
 			return
 		if not await _run_trial(key, cell, tier):

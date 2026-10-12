@@ -42,7 +42,9 @@ var _darkness := 0.0
 func _dungeon_extras() -> Array:
 	return [
 		{"kind": "post", "cell": Vector2i(7, 16)},
-		{"kind": "vault", "cell": Vector2i(24, 17), "tier": 3},
+		{"kind": "vault", "cell": Vector2i(8, 18), "tier": 1},
+		{"kind": "vault", "cell": Vector2i(24, 17), "tier": 2},
+		{"kind": "vault", "cell": Vector2i(33, 15), "tier": 3},
 		{"kind": "post", "cell": Vector2i(37, 12)},
 	]
 
