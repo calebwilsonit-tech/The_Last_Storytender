@@ -256,6 +256,21 @@ static func garrick_lesson_end() -> Array:
 # ---- Pip's memory: The Last Page --------------------------------------------------
 const PIP_BOOK_HINT := "A storybook lies open on the ground, its last page torn out. The words on the pages keep rearranging themselves. You will need something that can rewrite them."
 const PIP_INTRO := "Every page is bright and printed. Every sentence is waiting to be true."
+const PIP_WING_OBJECTIVES: Array[String] = [
+	"Three torn pages are scattered through the library: the Dark Wood, the Tall Tower, the Margin Archive. Bring them to the door.",
+	"Sleep the wolves, open the gate, then find a way over the river. A memory can stand on a plate for you.",
+	"Read the black bars with the Lantern. Some of the stairs have not been written yet.",
+	"Put the guards to sleep and find out what the lock sentence says. Two plates, two memories.",
+]
+const PIP_PAGES_DONE := "All three pages are home. The way to the last page is open."
+const PIP_ALL_PAGES := "Three pages. He is more afraid of the ending than of anything in it, and the door knows."
+const PIP_PAGE_NARRATION: Array[String] = ["One page back. The book is a little less torn.", "Two. The last chapter is close enough to hear."]
+const PIP_GUARDS_ASLEEP := "The guards are asleep. The sentence will not stay true forever."
+const PIP_ICE := "The river is frozen. It is only true for a little while."
+const PIP_SOLID := "The floor is written solid. It will want to be missing again soon."
+const PIP_WEARS_OFF := "The sentence wears off. The way is gone again."
+const PIP_LOCK_OPEN := "The door is open, in writing. Now to find who holds it."
+const PIP_ECHO_HOLDS := "Someone is still standing there, in the past, holding the gate."
 const PIP_STONE_HINT := "A sentence stands here with one word that can change. Strike it with the Quill, or press {interact}."
 const PIP_BRIDGE_HOLDS := "The bridge held. All it needed was one different word."
 const PIP_WOLVES_ASLEEP := "The wolves are asleep. The sentence will not stay true forever."

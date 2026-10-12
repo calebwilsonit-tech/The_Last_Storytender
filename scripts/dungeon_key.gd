@@ -36,6 +36,11 @@ func _draw() -> void:
 			draw_colored_polygon(PackedVector2Array([c + Vector2(-9, -8), c + Vector2(5, -8), c + Vector2(8, 4), c + Vector2(-9, 4)]), ink)
 			draw_line(c + Vector2(8, -2), c + Vector2(13, -2), ink, 3.0)
 			draw_line(c + Vector2(-9, 8), c + Vector2(-2, 4), ink, 2.6)
+		"page":
+			draw_colored_polygon(PackedVector2Array([c + Vector2(-8, -11), c + Vector2(5, -11), c + Vector2(9, -7), c + Vector2(9, 11), c + Vector2(-8, 11)]), Color("fbf3dc"))
+			draw_polyline(PackedVector2Array([c + Vector2(-8, -11), c + Vector2(5, -11), c + Vector2(9, -7), c + Vector2(9, 11), c + Vector2(-8, 11), c + Vector2(-8, -11)]), ink, 1.8)
+			for k in 3:
+				draw_line(c + Vector2(-5, -4 + k * 5), c + Vector2(6, -4 + k * 5), ink, 1.4)
 		_:
 			draw_circle(c, 6.0, ink)
 	for i in 3:
