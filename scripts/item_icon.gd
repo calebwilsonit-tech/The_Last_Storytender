@@ -33,6 +33,11 @@ static func draw_item(ci: CanvasItem, id: String, c: Vector2, sz: float) -> void
 			_o(ci, PackedVector2Array([c + Vector2(-4, -2) * u, c + Vector2(4, -10) * u, c + Vector2(12, 4) * u, c + Vector2(4, 6) * u]), Color("f4f0e6"), 2.0)
 			for p in [Vector2(-16, 12), Vector2(14, -12), Vector2(16, 12), Vector2(-4, 16)]:
 				_o(ci, PackedVector2Array([c + p * u, c + (p + Vector2(5, -2)) * u, c + (p + Vector2(3, 4)) * u]), Color("e9a1ae"), 1.6)
+		"warm_loaf":
+			_o(ci, DrawKit.ellipse(c + Vector2(0, 2) * u, 15.0 * u, 10.0 * u, 18), Color("d09a52"))
+			for i in 3:
+				ci.draw_line(c + Vector2(-8 + i * 8, -5) * u, c + Vector2(-5 + i * 8, 5) * u, Color("8a5a28"), 2.0 * u)
+			ci.draw_arc(c + Vector2(0, -8) * u, 7.0 * u, PI, TAU, 8, Color(1, 1, 1, 0.5), 2.0, true)
 		"ink_vial":
 			_o(ci, PackedVector2Array([c + Vector2(-9, -2) * u, c + Vector2(9, -2) * u, c + Vector2(11, 14) * u, c + Vector2(-11, 14) * u]), Color("1f1b3a"))
 			_o(ci, PackedVector2Array([c + Vector2(-4, -12) * u, c + Vector2(4, -12) * u, c + Vector2(4, -2) * u, c + Vector2(-4, -2) * u]), Color("a7c7d6", 0.7))

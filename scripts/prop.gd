@@ -3,12 +3,15 @@ extends StaticBody2D
 ## Procedurally inked scenery. Objects with `ghost = true` begin as graphite
 ## pencil sketches and fill with color as the restoration wave reaches them.
 
-enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE, PICKUP, BOOK }
+enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE, PICKUP, BOOK, CHAIR, TABLE, OVEN }
 
 var kind: Kind = Kind.TREE
 var ghost := false
 var variant := 0
 var item_id := ""         # for PICKUP props
+var occupied := false      # CHAIR: a guest is seated
+var warmth := 0.0          # TABLE: 0 cold .. 1 warm
+var table_len := 5         # TABLE length in cells
 var done := false          # a spent memory shard
 var lift := 0.0            # elevation of the cell it stands on, in px
 var _t := 0.0
@@ -25,6 +28,11 @@ func _ready() -> void:
 			poly.polygon = Iso.diamond(Vector2.ZERO, 1.8)
 		Kind.ANVIL, Kind.FIGURE:
 			poly.polygon = Iso.diamond(Vector2.ZERO, 0.55)
+		Kind.OVEN:
+			poly.polygon = Iso.diamond(Vector2.ZERO, 0.95)
+		Kind.TABLE:
+			var h := table_len * 0.5 - 0.1
+			poly.polygon = PackedVector2Array([Iso.to_screen(Vector2(-h, -0.42)), Iso.to_screen(Vector2(h, -0.42)), Iso.to_screen(Vector2(h, 0.42)), Iso.to_screen(Vector2(-h, 0.42))])
 		_:
 			poly = null
 	if poly:
@@ -59,6 +67,9 @@ func _draw() -> void:
 		Kind.FIGURE: _draw_figure()
 		Kind.PICKUP: _draw_pickup()
 		Kind.BOOK: _draw_book()
+		Kind.CHAIR: _draw_chair()
+		Kind.TABLE: _draw_table()
+		Kind.OVEN: _draw_oven()
 
 func _shadow(rx: float) -> void:
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
@@ -293,7 +304,12 @@ func _draw_figure() -> void:
 	DrawKit.shape(self, PackedVector2Array([Vector2(-11, -16), Vector2(11, -16), Vector2(9, -42), Vector2(-9, -42)]), fill, edge, 2.2, _seed + 1.0)
 	draw_circle(Vector2(0, -52), 10.0, fill)
 	draw_arc(Vector2(0, -52), 10.0, 0.0, TAU, 20, edge, 2.2, true)
-	if variant == 2:
+	if variant == 3:
+		# Maud, remembered: seated at the head of the table, hands folded in her lap.
+		DrawKit.shape(self, PackedVector2Array([Vector2(-15, -4), Vector2(15, -4), Vector2(13, -34), Vector2(-13, -34)]), Color(fill, shimmer * 0.9), edge, 2.2, _seed + 2.0)
+		draw_circle(Vector2(0, -44), 3.0, edge)
+		DrawKit.shape(self, PackedVector2Array([Vector2(-9, -20), Vector2(9, -20), Vector2(8, -12), Vector2(-8, -12)]), Color(fill, 0.5), edge, 1.8, _seed + 3.0)
+	elif variant == 2:
 		# Pip: hunched on the page, hands pressed over his eyes, the book in his lap.
 		DrawKit.shape(self, PackedVector2Array([Vector2(-14, -8), Vector2(14, -8), Vector2(16, 4), Vector2(-16, 4)]), Color(fill, shimmer * 0.8), edge, 2.2, _seed + 2.0)
 		DrawKit.line(self, Vector2(-9, -34), Vector2(-5, -52), edge, 4.0, _seed + 3.0, 0.3)
@@ -345,3 +361,81 @@ func _draw_book() -> void:
 	for i in 4:
 		var ph := fmod(_t * 0.5 + i * 0.27, 1.0)
 		draw_circle(Vector2(8 + i * 6, -8 - ph * 40.0), 1.8, Color(Palette.CYAN, (1.0 - ph) * 0.9))
+
+# --- Chair (the Empty Table's seats) ---------------------------------------------------------
+func _draw_chair() -> void:
+	_shadow(14.0)
+	var wood := Palette.WOOD.lerp(Palette.GOLD, 0.25 if occupied else 0.0)
+	var facing := -1.0 if variant == 0 else 1.0   # north row faces south, south row faces north
+	DrawKit.shape(self, PackedVector2Array([Vector2(-11, -14), Vector2(11, -14), Vector2(9, -4), Vector2(-9, -4)]), wood, Palette.OUTLINE, 2.4, _seed)
+	for lx in [-9.0, 9.0]:
+		draw_line(Vector2(lx, -4), Vector2(lx, 2), Palette.OUTLINE, 3.0)
+	var back_y := -14.0
+	DrawKit.shape(self, PackedVector2Array([Vector2(-10, back_y), Vector2(10, back_y), Vector2(9, back_y - 20.0), Vector2(-9, back_y - 20.0)]), wood.darkened(0.12), Palette.OUTLINE, 2.4, _seed + 1.0)
+	if occupied:
+		draw_circle(Vector2(0, -22), 26.0, Color(Palette.GOLD, 0.10))
+
+# --- The long table: cold and bare until it is filled ---------------------------------------
+func _draw_table() -> void:
+	_shadow(table_len * 24.0)
+	var w := clampf(warmth, 0.0, 1.0)
+	var h := table_len * 0.5
+	var lift := 26.0
+	var cloth := Color("7d8aa3").lerp(Color("e2b560"), w)
+	var wood := Color("5a4a44").lerp(Palette.WOOD, w)
+	var tl := Iso.to_screen(Vector2(-h, -0.45)) + Vector2(0, -lift)
+	var tr := Iso.to_screen(Vector2(h, -0.45)) + Vector2(0, -lift)
+	var br := Iso.to_screen(Vector2(h, 0.45)) + Vector2(0, -lift)
+	var bl := Iso.to_screen(Vector2(-h, 0.45)) + Vector2(0, -lift)
+	# Legs and the near side faces.
+	for lx in [-h + 0.3, h - 0.3]:
+		for ly in [-0.35, 0.35]:
+			var f := Iso.to_screen(Vector2(lx, ly))
+			draw_line(f, f + Vector2(0, -lift), Palette.OUTLINE, 5.0)
+	var front := PackedVector2Array([bl, br, br + Vector2(0, 8), bl + Vector2(0, 8)])
+	var side := PackedVector2Array([br, tr, tr + Vector2(0, 8), br + Vector2(0, 8)])
+	draw_colored_polygon(front, wood.darkened(0.15))
+	draw_colored_polygon(side, wood.darkened(0.3))
+	DrawKit.shape(self, PackedVector2Array([tl, tr, br, bl]), cloth, Palette.OUTLINE, 2.8, _seed)
+	# Place settings: bare plates when cold, bread and candles when warm.
+	for i in range(table_len):
+		var cx := -h + 0.5 + i
+		for ly in [-0.2, 0.2]:
+			var pc := Iso.to_screen(Vector2(cx, ly)) + Vector2(0, -lift - 1)
+			draw_colored_polygon(DrawKit.ellipse(pc, 9.0, 4.5, 14), Color("e8e4dc").lerp(Color("f6ead0"), w))
+			if w > 0.4:
+				draw_colored_polygon(DrawKit.ellipse(pc + Vector2(0, -2), 5.0, 3.0, 10), Color("c9893f", w))
+	if w > 0.15:
+		for cx in [-h + 0.8, 0.0, h - 0.8]:
+			var cp := Iso.to_screen(Vector2(cx, 0.0)) + Vector2(0, -lift)
+			draw_line(cp, cp + Vector2(0, -12), Color("f4ecd6"), 4.0)
+			draw_circle(cp + Vector2(0, -16), 4.0 + sin(_t * 9.0 + cx) * 0.8, Color("ffd24a", w))
+			draw_circle(cp + Vector2(0, -16), 24.0, Color(Palette.GOLD, 0.10 * w))
+	else:
+		# Frost creeping along the cloth.
+		for i in 6:
+			var fp := tl.lerp(tr, 0.1 + i * 0.16) + Vector2(0, 4 + (i % 2) * 6)
+			draw_line(fp, fp + Vector2(3, 6), Color(0.85, 0.95, 1.0, 0.6), 1.6)
+
+# --- Maud's cold oven: the doorway into her memory ---------------------------------------
+func _draw_oven() -> void:
+	_shadow(34.0)
+	var d := Iso.diamond(Vector2.ZERO, 1.7)
+	var h := 46.0
+	var up := Vector2(0, -h)
+	var stone := Color("8a8f9c")
+	var left := PackedVector2Array([d[3], d[2], d[2] + up, d[3] + up])
+	var right := PackedVector2Array([d[2], d[1], d[1] + up, d[2] + up])
+	DrawKit.shape(self, left, stone.darkened(0.12), Palette.OUTLINE, 2.6, _seed)
+	DrawKit.shape(self, right, stone.darkened(0.3), Palette.OUTLINE, 2.6, _seed + 1.0)
+	var dome := PackedVector2Array([d[3] + up, d[2] + up, d[1] + up, d[0] + up])
+	DrawKit.shape(self, dome, stone.lightened(0.05), Palette.OUTLINE, 2.6, _seed + 2.0)
+	# The mouth of the oven: black and cold, with one small light still in the ashes.
+	var mouth := DrawKit.face_quad(right, 0.25, 0.1, 0.75, 0.62)
+	DrawKit.shape(self, mouth, Color("14121a"), Palette.OUTLINE, 2.4, _seed + 3.0)
+	var m := (mouth[0] + mouth[2]) * 0.5 + Vector2(0, 8)
+	var pulse := 0.5 + 0.5 * sin(_t * 2.0)
+	draw_circle(m, 14.0 + pulse * 4.0, Color(Palette.CYAN, 0.12))
+	draw_circle(m, 3.0 + pulse, Color(Palette.CYAN.lightened(0.5), 0.9))
+	# Chimney.
+	DrawKit.shape(self, PackedVector2Array([Vector2(-6, -h - 6), Vector2(6, -h - 6), Vector2(6, -h - 34), Vector2(-6, -h - 34)]), stone.darkened(0.2), Palette.OUTLINE, 2.4, _seed + 4.0)

@@ -10,6 +10,7 @@ signal fell
 signal attacked
 signal dashed
 signal hit_landed
+signal style_changed(style: String)
 
 const LANTERN_MAX := 100.0
 const LANTERN_DRAIN := 24.0       # per second while shining
@@ -41,6 +42,7 @@ var _walk := 0.0
 var _invuln := 0.0
 var _facing_right := true
 var _facing_back := false
+var is_sneaking := false   # holding Ctrl/C: slower, much quieter
 var elev := 0.0            # visual elevation in px; physics stays on the ground plane
 var preview := false       # true when drawn inside the binder's paper-doll panel
 var _last_dir := Vector2.RIGHT
@@ -63,10 +65,35 @@ func _ready() -> void:
 	ink_changed.emit(ink, max_ink)
 	lantern_changed.emit(lantern_energy, LANTERN_MAX)
 
+## How far your presence carries (hearing), in ground pixels. Creeping is quiet;
+## dashing and fighting are loud; the Lantern announces you.
+func noise_radius() -> float:
+	var r := 45.0 + clampf(velocity.length() / speed, 0.0, 1.0) * 105.0
+	if _dash_t > 0.0:
+		r = 290.0
+	if _swing > 0.0:
+		r = maxf(r, 300.0)
+	if lantern_on:
+		r += 50.0
+	if is_sneaking:
+		r *= 0.4
+	return r
+
 func can_attack() -> bool:
 	return GameState.has_flag("has_quill")
 
 func _input(event: InputEvent) -> void:
+	if not preview and GameState.has_flag("format_mark") and not GameState.in_dialogue:
+		var st := ""
+		if event.is_action_pressed("style_underline"):
+			st = "underline"
+		elif event.is_action_pressed("style_bold"):
+			st = "bold"
+		elif event.is_action_pressed("style_italic"):
+			st = "italic"
+		if st != "":
+			GameState.format_style = st
+			style_changed.emit(st)
 	if event is InputEventMouseMotion or event is InputEventMouseButton:
 		_mouse_idle = 0.0
 
@@ -99,7 +126,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		# WASD are screen directions. The 2:1 isometric plane is squashed
 		# vertically, so halve the vertical speed to keep motion visually even.
-		var mult := speed_mult * (1.0 + GameState.equipped_stat("speed")) * (0.72 if lantern_on else 1.0)
+		is_sneaking = Input.is_action_pressed("sneak")
+		var mult := speed_mult * (1.0 + GameState.equipped_stat("speed")) * (0.72 if lantern_on else 1.0) * (0.55 if is_sneaking else 1.0)
 		var target := Vector2(dir.x, dir.y * 0.5) * speed * mult
 		if dir != Vector2.ZERO:
 			velocity = velocity.move_toward(target, accel * delta)
@@ -297,6 +325,11 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO, 13.0, Color(0, 0, 0, 0.30))
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
 	_draw_trail()
+	if is_sneaking and not preview:
+		# While creeping, a faint ring shows how far your presence carries.
+		draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))
+		draw_arc(Vector2.ZERO, noise_radius(), 0.0, TAU, 40, Color(1, 1, 1, 0.22), 2.0, true)
+		draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
 	if lantern_on:
 		_draw_beam(flick)
 	if _swing > 0.0:
@@ -311,7 +344,7 @@ func _draw() -> void:
 	var ph := _walk
 	var bob := -absf(sin(ph)) * 2.6 if moving else sin(_t * 1.8) * 0.7
 	var fx := 1.0 if _facing_right else -1.0
-	draw_set_transform(Vector2(0, bob - elev), 0.0, Vector2(fx * 0.8, 0.8))
+	draw_set_transform(Vector2(0, bob - elev + (4.0 if is_sneaking else 0.0)), 0.0, Vector2(fx * 0.8, 0.8 * (0.9 if is_sneaking else 1.0)))
 	if _invuln > 0.0 and int(_t * 20.0) % 2 == 0:
 		return   # blink while briefly invulnerable
 	if _facing_back:

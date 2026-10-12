@@ -5,6 +5,7 @@ extends LevelBase
 
 const MEMORY_SCENE := "res://scenes/memory_forge.tscn"
 const PIP_MEMORY_SCENE := "res://scenes/memory_pip.tscn"
+const MAUD_MEMORY_SCENE := "res://scenes/memory_maud.tscn"
 const RETURN_CELL := Vector2i(30, 15)       # where you step out of the memory
 
 var _enemy_spawns: Array[Dictionary] = []   # {kind, cell}; enemies appear after Garrick's lesson
@@ -21,6 +22,8 @@ var _forge: Prop
 var _garrick: Npc
 var _pip_npc: Npc
 var _book: Prop
+var _maud_npc: Npc
+var _oven: Prop
 var _entered_town := false
 
 # --- LevelBase hooks ---------------------------------------------------------------
@@ -55,6 +58,7 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 					var c2 := cell + Vector2i(dx, dy)
 					consumed[c2] = true
 					_floor.cells[c2] = ","
+					_floor.blockers[c2] = true
 			var kind := Prop.Kind.HOUSE if ch == "H" else Prop.Kind.FORGE
 			var hp := Prop.new()
 			hp.kind = kind
@@ -72,6 +76,11 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 		"k":
 			_floor.cells[cell] = "."
 			_add_pickup(cell, "softcover_binding")
+		"V":
+			_floor.cells[cell] = ","
+			_floor.blockers[cell] = true
+			_oven = _add_prop(Prop.Kind.OVEN, cell)
+			_register(_oven, _oven_prompt, _touch_oven, 110.0)
 		"Q":
 			_floor.cells[cell] = ","
 			_book = _add_prop(Prop.Kind.BOOK, cell)
@@ -113,7 +122,8 @@ func _add_npc(ch: String, cell: Vector2i) -> void:
 		"B":
 			n.kind = Npc.Kind.BAKER
 			n.npc_id = "maud"
-			_register(n, func(): return "Speak", func(): await _say(Story.maud_restored() if GameState.is_restored("maud") else Story.maud_ghost()))
+			_maud_npc = n
+			_register(n, func(): return "Speak", _talk_maud)
 
 func _notification(what: int) -> void:
 	# Remember where you were if the game is closed mid-walk.
@@ -123,6 +133,8 @@ func _notification(what: int) -> void:
 
 func _level_ready() -> void:
 	_player.dashed.connect(_on_dashed)
+	if GameState.has_flag("maud_memory_done") and is_instance_valid(_oven):
+		pass   # the oven stays; Maud is baking in it now
 	if GameState.has_flag("pip_memory_done") and is_instance_valid(_book):
 		_book.queue_free()   # the storybook has done its job
 	if GameState.has_flag("lesson_done"):
@@ -171,6 +183,8 @@ func _handle_cue(cue: String) -> void:
 			await _restoration_scene("garrick", _garrick)
 		"restore_pip":
 			await _restoration_scene("pip", _pip_npc)
+		"restore_maud":
+			await _restoration_scene("maud", _maud_npc)
 
 # --- Story beats -----------------------------------------------------------------------
 func _book_prompt() -> String:
@@ -195,6 +209,30 @@ func _talk_pip() -> void:
 		_hud.toast("Restored: Pip")
 	else:
 		await _say(Story.pip_ghost())
+
+func _oven_prompt() -> String:
+	if GameState.has_flag("maud_memory_done"):
+		return ""
+	return "Reach into the cold oven" if GameState.has_flag("pip_memory_done") else "Look at the oven"
+
+func _touch_oven() -> void:
+	if not GameState.has_flag("pip_memory_done"):
+		await _say([Story.line("", Story.MAUD_OVEN_HINT, "action")])
+		return
+	await _say(Story.maud_oven_enter())
+	Transition.go(MAUD_MEMORY_SCENE, Palette.GOLD.lightened(0.7))
+	await get_tree().create_timer(30.0).timeout
+
+func _talk_maud() -> void:
+	if GameState.is_restored("maud"):
+		await _say(Story.maud_restored())
+	elif GameState.has_flag("maud_memory_done"):
+		await _say(Story.maud_restoration())
+		GameState.add_mnemosynth(30)
+		_give_item("warm_loaf", 3)
+		_hud.toast("Restored: Maud")
+	else:
+		await _say(Story.maud_ghost())
 
 func _forge_prompt() -> String:
 	if GameState.has_flag("met_garrick") and not GameState.has_flag("memory_done"):

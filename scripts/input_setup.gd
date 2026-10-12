@@ -13,6 +13,10 @@ func _ready() -> void:
 	_bind("dash", [KEY_SHIFT])
 	_bind("lantern", [KEY_Q])
 	_bind_mouse("lantern", MOUSE_BUTTON_RIGHT)
+	_bind("style_underline", [KEY_1])
+	_bind("style_bold", [KEY_2])
+	_bind("style_italic", [KEY_3])
+	_bind("sneak", [KEY_CTRL, KEY_C])   # hold to creep: slower, much quieter
 	_bind("inventory", [KEY_TAB, KEY_I])
 	_bind("use_item", [KEY_F])
 	_bind("debug_reset", [KEY_F12])  # wipe the save and restart

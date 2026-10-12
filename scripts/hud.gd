@@ -5,6 +5,7 @@ extends CanvasLayer
 
 var bottle: InkBottle
 var gauge: LanternGauge
+var _toolbar: StyleToolbar
 var _quick_icon: ItemIcon
 var _quick_label: Label
 var _mnemo: Label
@@ -73,6 +74,12 @@ func _ready() -> void:
 	_narr.add_theme_constant_override("outline_size", 8)
 	add_child(_narr)
 
+	_toolbar = StyleToolbar.new()
+	_toolbar.position = Vector2(104, 112)
+	_toolbar.visible = false
+	add_child(_toolbar)
+	_toolbar.set_style(GameState.format_style)
+
 	_quick_icon = ItemIcon.new()
 	_quick_icon.position = Vector2(1180, 640)
 	_quick_icon.custom_minimum_size = Vector2(64, 64)
@@ -111,7 +118,7 @@ func set_lantern(cur: float, mx: float) -> void:
 	gauge.set_energy(cur, mx)
 
 func set_controls(armed: bool) -> void:
-	_help.text = "WASD move  ·  E speak / take  ·  Hold Q or right mouse: Lantern" + ("  ·  Click / J: Quill  ·  Shift: dash  ·  Tab: binder  ·  F: use item" if armed else "  ·  Shift: dash  ·  Tab: binder")
+	_help.text = "WASD move  ·  E speak / take  ·  Hold Q or right mouse: Lantern" + ("  ·  Click / J: Quill  ·  Shift: dash  ·  Ctrl/C: creep  ·  Tab: binder  ·  F: use item" if armed else "  ·  Shift: dash  ·  Tab: binder")
 
 func set_mnemo(v: int) -> void:
 	_mnemo.text = "◆ %d" % v
@@ -197,3 +204,11 @@ func set_quickslot(id: String) -> void:
 	_quick_label.visible = id != ""
 	if id != "":
 		_quick_label.text = "F   ×%d" % GameState.count(id)
+
+## The Format mark's toolbar appears once the Quill has learned it.
+func show_toolbar(on: bool) -> void:
+	_toolbar.visible = on
+	_toolbar.set_style(GameState.format_style)
+
+func set_style(s: String) -> void:
+	_toolbar.set_style(s)

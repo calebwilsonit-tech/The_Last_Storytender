@@ -156,6 +156,8 @@ func _add_prop(kind: Prop.Kind, cell: Vector2i, ghost: bool = false, variant: in
 	p.lift = _lift_at(cell)
 	p.position = Iso.to_screen(Vector2(cell))
 	_actors.add_child(p)
+	if kind == Prop.Kind.TREE:
+		_floor.blockers[cell] = true
 	return p
 
 func _register(node: Node2D, prompt: Callable, action: Callable, rng: float = INTERACT_RANGE) -> void:
@@ -219,6 +221,7 @@ func _build_player() -> void:
 	_player.floor_ref = _floor
 	_player.hit_landed.connect(func(): camera_shake(0.12, 2.5))
 	_player.fell.connect(_on_player_fell)
+	_player.style_changed.connect(func(st: String): _hud.set_style(st))
 	_player.crumpled.connect(_on_player_crumpled)
 	_player.ink = GameState.ink
 	_player.elev = _floor.height_at(_start) * Iso.LEVEL_H
@@ -234,6 +237,7 @@ func _build_ui() -> void:
 	_player.lantern_changed.connect(_hud.set_lantern)
 	_hud.set_lantern(_player.lantern_energy, Player.LANTERN_MAX)
 	_hud.set_controls(_player.can_attack())
+	_hud.show_toolbar(GameState.has_flag("format_mark"))
 	_dialogue = DialogueBox.new()
 	add_child(_dialogue)
 	_inventory = InventoryScreen.new()
@@ -301,6 +305,14 @@ func use_item(id: String) -> void:
 			b.elev = _floor.height_at(_player.position) * Iso.LEVEL_H
 			b.exploded.connect(func(_p: Vector2): camera_shake(0.35, 7.0))
 			_actors.add_child(b)
+		"warm_loaf":
+			if _player.ink >= _player.max_ink - 0.5:
+				_hud.toast("Your ink is already full")
+				return
+			GameState.remove_item(id)
+			_player.ink = minf(_player.ink + 60.0, _player.max_ink)
+			_player.ink_changed.emit(_player.ink, _player.max_ink)
+			_hud.toast("A warm loaf. You feel looked after.")
 		"ink_vial":
 			if _player.ink >= _player.max_ink - 0.5:
 				_hud.toast("Your ink is already full")

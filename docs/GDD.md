@@ -189,13 +189,14 @@ A Bare notices you within **250 px** and a Mite within **300 px** (ground distan
 ## 17. Puzzle Design Language: the Editor's Toolkit (proposed v2.8)
 The game is about *editing a story*, so puzzles should use the tools of an editor on the world itself. **Each town unlocks one new "proofreader's mark" for the Quill**, so every town has a fresh puzzle verb and the 1-2 hour length stays varied.
 
-| Town | Mark (verb) | What it does | Status |
+| Where | Puzzle verb | What it does | Status |
 |---|---|---|---|
-| Thistledown (Pip) | **Rewrite** | Swap a word in a sentence | Built |
-| Thistledown (Maud) | **Format** (Underline / Bold / Italic) | Text styling acts as physics (below) | Proposed |
-| Plot-Twist Peaks | **Fold / Reorder** | Dog-ear a page corner, shuffle chapters | Proposed |
-| Purple Prose Swamp | **Strike** | Delete words (adjectives, "not", whole sentences) | Proposed |
-| The Final Chapter | **All marks, at once** | Combined | Proposed |
+| Thistledown: Garrick's memory | **Remember** (Lantern) | Hold memories up to the light | Built |
+| Thistledown: Pip's memory | **Rewrite** | Swap a word in a sentence | Built |
+| Thistledown: Maud's memory | **Format** (Underline / Bold / Italic) | Text styling acts as physics | Built |
+| Every later town | **Chosen by the designer** | Each town gets its own verbs | Open (the Fold / Reorder, Strike and "all marks" ideas below are suggestions only) |
+
+**Rule: every town gets its own puzzle mechanics.** Marks the Quill has already learned stay available, so a later town *may* call back to an earlier one, but it is never required. Global systems (stealth/perception, difficulty, death cost, the binder) apply in every town.
 
 ### Out-of-the-box puzzle ideas (pick and mix)
 1. **Letter-level proofreading.** Objects are labeled with typos. Change one letter and the object changes: HOLE -> WHOLE (a pit fills in), STARE -> STAIR (stairs appear), BARE -> BEAR (already in the game). A starter-area secret.
@@ -209,7 +210,32 @@ The game is about *editing a story*, so puzzles should use the tools of an edito
 9. **Undo / Revision history.** Hold a button to rewind objects 3 seconds (burnt bread un-burns, a falling block rises again): the Eraser Crumbs' cousin, an "Undo". Pair with a saved "draft" of a room.
 10. **Index / card-catalog sorting.** Recipe cards arrive out of order; file them in the right order to open a drawer (alphabetical, or "order of operations").
 
-### Proposed assignment
+### Proposed assignment for Thistledown
 - **Maud's memory ("The Empty Table"):** the *Format* mark (idea 2), one *waiting* puzzle (7), one *unreliable Narrator* puzzle (6), and the boss is her fear that nobody is left to feed.
 - **Garrick's memory (extension to 3-4 rooms):** *strike-through negation* (3) and a *footnote portal* room (5).
 - **Starter-area secrets:** letter-level proofreading (1) hidden in the Plains.
+
+---
+## 18. Memory 3: Maud's "The Empty Table" and Stealth (implemented v2.8)
+### Stealth (global, every town)
+Enemies now **perceive** you instead of noticing you at a fixed distance. Each has a vision **cone** (Bare: ~54 deg either side, 270 px range; Mite: very wide cone, shorter range, sharp hearing), **hearing** (your noise radius), and **line of sight** (trees, houses and crates block it; so do cliffs/terraces higher than both of you). An alert meter fills (shown as a growing "?"), then they chase; if they lose you they **search** the last place they saw you, look around, and give up.
+- **Creep** (hold **Ctrl or C**): 55% speed, 40% noise, 75% sight range; a faint ring shows how far your presence carries.
+- Walking = 150 noise, dashing = 290, fighting = 300, the Lantern adds +50 and makes you easier to see.
+- **Sneak attack:** hitting an unaware (or sleeping) enemy does **double damage**. When one notices you, the ones beside it do too.
+- Cones are drawn on the ground near you (yellow, then orange, then red as they notice you).
+
+### The Format mark (Maud's memory verb)
+Choose a style with **1 (Underline), 2 (Bold), 3 (Italic)** and strike a word with the Quill:
+- **Underline:** the word becomes walkable; plot holes beneath it become a bridge.
+- **Bold:** the word is heavy (weight 2): it can press a pressure plate (needs weight 2).
+- **Italic:** the word slides along its lean until something stops it (a wall, another block, you); a block that slides into a plot hole plugs it for good.
+- **Rising dough** cannot be rushed: strike it early and it collapses. Hold the Lantern's warmth on it to help it rise.
+
+### The rooms (about 12-15 min)
+1. **The Pantry:** underline BREAD into a bridge (tutorial).
+2. **The Kitchen:** make SALT bold, then italic, and it slides onto the plate and opens the gate. Patrols to sneak past.
+3. **The Cellar:** the DOUGH must be waited for (the "do nothing" puzzle), then underlined into a bridge. Bares and Mites patrol (stealth practice).
+4. **The Hall (boss, The Empty Table):** six chairs set for six. Shapes in the dark are drawn to the Lantern's light; lead each to a chair. Every ~11 s **The Clearing** (a telegraphed cold) sweeps the hall from a random side: it erases standing guests, stands seated ones back up, and hurts you, unless you or they are **behind a bold word** (it shelters up to 3 tiles behind it). SERVE blocks can be bolded and slid into place. Seat all six at once to win.
+**Emotional resolution:** the table was only ever "a place where people are invited". Maud never lost the recipe; she lost the reason.
+
+Reward: **Warm Loaf** x3 (restores 60 ink), Maud's restoration, +40 Mnemosynth. The oven doorway needs Pip's memory first (the Quill must learn Rewrite before Format).

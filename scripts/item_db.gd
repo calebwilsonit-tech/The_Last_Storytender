@@ -14,6 +14,11 @@ const ITEMS := {
 		"desc": "Restores a good measure of ink.",
 		"flavor": "Still wet.",
 	},
+	"warm_loaf": {
+		"name": "Warm Loaf", "type": "consumable",
+		"desc": "Restores a good deal of ink.",
+		"flavor": "Still warm. Someone made it for you.",
+	},
 	"hardcover_binding": {
 		"name": "Hardcover Binding", "type": "binding",
 		"desc": "Heavy plates cut from book covers. -30% damage taken, but slower.",

@@ -13,6 +13,8 @@ const PLAINS_X_LIMIT := 22            # x >= this is the town (for region labels
 var cells: Dictionary = {}            # Vector2i -> String (kind)
 var heights: Dictionary = {}          # Vector2i -> int level (for stairs: the LOW level)
 var stairs: Dictionary = {}           # Vector2i -> Vector2i (direction the stairs rise toward)
+var blockers: Dictionary = {}          # Vector2i -> true: trees, houses, crates (block line of sight)
+var block_cells: Dictionary = {}       # Vector2i -> TextBlock occupying it
 var marks: Dictionary = {}             # Vector2i -> {"kind": "crack"|"flower", "t": float}
 var focus := Vector2.ZERO             # screen-space point the camera is looking at
 var _slices: Array[IsoSlice] = []
@@ -43,6 +45,31 @@ func height_at(p: Vector2) -> float:
 		var t := clampf(0.5 + (g.x - cell.x) * u.x + (g.y - cell.y) * u.y, 0.0, 1.0)
 		return level(cell) + t
 	return float(level(cell))
+
+## Line of sight between two ground-plane positions: blocked by void, solid scenery
+## (trees, houses), and terrain higher than both ends (a cliff or terrace between).
+func has_los(a: Vector2, b: Vector2) -> bool:
+	var ga := Iso.to_grid(a)
+	var gb := Iso.to_grid(b)
+	var d := gb - ga
+	var n := int(d.length() / 0.35) + 1
+	var start := Vector2i(roundi(ga.x), roundi(ga.y))
+	var end := Vector2i(roundi(gb.x), roundi(gb.y))
+	var top := maxf(height_at(a), height_at(b)) + 0.5
+	var prev := start
+	for i in range(1, n):
+		var g := ga + d * (float(i) / n)
+		var c := Vector2i(roundi(g.x), roundi(g.y))
+		if c == prev:
+			continue
+		prev = c
+		if not cells.has(c):
+			return false
+		if c != start and c != end and blockers.has(c):
+			return false
+		if height_at(Iso.to_screen(g)) > top:
+			return false
+	return true
 
 ## Can you walk from cell a to adjacent cell b without crossing a cliff?
 func edge_open(a: Vector2i, b: Vector2i) -> bool:

@@ -19,6 +19,7 @@ var in_dialogue := false
 var inventory: Dictionary = {}                     # item id -> count
 var equipment: Dictionary = {"binding": "", "amulet": ""}
 var quick_slot := ""                               # consumable bound to the F key
+var format_style := "underline"                    # selected Quill style: underline | bold | italic
 var difficulty := "normal"                        # "story" (gentle) or "normal"
 
 const SAVE_PATH := "user://savegame.json"

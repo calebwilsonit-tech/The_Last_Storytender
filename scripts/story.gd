@@ -102,12 +102,15 @@ static func pip_restored() -> Array:
 	]
 
 static func maud_ghost() -> Array:
-	return [line("Lorem Ipsum", "Consectetur... adipiscing...", "speech")]
+	return [
+		line("Lorem Ipsum", "Consectetur... adipiscing...", "speech"),
+		line("", "She is standing next to a cold oven, hands curled around nothing, as if holding a loaf that was never there.", "action"),
+	]
 
 static func maud_restored() -> Array:
 	return [
-		line("Maud", "I couldn't remember my own recipe. Turns out it was only ever bread, and someone to feed.", "speech"),
-		line("Maud", "Here. Don't tell the Narrator I gave you the heel. It's the best part.", "speech"),
+		line("Maud", "Don't tell the Narrator I gave you the heel. It's the best part.", "speech"),
+		line("Maud", "Come by at dinner. There's always a chair now.", "speech"),
 	]
 
 # ---- The Blacksmith's Regret (Garrick's memory) -------------------------------
@@ -305,4 +308,80 @@ static func pip_restoration() -> Array:
 		_pip("I was reading a book and then I wasn't. It was scary. But I think I finished a chapter."),
 		_pip("Mister Garrick says you can swing a quill. Will you show me how to hold one? I want to write the next page myself."),
 		line("", "He is smiling at the sky, where the underside of the next page is very faintly beginning to show text. It is not an ending. It is a sentence that starts with \"Once.\"", "action", "restore_pip"),
+	]
+
+# ---- Maud's memory: The Empty Table ------------------------------------------------------
+const MAUD_OVEN_HINT := "The oven is cold. Not just unlit: cold the way a room is cold when everyone has left it. Something else has to teach your Quill a new edge before you can reach what is in the ashes."
+const MAUD_INTRO := "Flour on every surface. The smell of bread that is not baking."
+const MAUD_OBJECTIVES: Array[String] = [
+	"Press 1 (Underline), then strike the word BREAD with your Quill",
+	"Make SALT heavy (2: Bold) and send it sliding (3: Italic) onto the plate",
+	"Dough cannot be rushed. Wait for it to rise, then underline it. Your Lantern's warmth helps",
+	"Seat the guests: %d / 6.  Hold your Lantern on them to lead them to a chair",
+	"Sit with Maud",
+]
+const MAUD_BREAD_DONE := "Underlined, the word stops being a word. It becomes somewhere to stand."
+const MAUD_SLID := "Italic: it leans, and everything that leans eventually lands somewhere."
+const MAUD_PLATE := "Bold. Heavy enough to matter."
+const MAUD_DOUGH_BURNED := "It collapsed. It was not ready. Try again, and this time wait."
+const MAUD_DOUGH_READY := "It rose."
+const MAUD_DOUGH_HINT := "Some things cannot be rewritten. They can only be waited for."
+const MAUD_SEATED: Array[String] = [
+	"One chair filled.", "Two.", "Three. The room has begun to warm.",
+	"Four. You can hear someone laughing, a long way off.", "Five.", "Six.",
+]
+
+static func _maud(text: String) -> Dictionary:
+	return line("Maud", text, "speech", "", Palette.CYAN_DEEP)
+
+static func _table(text: String, cue: String = "") -> Dictionary:
+	return line("The Empty Table", text, "speech", cue, Palette.CYAN_DEEP.darkened(0.2))
+
+static func maud_oven_enter() -> Array:
+	return [
+		line("", "You look into the oven. Cold ashes. In the middle of them, one very small light is still burning.", "action"),
+		line("", "You hold up the lantern, and the light in the ashes leans toward it.", "action"),
+	]
+
+static func maud_format_grant() -> Array:
+	return [
+		line("", "The Quill hums. It has learned a new edge: it can format.", "action"),
+		line("", "Press 1, 2 or 3 to choose Underline, Bold or Italic, then strike a word. Words in this kitchen have weight.", "action"),
+	]
+
+static func maud_boss_intro() -> Array:
+	return [
+		line("", "A long table, set for six, with six empty chairs. The room is cold in the way a kitchen is cold when it has stopped being used.", "action"),
+		_table("Set for six."),
+		_table("Nobody is coming."),
+		line("", "Shapes stand in the dark at the edges of the room, the outlines of people who sat here once. Warmth is an invitation. Hold your lantern up to them and they will come.", "action"),
+		line("", "Every so often the cold will sweep across the floor and clear it. Anything heavy will shelter whatever stands behind it.", "action"),
+	]
+
+static func maud_finale() -> Array:
+	return [
+		_table("...It was set for six. It was always set for six."),
+		line("", "The shapes at the table are not guests anyone could name. They are the outlines of people who were loud, and hungry, and late. They are warm now.", "action"),
+		_table("I thought if no one came, it meant no one had ever needed me."),
+		line("", "You hold the lantern up to the long table. It is only a table. A table is just a place where people are invited.", "action"),
+		_table("...Is the bread still good?", "dissolve_table"),
+	]
+
+static func maud_resolution() -> Array:
+	return [
+		_maud("I stopped baking the day the last chair stayed empty."),
+		_maud("Funny thing. I never lost the recipe. I lost the reason."),
+		line("", "She puts her hands into the flour. It is warm. It has been warm the whole time.", "action"),
+		_maud("Flour, water, salt, patience... and someone to feed."),
+		line("", "She looks across the table at you.", "action"),
+		_maud("Sit. You look like you could use a loaf."),
+	]
+
+static func maud_restoration() -> Array:
+	return [
+		line("Lorem Ipsum", "Consectetur...", "speech"),
+		_maud("...Oh. The oven's warm."),
+		_maud("I had a whole table of people in my head just now. All of them talking at once. I'd forgotten how loud it was. How good."),
+		_maud("Here. Take these. A loaf is for carrying to someone who needs it. That's the only rule I've ever had."),
+		line("", "She is already kneading something. The smell of bread spreads out across the square like a held breath let go.", "action", "restore_maud"),
 	]

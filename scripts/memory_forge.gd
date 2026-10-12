@@ -79,6 +79,7 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 			_add_pickup(cell, "oxford_comma")
 		"B":
 			_floor.cells[cell] = "m"
+			_floor.blockers[cell] = true
 			var b := IsoBlock.new()
 			b.position = Iso.to_screen(Vector2(cell))
 			b.tint = Color("56627a")

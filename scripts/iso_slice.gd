@@ -45,6 +45,10 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 	var r := _restoration(cell, kind)
 	var line_col := Palette.PENCIL.lerp(Palette.INK_BROWN, r)
 	var checker := (cell.x + cell.y) % 2 == 0
+	if kind == "w":
+		_draw_wood(cell, d, checker)
+		_draw_mark(cell, z)
+		return
 	if kind == "p" or kind == "b":
 		_draw_page(cell, d, kind, checker)
 		_draw_mark(cell, z)
@@ -76,6 +80,20 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 		_draw_grass(cell, c)
 	elif r > 0.4:
 		_draw_flowers(cell, c, r)
+
+# Maud's kitchen: warm wooden floorboards with a dusting of flour.
+func _draw_wood(cell: Vector2i, d: PackedVector2Array, checker: bool) -> void:
+	draw_colored_polygon(d, Color("c99d66") if checker else Color("b88b55"))
+	for k in 3:
+		var t := 0.25 + k * 0.25
+		draw_line(d[0].lerp(d[3], t), d[1].lerp(d[2], t), Color(0.25, 0.14, 0.06, 0.28), 1.6)
+	if _h(cell.x, cell.y, 60) > 0.78:
+		var c := _p(Vector2(cell), float(floor_ref.level(cell)))
+		for i in 3:
+			draw_circle(c + Vector2((_h(cell.x, cell.y, 61 + i) - 0.5) * 36.0, (_h(cell.x, cell.y, 64 + i) - 0.5) * 14.0), 1.6, Color(1, 0.98, 0.9, 0.7))
+	var loop := d.duplicate()
+	loop.append(d[0])
+	draw_polyline(loop, Color(0.2, 0.1, 0.04, 0.45), 1.4, true)
 
 # Pip's storybook: floor tiles are printed pages (and, once rewritten, wooden bridge planks).
 func _draw_page(cell: Vector2i, d: PackedVector2Array, kind: String, checker: bool) -> void:
@@ -109,6 +127,8 @@ func _draw_mark(cell: Vector2i, z: float) -> void:
 		for seg in [[Vector2(-14, -3), Vector2(-2, 2)], [Vector2(-2, 2), Vector2(8, -4)], [Vector2(8, -4), Vector2(15, 3)], [Vector2(-2, 2), Vector2(2, 9)]]:
 			draw_line(c + seg[0], c + seg[1], Color("ff5a3c", a), 2.4)
 		draw_colored_polygon(_quad(cell, z), Color(1.0, 0.35, 0.2, 0.10 + 0.08 * sin(t * 12.0)))
+	elif m["kind"] == "wipe":
+		draw_colored_polygon(_quad(cell, z), Color(1, 1, 1, 0.55 + 0.25 * sin(t * 30.0)))
 	elif m["kind"] == "ink":
 		var pulse := 0.8 + 0.2 * sin(t * 6.0)
 		draw_colored_polygon(_quad(cell, z), Color(Palette.CRITIC_RED, 0.55 * pulse))
@@ -173,7 +193,7 @@ func _cliff(a: Vector2, b: Vector2, depth: float, kind: String, side: int, void_
 	var q := PackedVector2Array([a, b, b + Vector2(0, depth), a + Vector2(0, depth)])
 	var base := Color(0.93, 0.86, 0.68)             # stacked pages at the world's edge
 	if not void_edge:
-		base = Color("a98458") if kind == "." else (Color("34415a") if kind == "m" else (Color("e8d9b4") if kind == "p" or kind == "b" else Color("cbb28a")))
+		base = Color("a98458") if kind == "." else (Color("34415a") if kind == "m" else (Color("e8d9b4") if kind == "p" or kind == "b" else (Color("9a6c3c") if kind == "w" else Color("cbb28a"))))
 	if side == 1:
 		base = base.darkened(0.18)
 	if kind == "," and not void_edge:
