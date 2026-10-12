@@ -53,3 +53,30 @@ Touch the frozen flame in Garrick's forge to enter his memory. The inside is a c
 **Design decision (added to the doc's outline):** The Critic cannot be killed with a blade. It is Garrick's *own* inner voice, a boss made of red ink that shouts discouraging words ("Derivative!", "Boring!", "Overwritten.") as projectiles. Each word hits for damage plus a debuff (slow, or the screen dims). To win you reach three memory shards on raised terraces around the forge and hold each up to the Lantern. Each memory plays as a short scene (Young Garrick and Wren) and strips one ink layer from The Critic, making it quieter and slower. After the third, The Critic dissolves and the First Sword is waiting on the anvil. The beat: you don't defeat self-doubt, you out-remember it.
 
 Back in the overworld the sword restores Thistledown as before.
+
+---
+## 10. Boss Structure & Difficulty Curve (added v2.1)
+**Rule: one memory per NPC, one boss per memory, one Editor per town.**
+Every NPC in need has exactly one memory (a Story Realm dungeon), and each memory ends in a **Memory Boss**: the embodiment of that person's specific wound (The Critic is Garrick's self-doubt). A town has 3 NPCs, so 3 memory bosses. When all three are restored, the Redaction sends the town's **Editor** (a big boss fought in the town itself, in the open). Defeating the Editor turns the town into a "Published Chapter" (safe zone). One memory per NPC, rather than several, keeps each story short and emotionally complete; deeper NPCs can earn a second memory later.
+
+**Boss principle:** you never win by dealing more damage, you win by remembering. Memory bosses are beaten by holding memories up to the Lantern while surviving their attacks. Editors are beaten by exposing and cutting their "edits" (Quill / Lantern / Eraser Crumbs).
+
+### Progression table
+| Town / Biome | Memory bosses (3) | Town Editor (finale) | New mechanic introduced |
+|---|---|---|---|
+| 1. Thistledown (Prologue Plains) | **The Critic** (Garrick, self-doubt) done. **The Spoiler** (Pip, fear of how the story ends; attacks are "spoilers"). **The Empty Table** (Maud, lost purpose; hunger/burnt-out ovens) | **The Scissor-Man** (Cut Content): cuts lines of void across the arena | Tutorial: dodge, Lantern "remember", terrain denial |
+| 2. Plot-Twist Peaks | Three memories whose arenas **shift geometry mid-fight** | **The Deus Ex Machina**: mechanical god on strings that spawns enemies; cut the strings | Moving platforms, add-spawns, cutting objects |
+| 3. Purple Prose Swamp | Memories with **sticky-adjective slow zones** and overwhelming visual noise | **The Overwriter** (new): buries the arena in adjectives; you must "edit" the prose down | Reading the screen under visual clutter; Quill rewrites |
+| 4. The Final Chapter | Memories of *the Author* | **The Silence** (final boss) | Everything combined; non-existence as a hazard |
+
+### Difficulty levers (data-driven, scale per boss)
+- **Memory layers** to strip: 3 (Thistledown) up to 5 by the Final Chapter.
+- **Projectile count and speed**, and spread patterns.
+- **Phases:** Thistledown bosses have 1 phase; later bosses gain a second phase (the Critic's voice answering back, etc.).
+- **Arena hazards:** plot holes, shifting terrain, slow zones, void lines.
+- **Debuffs:** one (slow or dim) at first; later stacking, with Coherence drain from Phase 3.
+- **Quieter-with-progress rule:** within a memory boss the enemy gets *easier* as you remember (emotional payoff), while each new town raises the *starting* difficulty. Editors ramp *up* instead, as an escalating finale.
+- **Rewards:** each memory boss grants a key item or Binding piece; each Editor grants a Lantern/Quill upgrade and unlocks the next town.
+
+### Restoration flow (implementation note)
+Phase 2 restores a whole town from one NPC. With this structure, each restored NPC recolors only the area around them (the wave radius is already per-origin), and the full "Published Chapter" restoration plays after the Editor falls.
