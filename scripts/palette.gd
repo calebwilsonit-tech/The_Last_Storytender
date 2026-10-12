@@ -33,6 +33,10 @@ const TUNIC := Color("b39b76")
 const TROUSERS := Color("62708a")
 const LEATHER := Color("5a3c28")
 const CRITIC_RED := Color("a3211f")
+const SPOILER_INK := Color("1a1030")
+const SPOILER_GOLD := Color("ffd24a")
+const PAGE := Color("f3e7c9")
+const PAGE_SHADE := Color("e4d3a8")
 const CRITIC_DARK := Color("3d0a10")
 
 ## Blend a color toward grayscale. r = 0 -> fully faded, 1 -> full color.

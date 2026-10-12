@@ -90,12 +90,15 @@ static func garrick_restored() -> Array:
 
 # ---- Villagers ---------------------------------------------------------------
 static func pip_ghost() -> Array:
-	return [line("Lorem Ipsum", "Dolor sit... amet? Amet.", "speech")]
+	return [
+		line("Lorem Ipsum", "Dolor sit... amet? Amet.", "speech"),
+		line("", "A storybook lies open at his feet. Whatever he was reading, he has been standing here since.", "action"),
+	]
 
 static func pip_restored() -> Array:
 	return [
-		line("Pip", "Mister Garrick is hammering again! It sounds like a heartbeat.", "speech"),
-		line("Pip", "I found a word in the sky. It said 'Chapter'. Do you think it's a good one?", "speech"),
+		line("Pip", "I found a word in the sky. It said 'Once'. Do you think it's a good one?", "speech"),
+		line("Pip", "I'm not going to read ahead. Not this time. I'm going to find out the slow way.", "speech"),
 	]
 
 static func maud_ghost() -> Array:
@@ -212,4 +215,94 @@ static func garrick_lesson_end() -> Array:
 		line("Garrick", "The second way takes longer. It's usually worth it.", "speech"),
 		line("Garrick", "Here. Hardcover. Heavy. It'll keep the Errors from reading you too closely.", "speech"),
 		line("Garrick", "And these: eraser crumbs. Throw them at anything you'd rather not read.", "speech"),
+	]
+
+# ---- Pip's memory: The Last Page --------------------------------------------------
+const PIP_BOOK_HINT := "A storybook lies open on the ground, its last page torn out. The words on the pages keep rearranging themselves. You will need something that can rewrite them."
+const PIP_INTRO := "Every page is bright and printed. Every sentence is waiting to be true."
+const PIP_STONE_HINT := "A sentence stands here with one word that can change. Strike it with the Quill, or press E."
+const PIP_BRIDGE_HOLDS := "The bridge held. All it needed was one different word."
+const PIP_WOLVES_ASLEEP := "The wolves are asleep. The sentence will not stay true forever."
+const PIP_WOLVES_WAKE := "The word wears off. The wolves stir."
+const PIP_GATE_OPEN := "Open. Sometimes the whole story is waiting on a single word."
+const PIP_TOWER_HINT := "A tower of pages, with black bars across the stairs. Light shows what is written underneath."
+const PIP_DOOR_LOCKED := "A door made of bound pages, with a slot the shape of a missing page."
+const PIP_OBJECTIVES: Array[String] = [
+	"Strike the word with your Quill (or press E) to rewrite the sentence",
+	"Get past the wolves, and rewrite the gate",
+	"Climb the tower and find the Torn Page",
+	"Rewrite the spoilers: %d / 5",
+	"Turn the page with Pip",
+]
+const PIP_REWRITE_NARRATION: Array[String] = [
+	"The first sentence changed. The Spoiler stammers, a book that did not expect to be edited.",
+	"Two. It was so sure.",
+	"Three. Its words are getting smaller.",
+	"Four. \"Don't,\" it says, in a voice that sounds like a boy.",
+	"Five.",
+]
+
+static func _sp(text: String, cue: String = "") -> Dictionary:
+	return line("The Spoiler", text, "speech", cue, Palette.GLITCH)
+
+static func _pip(text: String) -> Dictionary:
+	return line("Pip", text, "speech", "", Palette.CYAN_DEEP)
+
+static func pip_book_enter() -> Array:
+	return [
+		line("", "The book is open to a page with nothing on it. The pages around it shiver, as if someone has been holding their breath.", "action"),
+		line("", "You lean in. The lantern's light falls into the white space, and the white space falls into you.", "action"),
+	]
+
+static func pip_page_found() -> Array:
+	return [line("", "The last page of the story, torn out and folded very small, as if someone were hiding it from himself.", "action")]
+
+static func pip_door_fit() -> Array:
+	return [
+		line("", "You slide the Torn Page into the slot. It fits exactly. Of course it does. He knows how this story ends.", "action"),
+		line("", "The door of bound pages swings open onto a vast white room.", "action"),
+	]
+
+static func pip_boss_intro() -> Array:
+	return [
+		line("", "The room is one enormous open book, its pages stacked like stairs. At the far end a small boy sits with his hands pressed over his eyes.", "action"),
+		_sp("The knight dies."),
+		_sp("The dragon wins. The kingdom burns. Everyone you love is gone by chapter nine."),
+		_pip("I didn't want to know! I just wanted to see if it was okay!"),
+		_sp("It is not okay. I have read the end. I read it for you."),
+		line("", "Its words are enormous and they are not lying: when it says the floor will fall, the floor falls. But they are written in ink, and ink can be rewritten.", "action"),
+	]
+
+static func pip_finale() -> Array:
+	return [
+		_sp("...You can't just change it."),
+		line("", "It sounds younger now. Its pages are shaking.", "action"),
+		_sp("If I don't tell him how it ends, he'll find out alone. That's worse. That's always worse."),
+		line("", "You hold up the lantern. The torn page drifts down out of the book and lands in your hand, blank.", "action"),
+		line("", "It was never torn out. It was never written. That was the whole secret: there was never a last page, only a boy who was afraid to find out.", "action"),
+		_sp("...Oh.", "dissolve_spoiler"),
+	]
+
+static func pip_resolution() -> Array:
+	return [
+		_pip("Is it... is it over?"),
+		line("", "He is small, and he is gripping the book so tightly his knuckles have gone pale. The page in his lap is blank.", "action"),
+		_pip("I read the last page. I read it before anyone could tell me it was safe to."),
+		_pip("And after that nothing felt like it mattered, because I already knew how it ended."),
+		line("", "You hold out the lantern. You can't tell him how it ends. You don't know. Nobody does.", "action"),
+		_pip("...That's scary."),
+		line("", "It is. It is also the only way a story gets to keep going.", "action"),
+		_pip("Will you stay while I turn it?"),
+		line("", "You stay.", "action"),
+		line("", "He turns the page. Nothing terrible happens. A new sentence begins to write itself, slowly, in handwriting that looks a great deal like his.", "action"),
+	]
+
+static func pip_restoration() -> Array:
+	return [
+		line("Lorem Ipsum", "Dolor... sit... ", "speech"),
+		_pip("...Who are you?"),
+		_pip("Oh. You're the doodle from the page."),
+		_pip("I was reading a book and then I wasn't. It was scary. But I think I finished a chapter."),
+		_pip("Mister Garrick says you can swing a quill. Will you show me how to hold one? I want to write the next page myself."),
+		line("", "He is smiling at the sky, where the underside of the next page is very faintly beginning to show text. It is not an ending. It is a sentence that starts with \"Once.\"", "action", "restore_pip"),
 	]

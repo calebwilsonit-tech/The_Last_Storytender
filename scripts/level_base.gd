@@ -379,9 +379,11 @@ func _track_cell() -> void:
 func _nearest() -> Dictionary:
 	var best := {}
 	var best_d := 100000.0
+	# Drop interactables whose nodes were freed (picked-up items, spent stones).
+	_interactables = _interactables.filter(func(d): return is_instance_valid(d["node"]))
 	for it in _interactables:
 		var n: Node2D = it["node"]
-		if not is_instance_valid(n) or not n.is_inside_tree():
+		if not n.is_inside_tree():
 			continue
 		if it["prompt"].call() == "":
 			continue

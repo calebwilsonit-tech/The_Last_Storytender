@@ -4,6 +4,7 @@ extends LevelBase
 ## Garrick's memory (the forge's frozen flame), then returning the First Sword.
 
 const MEMORY_SCENE := "res://scenes/memory_forge.tscn"
+const PIP_MEMORY_SCENE := "res://scenes/memory_pip.tscn"
 const RETURN_CELL := Vector2i(30, 15)       # where you step out of the memory
 
 var _enemy_spawns: Array[Dictionary] = []   # {kind, cell}; enemies appear after Garrick's lesson
@@ -16,6 +17,8 @@ var _redactor_hinted := false
 var _enemies_out := false
 var _forge: Prop
 var _garrick: Npc
+var _pip_npc: Npc
+var _book: Prop
 var _entered_town := false
 
 # --- LevelBase hooks ---------------------------------------------------------------
@@ -67,6 +70,10 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 		"k":
 			_floor.cells[cell] = "."
 			_add_pickup(cell, "softcover_binding")
+		"Q":
+			_floor.cells[cell] = ","
+			_book = _add_prop(Prop.Kind.BOOK, cell)
+			_register(_book, _book_prompt, _touch_book, 90.0)
 		"g", "x":
 			_floor.cells[cell] = "."
 			_enemy_spawns.append({"kind": Enemy.Kind.BARE if ch == "g" else Enemy.Kind.MITE, "cell": cell})
@@ -93,14 +100,18 @@ func _add_npc(ch: String, cell: Vector2i) -> void:
 	match ch:
 		"N":
 			n.kind = Npc.Kind.BLACKSMITH
+			n.npc_id = "garrick"
 			_garrick = n
 			_register(n, func(): return "Speak", _talk_garrick)
 		"K":
 			n.kind = Npc.Kind.CHILD
-			_register(n, func(): return "Speak", func(): await _say(Story.pip_restored() if GameState.town_restored else Story.pip_ghost()))
+			n.npc_id = "pip"
+			_pip_npc = n
+			_register(n, func(): return "Speak", _talk_pip)
 		"B":
 			n.kind = Npc.Kind.BAKER
-			_register(n, func(): return "Speak", func(): await _say(Story.maud_restored() if GameState.town_restored else Story.maud_ghost()))
+			n.npc_id = "maud"
+			_register(n, func(): return "Speak", func(): await _say(Story.maud_restored() if GameState.is_restored("maud") else Story.maud_ghost()))
 
 func _notification(what: int) -> void:
 	# Remember where you were if the game is closed mid-walk.
@@ -110,9 +121,11 @@ func _notification(what: int) -> void:
 
 func _level_ready() -> void:
 	_player.dashed.connect(_on_dashed)
+	if GameState.has_flag("pip_memory_done") and is_instance_valid(_book):
+		_book.queue_free()   # the storybook has done its job
 	if GameState.has_flag("lesson_done"):
 		_spawn_enemies()
-	if GameState.has_flag("memory_done") and not GameState.town_restored:
+	if GameState.has_flag("memory_done") and not GameState.is_restored("garrick"):
 		_hud.narrate(Story.RETURNED, false, 5.0)
 	elif not GameState.has_flag("intro_done"):
 		GameState.set_flag("intro_done")
@@ -136,7 +149,7 @@ func _level_process(delta: float) -> void:
 func _update_region() -> void:
 	var cell := _floor.cell_at(_player.position)
 	if cell.x >= IsoFloor.PLAINS_X_LIMIT:
-		_hud.set_region("Thistledown — Published Chapter" if GameState.town_restored else "Thistledown (Draft)")
+		_hud.set_region("Thistledown — Published Chapter" if GameState.town_published else "Thistledown (Draft)")
 		if not _entered_town:
 			_entered_town = true
 			_hud.narrate(Story.SILENCE_WHISPER, true, 5.0)
@@ -152,9 +165,34 @@ func _handle_cue(cue: String) -> void:
 		"tear":
 			_garrick.tearful = true
 		"restore":
-			await _restoration_scene()
+			await _restoration_scene("garrick", _garrick)
+		"restore_pip":
+			await _restoration_scene("pip", _pip_npc)
 
 # --- Story beats -----------------------------------------------------------------------
+func _book_prompt() -> String:
+	if GameState.has_flag("pip_memory_done"):
+		return ""
+	return "Read Pip's storybook" if GameState.has_flag("has_quill") else "Look at the storybook"
+
+func _touch_book() -> void:
+	if not GameState.has_flag("has_quill"):
+		await _say([Story.line("", Story.PIP_BOOK_HINT, "action")])
+		return
+	await _say(Story.pip_book_enter())
+	Transition.go(PIP_MEMORY_SCENE, Palette.CYAN.lightened(0.7))
+	await get_tree().create_timer(30.0).timeout
+
+func _talk_pip() -> void:
+	if GameState.is_restored("pip"):
+		await _say(Story.pip_restored())
+	elif GameState.has_flag("pip_memory_done"):
+		await _say(Story.pip_restoration())
+		GameState.add_mnemosynth(30)
+		_hud.toast("Restored: Pip")
+	else:
+		await _say(Story.pip_ghost())
+
 func _forge_prompt() -> String:
 	if GameState.has_flag("met_garrick") and not GameState.has_flag("memory_done"):
 		return "Touch the frozen flame"
@@ -167,7 +205,7 @@ func _touch_flame() -> void:
 	await get_tree().create_timer(30.0).timeout   # the scene is replaced during the fade
 
 func _talk_garrick() -> void:
-	if GameState.town_restored:
+	if GameState.is_restored("garrick"):
 		if not GameState.has_flag("has_quill"):
 			await _say(Story.garrick_lesson_start())
 			GameState.set_flag("has_quill")
@@ -181,9 +219,8 @@ func _talk_garrick() -> void:
 	elif GameState.has_flag("memory_done"):
 		await _say(Story.garrick_restoration())
 		GameState.add_mnemosynth(25)
-		_hud.toast("Chapter Restored: Thistledown")
+		_hud.toast("Restored: Garrick")
 		_garrick.tearful = false
-		GameState.set_flag("town_restored")
 	elif GameState.has_flag("met_garrick"):
 		await _say(Story.garrick_ghost_repeat())
 	else:
@@ -244,14 +281,14 @@ func _hint_redactor() -> void:
 		_redactor_hinted = true
 		_hud.narrate(Story.REDACTOR_HINT, false, 6.0)
 
-func _restoration_scene() -> void:
+func _restoration_scene(id: String, npc: Npc) -> void:
 	_dialogue.hold(true)
 	_hud.set_prompt("")
 	var zoom := create_tween().set_parallel(true)
 	zoom.tween_property(_camera, "zoom", Vector2(ZOOM * 1.18, ZOOM * 1.18), 2.0).set_ease(Tween.EASE_IN_OUT)
 	await get_tree().create_timer(0.8).timeout
 	_hud.narrate(Story.RESTORED_NARRATION, false, 3.0)
-	GameState.start_restoration(_garrick.position)
+	GameState.start_restoration(id, npc.position)
 	await get_tree().create_timer(GameState.RESTORE_DURATION * 0.75).timeout
 	var back := create_tween()
 	back.tween_property(_camera, "zoom", Vector2(ZOOM, ZOOM), 2.5).set_ease(Tween.EASE_IN_OUT)

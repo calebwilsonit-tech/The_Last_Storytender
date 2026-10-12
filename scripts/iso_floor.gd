@@ -13,6 +13,7 @@ const PLAINS_X_LIMIT := 22            # x >= this is the town (for region labels
 var cells: Dictionary = {}            # Vector2i -> String (kind)
 var heights: Dictionary = {}          # Vector2i -> int level (for stairs: the LOW level)
 var stairs: Dictionary = {}           # Vector2i -> Vector2i (direction the stairs rise toward)
+var marks: Dictionary = {}             # Vector2i -> {"kind": "crack"|"flower", "t": float}
 var focus := Vector2.ZERO             # screen-space point the camera is looking at
 var _slices: Array[IsoSlice] = []
 
@@ -85,6 +86,8 @@ func build(parent: Node2D) -> void:
 		parent.add_child(sl)
 		_slices.append(sl)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	for c in marks.keys():
+		marks[c]["t"] = float(marks[c]["t"]) + delta
 	for sl in _slices:
 		sl.queue_redraw()

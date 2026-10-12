@@ -45,6 +45,10 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 	var r := _restoration(cell, kind)
 	var line_col := Palette.PENCIL.lerp(Palette.INK_BROWN, r)
 	var checker := (cell.x + cell.y) % 2 == 0
+	if kind == "p" or kind == "b":
+		_draw_page(cell, d, kind, checker)
+		_draw_mark(cell, z)
+		return
 	if kind == "m":
 		# Memory floor: cold slate with faint cyan seams, frozen embers hanging above.
 		draw_colored_polygon(d, Color("46566e") if checker else Color("3e4d64"))
@@ -72,6 +76,45 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 		_draw_grass(cell, c)
 	elif r > 0.4:
 		_draw_flowers(cell, c, r)
+
+# Pip's storybook: floor tiles are printed pages (and, once rewritten, wooden bridge planks).
+func _draw_page(cell: Vector2i, d: PackedVector2Array, kind: String, checker: bool) -> void:
+	if kind == "b":
+		draw_colored_polygon(d, Color("a8774a") if checker else Color("98683e"))
+		for i in 1:
+			draw_line(d[0].lerp(d[3], 0.5), d[1].lerp(d[2], 0.5), Color(0, 0, 0, 0.35), 2.0)
+		var l := d.duplicate()
+		l.append(d[0])
+		draw_polyline(l, Palette.OUTLINE, 2.4, true)
+		return
+	draw_colored_polygon(d, Palette.PAGE if checker else Palette.PAGE_SHADE)
+	# Printed lines of text running across the page.
+	for k in 3:
+		var t := 0.25 + k * 0.25
+		var a := d[0].lerp(d[3], t).lerp(d[1].lerp(d[2], t), 0.12)
+		var b := d[0].lerp(d[3], t).lerp(d[1].lerp(d[2], t), 0.88)
+		draw_line(a, b, Color(Palette.INK_BROWN, 0.20), 1.6)
+	var loop := d.duplicate()
+	loop.append(d[0])
+	draw_polyline(loop, Color(Palette.INK_BROWN, 0.35), 1.4, true)
+
+func _draw_mark(cell: Vector2i, z: float) -> void:
+	if not floor_ref.marks.has(cell):
+		return
+	var m: Dictionary = floor_ref.marks[cell]
+	var c := _p(Vector2(cell), z)
+	var t: float = m["t"]
+	if m["kind"] == "crack":
+		var a := 0.55 + 0.35 * sin(t * 12.0)
+		for seg in [[Vector2(-14, -3), Vector2(-2, 2)], [Vector2(-2, 2), Vector2(8, -4)], [Vector2(8, -4), Vector2(15, 3)], [Vector2(-2, 2), Vector2(2, 9)]]:
+			draw_line(c + seg[0], c + seg[1], Color("ff5a3c", a), 2.4)
+		draw_colored_polygon(_quad(cell, z), Color(1.0, 0.35, 0.2, 0.10 + 0.08 * sin(t * 12.0)))
+	elif m["kind"] == "flower":
+		for i in 5:
+			var o := Vector2(-18 + i * 9.0, (i % 2) * 6.0 - 3.0)
+			draw_line(c + o, c + o + Vector2(0, -7), Palette.GRASS_DARK, 1.6)
+			var col := Color("f08aa3") if i % 2 == 0 else Color("ffe08a")
+			draw_circle(c + o + Vector2(0, -9), 3.0 + 0.6 * sin(t * 3.0 + i), col)
 
 func _draw_grass(cell: Vector2i, c: Vector2) -> void:
 	if _h(cell.x, cell.y) > 0.62:
@@ -124,7 +167,7 @@ func _cliff(a: Vector2, b: Vector2, depth: float, kind: String, side: int, void_
 	var q := PackedVector2Array([a, b, b + Vector2(0, depth), a + Vector2(0, depth)])
 	var base := Color(0.93, 0.86, 0.68)             # stacked pages at the world's edge
 	if not void_edge:
-		base = Color("a98458") if kind == "." else (Color("34415a") if kind == "m" else Color("cbb28a"))
+		base = Color("a98458") if kind == "." else (Color("34415a") if kind == "m" else (Color("e8d9b4") if kind == "p" or kind == "b" else Color("cbb28a")))
 	if side == 1:
 		base = base.darkened(0.18)
 	if kind == "," and not void_edge:

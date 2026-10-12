@@ -8,6 +8,7 @@ extends RefCounted
 ##   P player start   T tree   C Mnemosynth crystal   S the First Sword
 ##   W tutorial sign   X town sign   H house (2x2 block)   F forge (2x2 block)
 ##   N Garrick the blacksmith   K Pip the child   B Maud the baker
+##   Q Pip's storybook (doorway to his memory)
 ##   g Bare (Typo-Ghoul)   k item pickup (Softcover Binding)   x Mite   R Redactor bar (3 cells wide)   D training dummy
 ##
 ## HEIGHTS (elevation of each cell, one level = Iso.LEVEL_H pixels)
@@ -29,7 +30,7 @@ const ROWS: Array[String] = [
 	"  .......#.....x.#.T..,,,,,,,,,,,,,,,,  ",
 	"  .............C.#....,,,,,,,,,,,,,,,,  ",
 	"  ..P.W..x............,,,,,,,,,,,,HH,,  ",
-	"  ........C..T........,,,,,K,,,,,,HH,,  ",
+	"  ........C..T........,,,,QK,,,,,,HH,,  ",
 	"  .T...............C..,,,,,,,,,,,,,,,,  ",
 	"  .......T.g..C.......,,,,,,,,,,,,,,,,  ",
 	"  ...C................,X,,,,,N,,,,,,,,  ",

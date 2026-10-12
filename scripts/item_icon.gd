@@ -62,6 +62,10 @@ static func draw_item(ci: CanvasItem, id: String, c: Vector2, sz: float) -> void
 			_o(ci, PackedVector2Array([c + Vector2(-4, -14) * u, c + Vector2(4, -14) * u, c + Vector2(4, -4) * u, c + Vector2(-4, -4) * u]), Color("a7c7d6", 0.6))
 			ci.draw_arc(c + Vector2(0, 6) * u, 5.0 * u, 0.0, TAU * 0.8, 12, Palette.GLITCH, 2.0, true)
 			ci.draw_arc(c + Vector2(0, 6) * u, 2.4 * u, 1.0, TAU * 0.9, 8, Palette.GLITCH.lightened(0.3), 1.6, true)
+		"torn_page":
+			_o(ci, PackedVector2Array([c + Vector2(-12, -14) * u, c + Vector2(10, -16) * u, c + Vector2(13, -4) * u, c + Vector2(9, 4) * u, c + Vector2(12, 14) * u, c + Vector2(-13, 15) * u]), Color("f4ecd6"))
+			for i in 4:
+				ci.draw_line(c + Vector2(-8, -8 + i * 5) * u, c + Vector2(8 - i * 2, -8 + i * 5) * u, Color(Palette.INK, 0.55), 1.4)
 		"bookmark":
 			_o(ci, PackedVector2Array([c + Vector2(-6, -16) * u, c + Vector2(6, -16) * u, c + Vector2(6, 14) * u, c + Vector2(0, 8) * u, c + Vector2(-6, 14) * u]), Palette.CRITIC_RED.lightened(0.15))
 			ci.draw_line(c + Vector2(0, -14) * u, c + Vector2(0, 4) * u, Color(1, 1, 1, 0.3), 1.6)

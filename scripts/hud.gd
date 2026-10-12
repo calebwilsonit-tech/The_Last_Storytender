@@ -52,7 +52,7 @@ func _ready() -> void:
 
 	_prompt = _label(24, Palette.INK)
 	_prompt.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	_prompt.position = Vector2(560, 560)
+	_prompt.position = Vector2(540, 520)
 	_prompt.visible = false
 
 	_toast = _label(28, Palette.INK_BROWN)

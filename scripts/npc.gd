@@ -7,6 +7,7 @@ enum Kind { BLACKSMITH, CHILD, BAKER }
 
 var kind: Kind = Kind.BLACKSMITH
 var display_name := "Lorem Ipsum"
+var npc_id := ""           # garrick / pip / maud: restored one person at a time
 var named := false          # name revealed (Garrick remembers himself mid-scene)
 var lift := 0.0             # elevation of the cell it stands on, in px
 var tearful := false        # a single ink-blue tear for the emotional beat
@@ -25,7 +26,7 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 func restoration() -> float:
-	return GameState.restored_at(global_position)
+	return GameState.restored_for(npc_id, global_position)
 
 func _fill(c: Color, r: float) -> Color:
 	# Missing: desaturated toward static gray. Restored: the full cel color.

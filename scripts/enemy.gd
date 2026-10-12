@@ -17,6 +17,7 @@ var hp := 6.0
 var max_hp := 6.0
 var hit_r := 20.0
 var friendly := false
+var asleep_t := 0.0         # >0: dozing (rewritten to sleep); wakes when it reaches 0
 var elev := 0.0
 
 var _home := Vector2.ZERO
@@ -60,6 +61,7 @@ func _ready() -> void:
 func hurt(dmg: float, dir_ground: Vector2) -> void:
 	if friendly or _dead_t >= 0.0:
 		return
+	asleep_t = 0.0          # a hit wakes it
 	hp -= dmg
 	_flash = 0.18
 	var force := 230.0 if kind == Kind.MITE else 170.0
@@ -125,6 +127,7 @@ func _physics_process(delta: float) -> void:
 		return
 	if not _lit_now and not friendly:
 		_proof = maxf(_proof - delta * 0.45, 0.0)
+	asleep_t = maxf(asleep_t - delta, 0.0)
 	var lit_slow := 0.5 if _lit_now else 1.0
 	_lit_now = false
 	if floor_ref:
@@ -155,7 +158,13 @@ func _can_see_target() -> bool:
 		return false
 	return true
 
+func sleep_for(seconds: float) -> void:
+	asleep_t = seconds
+	_state = "idle"
+
 func _hostile_tick(delta: float, slow: float) -> void:
+	if asleep_t > 0.0 and _state != "hurt":
+		return
 	var dg := _ground_to(target.position) if target else Vector2(9999, 0)
 	var dist := dg.length()
 	var dirg := dg.normalized() if dist > 0.01 else Vector2.RIGHT
@@ -245,6 +254,11 @@ func _draw() -> void:
 		_draw_bare()
 	else:
 		_draw_mite()
+	if asleep_t > 0.0 and _dead_t < 0.0:
+		var font := ThemeDB.get_default_theme().default_font
+		for i in 3:
+			var ph := fmod(_t * 0.7 + i * 0.33, 1.0)
+			draw_string(font, Vector2(14 + i * 7, -62 - ph * 26.0), "z", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14 + i * 4, Color(1, 1, 1, 1.0 - ph))
 	# Ink spatter from hits.
 	for s in _splats:
 		draw_circle(s.pos, s.r * (1.0 - float(s.age)), Color(Palette.INK, 0.9 * (1.0 - float(s.age))))

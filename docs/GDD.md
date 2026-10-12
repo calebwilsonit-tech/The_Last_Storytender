@@ -138,3 +138,22 @@ Until these exist, Thistledown is a vertical slice, not a complete town.
 Mnemosynth is the currency and also refuels the Lantern.
 
 **Autosave:** progress, inventory, equipment, flags and currency save automatically at every item pickup, story beat, restoration and on quit, and load on launch. **F12** wipes the save (development).
+
+---
+## 14. Memory 2: Pip's "The Last Page" (implemented v2.5)
+**Wound:** Pip peeked at the last page of his favorite storybook and has believed ever since that every story ends badly. **Boss:** The Spoiler. **Reward:** The Bookmark, plus Pip's restoration. Estimated first-time length: ~12-15 min.
+
+**New verb: rewriting.** This memory is where the Quill gets its real purpose. *Sentence stones* hold a sentence with one changeable word ("The bridge **BREAKS**"). Strike the word with the Quill (or press E) to rewrite it and change what is true.
+
+| Room | Idea | Mechanics used |
+|---|---|---|
+| 1. Front Matter | Rewrite "BREAKS" to "HOLDS" and a bridge forms over the chasm | Rewriting, plot holes |
+| 2. The Dark Wood | Rewrite the wolves "ASLEEP" (18s, then it wears off) to sneak to the second stone and rewrite the gate "OPEN"; or fight / proofread them | Rewriting under time pressure, combat, Lantern |
+| 3. The Tall Tower | Redactor bars across the stairs (Lantern), a Mite ambush, and the **Torn Page** that opens the door to the boss | Elevation, Redactors, enemies |
+| 4. The Last Page | **The Spoiler** announces the future in huge words. Sentences come true after 5s unless rewritten | Reading the screen, rewriting, dodging |
+
+**The Spoiler fight (reading the screen):** every 8s it announces a spoiler ("The floor beneath the WEST collapses."; "Wolves from the NORTH attack."), the cells flash red, and a sentence stone appears elsewhere on the platform. Do nothing and the floor becomes plot holes (7s) or Mites spawn. Rewrite it in time and the floor blooms into flowers that heal you. After 3 rewrites it speaks two sentences at once. Five rewrites win. The sky darkens while the Spoiler is winning and brightens as you succeed.
+**Emotional resolution:** it dissolves into a boy who was afraid to find out. You can't tell Pip how it ends, only stay while he turns the page.
+
+### Restoration is now per-NPC
+Each restored NPC blooms color outward from them (Garrick, then Pip, then Maud). The full "Published Chapter" restoration is reserved for the Editor fight.

@@ -37,6 +37,11 @@ const ITEMS := {
 		"desc": "A crafting material scraped from the Redaction.",
 		"flavor": "It stains your fingers with bad memories.",
 	},
+	"torn_page": {
+		"name": "The Torn Page", "type": "key",
+		"desc": "The last page of Pip's storybook, torn out and hidden. It fits the door to the final room.",
+		"flavor": "He tore it out so no one could spoil it. Then he spoiled it himself.",
+	},
 	"bookmark": {
 		"name": "The Bookmark", "type": "key",
 		"desc": "Lets you return to a place you have restored.",

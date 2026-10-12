@@ -3,7 +3,7 @@ extends StaticBody2D
 ## Procedurally inked scenery. Objects with `ghost = true` begin as graphite
 ## pencil sketches and fill with color as the restoration wave reaches them.
 
-enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE, PICKUP }
+enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE, PICKUP, BOOK }
 
 var kind: Kind = Kind.TREE
 var ghost := false
@@ -58,6 +58,7 @@ func _draw() -> void:
 		Kind.PORTAL: _draw_portal()
 		Kind.FIGURE: _draw_figure()
 		Kind.PICKUP: _draw_pickup()
+		Kind.BOOK: _draw_book()
 
 func _shadow(rx: float) -> void:
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
@@ -292,7 +293,12 @@ func _draw_figure() -> void:
 	DrawKit.shape(self, PackedVector2Array([Vector2(-11, -16), Vector2(11, -16), Vector2(9, -42), Vector2(-9, -42)]), fill, edge, 2.2, _seed + 1.0)
 	draw_circle(Vector2(0, -52), 10.0, fill)
 	draw_arc(Vector2(0, -52), 10.0, 0.0, TAU, 20, edge, 2.2, true)
-	if variant == 0:
+	if variant == 2:
+		# Pip: hunched on the page, hands pressed over his eyes, the book in his lap.
+		DrawKit.shape(self, PackedVector2Array([Vector2(-14, -8), Vector2(14, -8), Vector2(16, 4), Vector2(-16, 4)]), Color(fill, shimmer * 0.8), edge, 2.2, _seed + 2.0)
+		DrawKit.line(self, Vector2(-9, -34), Vector2(-5, -52), edge, 4.0, _seed + 3.0, 0.3)
+		DrawKit.line(self, Vector2(9, -34), Vector2(5, -52), edge, 4.0, _seed + 4.0, 0.3)
+	elif variant == 0:
 		# Young Garrick: arm raised, hammer overhead, forever about to strike.
 		DrawKit.line(self, Vector2(8, -38), Vector2(18, -62), edge, 4.0, _seed + 2.0, 0.3)
 		DrawKit.shape(self, PackedVector2Array([Vector2(12, -72), Vector2(30, -64), Vector2(26, -56), Vector2(8, -64)]), fill, edge, 2.2, _seed + 3.0)
@@ -317,3 +323,25 @@ func _draw_pickup() -> void:
 	for i in 3:
 		var ph := fmod(_t * 0.5 + i * 0.33, 1.0)
 		draw_circle(Vector2(-10 + i * 10, -18 - ph * 30.0), 1.5, Color(Palette.GOLD, (1.0 - ph) * 0.9))
+
+# --- Pip's storybook: the doorway into his memory ---------------------------------------------
+func _draw_book() -> void:
+	_shadow(30.0)
+	var glow := 0.5 + 0.5 * sin(_t * 2.0)
+	for k in 3:
+		draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
+		draw_circle(Vector2.ZERO, 54.0 - k * 14.0, Color(Palette.CYAN, (0.05 + 0.03 * k) * (0.6 + 0.4 * glow)))
+	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
+	var L := PackedVector2Array([Vector2(0, -6), Vector2(-34, -14), Vector2(-34, 4), Vector2(0, 12)])
+	var R := PackedVector2Array([Vector2(0, -6), Vector2(34, -14), Vector2(34, 4), Vector2(0, 12)])
+	DrawKit.shape(self, PackedVector2Array([Vector2(-38, -12), Vector2(38, -12), Vector2(38, 8), Vector2(0, 16), Vector2(-38, 8)]), Color("5b3a6a"), Palette.OUTLINE, 2.6, _seed)
+	DrawKit.shape(self, L, Palette.PAGE, Palette.OUTLINE, 2.2, _seed + 1.0)
+	DrawKit.shape(self, R, Palette.PAGE_SHADE, Palette.OUTLINE, 2.2, _seed + 2.0)
+	for i in 4:
+		draw_line(Vector2(-30 + i * 2, -10 + i * 4), Vector2(-6, -4 + i * 4), Color(Palette.INK_BROWN, 0.4), 1.3)
+	# The blank right-hand page glows: the way in. A torn stub shows where the last page was.
+	draw_colored_polygon(PackedVector2Array([Vector2(4, -4), Vector2(30, -11), Vector2(30, 1), Vector2(4, 8)]), Color(Palette.CYAN.lightened(0.5), 0.35 + 0.35 * glow))
+	draw_polyline(PackedVector2Array([Vector2(34, -14), Vector2(31, -8), Vector2(35, -3), Vector2(32, 4)]), Color(Palette.OUTLINE, 0.9), 2.0)
+	for i in 4:
+		var ph := fmod(_t * 0.5 + i * 0.27, 1.0)
+		draw_circle(Vector2(8 + i * 6, -8 - ph * 40.0), 1.8, Color(Palette.CYAN, (1.0 - ph) * 0.9))

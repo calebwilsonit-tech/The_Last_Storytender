@@ -21,6 +21,7 @@ What's in:
 - **The Blacksmith's Regret** (`scripts/memory_forge.gd`): frozen-time forge, three memory shards on raised terraces, The Critic boss that throws discouraging-word projectiles (slow / dim debuffs), memory vignettes with Young Garrick and Wren, a quiet finale.
 - **Combat:** Quill combo, dash, and a Lantern beam that proofreads Typo-Ghoul Bares back into Bears and burns Redactor bars off the path. Garrick teaches it at a training dummy. See GDD section 11.
 - **Inventory:** a binder UI (Tab) with a paper-doll that shows equipped Bindings and amulet, a card catalog of items, quick-use, Eraser Crumbs bombs, Ink Vials, and **autosave**. See GDD section 13.
+- **Pip's memory ("The Last Page")**: a pop-up storybook with a rewriting mechanic (Quill changes the word in a sentence), four rooms, and The Spoiler boss that announces the future and lets you rewrite it. Restoration is per-NPC. See GDD section 14.
 - Plot holes (fall = lose ink, respawn safely), crumple/smooth-out recovery, typewriter dialogue with clacks, Narrator and Silence text.
 - All story text in `scripts/story.gd`. Design: `docs/GDD.md`. Art direction and your reference sheets: `docs/ART_DIRECTION.md`, `docs/art_reference/`.
 
