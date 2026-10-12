@@ -66,7 +66,14 @@ func restored_for(id: String, pos: Vector2) -> float:
 			return _source_value(src, pos)
 	return 0.0
 
+var _restore_until_ms := 0
+
+## True while a restoration wave is spreading (the ground has to repaint every frame).
+func restore_active() -> bool:
+	return Time.get_ticks_msec() < _restore_until_ms
+
 func start_restoration(id: String, origin: Vector2, radius: float = SOURCE_RADIUS) -> void:
+	_restore_until_ms = Time.get_ticks_msec() + int(RESTORE_DURATION * 1000.0) + 800
 	var src := {"id": id, "origin": origin, "radius": 1.0}
 	sources.append(src)
 	set_flag("restored_" + id)
@@ -78,6 +85,7 @@ func start_restoration(id: String, origin: Vector2, radius: float = SOURCE_RADIU
 	restoration_finished.emit()
 
 func publish_town() -> void:
+	_restore_until_ms = Time.get_ticks_msec() + 800
 	town_published = true
 	set_flag("town_published")
 

@@ -40,7 +40,19 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_t += delta
+	# Props far from the camera keep whatever they last drew, and trees sway at half rate.
+	var cam := get_viewport().get_camera_2d()
+	if cam:
+		var d := global_position - cam.get_screen_center_position()
+		if absf(d.x) > 620.0 or absf(d.y) > 440.0:
+			return
+	if kind == Kind.TREE:
+		_skip = not _skip
+		if _skip:
+			return
 	queue_redraw()
+
+var _skip := false
 
 func _restoration() -> float:
 	return GameState.restored_at(global_position) if ghost else 1.0

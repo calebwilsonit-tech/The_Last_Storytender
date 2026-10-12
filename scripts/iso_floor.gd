@@ -113,8 +113,33 @@ func build(parent: Node2D) -> void:
 		parent.add_child(sl)
 		_slices.append(sl)
 
+## The ground is expensive to draw, so it only repaints when something changed: the camera
+## moved a little, a mark is animating, a restoration wave is spreading, or a quarter of a
+## second has passed. Diagonal rows far above or below the camera are switched off entirely.
+const REDRAW_MOVE := 56.0
+const VIEW_HALF_Y := 330.0
+var dirty := false
+var _drawn_focus := Vector2(1e9, 1e9)
+var _idle := 0.0
+var _had_marks := false
+
 func _process(delta: float) -> void:
 	for c in marks.keys():
 		marks[c]["t"] = float(marks[c]["t"]) + delta
+	_idle += delta
+	var animated := not marks.is_empty() or _had_marks or GameState.restore_active()
+	_had_marks = not marks.is_empty()
+	var moved := focus.distance_to(_drawn_focus) > REDRAW_MOVE
+	if not (animated or moved or dirty or _idle > 0.25):
+		return
+	if moved:
+		_drawn_focus = focus
+	_idle = 0.0
+	dirty = false
 	for sl in _slices:
-		sl.queue_redraw()
+		var near := absf(sl.position.y - focus.y) < VIEW_HALF_Y + 190.0
+		if near:
+			sl.visible = true
+			sl.queue_redraw()
+		elif sl.visible:
+			sl.visible = false

@@ -30,7 +30,7 @@ func _draw() -> void:
 		var kind: String = floor_ref.cells[cell]
 		var z := float(floor_ref.level(cell))
 		var gp := Iso.pt(Vector2(cell), z)
-		if absf(gp.x - f.x) > 800.0 or absf(gp.y - f.y) > 560.0:
+		if absf(gp.x - f.x) > 500.0 or absf(gp.y - f.y) > 330.0:
 			continue
 		if floor_ref.stairs.has(cell):
 			_draw_stairs(cell, kind)
@@ -78,7 +78,7 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 			draw_colored_polygon(d, Color(1, 1, 1, 0.07))
 	var loop := d.duplicate()
 	loop.append(d[0])
-	draw_polyline(loop, Color(line_col, 0.20 + 0.10 * (1.0 - r)), 1.2, true)
+	draw_polyline(loop, Color(line_col, 0.20 + 0.10 * (1.0 - r)), 1.2, false)
 	var c := _p(Vector2(cell), z)
 	if kind == ".":
 		_draw_grass(cell, c)
@@ -189,13 +189,13 @@ func _draw_mark(cell: Vector2i, z: float) -> void:
 func _draw_grass(cell: Vector2i, c: Vector2) -> void:
 	if _h(cell.x, cell.y) > 0.62:
 		return
+	var segs := PackedVector2Array()
 	for i in 3:
 		var o := Vector2((_h(cell.x, cell.y, i + 1) - 0.5) * 36.0, (_h(cell.x, cell.y, i + 5) - 0.5) * 14.0)
 		var p := c + o
 		var lean := (_h(cell.x, cell.y, i + 9) - 0.5) * 4.0
-		draw_line(p, p + Vector2(lean - 2.0, -6.0), Palette.GRASS_DARK, 1.5, true)
-		draw_line(p, p + Vector2(lean + 2.0, -5.0), Palette.GRASS_DARK, 1.5, true)
-		draw_line(p, p + Vector2(lean, -8.0), Palette.GRASS_DARK, 1.5, true)
+		segs.append_array([p, p + Vector2(lean - 2.0, -6.0), p, p + Vector2(lean + 2.0, -5.0), p, p + Vector2(lean, -8.0)])
+	draw_multiline(segs, Palette.GRASS_DARK, 1.5)   # one draw call for all nine blades
 
 func _draw_flowers(cell: Vector2i, c: Vector2, r: float) -> void:
 	if _h(cell.x, cell.y, 20) > 0.18:
@@ -245,11 +245,14 @@ func _cliff(a: Vector2, b: Vector2, depth: float, kind: String, side: int, void_
 	draw_colored_polygon(q, base)
 	var edge := Palette.INK_BROWN if (void_edge or r > 0.5) else Palette.PENCIL
 	# Strata: horizontal page-edge / soil lines.
+	var strata := PackedVector2Array()
 	var i := 1
 	while i * 7.0 < depth:
 		var o := Vector2(0, i * 7.0)
-		draw_line(a + o, b + o, Color(edge, 0.30), 1.0, true)
+		strata.append_array([a + o, b + o])
 		i += 1
+	if not strata.is_empty():
+		draw_multiline(strata, Color(edge, 0.30), 1.0)
 	if kind == "." and not void_edge:
 		var lip := PackedVector2Array([a, b, b + Vector2(0, 6), a + Vector2(0, 6)])
 		draw_colored_polygon(lip, Color(Palette.GRASS_DARK, 0.85))
