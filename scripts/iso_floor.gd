@@ -104,14 +104,37 @@ func build(parent: Node2D) -> void:
 		if not by_s.has(s):
 			by_s[s] = []
 		by_s[s].append(cell)
+	# Two nodes per diagonal row, because actors are sorted among them by their y position:
+	#  - the GROUND node paints flat tops very early, so a tile can never paint over the feet or
+	#    shadow of anything standing near it (which flickered as you crossed a tile edge);
+	#  - the EDGE node sits just behind actors on this row and paints what can really hide them:
+	#    cliff faces, stairs, plot holes, and the tops of ground that is higher than what lies behind.
 	for s: int in by_s.keys():
-		var sl := IsoSlice.new()
-		sl.floor_ref = self
-		sl.cells.assign(by_s[s])
-		# Sort key just behind actors standing on this diagonal row.
-		sl.position = Vector2(0.0, (s - 0.5) * Iso.TILE_H * 0.5)
-		parent.add_child(sl)
-		_slices.append(sl)
+		var diag_y: float = (s - 0.5) * Iso.TILE_H * 0.5
+		for m in [IsoSlice.GROUND, IsoSlice.EDGE]:
+			var sl := IsoSlice.new()
+			sl.floor_ref = self
+			sl.mode = m
+			sl.cells.assign(by_s[s])
+			sl.diag_y = diag_y
+			sl.position = Vector2(0.0, diag_y)
+			# Draw order comes from z_index, not from y: everything is ordered by which diagonal
+			# row of cells it belongs to, so nothing flips as you cross a cell.
+			#   flat ground tops  z = -2000 + s     (always behind every actor)
+			#   walls/stairs/holes z = 3s            (behind actors on this row, in front of the row behind)
+			#   actors             z = 3s + 1        (set each frame by LevelBase)
+			sl.z_index = (3 * s) if m == IsoSlice.EDGE else (-2000 + s)
+			parent.add_child(sl)
+			_slices.append(sl)
+
+## True when the ground behind this cell (toward -x or -y) is lower: the cell's own far-side
+## wall faces away from the camera, and the cell hides whatever stands below it.
+func back_lower(cell: Vector2i) -> bool:
+	var lv := level(cell)
+	for n in [cell + Vector2i(0, -1), cell + Vector2i(-1, 0)]:
+		if cells.has(n) and not stairs.has(n) and level(n) < lv:
+			return true
+	return false
 
 ## The ground is expensive to draw, so it only repaints when something changed: the camera
 ## moved a little, a mark is animating, a restoration wave is spreading, or a quarter of a
@@ -135,7 +158,7 @@ func _process(delta: float) -> void:
 	_idle = 0.0
 	dirty = false
 	for sl in _slices:
-		var near := absf(sl.position.y - focus.y) < Settings.cull_half().y + 190.0
+		var near := absf(sl.diag_y - focus.y) < Settings.cull_half().y + 190.0
 		if near:
 			sl.visible = true
 			sl.queue_redraw()

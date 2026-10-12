@@ -3,8 +3,13 @@ extends Node2D
 ## One diagonal row of the isometric page (cells sharing x + y). Draws tiles at
 ## their elevation, stacked-paper cliff faces, stairs, and plot holes.
 
+const GROUND := 1
+const EDGE := 2
+
 var floor_ref: IsoFloor
 var cells: Array[Vector2i] = []
+var mode := EDGE
+var diag_y := 0.0
 
 static func _h(x: int, y: int, k: int = 0) -> float:
 	return fposmod(sin(float(x) * 127.1 + float(y) * 311.7 + float(k) * 74.7) * 43758.5453, 1.0)
@@ -33,12 +38,17 @@ func _draw() -> void:
 		var gp := Iso.pt(Vector2(cell), z)
 		if absf(gp.x - f.x) > half.x or absf(gp.y - f.y) > half.y:
 			continue
-		if floor_ref.stairs.has(cell):
+		var solid_top := not floor_ref.stairs.has(cell) and kind != "#"
+		if mode == GROUND:
+			if solid_top and not floor_ref.back_lower(cell):
+				_draw_tile(cell, kind, z)
+		elif floor_ref.stairs.has(cell):
 			_draw_stairs(cell, kind)
 		elif kind == "#":
 			_draw_pit(cell, z)
 		else:
-			_draw_tile(cell, kind, z)
+			if floor_ref.back_lower(cell):
+				_draw_tile(cell, kind, z)
 			_draw_faces(cell, kind, z)
 
 func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:

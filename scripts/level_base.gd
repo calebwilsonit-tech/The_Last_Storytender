@@ -304,6 +304,7 @@ func _build_ui() -> void:
 # --- Frame loop -----------------------------------------------------------------------
 func _process(delta: float) -> void:
 	_update_elevation(delta)
+	_update_sort_z()
 	_floor.focus = _camera.get_screen_center_position()
 	var size := get_viewport_rect().size
 	var view := size / _camera.zoom
@@ -315,6 +316,31 @@ func _process(delta: float) -> void:
 	_update_prompt()
 	_collect_crystals()
 	_level_process(delta)
+
+## Everything standing in the world is drawn in order of the diagonal row of cells it occupies
+## (z = 3 * (x + y) + 1), which matches the ground nodes in IsoFloor.build. Unlike sorting by y
+## position, this never flips while something crosses the middle of a cell.
+func _update_sort_z() -> void:
+	for n in _actors.get_children():
+		if n is IsoSlice or not (n is Node2D):
+			continue
+		if n.has_meta("z_done"):
+			continue
+		var node := n as Node2D
+		var cell := _floor.cell_at(node.position)
+		var s := cell.x + cell.y
+		var extra := 0
+		var flat := false
+		if node is Prop:
+			var pk: int = (node as Prop).kind
+			if pk == Prop.Kind.HOUSE or pk == Prop.Kind.FORGE:
+				extra = 1            # a 2x2 building spans one more row than its centre cell
+			elif pk == Prop.Kind.TABLE:
+				extra = int((node as Prop).table_len * 0.5)
+			node.set_meta("z_done", true)       # props never move
+		elif node is PressurePlate or node is EchoPlate or node is PasteGhost:
+			flat = true
+		node.z_index = 3 * (s + extra) + (0 if flat else 1)
 
 func _update_elevation(delta: float) -> void:
 	var target := _floor.height_at(_player.position) * Iso.LEVEL_H
