@@ -419,6 +419,17 @@ for y in range(H):
         cnt[rows[y][x]] = cnt.get(rows[y][x], 0) + 1
 print({k: v for k, v in sorted(cnt.items()) if k != ' '})
 
+# ---- phase 2: varied puzzle sites, four new regions, side dungeons (kept in its own file) ----------------------------
+exec(open('tools/gen_phase2.py').read())
+
+# ---- fewer lantern posts: these three were thinned out AFTER everything else was decided, so the rest
+# of the world (chests, vaults, trees) stays exactly where saves expect it ----------------------------------
+DROPPED_POSTS = {"wells", "ridge", "graves"}
+for wid, name, (x, y), r in WAYPOINTS:
+    if wid in DROPPED_POSTS:
+        rows[y][x] = '.'
+WAYPOINTS = [w for w in WAYPOINTS if w[0] not in DROPPED_POSTS]
+
 # ---- write ---------------------------------------------------------------------------------------------
 def fmt(name, arr):
     return "const %s: Array[String] = [\n%s,\n]\n" % (name, ",\n".join('\t"%s"' % "".join(r) for r in arr))
@@ -446,9 +457,12 @@ const WAYPOINTS: Array[Dictionary] = %s
 const LORE := %s
 const CHESTS := %s
 const RIDDLES := %s
+const SITES := %s
+const PORTALS := %s
+const LORE_TEXT := %s
 
 ''' % (OX, OY, START[0], START[1], json.dumps(REGIONS), json.dumps([{"id": a, "name": b, "cell": [c[0], c[1]], "region": d} for a, b, c, d in WAYPOINTS]).replace('true', 'true'),
-       json.dumps({k: [v[0], v[1]] for k, v in LORE.items()}), json.dumps(CHESTS), json.dumps(RIDDLES))
+       json.dumps({k: [v[0], v[1]] for k, v in LORE.items()}), json.dumps(CHESTS), json.dumps(RIDDLES), json.dumps(SITES), json.dumps(PORTALS), json.dumps(LORE_TEXT))
 out += fmt('ROWS', rows) + "\n" + fmt('HEIGHTS', hts) + "\n" + fmt('REGION_ROWS', reg)
 out += '''
 static func region_at(cell: Vector2i) -> String:
@@ -461,4 +475,4 @@ static func region_name(cell: Vector2i) -> String:
 '''
 open('data/prologue_map.gd', 'w').write(out)
 print("written", W, "x", H)
-sys.exit(1 if problems else 0)
+sys.exit(1 if (problems or bad2) else 0)

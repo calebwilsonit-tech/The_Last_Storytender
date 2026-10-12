@@ -32,6 +32,7 @@ var _oven: Prop
 var _entered_town := false
 var _gate_prop: Prop
 var _posts: Dictionary = {}               # waypoint id -> Prop
+var _sites: PuzzleSites
 var _spawn_state: Array[Dictionary] = []
 
 func _got_key(tag: String, cell: Vector2i) -> String:
@@ -70,6 +71,9 @@ func _spawn_chest(cell: Vector2i) -> void:
 func _open_chest(chest: Prop, cell: Vector2i) -> void:
 	var key: String = chest.get_meta("got_key")
 	if GameState.has_flag(key):
+		return
+	if PuzzleSites.chest_locked(cell):
+		_hud.toast("The chest is sealed. Something nearby is holding it shut.")
 		return
 	GameState.set_flag(key)
 	GameState.add_renown(5)
@@ -353,6 +357,10 @@ func _exit_tree() -> void:
 
 func _level_ready() -> void:
 	GameState.before_exit = Callable(self, "_record_exit_post")
+	echo_enabled = GameState.has_flag("memory_done")        # Garrick's memory taught you to remember an Echo
+	_sites = PuzzleSites.new()
+	add_child(_sites)
+	_sites.setup(self)
 	_floor.static_world = true      # the overworld ground never changes: no safety repaints
 	_setup_chunks()
 	Settings.quality_changed.connect(_setup_chunks)
@@ -660,6 +668,9 @@ func _on_death_reset() -> void:
 		e.queue_free()
 	for sp in _spawn_state:
 		sp["node"] = null
+	_clear_echoes()
+	if _sites != null:
+		_sites.on_death_reset()
 
 func _introduce_enemy(k: Enemy.Kind) -> void:
 	var flag := "met_enemy_%d" % int(k)

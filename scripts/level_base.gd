@@ -35,6 +35,9 @@ var _safe_pos := Vector2.ZERO
 var _interactables: Array[Dictionary] = []   # {node, prompt: Callable, action: Callable, range: float}
 var _fell_once := false
 var _busy := false
+var echo_enabled := false            # Garrick's memory verb: R records a ghost of you that stands on plates
+var _echoes: Array[Echo] = []
+var _recording: Echo
 var _crystals: Array[Prop] = []
 var _first_proofread := false
 var _shake := 0.0
@@ -807,6 +810,45 @@ func _update_prompt() -> void:
 	var it := _nearest()
 	_hud.set_prompt(it["prompt"].call() if not it.is_empty() else "")
 
+# --- Echoes: Garrick's memory verb ----------------------------------------------------------------------
+func _input(event: InputEvent) -> void:
+	if echo_enabled and event.is_action_pressed("echo") and not get_tree().paused and not GameState.in_dialogue and not _busy \
+			and not _player.is_falling and not _player.is_crumpled:
+		_toggle_echo()
+
+func _toggle_echo() -> void:
+	if is_instance_valid(_recording):
+		_recording.stop_record()
+		return
+	if _echoes.size() >= 2:
+		var old: Echo = _echoes.pop_front()
+		if is_instance_valid(old):
+			old.queue_free()
+	var e := Echo.new()
+	e.floor_ref = _floor
+	e.player = _player
+	_actors.add_child(e)
+	_recording = e
+	e.recorded.connect(_on_echo_recorded)
+	e.discarded.connect(func(_x): _recording = null)
+	_hud.toast("Remembering... walk, then press {echo} again.")
+	Telemetry.log_event("puzzle", {"p": "echo_start"})
+
+func _on_echo_recorded(e: Echo) -> void:
+	_recording = null
+	_echoes.append(e)
+	_hud.toast("Remembered. It will play it back, and stay.")
+	Telemetry.log_event("puzzle", {"p": "echo_set", "n": _echoes.size()})
+
+func _clear_echoes() -> void:
+	for e in _echoes:
+		if is_instance_valid(e):
+			e.queue_free()
+	_echoes.clear()
+	if is_instance_valid(_recording):
+		_recording.queue_free()
+	_recording = null
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("debug_report"):
 		Telemetry.flush()
@@ -853,6 +895,14 @@ func _setup_chunks() -> void:
 		_chunks.queue_free()
 		_chunks = null
 		_floor.set_chunks(false)
+
+## Changes what a cell is while the level runs (a bridge unrolls, a causeway page crumbles), and repaints
+## the ground that shows it.
+func set_cell_kind(cell: Vector2i, kind: String) -> void:
+	_floor.cells[cell] = kind
+	_floor.dirty = true
+	if _chunks != null:
+		_chunks.repaint_cell(cell)
 
 ## Levels that have a world to look at override this (the overworld does).
 func _map_available() -> bool:

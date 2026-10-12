@@ -108,6 +108,12 @@ func _repaint(ck: Vector2i) -> void:
 	(c["painter"] as IsoSlice).queue_redraw()
 	(c["vp"] as SubViewport).render_target_update_mode = SubViewport.UPDATE_ONCE
 
+## Repaints just the chunk that holds this cell (a bridge unrolled, a causeway page crumbled).
+func repaint_cell(cell: Vector2i) -> void:
+	var ck := Vector2i(floori(cell.x / float(CS)), floori(cell.y / float(CS)))
+	if _chunks.has(ck):
+		_repaint(ck)
+
 func repaint_all() -> void:
 	for ck: Vector2i in _chunks.keys():
 		_repaint(ck)

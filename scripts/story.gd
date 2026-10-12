@@ -471,7 +471,8 @@ const LORE := {
 }
 
 static func lore(id: String) -> Array:
-	return [line("", LORE.get(id, "The stone is blank, and a little embarrassed about it."), "action")]
+	var text: String = LORE.get(id, PrologueMap.LORE_TEXT.get(id, "The stone is blank, and a little embarrassed about it."))
+	return [line("", InputSetup.fmt(text), "action")]
 
 static func gate_locked() -> Array:
 	return [

@@ -22,8 +22,6 @@ var _dim_t := 0.0
 var _plate_nodes: Dictionary = {}      # char -> EchoPlate
 var _gate_nodes: Dictionary = {}       # char -> StoryGate
 var _gate_open_seen := {}
-var _echoes: Array[Echo] = []
-var _recording: Echo
 var _guard_spawns: Array[Vector2i] = []
 var _looked := {}
 var _room_seen := {}
@@ -141,6 +139,7 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 	return true
 
 func _level_ready() -> void:
+	echo_enabled = true
 	for plate: EchoPlate in _plate_nodes.values():
 		plate.player = _player
 	for c in _guard_spawns:
@@ -370,45 +369,6 @@ func _checkpoint_for(cell: Vector2i) -> Vector2:
 		1: return Iso.to_screen(Vector2(14, 11))
 		2: return Iso.to_screen(Vector2(28, 11))
 		_: return Iso.to_screen(Vector2(ARENA_X, 12))
-
-# --- Echoes: Garrick's memory verb ----------------------------------------------------------------------
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("echo") and not get_tree().paused and not GameState.in_dialogue and not _busy \
-			and not _player.is_falling and not _player.is_crumpled:
-		_toggle_echo()
-
-func _toggle_echo() -> void:
-	if is_instance_valid(_recording):
-		_recording.stop_record()
-		return
-	if _echoes.size() >= 2:
-		var old: Echo = _echoes.pop_front()
-		if is_instance_valid(old):
-			old.queue_free()
-	var e := Echo.new()
-	e.floor_ref = _floor
-	e.player = _player
-	_actors.add_child(e)
-	_recording = e
-	e.recorded.connect(_on_echo_recorded)
-	e.discarded.connect(func(_x): _recording = null)
-	_hud.toast("Remembering... walk, then press {echo} again.")
-	Telemetry.log_event("puzzle", {"p": "echo_start"})
-
-func _on_echo_recorded(e: Echo) -> void:
-	_recording = null
-	_echoes.append(e)
-	_hud.toast("Remembered. It will play it back, and stay.")
-	Telemetry.log_event("puzzle", {"p": "echo_set", "n": _echoes.size()})
-
-func _clear_echoes() -> void:
-	for e in _echoes:
-		if is_instance_valid(e):
-			e.queue_free()
-	_echoes.clear()
-	if is_instance_valid(_recording):
-		_recording.queue_free()
-	_recording = null
 
 func _tick_gates() -> void:
 	for pair in ROOM_GATES:
