@@ -151,8 +151,12 @@ class Rec extends RefCounted:
 			if not p["outline"]:
 				continue
 			apply_xf.call(p["xf"])
-			for bp in p["geo"]["back"]:
-				ci.draw_colored_polygon(bp, Color(out, out.a * alpha))
+			# the silhouette backing: the shape itself plus a fat line round its edge. (Drawing an offset
+			# polygon instead is the same picture but costs ~300x more, because the engine has to triangulate
+			# every rounded corner.)
+			var bc := Color(out, out.a * alpha)
+			ci.draw_colored_polygon(p["pts"], bc)
+			ci.draw_polyline(p["geo"]["loop"], bc, outer * 2.0, true)
 		order.sort_custom(func(a, b): return a[2] < b[2] or (a[2] == b[2] and a[3] < b[3]))
 		for o in order:
 			if o[0] == "part":
@@ -190,9 +194,11 @@ static func geo(pts: PackedVector2Array, outer: float, shade: float) -> Dictiona
 	var hit = _geo.get(key)
 	if hit != null:
 		return hit
-	var g := {"ok": not Geometry2D.triangulate_polygon(pts).is_empty(), "back": [], "cres": []}
+	var g := {"ok": not Geometry2D.triangulate_polygon(pts).is_empty(), "loop": PackedVector2Array(), "cres": []}
 	if g["ok"]:
-		g["back"] = Geometry2D.offset_polygon(pts, outer, Geometry2D.JOIN_ROUND)
+		var loop := pts.duplicate()
+		loop.append(pts[0])
+		g["loop"] = loop
 		if shade > 0.0:
 			var c := centroid(pts)
 			var rr := radius_of(pts, c)
