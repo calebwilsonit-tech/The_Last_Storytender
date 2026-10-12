@@ -117,6 +117,10 @@ func _look_dir() -> Vector2:
 	_face_cur = _face_cur.lerp(want, 0.08).normalized() if _face_cur.lerp(want, 0.08).length() > 0.05 else want
 	return _face_cur
 
+## Rotates a point about a pivot (used for the swinging arms and hammer).
+func _rot(p: Vector2, pivot: Vector2, ang: float) -> Vector2:
+	return pivot + (p - pivot).rotated(ang)
+
 func _draw_body_original(r: float, pen: Color, s: float, breathe: float) -> void:
 	var shirt := Palette.RUST
 	var skin := Color("e9b58f")
@@ -125,41 +129,82 @@ func _draw_body_original(r: float, pen: Color, s: float, breathe: float) -> void
 			shirt = Color("6f9fcf")
 		Kind.BAKER:
 			shirt = Color("f0e6d2")
-	# Legs
-	DrawKit.shape(self, PackedVector2Array([Vector2(-9, 0), Vector2(-2, 0), Vector2(-3, -12), Vector2(-9, -12)]), _fill(Color("4a3a30"), r), pen, 1.6, _seed)
-	DrawKit.shape(self, PackedVector2Array([Vector2(2, 0), Vector2(9, 0), Vector2(9, -12), Vector2(3, -12)]), _fill(Color("4a3a30"), r), pen, 1.6, _seed + 1.0)
-	# Torso
-	var torso := DrawKit.ellipse(Vector2(0, -26 + breathe * 0.4), 15.0, 16.0, 18, 0.06, _seed)
+	# Missing people only stir; restored people are properly alive.
+	var live := 0.35 + 0.65 * r
+	var t := _t
+	var lean := sin(t * 1.3 + _seed) * 1.1 * live
+	var blink := fmod(t * 0.55 + _seed * 3.0, 3.0) < 0.14
+	# Legs (the child taps a foot while waiting).
+	var tap := maxf(0.0, sin(t * 3.4 + _seed)) * 2.6 * live if kind == Kind.CHILD else 0.0
+	var shift := sin(t * 0.8 + _seed) * 0.8 * live
+	DrawKit.shape(self, PackedVector2Array([Vector2(-9 + shift, 0), Vector2(-2 + shift, 0), Vector2(-3, -12), Vector2(-9, -12)]), _fill(Color("4a3a30"), r), pen, 1.6, _seed)
+	DrawKit.shape(self, PackedVector2Array([Vector2(2, -tap), Vector2(9, -tap), Vector2(9, -12), Vector2(3, -12)]), _fill(Color("4a3a30"), r), pen, 1.6, _seed + 1.0)
+	# Torso (breathes, leans a little)
+	var torso := DrawKit.ellipse(Vector2(lean * 0.5, -26 + breathe * 0.4), 15.0 + breathe * 0.25, 16.0 + breathe * 0.35, 18, 0.06, _seed)
 	DrawKit.shape(self, torso, _fill(shirt, r), pen, 2.0, _seed + 2.0)
 	if kind == Kind.BLACKSMITH or kind == Kind.BAKER:
-		var apron := PackedVector2Array([Vector2(-10, -28), Vector2(10, -28), Vector2(12, -9), Vector2(-12, -9)])
+		var apron := PackedVector2Array([Vector2(-10 + lean * 0.4, -28), Vector2(10 + lean * 0.4, -28), Vector2(12, -9), Vector2(-12, -9)])
 		DrawKit.shape(self, apron, _fill(Color("6b4a33") if kind == Kind.BLACKSMITH else Color("fffaf0"), r), pen, 1.6, _seed + 3.0)
+	# Arms: idle swing; Garrick lifts and taps his hammer, Maud kneads, Pip fidgets.
+	var arm_c := _fill(shirt.darkened(0.08), r)
+	var hand_c := _fill(skin, r)
+	var kn := pow(maxf(0.0, sin(t * 1.15 + _seed)), 3.0) * live          # a slow beat: lift, then tap
+	for side: float in [-1.0, 1.0]:
+		var sh := Vector2(side * 13.0 + lean * 0.5, -35.0 + breathe * 0.3)
+		var a: float = side * 0.16 + sin(t * 1.6 + side * 1.7 + _seed) * 0.07 * live
+		var len: float = 22.0
+		if kind == Kind.BAKER:
+			# elbows out, hands working the dough in front
+			a = side * 0.55 - sin(t * 3.0 + side * 1.4) * 0.28 * live
+			len = 18.0
+		elif kind == Kind.CHILD:
+			a += sin(t * 2.4 + side) * 0.12 * live
+			len = 18.0
+		elif kind == Kind.BLACKSMITH and side > 0.0:
+			a = 0.9 - kn * 0.9
+		var hand := sh + Vector2(sin(a) * len, cos(a) * len)
+		var perp := (hand - sh).orthogonal().normalized() * 3.4
+		DrawKit.shape(self, PackedVector2Array([sh + perp, sh - perp, hand - perp * 0.8, hand + perp * 0.8]), arm_c, pen, 1.6, _seed + 20.0 + side)
+		draw_circle(hand, 3.4, hand_c)
+		draw_arc(hand, 3.4, 0.0, TAU, 10, pen, 1.4, true)
+		if kind == Kind.BLACKSMITH and side > 0.0:
+			var tilt := -0.9 * kn
+			var haft_tip := _rot(hand + Vector2(10, -16), hand, tilt)
+			DrawKit.line(self, hand, haft_tip, _fill(Palette.WOOD, maxf(r, 0.0)).lerp(pen, 1.0 - r), 3.0, _seed + 8.0, 0.2)
+			var head: PackedVector2Array = PackedVector2Array([hand + Vector2(6, -22), hand + Vector2(19, -14), hand + Vector2(16, -9), hand + Vector2(3, -17)])
+			for i in head.size():
+				head[i] = _rot(head[i], hand, tilt)
+			DrawKit.shape(self, head, _fill(Color("8e8e96"), r), pen, 1.6, _seed + 9.0)
 	# Head
-	var head_c := Vector2(0, -50 + breathe * 0.6)
+	var head_c := Vector2(lean + sin(t * 0.9 + _seed * 2.0) * 0.8 * live, -50 + breathe * 0.6 + (sin(t * 1.6 + _seed) * 0.6 * live))
 	var hr := 12.0 if kind != Kind.CHILD else 13.5
 	DrawKit.shape(self, DrawKit.ellipse(head_c, hr, hr, 18, 0.05, _seed + 4.0), _fill(skin, r), pen, 2.0, _seed + 4.0)
 	match kind:
 		Kind.BLACKSMITH:
 			# Gray beard and brow: an old hero.
-			var beard := PackedVector2Array([head_c + Vector2(-10, 2), head_c + Vector2(10, 2), head_c + Vector2(6, 18), head_c + Vector2(0, 21), head_c + Vector2(-6, 18)])
+			var beard := PackedVector2Array([head_c + Vector2(-10, 2), head_c + Vector2(10, 2), head_c + Vector2(6, 18 + breathe * 0.3), head_c + Vector2(0, 21 + breathe * 0.5), head_c + Vector2(-6, 18 + breathe * 0.3)])
 			DrawKit.shape(self, beard, _fill(Color("c9c5bd"), r), pen, 1.6, _seed + 5.0)
-			DrawKit.line(self, head_c + Vector2(-9, -6), head_c + Vector2(-2, -4), pen, 2.6, _seed + 6.0, 0.3)
-			DrawKit.line(self, head_c + Vector2(2, -4), head_c + Vector2(9, -6), pen, 2.6, _seed + 7.0, 0.3)
-			# Hammer in hand
-			DrawKit.line(self, Vector2(14, -30), Vector2(26, -44), _fill(Palette.WOOD, maxf(r, 0.0)).lerp(pen, 1.0 - r), 3.0, _seed + 8.0, 0.3)
-			DrawKit.shape(self, PackedVector2Array([Vector2(20, -50), Vector2(33, -42), Vector2(30, -37), Vector2(17, -45)]), _fill(Color("8e8e96"), r), pen, 1.6, _seed + 9.0)
+			var brow := -2.0 * kn
+			DrawKit.line(self, head_c + Vector2(-9, -6 + brow), head_c + Vector2(-2, -4 + brow), pen, 2.6, _seed + 6.0, 0.3)
+			DrawKit.line(self, head_c + Vector2(2, -4 + brow), head_c + Vector2(9, -6 + brow), pen, 2.6, _seed + 7.0, 0.3)
 		Kind.BAKER:
-			# Tall chef's hat.
-			var hat := PackedVector2Array([head_c + Vector2(-10, -8), head_c + Vector2(10, -8), head_c + Vector2(12, -26), head_c + Vector2(0, -32), head_c + Vector2(-12, -26)])
+			# Tall chef's hat, wobbling a touch as she works.
+			var wob := sin(t * 3.0 + _seed) * 1.6 * live
+			var hat := PackedVector2Array([head_c + Vector2(-10, -8), head_c + Vector2(10, -8), head_c + Vector2(12 + wob, -26), head_c + Vector2(wob * 1.4, -32), head_c + Vector2(-12 + wob, -26)])
 			DrawKit.shape(self, hat, _fill(Color("fffaf0"), r), pen, 1.8, _seed + 5.0)
 		Kind.CHILD:
-			# Messy tuft of hair.
+			# Messy tuft of hair that bounces.
 			for i in 4:
-				DrawKit.line(self, head_c + Vector2(-6 + i * 4, -hr + 1), head_c + Vector2(-9 + i * 6, -hr - 8), pen, 2.0, _seed + i, 0.4)
+				var sw := sin(t * 4.0 + i * 1.3 + _seed) * 1.8 * live
+				DrawKit.line(self, head_c + Vector2(-6 + i * 4, -hr + 1), head_c + Vector2(-9 + i * 6 + sw, -hr - 8), pen, 2.0, _seed + i, 0.4)
 	# Face
-	var look := sin(_t * 0.7) * 1.2
-	draw_circle(head_c + Vector2(-4.5 + look, -1), 1.8, pen)
-	draw_circle(head_c + Vector2(4.5 + look, -1), 1.8, pen)
+	var look := sin(t * 0.7 + _seed) * 1.2 * live
+	if blink:
+		draw_line(head_c + Vector2(-6.3 + look, -1), head_c + Vector2(-2.7 + look, -1), pen, 1.8)
+		draw_line(head_c + Vector2(2.7 + look, -1), head_c + Vector2(6.3 + look, -1), pen, 1.8)
+	else:
+		draw_circle(head_c + Vector2(-4.5 + look, -1), 1.8, pen)
+		draw_circle(head_c + Vector2(4.5 + look, -1), 1.8, pen)
 	var smile := 0.2 + 0.7 * r
 	# Solemn by default: a level mouth for the adults, a small smile only for the child.
 	var my := 5.5 if kind != Kind.BLACKSMITH else 8.5
@@ -168,6 +213,11 @@ func _draw_body_original(r: float, pen: Color, s: float, breathe: float) -> void
 	else:
 		draw_line(head_c + Vector2(look * 0.5 - 3.0, my), head_c + Vector2(look * 0.5 + 3.0, my + 0.5 * smile - 0.3), pen, 1.8)
 	if tearful:
-		var drip := fmod(_t * 0.5, 1.0)
+		var drip := fmod(t * 0.5, 1.0)
 		draw_circle(head_c + Vector2(6.5, 4.0 + drip * 14.0), 2.3 - drip, Color(Palette.TEAR, 0.95 * (1.0 - drip * 0.6)))
 		draw_line(head_c + Vector2(6.5, 2.0), head_c + Vector2(6.5, 4.0 + drip * 14.0), Color(Palette.TEAR, 0.5), 1.4)
+	# Maud's flour: a little puff drifts up whenever she works the dough.
+	if kind == Kind.BAKER and r > 0.4:
+		for i in 3:
+			var ph := fmod(t * 0.6 + i * 0.33 + _seed, 1.0)
+			draw_circle(Vector2(-6 + i * 6 + sin(t * 2.0 + i) * 3.0, -20 - ph * 26.0), 2.0 + ph * 2.5, Color(1, 0.98, 0.92, 0.45 * (1.0 - ph) * r))

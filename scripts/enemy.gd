@@ -481,14 +481,20 @@ func _draw_bare() -> void:
 	var tele := _state == "windup"
 	if tele:
 		rear = -4.0
-	var bob := sin(_t * (3.0 if _state == "chase" else 1.6)) * 1.5
+	var moving := velocity.length() > 15.0
+	var gait := _t * (11.0 if _state == "chase" else 6.0)
+	var bob := (absf(sin(gait)) * -2.4) if moving else sin(_t * 1.6) * 1.5
+	var breathe := sin(_t * 2.2 + _seed) * (0.6 if moving else 1.1)
 	draw_set_transform(Vector2(0, -elev + bob), 0.0, Vector2(_face, 1.0))
-	# Legs.
-	_poly(PackedVector2Array([Vector2(-16, 0), Vector2(-6, 0), Vector2(-6, -14), Vector2(-17, -14)]), c.darkened(0.12))
-	_poly(PackedVector2Array([Vector2(8, 0), Vector2(19, 0), Vector2(18, -14), Vector2(8, -14)]), c.darkened(0.12))
+	# Legs: they really walk now, one planted while the other swings.
+	var sa := sin(gait) * 5.0 if moving else 0.0
+	var la := maxf(0.0, sin(gait)) * 3.5 if moving else 0.0
+	var lb := maxf(0.0, -sin(gait)) * 3.5 if moving else 0.0
+	_poly(PackedVector2Array([Vector2(-16 + sa, -la), Vector2(-6 + sa, -la), Vector2(-6, -14), Vector2(-17, -14)]), c.darkened(0.12))
+	_poly(PackedVector2Array([Vector2(8 - sa, -lb), Vector2(19 - sa, -lb), Vector2(18, -14), Vector2(8, -14)]), c.darkened(0.12))
 	# Hunched body.
-	_poly(DrawKit.ellipse(Vector2(-2 + rear, -30), 25.0, 21.0, 20, 0.07, _seed), c)
-	_poly(DrawKit.ellipse(Vector2(2 + rear, -26), 14.0, 14.0, 16, 0.05, _seed + 2.0), belly, 2.0)
+	_poly(DrawKit.ellipse(Vector2(-2 + rear, -30 - breathe * 0.5), 25.0 + breathe * 0.5, 21.0 + breathe, 20, 0.07, _seed), c)
+	_poly(DrawKit.ellipse(Vector2(2 + rear, -26 - breathe * 0.4), 14.0, 14.0 + breathe * 0.5, 16, 0.05, _seed + 2.0), belly, 2.0)
 	# Wrinkles (bare skin) or fur tufts (proofread).
 	var wr := 1.0 - (1.0 if friendly else _proof)
 	for i in 5:
@@ -500,19 +506,26 @@ func _draw_bare() -> void:
 		var p := Vector2(-2 + rear, -30) + Vector2(cos(a) * 25.0, sin(a) * 21.0)
 		draw_line(p, p + Vector2(cos(a), sin(a)) * 6.0 * tuft, c.darkened(0.25), 2.2)
 	# Head.
-	var hc := Vector2(17 + rear * 0.4, -44)
+	var sniff := sin(_t * 2.4 + _seed) * (1.0 if _state == "idle" else 0.4)
+	var hc := Vector2(17 + rear * 0.4, -44 + sniff * 1.6 - breathe * 0.4)
 	_poly(DrawKit.ellipse(hc, 13.0, 12.0, 16, 0.04, _seed + 4.0), c)
 	_poly(DrawKit.ellipse(hc + Vector2(9, 4), 8.0, 6.0, 12), belly, 2.0)
 	draw_circle(hc + Vector2(14, 2), 2.4, Palette.OUTLINE)
-	_poly(DrawKit.ellipse(hc + Vector2(-6, -11), 4.5, 4.5, 10), c.darkened(0.08), 2.0)
+	var twitch := pow(maxf(0.0, sin(_t * 0.9 + _seed * 2.0)), 10.0) * 3.0     # an ear flicks now and then
+	_poly(DrawKit.ellipse(hc + Vector2(-6, -11 - twitch), 4.5, 4.5, 10), c.darkened(0.08), 2.0)
 	_poly(DrawKit.ellipse(hc + Vector2(5, -11), 4.5, 4.5, 10), c.darkened(0.08), 2.0)
-	# Eyes: dull holes while broken, warm lights once proofread.
+	# Eyes: dull holes while broken, warm lights once proofread. They blink.
 	var eye := Color(0.1, 0.05, 0.08).lerp(Palette.CYAN, tuft)
-	draw_circle(hc + Vector2(1, -2), 2.2, eye)
-	draw_circle(hc + Vector2(8, -2), 2.2, eye)
+	if fmod(_t * 0.5 + _seed * 3.0, 3.0) < 0.13 and _state != "windup":
+		draw_line(hc + Vector2(-1, -2), hc + Vector2(3, -2), eye, 1.8)
+		draw_line(hc + Vector2(6, -2), hc + Vector2(10, -2), eye, 1.8)
+	else:
+		draw_circle(hc + Vector2(1, -2), 2.2, eye)
+		draw_circle(hc + Vector2(8, -2), 2.2, eye)
 	# Arms with claws.
 	var ar := hc + Vector2(-4, 10)
-	_poly(PackedVector2Array([Vector2(8 + rear, -36), Vector2(16 + rear, -34), ar + Vector2(14, 14), ar + Vector2(6, 16)]), c.darkened(0.1), 2.2)
+	var asw := -sa * 0.8 if moving else sin(_t * 1.7 + _seed) * 1.2
+	_poly(PackedVector2Array([Vector2(8 + rear, -36), Vector2(16 + rear, -34), ar + Vector2(14 + asw, 14), ar + Vector2(6 + asw, 16)]), c.darkened(0.1), 2.2)
 	if tele or _state == "lunge":
 		for k in 3:
 			draw_line(ar + Vector2(14, 14), ar + Vector2(20 + k * 3, 22 + k * 2), Color("efe3c4"), 2.0)
@@ -533,6 +546,10 @@ func _draw_bare() -> void:
 func _draw_mite() -> void:
 	var hop := absf(sin(_t * 9.0 + _seed)) * 6.0
 	var c := Vector2(0, -14 - hop)
+	# squash and stretch: wide and flat on landing, tall and thin in the air
+	var sq := 1.0 + (hop - 3.0) * 0.03
+	draw_set_transform(Vector2(0, -elev - 2.0), 0.0, Vector2(1.0 / sq, sq))
+	c = Vector2(0, -12.0 - hop)
 	var boil := int(_t * 12.0)
 	# Pale halo, as in the enemy sheet, then the black scribble.
 	draw_circle(c, 15.0, Color(1, 1, 1, 0.85))
@@ -553,3 +570,4 @@ func _draw_mite() -> void:
 		draw_line(base, base + Vector2(cos(a + 0.4), sin(a + 0.4)) * 7.0, Color.WHITE, 2.0)
 	draw_circle(c + Vector2(-3, -1), 1.8, Color.WHITE)
 	draw_circle(c + Vector2(3, -1), 1.8, Color.WHITE)
+	draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)

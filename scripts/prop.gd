@@ -72,13 +72,13 @@ func _process(delta: float) -> void:
 			_skip = not _skip
 			if _skip:
 				return
-	if kind != Kind.TREE and Settings.art_style != "default":
+	if kind != Kind.TREE:
 		_gate.hz = 3.0 if STILL_KINDS.has(kind) and not occupied else RedrawGate.HZ
 		if not _gate.ok(delta, self):
 			return
 	queue_redraw()
 
-const STILL_KINDS := [Kind.HOUSE, Kind.SIGN, Kind.CHAIR, Kind.GATE, Kind.OVEN, Kind.PORTAL, Kind.ANVIL]
+const STILL_KINDS := [Kind.SIGN, Kind.CHAIR, Kind.GATE]
 var _gate := RedrawGate.new()
 var _skip := false
 var _drawn_once := false
@@ -230,6 +230,13 @@ func _draw_house(r: float, forge: bool, flame_r: float = -1.0) -> void:
 	var cp := Vector2(22, -h - 30)
 	var chim := PackedVector2Array([cp, cp + Vector2(12, 6), cp + Vector2(12, -16), cp + Vector2(0, -22)])
 	DrawKit.shape(self, chim, _fill(Color("9c6b55"), r), pen, 1.8, _seed + 4.0)
+	# Smoke curls up from a home that has its ink back (and from the forge once the flame is lit).
+	var puff := (r if not forge else flame_r)
+	if puff > 0.5 and Settings.gfx_on("ambient"):
+		for i in 4:
+			var ph := fmod(_t * 0.32 + i * 0.25 + _seed * 0.1, 1.0)
+			var sp := cp + Vector2(6.0 + sin(_t * 0.9 + i * 1.7) * 4.0 * ph + ph * 10.0, -22.0 - ph * 40.0)
+			draw_circle(sp, 3.0 + ph * 6.0, Color(0.9, 0.9, 0.93, 0.5 * (1.0 - ph) * puff))
 	if forge:
 		_draw_forge_fire(DrawKit.face(door, 0.5, 0.0), flame_r)
 	# [REDACTED]: a black censor bar over the doorway until the page is restored.

@@ -3,6 +3,9 @@ extends LevelBase
 ## Built from data/prologue_map.gd. Restoring Thistledown means entering
 ## Garrick's memory (the forge's frozen flame), then returning the First Sword.
 
+func _init() -> void:
+	ambient_leaves = true
+
 const MEMORY_SCENE := "res://scenes/memory_forge.tscn"
 const PIP_MEMORY_SCENE := "res://scenes/memory_pip.tscn"
 const MAUD_MEMORY_SCENE := "res://scenes/memory_maud.tscn"

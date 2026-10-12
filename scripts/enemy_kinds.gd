@@ -306,15 +306,16 @@ static func _draw_slug(e: Enemy) -> void:
 	for i in seg:
 		var k := float(seg - 1 - i)
 		var wob := sin(t * 3.0 + k) * 2.0
-		var r := 15.0 - i * 1.5
-		var ctr := Vector2(-26.0 + i * 15.0, -12.0 + wob)
+		var inch := sin(t * 2.6 - i * 0.9)                    # a ripple of squeeze and stretch runs down it
+		var r := 15.0 - i * 1.5 + inch * 1.2
+		var ctr := Vector2(-26.0 + i * 15.0 + inch * 2.2, -12.0 + wob - inch * 1.0)
 		e._poly(DrawKit.ellipse(ctr, r, r * 0.8, 14, 0.05, e._seed + i), c.darkened(0.04 * k))
 	# a long run of words along its back, with no punctuation at all
 	var font := ThemeDB.get_default_theme().default_font
 	var txt := "and then and then and then" if not e.friendly else "and then. and then."
 	e.draw_string(font, Vector2(-34, -22), txt, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 9, Color(0.05, 0.1, 0.05, 0.75))
 	# head with eye stalks
-	var head := Vector2(36, -14 + sin(t * 4.0))
+	var head := Vector2(36 + sin(t * 2.6) * 2.0, -14 + sin(t * 4.0))
 	e._poly(DrawKit.ellipse(head, 11.0, 10.0, 12), c.lightened(0.05))
 	for sx in [-4.0, 5.0]:
 		e.draw_line(head + Vector2(sx, -8), head + Vector2(sx + 2, -22 + sin(t * 5.0 + sx)), Palette.OUTLINE, 2.2)
@@ -346,10 +347,15 @@ static func _draw_dangler(e: Enemy) -> void:
 	e.draw_circle(top + Vector2(sway * 0.3, 0), 2.5, Palette.OUTLINE)
 	# a hook-shaped body: a swung comma
 	e._poly(DrawKit.ellipse(body, 15.0, 17.0, 16, 0.06, e._seed), c)
-	e._poly(PackedVector2Array([body + Vector2(-4, 14), body + Vector2(6, 14), body + Vector2(2, 30), body + Vector2(-8, 34)]), c.darkened(0.1), 2.2)
+	var flick := sin(t * 3.1 + e._seed) * 6.0
+	e._poly(PackedVector2Array([body + Vector2(-4, 14), body + Vector2(6, 14), body + Vector2(2 + flick * 0.5, 30), body + Vector2(-8 + flick, 34 + absf(flick) * 0.3)]), c.darkened(0.1), 2.2)
+	var blink := fmod(t * 0.6 + e._seed * 3.0, 3.0) < 0.13
 	for ex in [-5.0, 5.0]:
-		e.draw_circle(body + Vector2(ex, -4), 3.4, Color.WHITE)
-		e.draw_circle(body + Vector2(ex + 1, -4), 1.5, Palette.OUTLINE)
+		if blink:
+			e.draw_line(body + Vector2(ex - 3.0, -4), body + Vector2(ex + 3.0, -4), Palette.OUTLINE, 2.0)
+		else:
+			e.draw_circle(body + Vector2(ex, -4), 3.4, Color.WHITE)
+			e.draw_circle(body + Vector2(ex + 1, -4), 1.5, Palette.OUTLINE)
 	if float(e.x["tele"]) > 0.0:
 		e.draw_circle(body + Vector2(10, -2), 6.0 + sin(t * 30.0) * 1.5, Color(1.0, 0.45, 0.35, 0.8))
 	for b: Dictionary in e.x["bolts"]:
@@ -368,10 +374,16 @@ static func _draw_censor(e: Enemy) -> void:
 	var sgn := 1.0 if facing_right else -1.0
 	var robe := Color("2b2b3a")
 	# tall robed figure
-	e._poly(PackedVector2Array([Vector2(-16, 0), Vector2(16, 0), Vector2(11, -52 + bob), Vector2(-11, -52 + bob)]), robe)
-	e._poly(DrawKit.ellipse(Vector2(0, -62 + bob), 11.0, 12.0, 14, 0.03, e._seed), Color("e8e0d0"))
+	var hem := sin(t * 1.8 + e._seed) * 2.5
+	var tilt := sin(t * 1.1 + e._seed) * 1.6
+	e._poly(PackedVector2Array([Vector2(-16 + hem, 0), Vector2(16 + hem, 0), Vector2(11 + tilt * 0.4, -52 + bob), Vector2(-11 + tilt * 0.4, -52 + bob)]), robe)
+	e._poly(DrawKit.ellipse(Vector2(tilt, -62 + bob), 11.0, 12.0, 14, 0.03, e._seed), Color("e8e0d0"))
+	var shut := fmod(t * 0.5 + e._seed * 2.0, 3.0) < 0.12
 	for ex in [-4.0, 4.0]:
-		e.draw_circle(Vector2(ex, -64 + bob), 1.8, Palette.OUTLINE)
+		if shut:
+			e.draw_line(Vector2(ex - 1.8 + tilt, -64 + bob), Vector2(ex + 1.8 + tilt, -64 + bob), Palette.OUTLINE, 1.6)
+		else:
+			e.draw_circle(Vector2(ex + tilt, -64 + bob), 1.8, Palette.OUTLINE)
 	# the black bar across the front (strip it with the Lantern)
 	var bar_up := float(e.x["bar_t"]) <= 0.0
 	var bw := 40.0 if bar_up else 8.0

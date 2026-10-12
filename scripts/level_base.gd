@@ -18,6 +18,7 @@ var _paper_flat: ColorRect
 var _paper_vignette := 0.2
 var _floor: IsoFloor
 var _actors: Node2D
+var ambient_leaves := false          # the overworld sets this: drifting leaves and paper scraps
 var _player: Player
 var _camera: Camera2D
 var _hud: Hud
@@ -97,6 +98,8 @@ func _ready() -> void:
 	_add_edge_walls()
 	_add_void_walls()
 	_build_player()
+	if ambient_leaves:
+		add_child(AmbientDrift.new())
 	_build_ui()
 	GameState.mnemosynth_changed.connect(_hud.set_mnemo)
 	GameState.renown_changed.connect(func(_v: int, _r: int): _hud.set_renown())
