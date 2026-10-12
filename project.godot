@@ -14,12 +14,17 @@ config/features=PackedStringArray("4.3", "GL Compatibility")
 [autoload]
 
 InputSetup="*res://scripts/input_setup.gd"
+GameState="*res://scripts/game_state.gd"
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
+
+[gui]
+
+theme/custom_font="res://assets/fonts/IMFellEnglish-Regular.ttf"
 
 [rendering]
 

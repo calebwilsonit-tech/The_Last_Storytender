@@ -7,8 +7,9 @@ func _ready() -> void:
 	_bind("move_right", [KEY_D, KEY_RIGHT])
 	_bind("move_up", [KEY_W, KEY_UP])
 	_bind("move_down", [KEY_S, KEY_DOWN])
-	_bind("debug_damage", [KEY_SPACE])  # Phase 1 test: take ink damage
-	_bind("debug_heal", [KEY_H])        # Phase 1 test: restore ink
+	_bind("interact", [KEY_E, KEY_SPACE, KEY_ENTER])
+	_bind("debug_damage", [KEY_F1])   # test: take ink damage
+	_bind("debug_heal", [KEY_F2])     # test: restore ink
 
 func _bind(action: String, keys: Array) -> void:
 	if not InputMap.has_action(action):
