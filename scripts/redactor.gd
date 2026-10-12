@@ -18,6 +18,7 @@ var _gone := false
 var _fade := 1.0
 var _poly: CollisionPolygon2D
 var _seed := 0.0
+var near := false           # the level sets this when you are close: shows how to read the bar away
 
 func _ready() -> void:
 	_seed = position.x * 0.013 + position.y * 0.007
@@ -30,6 +31,7 @@ func _ready() -> void:
 		Iso.to_screen(a * h + n * 0.3), Iso.to_screen(a * -h + n * 0.3)])
 	add_child(_poly)
 	add_to_group("lightable")
+	add_to_group("redactors")
 
 func lit(delta: float) -> void:
 	if _gone:
@@ -89,6 +91,19 @@ func _draw() -> void:
 		draw_colored_polygon(q, Color(0.04, 0.03, 0.07, vis))
 		if _h(float(i) * 3.1 + floorf(_t * 10.0)) > 0.9:
 			draw_rect(Rect2(a0 + Vector2(0, -lift - 4) + jit, Vector2((a1 - a0).x, 3)), Color(1, 1, 1, 0.5 * vis))
+	if near and not _gone and progress < 0.3:
+		var font2 := ThemeDB.get_default_theme().default_font
+		var head := load("res://assets/fonts/IMFellEnglish-Regular.ttf") as Font
+		var label := "Hold and aim the Lantern here"
+		var lw := head.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 20).x
+		var spec := InputSetup.display_spec("lantern")
+		var pill := Rect2(mid + Vector2(-(lw + 70.0) * 0.5, -lift - 70.0 + sin(_t * 3.0) * 2.0), Vector2(lw + 70.0, 34.0))
+		var bg := StyleBoxFlat.new()
+		bg.bg_color = Color(0.08, 0.09, 0.13, 0.85)
+		bg.set_corner_radius_all(17)
+		draw_style_box(bg, pill)
+		Glyph.draw(self, font2, spec, pill.position + Vector2(10, 17), 24.0)
+		draw_string(head, pill.position + Vector2(52, 24), label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 20, Color("f4ecd8"))
 	if progress < 0.99 and not _gone:
 		# Ground shadow so the bar reads as floating.
 		draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))

@@ -20,16 +20,16 @@ var in_dialogue := false
 # --- Levels and attributes (spent with Mnemosynth at the Index) --------------------------------
 ## key -> [name, what a point does (per point)]. Level = 1 + points spent.
 const ATTRS := {
-	"ink": ["Inkwell", "+3 maximum ink"],
-	"grit": ["Thick Paper", "-1% damage taken"],
-	"pen": ["Penmanship", "+1.5% Quill damage, +0.4% reach"],
-	"wit": ["Wit", "+0.04 ink regen/s, -1% Lantern burn, and an extra try in Vault Trials every 8 points"],
-	"foot": ["Footwork", "+0.5% speed, -0.8% dash cooldown"],
-	"luck": ["Fortune", "+0.8% drop chances, +0.4% Mnemosynth found"],
+	"ink": ["Inkwell", "+2 maximum ink"],
+	"grit": ["Thick Paper", "-0.5% damage taken"],
+	"pen": ["Penmanship", "+1% Quill damage, +0.25% reach"],
+	"wit": ["Wit", "+0.025 ink regen/s, -0.5% Lantern burn, and an extra try in Vault Trials every 20 points"],
+	"foot": ["Footwork", "+0.3% speed, -0.5% dash cooldown"],
+	"luck": ["Fortune", "+0.5% drop chances, +0.25% Mnemosynth found"],
 }
 const ATTR_ORDER := ["ink", "grit", "pen", "wit", "foot", "luck"]
-const ATTR_CAP := 40
-const LEVEL_CAP := 100
+const ATTR_CAP := 100             # each attribute goes up to 100
+const LEVEL_CAP := 601            # 1 + six attributes at 100
 const FREE_POINTS := 15           # handed out when the Index first shows you the system
 var attrs: Dictionary = {"ink": 0, "grit": 0, "pen": 0, "wit": 0, "foot": 0, "luck": 0}
 var free_points := 0               # spend these without paying
@@ -45,8 +45,8 @@ func level() -> int:
 
 ## Mnemosynth needed for the next point; it grows with every level, like a soul cost.
 func level_cost() -> int:
-	var l := level()
-	return int(30.0 + 6.0 * l + 0.55 * l * l)
+	var p := level() - 1          # points spent so far
+	return int(20.0 + 4.0 * p + 0.08 * p * p)
 
 func spend_point(key: String) -> bool:
 	if not ATTRS.has(key) or attr(key) >= ATTR_CAP or level() >= LEVEL_CAP:
@@ -66,15 +66,15 @@ func spend_point(key: String) -> bool:
 ## What the attributes add to the stat `key` (same names equipment uses).
 func attr_stat(key: String) -> float:
 	match key:
-		"armor": return 0.01 * attr("grit")
-		"dmg": return 0.015 * attr("pen")
-		"reach": return 0.004 * attr("pen")
-		"regen": return 0.04 * attr("wit")
-		"lantern_eff": return -0.01 * attr("wit")
-		"speed": return 0.005 * attr("foot")
-		"dash_cd": return -0.008 * attr("foot")
-		"luck": return 0.008 * attr("luck")
-		"mnemo": return 0.004 * attr("luck")
+		"armor": return 0.005 * attr("grit")
+		"dmg": return 0.01 * attr("pen")
+		"reach": return 0.0025 * attr("pen")
+		"regen": return 0.025 * attr("wit")
+		"lantern_eff": return -0.005 * attr("wit")
+		"speed": return 0.003 * attr("foot")
+		"dash_cd": return -0.005 * attr("foot")
+		"luck": return 0.005 * attr("luck")
+		"mnemo": return 0.0025 * attr("luck")
 	return 0.0
 
 # --- Inventory -------------------------------------------------------------------------
@@ -121,7 +121,7 @@ func rank_next() -> int:
 
 ## Each rank widens the ink bottle a little.
 func max_ink_bonus() -> float:
-	return 10.0 * (rank() - 1) + 3.0 * attr("ink")
+	return 10.0 * (rank() - 1) + 2.0 * attr("ink")
 
 func add_renown(n: int) -> void:
 	if n > 0:

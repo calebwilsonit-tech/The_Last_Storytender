@@ -42,6 +42,13 @@ var _serve_i := 0
 var _dough_hinted := false
 
 # --- LevelBase hooks ---------------------------------------------------------------------------------
+func _dungeon_extras() -> Array:
+	return [
+		{"kind": "post", "cell": Vector2i(6, 17)},
+		{"kind": "vault", "cell": Vector2i(22, 15), "tier": 3},
+		{"kind": "post", "cell": Vector2i(38, 12)},
+	]
+
 func _map_rows() -> Array[String]:
 	return MemoryMaudMap.ROWS
 
@@ -252,10 +259,51 @@ func _on_seated(_g: Guest) -> void:
 	_hud.set_objective(Story.MAUD_OBJECTIVES[3] % _seated)
 	_hud.narrate(Story.MAUD_SEATED[mini(_seated, GUESTS) - 1], false, 3.0)
 	Telemetry.log_event("boss", {"boss": "empty_table", "what": "seated", "n": _seated})
-	if _seated >= GUESTS:
-		_finale()
+	if _seated >= GUESTS and not _reckoning:
+		_begin_reckoning()
+
+var _reckoning := false
+var _cold: ColdShoulder
+
+## Every chair is filled: the cold stops being weather and turns up as a figure you can fight.
+func _begin_reckoning() -> void:
+	_reckoning = true
+	_busy = true
+	_wave = {}
+	for c in _arena_cells:
+		_floor.marks.erase(c)
+	await get_tree().create_timer(1.2).timeout
+	await _say(Story.maud_reckoning())
+	_cold = ColdShoulder.new()
+	_cold.target = _player
+	_cold.floor_ref = _floor
+	var mid := Vector2i((_arena_min.x + _arena_max.x) / 2, (_arena_min.y + _arena_max.y) / 2 + 1)
+	_cold.position = Iso.to_screen(Vector2(mid))
+	_cold.elev = _lift_at(mid)
+	_cold.slam_hit = _on_slam
+	_actors.add_child(_cold)
+	_cold.damaged.connect(func(frac: float): _hud.set_boss("The Cold Shoulder", frac))
+	_cold.defeated.connect(_on_cold_beaten)
+	_cold.begin()
+	_wave_cd = 12.0
+	_hud.set_objective(Story.MAUD_FIGHT_OBJECTIVE)
+	Telemetry.log_event("boss", {"boss": "empty_table", "what": "reckoning"})
+	_busy = false
+
+func _on_slam(at: Vector2) -> void:
+	camera_shake(0.35, 5.0)
+	if _dist(at, _player.position) < _cold.slam_radius() * 1.0 and not _player.is_falling:
+		_player.take_damage(14.0 * GameState.enemy_dmg_mult(), true, "cold_slam")
+
+func _on_cold_beaten() -> void:
+	_hud.set_boss("", 0.0)
+	Telemetry.log_event("boss", {"boss": "empty_table", "what": "defeated"})
+	camera_shake(0.7, 9.0)
+	_finale()
 
 func _tick_boss(delta: float) -> void:
+	if _reckoning and is_instance_valid(_cold):
+		_cold.warmed = _player.lantern_on and _dist(_cold.position, _player.position) < 320.0
 	if _guests.size() < GUESTS:
 		_guest_timer -= delta
 		if _guest_timer <= 0.0:
@@ -371,6 +419,8 @@ func _sit_with_maud() -> void:
 	_leave()
 
 func _on_death_reset() -> void:
+	if is_instance_valid(_cold):
+		_cold.reset_fight()
 	_wave = {}
 	_wave_cd = 8.0
 	for c in _arena_cells:

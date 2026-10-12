@@ -6,6 +6,8 @@ extends Node2D
 
 signal fired(word: String, fx: String, origin: Vector2, dir: Vector2)
 signal pool_requested(at: Vector2)   # a patch of floor is about to be cut with red ink
+signal damaged(fraction: float)
+signal defeated
 
 const WORDS := [
 	{"w": "Derivative!", "fx": "slow"},
@@ -30,6 +32,139 @@ var _flash := 0.0
 var _home := Vector2.ZERO
 var _dissolve := -1.0    # >= 0 while dissolving into the floor
 
+# --- The Reckoning: once every memory is held up, the Critic has a body and can be fought. -------
+var reckoning := false
+var hp := 150.0
+var max_hp := 150.0
+var hit_r := 38.0
+var elev := 0.0
+var _dead := false
+var _state := ""         # "" | "fan" | "pools" | "lunge_tele" | "lunge_dash" | "rest"
+var _state_t := 0.0
+var _atk_i := 0
+var _lunge_from := Vector2.ZERO
+var _lunge_to := Vector2.ZERO
+var _lunge_hit := false
+var _since_blink := 0.0
+
+func begin_reckoning() -> void:
+	reckoning = true
+	layers = 0
+	max_hp = 150.0 * (0.7 if GameState.is_story() else 1.0)
+	hp = max_hp
+	_dead = false
+	_state = ""
+	_cd = 2.0
+	_stun = 1.2
+	_flash = 0.5
+	active = true
+	add_to_group("hittables")
+	damaged.emit(1.0)
+
+func reset_fight() -> void:
+	if reckoning and not _dead:
+		hp = max_hp
+		_state = ""
+		_cd = 2.5
+		position = _home
+		damaged.emit(1.0)
+
+## The Quill. It lands harder while the Critic is recovering from a lunge.
+func hurt(dmg: float, _dir: Vector2 = Vector2.ZERO) -> void:
+	if not reckoning or _dead:
+		return
+	var real := dmg * (1.6 if _state == "rest" else 1.0)
+	hp = maxf(hp - real, 0.0)
+	_flash = 0.2
+	_since_blink += real
+	if _since_blink >= 28.0 and hp > 0.0 and _state != "lunge_dash":
+		# Hit too often and it slips away across the forge, so you have to chase it.
+		_since_blink = 0.0
+		_state = "blink"
+		_state_t = 0.45
+		_tele = 0.0
+	damaged.emit(hp / max_hp)
+	if hp <= 0.0:
+		_dead = true
+		active = false
+		_state = ""
+		remove_from_group("hittables")
+		defeated.emit()
+
+func _fury() -> float:
+	return 0.65 if hp < max_hp * 0.5 else 1.0     # below half it hurries
+
+func _reckon_tick(delta: float) -> void:
+	if _stun > 0.0:
+		_stun -= delta
+		return
+	match _state:
+		"":
+			var goal := _home + Vector2(cos(_t * 0.6) * 110.0, sin(_t * 0.9) * 46.0)
+			position = position.lerp(goal, 1.0 - exp(-1.8 * delta))
+			_cd -= delta
+			if _cd <= 0.0:
+				_word = WORDS[randi() % WORDS.size()]
+				match _atk_i % 3:
+					0: _state = "fan"
+					1: _state = "pools"
+					2:
+						_state = "lunge_tele"
+						_lunge_from = position
+						_lunge_to = target.position
+						_lunge_hit = false
+				_atk_i += 1
+				_state_t = 0.8 * _fury() if _state != "lunge_tele" else 0.9 * _fury()
+				_tele = _state_t
+		"fan", "pools":
+			_state_t -= delta
+			_tele = _state_t
+			if _state_t <= 0.0:
+				_tele = 0.0
+				var from := position
+				var base: Vector2 = (target.position - from).normalized()
+				if _state == "fan":
+					var n := 7 if hp < max_hp * 0.5 else 5
+					for k in n:
+						fired.emit(_word["w"], _word["fx"], from, base.rotated((k - (n - 1) * 0.5) * 0.26))
+				else:
+					pool_requested.emit(target.position)
+					for k in 2:
+						pool_requested.emit(target.position + Vector2.from_angle(randf() * TAU) * randf_range(60.0, 110.0))
+				_state = ""
+				_cd = 1.5 * _fury()
+		"lunge_tele":
+			_state_t -= delta
+			_tele = _state_t
+			if _state_t <= 0.0:
+				_tele = 0.0
+				_state = "lunge_dash"
+				_state_t = 0.0
+		"lunge_dash":
+			_state_t += delta
+			var f := clampf(_state_t / 0.35, 0.0, 1.0)
+			position = _lunge_from.lerp(_lunge_to, f)
+			if not _lunge_hit and target and position.distance_to(target.position) < 42.0:
+				_lunge_hit = true
+				target.take_damage(12.0 * GameState.enemy_dmg_mult(), true, "critic_lunge")
+			if f >= 1.0:
+				_state = "rest"
+				_state_t = 1.6
+		"blink":
+			_state_t -= delta
+			if _state_t <= 0.0:
+				position = _home + Vector2.from_angle(randf() * TAU) * 150.0
+				_flash = 0.4
+				_state = ""
+				_cd = 0.5
+				_atk_i = 0
+		"rest":
+			_state_t -= delta
+			if _state_t <= 0.0:
+				_state = ""
+				_cd = 1.2 * _fury()
+
+
 func _ready() -> void:
 	_home = position
 
@@ -49,6 +184,11 @@ func _process(delta: float) -> void:
 	_flash = maxf(_flash - delta, 0.0)
 	if _dissolve >= 0.0:
 		_dissolve += delta
+		queue_redraw()
+		return
+	if reckoning:
+		if active and target and not _dead:
+			_reckon_tick(delta)
 		queue_redraw()
 		return
 	if _stun > 0.0:
@@ -158,6 +298,14 @@ func _draw() -> void:
 		var w := font.get_string_size(txt, HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz).x
 		draw_string_outline(font, Vector2(-w * 0.5, -112), txt, HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz, 8, Color(Palette.OUTLINE, 0.9))
 		draw_string(font, Vector2(-w * 0.5, -112), txt, HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz, Color("ff6a5c"))
+	# Reckoning: a line shows where the lunge will land; after it the Critic sags, open to the Quill.
+	if reckoning and _state == "lunge_tele":
+		var to_l := (_lunge_to - position)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		draw_line(Vector2(0, -lift), to_l - Vector2(0, lift), Color(1, 0.3, 0.25, 0.55), 5.0)
+		draw_circle(to_l - Vector2(0, lift), 26.0, Color(1, 0.3, 0.25, 0.25))
+	if reckoning and _state == "rest":
+		draw_circle(Vector2(0, -lift - 60.0), 56.0, Color(1, 0.9, 0.5, 0.18))
 	# Falling ink while dissolving.
 	if _dissolve >= 0.0:
 		for i in 14:

@@ -193,6 +193,15 @@ static func critic_finale() -> Array:
 		line("", "The red ink lets go. It runs down the anvil and sinks into the floor like rain into a field.", "action"),
 	]
 
+const CRITIC_FIGHT_OBJECTIVE := "Strike the Critic with the Quill. Hit its words in the air to rewrite them and send them back."
+
+static func critic_reckoning() -> Array:
+	return [
+		line("", "The red ink stops being a voice. It pulls itself together into something with edges, and the edges are pointed at you.", "action"),
+		_critic("Fine. FINE. You remembered. Do you think that makes it GOOD?"),
+		line("", "It is still the Critic, and it is still very loud. But you held up what it was built to drown out, and now it has a shape, and shapes can be struck. Raise the Quill.", "action"),
+	]
+
 static func memory_sword() -> Array:
 	return [
 		line("", "The sword is small, and plain, and a little crooked. It is warm, as if someone has only just let go of it.", "action"),
@@ -284,6 +293,15 @@ static func pip_boss_intro() -> Array:
 		line("", "Its words are enormous and they are not lying: when it says the floor will fall, the floor falls. But they are written in ink, and ink can be rewritten.", "action"),
 	]
 
+const SPOILER_FIGHT_OBJECTIVE := "The Spoiler is on the page now. Strike it with the Quill, or rewrite its sentences, to knock the last chapter out of it."
+
+static func spoiler_reckoning() -> Array:
+	return [
+		line("", "The book sinks out of the air until it hangs at the height of your eyes. Its pages are shaking. It has run out of things to say that you haven't already changed.", "action"),
+		_sp("...Fine. If you're so sure of the ending, come and take it."),
+		line("", "It is still the Spoiler, and the next spoiler is already loading. But it is made of paper now, and paper can be written on. Strike it, or strike out what it says.", "action"),
+	]
+
 static func pip_finale() -> Array:
 	return [
 		_sp("...You can't just change it."),
@@ -364,6 +382,15 @@ static func maud_boss_intro() -> Array:
 		_table("Nobody is coming."),
 		line("", "Shapes stand in the dark at the edges of the room, the outlines of people who sat here once. Warmth is an invitation. Hold your lantern up to them and they will come.", "action"),
 		line("", "Every so often the cold will sweep across the floor and clear it. Anything heavy will shelter whatever stands behind it.", "action"),
+	]
+
+const MAUD_FIGHT_OBJECTIVE := "The Cold Shoulder always turns away from you. Circle behind it and strike with the Quill. Your Lantern's warmth slows its turning."
+
+static func maud_reckoning() -> Array:
+	return [
+		line("", "Six guests, six chairs. And from the dark behind the last chair, something rises to its feet: tall, hunched, glittering, with one great shoulder turned toward the table.", "action"),
+		_table("...You came. All of you came. Then why does it feel like I'm being turned away?"),
+		line("", "It is the thing she was afraid of all along: the cold shoulder. It will always show you its side. But anything that turns away has a back, and the guests are warm, and so are you.", "action"),
 	]
 
 static func maud_finale() -> Array:

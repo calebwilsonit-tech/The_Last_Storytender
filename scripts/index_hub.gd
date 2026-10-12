@@ -45,7 +45,10 @@ func _ready() -> void:
 func is_open() -> bool:
 	return visible
 
-func open_hub() -> void:
+var _dungeon := false       # inside a memory: no fast travel from here
+
+func open_hub(in_dungeon: bool = false) -> void:
+	_dungeon = in_dungeon
 	_pocket = false
 	_enter("hub")
 
@@ -114,7 +117,7 @@ func _ids() -> Array:
 		"shop": return _shop_ids()
 	if _mode == "level":
 		return GameState.ATTR_ORDER.duplicate()
-	return ["level", "workbench", "shop", "travel", "leave"]
+	return ["level", "workbench", "shop", "leave"] if _dungeon else ["level", "workbench", "shop", "travel", "leave"]
 
 func _stock_rank(id: String) -> int:
 	for e: Array in ItemCatalog.SHOP_STOCK:
@@ -143,7 +146,7 @@ func _activate() -> void:
 			if GameState.attr(id) >= GameState.ATTR_CAP:
 				_say("That one is as strong as it gets.")
 			elif GameState.level() >= GameState.LEVEL_CAP:
-				_say("Level 100. The draft is as revised as it will ever be.")
+				_say("Every attribute is at 100. The draft is as revised as it will ever be.")
 			elif GameState.spend_point(id):
 				_say("%s rises to %d. You are now Level %d." % [GameState.ATTRS[id][0], GameState.attr(id), GameState.level()])
 				Telemetry.log_event("level_up", {"attr": id, "level": GameState.level()})
@@ -296,6 +299,8 @@ func _paint_hub() -> void:
 		["travel", "The Map", "Walk the page to any post you have lit."],
 		["leave", "Leave the Index", "The lantern will keep your place."],
 	]
+	if _dungeon:
+		rows = rows.filter(func(r): return r[0] != "travel")
 	for i in rows.size():
 		var r := Rect2(base + Vector2(0, 22 + i * 78), Vector2(PANEL.size.x - 120, 66))
 		_hit.append({"r": r, "i": i})
@@ -307,7 +312,7 @@ func _paint_hub() -> void:
 			_view.draw_circle(r.position + Vector2(-24, r.size.y * 0.5), 8.0, Palette.GOLD)
 		_txt(rows[i][1], r.position + Vector2(28, 30), 30, Palette.INK)
 		_txt(rows[i][2], r.position + Vector2(28, 56), 19, Color(Palette.INK, 0.65), _ital)
-	_view.draw_string(_font, PANEL.position + Vector2(PANEL.size.x - 330, PANEL.size.y - 22), "Level %d / %d   ·   Rank %d" % [GameState.level(), GameState.LEVEL_CAP, GameState.rank()], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 18, Color(Palette.INK, 0.5))
+	_view.draw_string(_font, PANEL.position + Vector2(PANEL.size.x - 330, PANEL.size.y - 22), "Level %d   ·   Rank %d" % [GameState.level(), GameState.rank()], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 18, Color(Palette.INK, 0.5))
 
 func _paint_level() -> void:
 	var ids := _ids()
@@ -331,7 +336,7 @@ func _paint_level() -> void:
 	var y := PANEL.position.y + 120.0
 	_txt(String(GameState.ATTRS[key][0]), Vector2(x, y + 20), 36, Palette.INK)
 	_view.draw_multiline_string(_head, Vector2(x, y + 60), "Each point: " + String(GameState.ATTRS[key][1]) + ".", HORIZONTAL_ALIGNMENT_LEFT, 440.0, 22, 4, Color(Palette.INK, 0.9))
-	_txt("Level %d / %d" % [GameState.level(), GameState.LEVEL_CAP], Vector2(x, y + 190), 40, Palette.INK)
+	_txt("Level %d" % GameState.level(), Vector2(x, y + 190), 40, Palette.INK)
 	var cost := GameState.level_cost()
 	var free := GameState.free_points > 0
 	var ok := (free or GameState.mnemosynth >= cost) and GameState.attr(key) < GameState.ATTR_CAP
@@ -345,9 +350,9 @@ func _paint_level() -> void:
 		if absf(a) > 0.0001:
 			fx[s] = a
 	if GameState.attr("ink") > 0:
-		lines.append("+%d maximum ink" % (3 * GameState.attr("ink")))
-	if GameState.attr("wit") >= 8:
-		lines.append("+%d tries in Vault Trials" % (GameState.attr("wit") / 8))
+		lines.append("+%d maximum ink" % (2 * GameState.attr("ink")))
+	if GameState.attr("wit") >= 20:
+		lines.append("+%d tries in Vault Trials" % (GameState.attr("wit") / 20))
 	var txt := ItemCatalog.fx_text(fx)
 	if txt != "":
 		lines.append(txt)

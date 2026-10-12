@@ -5,6 +5,9 @@ extends Node2D
 ## in huge words, and then the words come true, unless you rewrite them first.
 
 signal speak                  # time for the next spoiler (the level decides which)
+signal damaged(fraction: float)
+signal struck                 # the Quill landed during the Reckoning (the level cancels a pending spoiler)
+signal defeated_fight
 
 var target: Node2D
 var active := false
@@ -20,6 +23,47 @@ var _fade := 1.0
 var _defeated := false
 var _home := Vector2.ZERO
 var lift := 0.0
+
+# --- The Reckoning: once five sentences are rewritten the book comes down to eye level. ---------
+var reckoning := false
+var hp := 140.0
+var max_hp := 140.0
+var hit_r := 40.0
+var _dead := false
+var _hover := 92.0
+
+func begin_reckoning() -> void:
+	reckoning = true
+	max_hp = 140.0 * (0.7 if GameState.is_story() else 1.0)
+	hp = max_hp
+	_dead = false
+	certainty = 0
+	active = true
+	_cd = 2.5
+	_stun = 1.0
+	_flash = 0.5
+	add_to_group("hittables")
+	damaged.emit(1.0)
+
+func reset_fight() -> void:
+	if reckoning and not _dead:
+		hp = max_hp
+		_cd = 3.0
+		damaged.emit(1.0)
+
+func hurt(dmg: float, _dir: Vector2 = Vector2.ZERO) -> void:
+	if not reckoning or _dead:
+		return
+	hp = maxf(hp - dmg, 0.0)
+	_flash = 0.25
+	_stun = maxf(_stun, 0.35)
+	damaged.emit(hp / max_hp)
+	struck.emit()
+	if hp <= 0.0:
+		_dead = true
+		active = false
+		remove_from_group("hittables")
+		defeated_fight.emit()
 
 func _ready() -> void:
 	_home = position
@@ -49,12 +93,13 @@ func _process(delta: float) -> void:
 			return
 	elif active:
 		_stun = maxf(_stun - delta, 0.0)
-		var goal := _home + Vector2(cos(_t * 0.4) * 60.0, sin(_t * 0.7) * 20.0)
+		_hover = lerpf(_hover, 46.0 if reckoning else 92.0, 1.0 - exp(-2.0 * delta))
+		var goal := _home + (Vector2(cos(_t * 0.5) * 170.0, sin(_t * 0.8) * 70.0) if reckoning else Vector2(cos(_t * 0.4) * 60.0, sin(_t * 0.7) * 20.0))
 		position = position.lerp(goal, 1.0 - exp(-1.2 * delta))
 		if _stun <= 0.0:
 			_cd -= delta
 			if _cd <= 0.0:
-				_cd = interval
+				_cd = interval * (0.7 if reckoning and hp < max_hp * 0.5 else 1.0)
 				speak.emit()
 	queue_redraw()
 
@@ -81,7 +126,7 @@ func _draw() -> void:
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
 	for k in 3:
 		draw_circle(Vector2.ZERO, 70.0 - k * 16.0, Color(Palette.GLITCH, (0.10 + 0.06 * k) * fade))
-	draw_set_transform(Vector2(0, -lift - 92.0 + sin(_t * 1.4) * 6.0), 0.0, Vector2.ONE)
+	draw_set_transform(Vector2(0, -lift - _hover + sin(_t * 1.4) * 6.0), 0.0, Vector2.ONE)
 	var flap := sin(_t * 2.6)
 	# Cover (dark, ominous), then the two flapping pages.
 	var cover := PackedVector2Array([Vector2(-66, 14), Vector2(66, 14), Vector2(60, -40), Vector2(-60, -40)])

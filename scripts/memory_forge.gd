@@ -29,6 +29,13 @@ var _looked := {}
 var _room_seen := {}
 
 # --- LevelBase hooks ---------------------------------------------------------------
+func _dungeon_extras() -> Array:
+	return [
+		{"kind": "post", "cell": Vector2i(16, 11)},
+		{"kind": "vault", "cell": Vector2i(22, 10), "tier": 2},
+		{"kind": "post", "cell": Vector2i(38, 12)},
+	]
+
 func _map_rows() -> Array[String]:
 	return MemoryForgeMap.ROWS
 
@@ -134,6 +141,8 @@ func _level_ready() -> void:
 	_critic.target = _player
 	_critic.fired.connect(_on_critic_fired)
 	_critic.pool_requested.connect(_on_pool)
+	_critic.damaged.connect(func(frac: float): _hud.set_boss("The Critic", frac))
+	_critic.defeated.connect(_on_critic_defeated)
 	_hud.set_objective(Story.FORGE_OBJECTIVES[0])
 	_hud.set_region("The Blacksmith's Regret")
 	await get_tree().create_timer(2.6).timeout
@@ -192,12 +201,22 @@ func _on_critic_fired(word: String, fx: String, origin: Vector2, dir: Vector2) -
 	b.floor_ref = _floor
 	b.position = origin
 	b.vel = dir * _critic.bolt_speed()
+	if _critic.reckoning:
+		b.reflectable = true
+		b.reflect_to = _critic
 	_actors.add_child(b)
 
 func _check_bolts() -> void:
 	if _player.is_falling or _player.is_crumpled:
 		return
 	for b: WordBolt in get_tree().get_nodes_in_group("bolts"):
+		if b.friendly:
+			# A rewritten word flies home and lands on the Critic.
+			if is_instance_valid(_critic) and _dist(b.position, _critic.position) < 46.0:
+				_critic.hurt(14.0)
+				camera_shake(0.2, 3.0)
+				b.queue_free()
+			continue
 		if _dist(b.position, _player.position) > 20.0:
 			continue
 		if absf(_floor.height_at(b.position) - _floor.height_at(_player.position)) > 0.7:
@@ -233,10 +252,30 @@ func _remember(shard: Prop) -> void:
 	_hud.set_objective(Story.MEMORY_OBJECTIVE % _remembered)
 	_hud.narrate(Story.MEMORY_SHARD_NARRATION[_remembered - 1], false, 3.5)
 	if _critic.layers <= 0:
-		_finale()
+		_begin_reckoning()
 	else:
 		await get_tree().create_timer(1.6).timeout
 		_critic.active = true
+
+## Every memory is held up: the Critic loses its plates and becomes something you can hit.
+func _begin_reckoning() -> void:
+	_busy = true
+	await get_tree().create_timer(1.4).timeout
+	await _say(Story.critic_reckoning())
+	_hud.set_objective(Story.CRITIC_FIGHT_OBJECTIVE)
+	_critic.begin_reckoning()
+	Telemetry.log_event("boss", {"boss": "critic", "what": "reckoning"})
+	_busy = false
+
+func _on_critic_defeated() -> void:
+	_clear_bolts()
+	_clear_pools()
+	_slow_t = 0.0
+	_player.speed_mult = 1.0
+	_hud.set_boss("", 0.0)
+	Telemetry.log_event("boss", {"boss": "critic", "what": "defeated"})
+	camera_shake(0.7, 9.0)
+	_finale()
 
 func _finale() -> void:
 	if _finale_started:
@@ -382,6 +421,7 @@ func _look(idx: int) -> void:
 	await _say(Story.forge_look(idx))
 
 func _on_death_reset() -> void:
+	_critic.reset_fight()
 	_clear_echoes()
 	_clear_bolts()
 	_clear_pools()

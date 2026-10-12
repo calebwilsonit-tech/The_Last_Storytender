@@ -74,14 +74,7 @@ func _open_chest(chest: Prop, cell: Vector2i) -> void:
 	var reward: String = PrologueMap.CHESTS.get("%d,%d" % [cell.x, cell.y], "mnemo:20")
 	if reward.begins_with("tier:"):
 		reward = TrialPrizes.roll(int(reward.substr(5)), cell)
-	var parts := reward.split(":")
-	if parts[0] == "mnemo":
-		GameState.add_mnemosynth(int(parts[1]))
-		_hud.toast("Found %d Mnemosynth" % int(parts[1]))
-	else:
-		var n := int(parts[2]) if parts.size() > 2 else 1
-		_give_item(parts[1], n)
-		_hud.toast("Found: %s%s" % [ItemDB.info(parts[1])["name"], (" x%d" % n) if n > 1 else ""])
+	_grant_reward(reward)
 	_hud.narrate(Story.CHEST_LINES[randi() % Story.CHEST_LINES.size()], false, 4.0)
 	Telemetry.log_event("chest", {"at": "%d,%d" % [cell.x, cell.y]})
 
@@ -120,25 +113,11 @@ func _spawn_riddle_gate(cell: Vector2i) -> void:
 	if GameState.has_flag("riddle_" + id):
 		gate.open()
 
-var _trial: VaultTrial
-
 func _attempt_trial(id: String, stone: SentenceStone, cell: Vector2i, tier: int) -> void:
-	if stone.locked or (_trial != null and _trial.is_open()):
+	if stone.locked:
 		return
-	if _trial == null:
-		_trial = VaultTrial.new()
-		add_child(_trial)
-	var seed_v := cell.x * 7919 + cell.y * 104729 + tier
-	TrialGames.pad_mode = not Input.get_connected_joypads().is_empty()
-	var kind := TrialGames.pick(tier, seed_v, Input.get_connected_joypads().is_empty())
-	var g := TrialGames.make(kind, tier, seed_v + int(Time.get_ticks_msec() % 9973))
-	_trial.open(g)
-	var won: bool = await _trial.finished
-	Telemetry.log_event("trial", {"id": id, "kind": kind, "tier": tier, "won": won})
-	if won:
+	if await _run_trial(id, cell, tier):
 		_on_riddle(id, stone, stone.options.size() - 1)
-	else:
-		_hud.toast("The words slip away. Try again whenever you like.")
 
 func _on_riddle(id: String, stone: SentenceStone, idx: int) -> void:
 	if idx != stone.options.size() - 1:

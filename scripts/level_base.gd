@@ -99,6 +99,7 @@ func _ready() -> void:
 	GameState.rank_up.connect(_on_rank_up)
 	_hud.set_renown()
 	_hud.set_mnemo(GameState.mnemosynth)
+	_place_dungeon_extras()
 	_level_ready()
 
 func _build_background() -> void:
@@ -312,6 +313,9 @@ func _build_ui() -> void:
 
 # --- Frame loop -----------------------------------------------------------------------
 func _process(delta: float) -> void:
+	for rd in get_tree().get_nodes_in_group("redactors"):
+		if is_instance_valid(rd):
+			rd.near = _dist(rd.position, _player.position) < 320.0
 	_update_elevation(delta)
 	_update_sort_z()
 	_update_occlusion(delta)
@@ -576,6 +580,78 @@ func award_boss_drops(boss_id: String) -> void:
 	var drops := DropTables.roll_boss(boss_id)
 	_award_drops(drops)
 	Telemetry.log_event("boss_drops", {"boss": boss_id, "drops": drops.map(func(d): return d[0])})
+
+## Pays out a reward string: "mnemo:N", "item:id" or "item:id:N" (chests, vaults, bosses).
+func _grant_reward(reward: String) -> void:
+	var parts := reward.split(":")
+	if parts[0] == "mnemo":
+		GameState.add_mnemosynth(int(parts[1]))
+		_hud.toast("Found %d Mnemosynth" % int(parts[1]))
+	else:
+		var n := int(parts[2]) if parts.size() > 2 else 1
+		_give_item(parts[1], n)
+		_hud.toast("Found: %s%s" % [ItemDB.info(parts[1])["name"], (" x%d" % n) if n > 1 else ""])
+
+# --- Vault Trials (overworld vaults and dungeon vaults share this) ---------------------------
+var _trial: VaultTrial
+
+## Opens a word-game trial; returns true if it was won.
+func _run_trial(id: String, cell: Vector2i, tier: int) -> bool:
+	if _trial != null and _trial.is_open():
+		return false
+	if _trial == null:
+		_trial = VaultTrial.new()
+		add_child(_trial)
+	var seed_v := cell.x * 7919 + cell.y * 104729 + tier
+	TrialGames.pad_mode = not Input.get_connected_joypads().is_empty()
+	var kind := TrialGames.pick(tier, seed_v, Input.get_connected_joypads().is_empty())
+	var g := TrialGames.make(kind, tier, seed_v + int(Time.get_ticks_msec() % 9973))
+	_trial.open(g)
+	var won: bool = await _trial.finished
+	Telemetry.log_event("trial", {"id": id, "kind": kind, "tier": tier, "won": won})
+	if not won:
+		_hud.toast("The words slip away. Try again whenever you like.")
+	return won
+
+# --- Dungeon extras: every memory has a lantern post and a vault chest, like the overworld ---------
+## Override: [{"kind": "post" | "vault", "cell": Vector2i, "tier": int}]
+func _dungeon_extras() -> Array:
+	return []
+
+func _place_dungeon_extras() -> void:
+	for e: Dictionary in _dungeon_extras():
+		var cell: Vector2i = e["cell"]
+		if not _floor.cells.has(cell):
+			push_warning("dungeon extra off the map: %s" % cell)
+			continue
+		match String(e["kind"]):
+			"post": _dungeon_post(cell)
+			"vault": _dungeon_vault(cell, int(e.get("tier", 2)))
+
+func _dungeon_post(cell: Vector2i) -> void:
+	var post := _add_prop(Prop.Kind.POST, cell, false, 1)
+	_floor.blockers[cell] = true
+	_register(post, func(): return "Rest at the post", func():
+		_player.restore_ink(100.0)
+		_player.refuel(100.0)
+		GameState.save_game()
+		_hud.toast("You rest by the lantern.")
+		_index.open_hub(true), 100.0)
+
+func _dungeon_vault(cell: Vector2i, tier: int) -> void:
+	var key := "vault_%s_%d_%d" % [String(name), cell.x, cell.y]
+	var chest := _add_prop(Prop.Kind.CHEST, cell, false, 1 if GameState.has_flag(key) else 0)
+	_floor.blockers[cell] = true
+	_register(chest, func(): return "" if GameState.has_flag(key) else ("Open the locked chest  " + "★".repeat(tier)), func():
+		if GameState.has_flag(key):
+			return
+		if not await _run_trial(key, cell, tier):
+			return
+		GameState.set_flag(key)
+		GameState.add_renown(4 + 4 * tier)
+		chest.variant = 1
+		_grant_reward(TrialPrizes.roll(tier, cell))
+		_hud.narrate(Story.CHEST_LINES[randi() % Story.CHEST_LINES.size()], false, 4.0), 90.0)
 
 func _on_proofread(e: Enemy) -> void:
 	drop_crystals(e.position, 6)

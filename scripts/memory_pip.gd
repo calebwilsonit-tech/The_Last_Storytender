@@ -39,6 +39,13 @@ var _room_seen := {}
 var _darkness := 0.0
 
 # --- LevelBase hooks ------------------------------------------------------------------------
+func _dungeon_extras() -> Array:
+	return [
+		{"kind": "post", "cell": Vector2i(7, 16)},
+		{"kind": "vault", "cell": Vector2i(24, 17), "tier": 3},
+		{"kind": "post", "cell": Vector2i(37, 12)},
+	]
+
 func _map_rows() -> Array[String]:
 	return MemoryPipMap.ROWS
 
@@ -126,6 +133,9 @@ func _level_ready() -> void:
 			_room2_enemies.append(e)
 	_spoiler.target = _player
 	_spoiler.speak.connect(_on_spoiler_speak)
+	_spoiler.damaged.connect(func(frac: float): _hud.set_boss("The Spoiler", frac))
+	_spoiler.struck.connect(_on_spoiler_struck)
+	_spoiler.defeated_fight.connect(_on_spoiler_beaten)
 	_hud.set_region("The Last Page")
 	_hud.set_objective(Story.PIP_OBJECTIVES[0])
 	await get_tree().create_timer(2.4).timeout
@@ -304,6 +314,10 @@ func _spawn_spoiler_event() -> void:
 func _on_spoiler_stone(hz: Dictionary, stone: SentenceStone, idx: int) -> void:
 	if hz["phase"] != "warn" or idx != 1:
 		return
+	if _reckoning:
+		_cancel_hazard(hz)
+		_spoiler.hurt(12.0)      # a rewritten sentence lands on the book itself
+		return
 	Telemetry.log_event("boss", {"boss": "spoiler", "what": "rewritten", "n": _rewrites + 1})
 	hz["phase"] = "rewritten"
 	hz["t"] = 8.0
@@ -320,7 +334,54 @@ func _on_spoiler_stone(hz: Dictionary, stone: SentenceStone, idx: int) -> void:
 	_hud.set_objective(Story.PIP_OBJECTIVES[3] % _rewrites)
 	_hud.narrate(Story.PIP_REWRITE_NARRATION[mini(_rewrites, 5) - 1], false, 3.5)
 	if _rewrites >= 5:
-		_finale()
+		_begin_reckoning()
+
+var _reckoning := false
+
+## Rewritten (or struck out): the sentence becomes flowers instead of coming true.
+func _cancel_hazard(hz: Dictionary) -> void:
+	hz["phase"] = "rewritten"
+	hz["t"] = 8.0
+	if is_instance_valid(hz["stone"]):
+		hz["stone"].locked = true
+		hz["stone"].ttl = -1.0
+	for c in hz["cells"]:
+		_floor.marks[c] = {"kind": "flower", "t": 0.0}
+	camera_shake(0.3, 4.0)
+
+## Striking the Spoiler itself edits its schedule: the oldest sentence that has not come true yet is struck out.
+func _on_spoiler_struck() -> void:
+	for hz in _hazards:
+		if hz["phase"] == "warn":
+			_cancel_hazard(hz)
+			_hud.toast("Struck out")
+			return
+
+## Five sentences rewritten: the Spoiler comes down to eye level and can be hurt.
+func _begin_reckoning() -> void:
+	_busy = true
+	_spoiler.active = false
+	await get_tree().create_timer(1.2).timeout
+	for hz in _hazards:
+		for c in hz["cells"]:
+			_floor.cells[c] = hz["orig"].get(c, "p")
+			_floor.marks.erase(c)
+		if is_instance_valid(hz["stone"]):
+			hz["stone"].queue_free()
+	_hazards.clear()
+	await _say(Story.spoiler_reckoning())
+	_reckoning = true
+	_hud.set_objective(Story.SPOILER_FIGHT_OBJECTIVE)
+	_spoiler.interval = 6.0 if GameState.is_story() else 5.0
+	_spoiler.begin_reckoning()
+	Telemetry.log_event("boss", {"boss": "spoiler", "what": "reckoning"})
+	_busy = false
+
+func _on_spoiler_beaten() -> void:
+	_hud.set_boss("", 0.0)
+	Telemetry.log_event("boss", {"boss": "spoiler", "what": "defeated"})
+	camera_shake(0.7, 9.0)
+	_finale()
 
 func _tick_hazards(delta: float) -> void:
 	for hz in _hazards.duplicate():
@@ -449,6 +510,9 @@ func _on_death_reset() -> void:
 			if is_instance_valid(hz["stone"]):
 				hz["stone"].queue_free()
 		_hazards.clear()
+		if _reckoning:
+			_spoiler.reset_fight()
+			return
 		_rewrites = maxi(_rewrites - 1, 0)
 		_spoiler.certainty = 5 - _rewrites
 		_spoiler._cd = 3.0
