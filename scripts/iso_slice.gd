@@ -288,19 +288,14 @@ func _cliff(a: Vector2, b: Vector2, depth: float, kind: String, side: int, void_
 	if kind == "." and not void_edge:
 		var lip := PackedVector2Array([a, b, b + Vector2(0, 6), a + Vector2(0, 6)])
 		draw_colored_polygon(lip, Color(Palette.GRASS_DARK, 0.85))
-	# A dark outline on every visible edge of the wall (corners, foot and top), so cliffs stand out
-	# from the ground at every graphics setting.
-	var ink := Color("2a1b0f")
-	var ow := 3.4
+	# A thin black outline around each wall face, so a cliff that overlaps a house or a prop
+	# is easy to tell apart from it.
+	var ink := Color("0c0906")
+	var ow := 1.9
 	draw_line(a, a + Vector2(0, depth), ink, ow, true)
 	draw_line(b, b + Vector2(0, depth), ink, ow, true)
 	draw_line(a + Vector2(0, depth), b + Vector2(0, depth), ink, ow, true)
 	draw_line(a, b, ink, ow, true)
-	# round the corners so the strokes join cleanly
-	draw_circle(a, ow * 0.5, ink)
-	draw_circle(b, ow * 0.5, ink)
-	draw_circle(a + Vector2(0, depth), ow * 0.5, ink)
-	draw_circle(b + Vector2(0, depth), ow * 0.5, ink)
 	if not void_edge:
 		# a pale lip along the top so the edge of the higher ground reads clearly
 		draw_line(a + Vector2(0, 1.6), b + Vector2(0, 1.6), Color(1, 1, 0.92, 0.9), 2.6)
@@ -349,7 +344,7 @@ func _box(c: Vector2, x0: float, y0: float, x1: float, y1: float, zb: float, zt:
 	for poly in [left, right, top]:
 		var loop: PackedVector2Array = poly.duplicate()
 		loop.append(poly[0])
-		draw_polyline(loop, Color("2a1b0f", 0.85), 2.4, true)
+		draw_polyline(loop, Color("0c0906", 0.9), 1.7, true)
 
 # --- Plot holes -----------------------------------------------------------------
 func _draw_pit(cell: Vector2i, z: float) -> void:
