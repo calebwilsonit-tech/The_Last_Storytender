@@ -8,7 +8,7 @@ config_version=5
 
 config/name="The Last Storytender"
 config/description="A sentient doodle in the margins of an abandoned manuscript. The world is not ending; it is being edited."
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/title.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 
 [autoload]
@@ -17,6 +17,7 @@ InputSetup="*res://scripts/input_setup.gd"
 GameState="*res://scripts/game_state.gd"
 Transition="*res://scripts/transition.gd"
 Telemetry="*res://scripts/telemetry.gd"
+Settings="*res://scripts/settings.gd"
 
 [display]
 

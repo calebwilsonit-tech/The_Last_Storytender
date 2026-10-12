@@ -162,7 +162,7 @@ Each restored NPC blooms color outward from them (Garrick, then Pip, then Maud).
 ## 15. Difficulty & Tuning Pass (implemented v2.6)
 Why: an honest review found nothing could really threaten the player (free respawn, a dodge-only Critic, stacking armor, one-throw crowd clears, infinite lantern, no resource pressure).
 
-**Difficulty setting (binder, or press D):** *Normal* (default) and *Story* (gentler: 60% enemy damage, full ink after crumpling, no Mnemosynth loss, slower bolts, longer Spoiler windows, 8 fall damage).
+**Difficulty setting (chosen at New Game, fixed for that save):** *Normal* and *Story* (gentler: 60% enemy damage, full ink after crumpling, no Mnemosynth loss, slower bolts, longer Spoiler windows, 8 fall damage).
 **Death cost (Normal):** crumpling loses 15% of your Mnemosynth (dropped as crystals where you fell, recoverable), restores 50 ink, and wakes you at the start of the current room with 2s of grace. The room's Errors reset (but not right on top of you); boss progress is mostly kept (the Spoiler recovers one sentence; the Critic keeps your remembered shards). Falling costs 15 (Story 8) and never kills.
 **Combat:** Bare 9 hp / faster (86) / shorter windup (0.45s); Mite faster (150) and hits for 6; Errors drift back into the Plains over time.
 **Gear & items:** Hardcover -30% (was -35%), Oxford Comma +0.5s grace (was +0.8), total armor capped at 50%. Eraser Crumbs: 5 damage, smaller radius, Garrick gives 2. Lantern drains faster (24/s); crystals refuel less (12). A proofread Bare gives an Ink Vial 60% of the time (always in Story).
@@ -174,3 +174,13 @@ Why: an honest review found nothing could really threaten the player (free respa
 - Mnemosynth has nothing to spend on until the Narrator shop exists.
 - Only two enemy types; the tall shadow "Censor" (ranged) from the enemy sheet is the next addition.
 - All numbers are from reading code and automated runs. Real tuning needs the playtest log.
+
+---
+## 16. Menus & Settings (implemented v2.7)
+- **Title screen:** Continue (if a save exists), New Game, Settings, Quit. New Game confirms before erasing an existing save, then asks for **difficulty (Story / Normal), which is fixed for that save**. The game now starts here.
+- **Pause menu (Esc):** Resume, Settings, Save and return to title, Quit.
+- **Settings (title or pause):** master volume, fullscreen, screen shake, dialogue speed, playtest log on/off. Difficulty is shown read-only. Settings are stored separately from the save.
+- **Menu controls:** **WASD, arrow keys and gamepad all work** in every menu and in the binder (W/S move, A/D adjust or move sideways, Enter/E/Space accept, Esc back). Mouse works too.
+
+### Enemy awareness (how mobs notice you)
+A Bare notices you within **250 px** and a Mite within **300 px** (ground distance, vertical counts double), which is the inner half of the screen at the default zoom. Nothing off-screen chases you; they give up beyond double that range and return home. They cannot see you across different floor levels. There is currently no line of sight, vision cone or noise; this is a candidate for a stealth-flavored upgrade.

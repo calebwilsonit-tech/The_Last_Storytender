@@ -19,6 +19,7 @@ var _camera: Camera2D
 var _hud: Hud
 var _dialogue: DialogueBox
 var _inventory: InventoryScreen
+var _pause: PauseMenu
 
 var _start := Vector2.ZERO
 var _map_start := Vector2.ZERO     # the map's own start cell, ignoring return-spawn overrides
@@ -237,6 +238,8 @@ func _build_ui() -> void:
 	add_child(_dialogue)
 	_inventory = InventoryScreen.new()
 	add_child(_inventory)
+	_pause = PauseMenu.new()
+	add_child(_pause)
 	_inventory.use_requested.connect(use_item)
 	GameState.inventory_changed.connect(_on_inventory_changed)
 	_on_inventory_changed()
@@ -266,6 +269,8 @@ func _update_elevation(delta: float) -> void:
 	_camera.offset = off
 
 func camera_shake(duration: float = 0.4, mag: float = 6.0) -> void:
+	if not Settings.screen_shake:
+		return
 	_shake = duration
 	_shake_mag = mag
 
@@ -430,6 +435,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("debug_reset"):
 		GameState.reset_all()
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
+		return
+	if event.is_action_pressed("ui_cancel") and not GameState.in_dialogue and not _inventory.is_open() and not _pause.is_open():
+		_pause.open()
 		return
 	if event.is_action_pressed("inventory") and not _busy and not GameState.in_dialogue and not _player.is_falling:
 		_inventory.open()

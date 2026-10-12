@@ -130,7 +130,7 @@ func _show_line(l: Dictionary) -> void:
 		if i % 2 == 0 and plain[i - 1] != " ":
 			_audio.pitch_scale = randf_range(0.9, 1.15)
 			_audio.play()
-		await get_tree().create_timer(1.0 / CPS).timeout
+		await get_tree().create_timer(1.0 / Settings.dialogue_cps()).timeout
 	_text.visible_characters = -1
 	_typing = false
 	_waiting = true

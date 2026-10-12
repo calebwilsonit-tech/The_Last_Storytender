@@ -99,11 +99,12 @@ func spoiler_window_bonus() -> float:
 func fall_damage() -> float:
 	return 8.0 if is_story() else 15.0
 
-func toggle_difficulty() -> void:
-	difficulty = "normal" if is_story() else "story"
-	inventory_changed.emit()
+## Begin a fresh save with the chosen difficulty (fixed for that save).
+func new_game(diff: String) -> void:
+	reset_all()
+	difficulty = diff
 	save_game()
-	Telemetry.log_event("difficulty", {"to": difficulty})
+	Telemetry.log_event("new_game", {"difficulty": diff})
 
 # --- Items ---------------------------------------------------------------------------------
 func count(id: String) -> int:

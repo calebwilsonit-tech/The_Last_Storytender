@@ -4,7 +4,7 @@
 Design doc: [docs/GDD.md](docs/GDD.md)
 
 ## Run
-Open this folder in Godot 4.3+ (Project Manager → Import → `project.godot`) and press F5.
+Open this folder in Godot 4.3+ (Project Manager → Import → `project.godot`) and press F5. The game starts at the title screen; New Game asks for a difficulty, which is fixed for that save.
 
 ## Current build: Phase 2 + the first Story Realm
 Walk the **Prologue Plains**, climb the stairs into **Thistledown** (a Redacted ghost town on a raised page),
@@ -12,7 +12,7 @@ and meet the placeholder blacksmith. Touch the **frozen flame** in his forge to 
 Blacksmith's Regret**. Hold up three memories to the Lantern to quiet **The Critic** (his own inner voice,
 made of red ink), take the **First Sword**, and bring it back to restore the town.
 
-Controls: **WASD** move · **E / Space / Enter** speak, take, advance dialogue · **Click / J** Quill (after Garrick's lesson) · **Shift** dash · **Hold Q / right mouse** Lantern · **Tab / I** binder · **F** quick-use item · **D** (in the binder) difficulty · **F10** save the playtest report · **F1** test damage, **F2** heal, **F12** wipe save.
+Controls: **WASD** move · **E / Space / Enter** speak, take, advance dialogue · **Click / J** Quill (after Garrick's lesson) · **Shift** dash · **Hold Q / right mouse** Lantern · **Tab / I** binder · **F** quick-use item · **Esc** pause / settings · **F10** save the playtest report · **F1** test damage, **F2** heal, **F12** wipe save.
 
 What's in:
 - Isometric 2:1 world with **elevation**: height levels, stairs, solid cliff edges, stacked-paper page edges, depth-sorted so tall terraces hide what's behind them. Maps are text (`data/*.gd`).
