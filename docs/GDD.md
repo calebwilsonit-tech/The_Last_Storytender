@@ -301,3 +301,11 @@ Enemies now stay near their post: idle wandering drifts back toward home beyond 
 - Memories and dungeons stay small; the chapter itself is the thing that is large and rewards exploration.
 - Fast travel only exists where it earns its place (long distances), and gets more useful as chapters grow.
 - **Technical prerequisite before building Chapter One:** the ground is currently redrawn from per-cell commands, which will not hold at 4x. Chapter maps need chunked ground (cache each chunk as a texture or mesh and only repaint chunks that change, such as restoration waves), props and enemies streamed by distance, region data per chunk, and the map generator extended to produce multi-region chapters. Treat that engine work as the first task of Chapter One.
+
+### Length and pacing: "this goes on absurdly long" (design intent)
+The game should be a decent sized game, and at points it should feel *absurdly* long, in the way a few stretches of Undertale feel like they keep going. That is deliberate, not a pacing bug:
+- Each chapter gets a few **marathon set pieces**: very long routes, sprawling regions or chained puzzle sequences where the player starts to wonder how much is left. Make the length itself part of the joke or the mood (a corridor that keeps going, a stairwell nobody finished writing, a chapter that clearly could have ended three scenes ago).
+- Make the length **earn its keep**: escalating gags, new small ideas every few minutes, sincere beats tucked in, and no repeating the same trick. Never pad.
+- Give relief inside the long parts: lantern posts to rest at, safe pockets, and the occasional shortcut that rewards exploration.
+- Keep the **memories and dungeons short**; the long stretches belong to the chapters themselves, which scale at 4x the Prologue or more.
+- Track it in playtest reports: record time per region and flag any stretch where players quit or stall, so "long on purpose" never turns into "long and dull".
