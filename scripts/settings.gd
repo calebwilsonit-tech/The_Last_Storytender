@@ -29,6 +29,7 @@ const GFX := [
 	{"id": "sway", "label": "Tree sway", "opts": ["Off", "On"], "cost": "Animates every tree on screen", "impact": 2},
 	{"id": "shadows", "label": "Shadows", "opts": ["Off", "On"], "cost": "Blob shadows under objects", "impact": 1},
 	{"id": "glow", "label": "Glow effects", "opts": ["Off", "On"], "cost": "Halos around the Lantern, crystals and posts", "impact": 1},
+	{"id": "see_through", "label": "See-through when behind things", "opts": ["Off", "On"], "cost": "Fades cliffs and trees that hide you", "impact": 0},
 	{"id": "vignette", "label": "Screen edge shading", "opts": ["Off", "On"], "cost": "Darkens the corners of the page", "impact": 1},
 	{"id": "smooth", "label": "Smooth line edges", "opts": ["Off", "On"], "cost": "Anti-aliasing on hand-drawn outlines", "impact": 2},
 	{"id": "fps", "label": "Frame rate limit", "opts": ["30", "60", "120", "Unlimited"], "cost": "Lower uses less power and heat", "impact": 1},
@@ -37,9 +38,9 @@ const GFX := [
 ]
 const PRESET_NAMES := ["Low", "Balanced", "High", "Custom"]
 const PRESETS := {
-	0: {"density": 0, "paper": 1, "paper_detail": 0, "grass": 0, "outlines": 0, "strata": 0, "refresh": 0, "distance": 0, "sway": 0, "shadows": 0, "glow": 0, "vignette": 0, "smooth": 0, "fps": 1, "vsync": 1, "show_fps": 0},
-	1: {"density": 0, "paper": 2, "paper_detail": 1, "grass": 1, "outlines": 1, "strata": 1, "refresh": 1, "distance": 1, "sway": 0, "shadows": 1, "glow": 1, "vignette": 1, "smooth": 0, "fps": 1, "vsync": 1, "show_fps": 0},
-	2: {"density": 1, "paper": 3, "paper_detail": 2, "grass": 1, "outlines": 1, "strata": 1, "refresh": 2, "distance": 2, "sway": 1, "shadows": 1, "glow": 1, "vignette": 1, "smooth": 1, "fps": 1, "vsync": 1, "show_fps": 0},
+	0: {"density": 0, "paper": 1, "paper_detail": 0, "grass": 0, "outlines": 0, "strata": 0, "refresh": 0, "distance": 0, "sway": 0, "shadows": 0, "glow": 0, "see_through": 1, "vignette": 0, "smooth": 0, "fps": 1, "vsync": 1, "show_fps": 0},
+	1: {"density": 0, "paper": 2, "paper_detail": 1, "grass": 1, "outlines": 1, "strata": 1, "refresh": 1, "distance": 1, "sway": 0, "shadows": 1, "glow": 1, "see_through": 1, "vignette": 1, "smooth": 0, "fps": 1, "vsync": 1, "show_fps": 0},
+	2: {"density": 1, "paper": 3, "paper_detail": 2, "grass": 1, "outlines": 1, "strata": 1, "refresh": 2, "distance": 2, "sway": 1, "shadows": 1, "glow": 1, "see_through": 1, "vignette": 1, "smooth": 1, "fps": 1, "vsync": 1, "show_fps": 0},
 }
 var preset := -1                 # 0 Low, 1 Balanced, 2 High, 3 Custom, -1 = pick for this computer on first run
 var gfx: Dictionary = {}         # option id -> index

@@ -5,6 +5,7 @@ extends Node2D
 
 const GROUND := 1
 const EDGE := 2
+const FADE := 3        # draws only the cells that are currently hiding the player, see-through
 
 var floor_ref: IsoFloor
 var cells: Array[Vector2i] = []
@@ -39,6 +40,9 @@ func _draw() -> void:
 		if absf(gp.x - f.x) > half.x or absf(gp.y - f.y) > half.y:
 			continue
 		var solid_top := not floor_ref.stairs.has(cell) and kind != "#"
+		var faded := floor_ref.fade_cells.has(cell)
+		if (mode == EDGE and faded) or (mode == FADE and not faded):
+			continue
 		if mode == GROUND:
 			if solid_top and not floor_ref.back_lower(cell):
 				_draw_tile(cell, kind, z)

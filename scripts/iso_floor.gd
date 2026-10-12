@@ -109,6 +109,7 @@ func build(parent: Node2D) -> void:
 	#    shadow of anything standing near it (which flickered as you crossed a tile edge);
 	#  - the EDGE node sits just behind actors on this row and paints what can really hide them:
 	#    cliff faces, stairs, plot holes, and the tops of ground that is higher than what lies behind.
+	_by_s = by_s
 	for s: int in by_s.keys():
 		var diag_y: float = (s - 0.5) * Iso.TILE_H * 0.5
 		for m in [IsoSlice.GROUND, IsoSlice.EDGE]:
@@ -126,6 +127,9 @@ func build(parent: Node2D) -> void:
 			sl.z_index = (3 * s) if m == IsoSlice.EDGE else (-2000 + s)
 			parent.add_child(sl)
 			_slices.append(sl)
+			if m == IsoSlice.EDGE:
+				_edge_nodes[s] = sl
+				_edge_parent = parent
 
 ## True when the ground behind this cell (toward -x or -y) is lower: the cell's own far-side
 ## wall faces away from the camera, and the cell hides whatever stands below it.
@@ -140,6 +144,12 @@ func back_lower(cell: Vector2i) -> bool:
 ## moved a little, a mark is animating, a restoration wave is spreading, or a quarter of a
 ## second has passed. Diagonal rows far above or below the camera are switched off entirely.
 var dirty := false
+var fade_cells: Dictionary = {}          # cells currently hiding the player (drawn see-through)
+var _edge_nodes: Dictionary = {}         # diagonal sum -> its EDGE slice
+var _fade_nodes: Dictionary = {}         # diagonal sum -> its FADE slice (made on demand)
+var _by_s: Dictionary = {}
+var _edge_parent: Node2D
+const FADE_ALPHA := 0.4
 var _drawn_focus := Vector2(1e9, 1e9)
 var _idle := 0.0
 var _had_marks := false
@@ -164,3 +174,46 @@ func _process(delta: float) -> void:
 			sl.queue_redraw()
 		elif sl.visible:
 			sl.visible = false
+
+## Cells that are in front of the player and taller than where they stand are drawn see-through,
+## so the player is never lost behind a cliff. Pass an empty list to turn it off.
+func set_fade(list: Array) -> void:
+	var now := {}
+	for c in list:
+		now[c] = true
+	if now.size() == fade_cells.size():
+		var same := true
+		for c in now.keys():
+			if not fade_cells.has(c):
+				same = false
+				break
+		if same:
+			return
+	var touched := {}
+	for c in fade_cells.keys():
+		touched[c.x + c.y] = true
+	for c in now.keys():
+		touched[c.x + c.y] = true
+	fade_cells = now
+	for s in touched.keys():
+		if _edge_nodes.has(s):
+			_edge_nodes[s].queue_redraw()
+		var want := false
+		for c in now.keys():
+			if c.x + c.y == s:
+				want = true
+				break
+		if want and not _fade_nodes.has(s) and _edge_parent != null and _by_s.has(s):
+			var fn := IsoSlice.new()
+			fn.floor_ref = self
+			fn.mode = IsoSlice.FADE
+			fn.cells.assign(_by_s[s])
+			fn.diag_y = (s - 0.5) * Iso.TILE_H * 0.5
+			fn.position = Vector2(0.0, fn.diag_y)
+			fn.z_index = 3 * s
+			fn.modulate.a = FADE_ALPHA
+			_edge_parent.add_child(fn)
+			_fade_nodes[s] = fn
+		if _fade_nodes.has(s):
+			_fade_nodes[s].visible = want
+			_fade_nodes[s].queue_redraw()

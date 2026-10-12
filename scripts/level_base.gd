@@ -305,6 +305,7 @@ func _build_ui() -> void:
 func _process(delta: float) -> void:
 	_update_elevation(delta)
 	_update_sort_z()
+	_update_occlusion(delta)
 	_floor.focus = _camera.get_screen_center_position()
 	var size := get_viewport_rect().size
 	var view := size / _camera.zoom
@@ -341,6 +342,39 @@ func _update_sort_z() -> void:
 		elif node is PressurePlate or node is EchoPlate or node is PasteGhost:
 			flat = true
 		node.z_index = 3 * (s + extra) + (0 if flat else 1)
+
+## Things that stand between the camera and the player fade out, so you can always see yourself:
+## raised ground and stairs in front of you, and trees, houses and other tall props.
+func _update_occlusion(delta: float) -> void:
+	var on := Settings.gfx_on("see_through") and _player and is_instance_valid(_player) and not _player.preview
+	var pc := _floor.cell_at(_player.position)
+	var list: Array = []
+	if on:
+		var pl := _floor.level(pc)
+		for dx in range(0, 4):
+			for dy in range(0, 4):
+				if dx == 0 and dy == 0:
+					continue
+				var c := pc + Vector2i(dx, dy)
+				if _floor.cells.has(c) and (_floor.level(c) > pl or (_floor.stairs.has(c) and _floor.level(c) + 1 > pl)):
+					if _floor.level(c) > pl:
+						list.append(c)
+	_floor.set_fade(list)
+	# tall props in front of the player
+	var pp := _player.position
+	for n in _actors.get_children():
+		if not (n is Prop):
+			continue
+		var pr := n as Prop
+		var want := 1.0
+		if on and pr.kind in [Prop.Kind.TREE, Prop.Kind.HOUSE, Prop.Kind.FORGE, Prop.Kind.OVEN, Prop.Kind.GATE, Prop.Kind.POST, Prop.Kind.SIGN]:
+			var tall := 110.0 if pr.kind == Prop.Kind.TREE else (150.0 if pr.kind in [Prop.Kind.HOUSE, Prop.Kind.FORGE] else 70.0)
+			var half_w := 46.0 if pr.kind == Prop.Kind.TREE else (96.0 if pr.kind in [Prop.Kind.HOUSE, Prop.Kind.FORGE] else 30.0)
+			var d := pr.position - pp
+			if d.y > 6.0 and d.y < tall and absf(d.x) < half_w:
+				want = 0.4
+		if absf(pr.modulate.a - want) > 0.01:
+			pr.modulate.a = move_toward(pr.modulate.a, want, delta * 6.0)
 
 func _update_elevation(delta: float) -> void:
 	var target := _floor.height_at(_player.position) * Iso.LEVEL_H
