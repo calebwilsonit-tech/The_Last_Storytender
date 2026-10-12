@@ -184,3 +184,32 @@ Why: an honest review found nothing could really threaten the player (free respa
 
 ### Enemy awareness (how mobs notice you)
 A Bare notices you within **250 px** and a Mite within **300 px** (ground distance, vertical counts double), which is the inner half of the screen at the default zoom. Nothing off-screen chases you; they give up beyond double that range and return home. They cannot see you across different floor levels. There is currently no line of sight, vision cone or noise; this is a candidate for a stealth-flavored upgrade.
+
+---
+## 17. Puzzle Design Language: the Editor's Toolkit (proposed v2.8)
+The game is about *editing a story*, so puzzles should use the tools of an editor on the world itself. **Each town unlocks one new "proofreader's mark" for the Quill**, so every town has a fresh puzzle verb and the 1-2 hour length stays varied.
+
+| Town | Mark (verb) | What it does | Status |
+|---|---|---|---|
+| Thistledown (Pip) | **Rewrite** | Swap a word in a sentence | Built |
+| Thistledown (Maud) | **Format** (Underline / Bold / Italic) | Text styling acts as physics (below) | Proposed |
+| Plot-Twist Peaks | **Fold / Reorder** | Dog-ear a page corner, shuffle chapters | Proposed |
+| Purple Prose Swamp | **Strike** | Delete words (adjectives, "not", whole sentences) | Proposed |
+| The Final Chapter | **All marks, at once** | Combined | Proposed |
+
+### Out-of-the-box puzzle ideas (pick and mix)
+1. **Letter-level proofreading.** Objects are labeled with typos. Change one letter and the object changes: HOLE -> WHOLE (a pit fills in), STARE -> STAIR (stairs appear), BARE -> BEAR (already in the game). A starter-area secret.
+2. **Typography is physics (Maud's memory).** Underline a word-block and it extends into a walkable line (a bridge). Bold makes it heavy enough to press a pressure plate or crack thin floor. Italic makes it lean and slide. Solve rooms by styling the text the room is made of.
+3. **Strike-through negation.** "The door is NOT open": strike NOT. Deleting can be the answer, not just swapping.
+4. **The page is a physical object.** Dog-ear a corner of the world to fold a far ledge onto a near one; the page edge's stacked-paper cliffs are literally the fold. (Peaks.)
+5. **Footnotes as portals.** Superscript numbers (^1) on the ground teleport you to the page's footer, a strip of world where the explanation (and the key) is written. (Garrick's extended memory or Peaks.)
+6. **The unreliable Narrator.** The Narrator's text tells you which path is safe, and one of his lines is a lie. Cross-check with a sentence stone or the Lantern to find which. (Uses the existing narration UI as a puzzle.)
+7. **A puzzle you solve by waiting (Maud).** Dough cannot be rushed. Rewriting "rises SLOWLY" to "QUICKLY" burns it. The emotionally right answer is patience: a puzzle whose solution is to do nothing and stay.
+8. **Lorem-ipsum cipher.** A Redacted sentence with only some letters revealed by the Lantern; deduce the missing words (Wordle-like) to rewrite the right one.
+9. **Undo / Revision history.** Hold a button to rewind objects 3 seconds (burnt bread un-burns, a falling block rises again): the Eraser Crumbs' cousin, an "Undo". Pair with a saved "draft" of a room.
+10. **Index / card-catalog sorting.** Recipe cards arrive out of order; file them in the right order to open a drawer (alphabetical, or "order of operations").
+
+### Proposed assignment
+- **Maud's memory ("The Empty Table"):** the *Format* mark (idea 2), one *waiting* puzzle (7), one *unreliable Narrator* puzzle (6), and the boss is her fear that nobody is left to feed.
+- **Garrick's memory (extension to 3-4 rooms):** *strike-through negation* (3) and a *footnote portal* room (5).
+- **Starter-area secrets:** letter-level proofreading (1) hidden in the Plains.
