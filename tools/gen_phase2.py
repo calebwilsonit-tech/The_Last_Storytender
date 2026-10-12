@@ -64,7 +64,9 @@ def site_flat(cx, cy, rad, lv):
             return False
     return True
 
-def too_close_to_site(x, y, gap=10):
+_gap = [10]
+def too_close_to_site(x, y, gap=None):
+    gap = gap or _gap[0]
     """Sites need room: plates, stones and stairs of one must never land in another's footprint."""
     for sd in SITES.values():
         sx, sy = sd["chest"]
@@ -284,6 +286,7 @@ new_site("p_words_margin", place(14, 14, 5, 1, lambda x, y: tpl_words(x, y, 2, 1
 new_site("p_echo_margin", place(8, 26, 5, 1, lambda x, y: tpl_echo(x, y, 2, 1)))
 new_site("p_crumble_smudge", place(104, 84, 6, 0, lambda x, y: tpl_crumble(x, y, 3, 0)))
 new_site("p_arena_smudge", place(120, 88, 5, 0, lambda x, y: tpl_arena(x, y, 3, 0, ['x', 'l'])))
+_gap[0] = 7
 new_site("p_words_smudge", place(110, 94, 5, 0, lambda x, y: tpl_words(x, y, 3, 0)))
 for k in [k for k, v in SITES.items() if v is None]:
     del SITES[k]
