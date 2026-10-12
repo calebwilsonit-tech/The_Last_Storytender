@@ -73,7 +73,7 @@ func paper_scale() -> float:
 	return [0.0, 0.25, 0.4, 0.5][clampi(g("paper"), 0, 3)]
 
 func cull_half() -> Vector2:
-	return [Vector2(440.0, 270.0), Vector2(500.0, 330.0), Vector2(620.0, 420.0)][clampi(g("distance"), 0, 2)]
+	return [Vector2(480.0, 300.0), Vector2(540.0, 360.0), Vector2(660.0, 450.0)][clampi(g("distance"), 0, 2)]
 
 func ground_move_threshold() -> float:
 	return [110.0, 56.0, 28.0][clampi(g("refresh"), 0, 2)]

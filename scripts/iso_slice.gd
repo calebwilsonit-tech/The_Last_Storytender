@@ -70,17 +70,19 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 			draw_circle(q, 1.6, Color("ffb347", 0.95))
 		return
 	if kind == ".":
-		draw_colored_polygon(d, Color(Palette.GRASS, 0.34 if checker else 0.26))
+		# Opaque cut-paper green: saturated, so the ground reads clearly against the page.
+		draw_colored_polygon(d, Color("8cbc5e") if checker else Color("80b256"))
 	else:
-		# Town: bare page, then warm cobbles as the ink flows back.
-		if r > 0.0:
-			draw_colored_polygon(d, Color(Palette.COBBLE, (0.30 if checker else 0.20) * r))
-		elif checker:
-			draw_colored_polygon(d, Color(1, 1, 1, 0.07))
+		# Town: a bare pale page that turns into warm cobbles as the ink flows back.
+		var bare := Color("efe5cb") if checker else Color("e7dcc0")
+		var cobble := Color("d8ab6c") if checker else Color("cd9f60")
+		draw_colored_polygon(d, bare.lerp(cobble, r))
+	_draw_height_cues(cell, d, z)
 	if Settings.gfx_on("outlines"):
 		var loop := d.duplicate()
 		loop.append(d[0])
-		draw_polyline(loop, Color(line_col, 0.20 + 0.10 * (1.0 - r)), 1.2, false)
+		var edge_col := Color("3f6a30", 0.6) if kind == "." else Color(line_col, 0.35 + 0.25 * r)
+		draw_polyline(loop, edge_col, 1.6, false)
 	if not Settings.gfx_on("grass"):
 		return
 	var c := _p(Vector2(cell), z)
@@ -88,6 +90,27 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 		_draw_grass(cell, c)
 	elif r > 0.4:
 		_draw_flowers(cell, c, r)
+
+## Height cues that stay on at every graphics setting: higher ground is a touch lighter, and the
+## ground at the foot of a cliff is shaded, so levels read at a glance.
+func _draw_height_cues(cell: Vector2i, d: PackedVector2Array, z: float) -> void:
+	if z > 0.0:
+		draw_colored_polygon(d, Color(1, 0.97, 0.78, minf(0.13 * z, 0.38)))
+	for side in 2:
+		var n := cell + (Vector2i(0, -1) if side == 0 else Vector2i(-1, 0))
+		if not floor_ref.cells.has(n) or floor_ref.stairs.has(n):
+			continue
+		var drop := float(floor_ref.level(n)) - z
+		if drop <= 0.0:
+			continue
+		var a: Vector2 = d[0]
+		var b: Vector2 = d[1] if side == 0 else d[3]
+		var inward: Vector2 = (d[3] - d[0]) if side == 0 else (d[1] - d[0])
+		# two soft bands: a dark contact shadow hugging the cliff, then a lighter, wider falloff
+		var wide := PackedVector2Array([a, b, b + inward * 0.6, a + inward * 0.6])
+		draw_colored_polygon(wide, Color(0.08, 0.06, 0.03, minf(0.14 + 0.05 * drop, 0.28)))
+		var near := PackedVector2Array([a, b, b + inward * 0.28, a + inward * 0.28])
+		draw_colored_polygon(near, Color(0.05, 0.04, 0.02, minf(0.28 + 0.08 * drop, 0.50)))
 
 # The Cutting Room: a green self-healing cutting mat with white grid lines and ruler ticks.
 func _draw_mat(cell: Vector2i, d: PackedVector2Array, checker: bool) -> void:
@@ -199,7 +222,7 @@ func _draw_grass(cell: Vector2i, c: Vector2) -> void:
 		var p := c + o
 		var lean := (_h(cell.x, cell.y, i + 9) - 0.5) * 4.0
 		segs.append_array([p, p + Vector2(lean - 2.0, -6.0), p, p + Vector2(lean + 2.0, -5.0), p, p + Vector2(lean, -8.0)])
-	draw_multiline(segs, Palette.GRASS_DARK, 1.5)   # one draw call for all nine blades
+	draw_multiline(segs, Color("4d8038"), 1.7)   # one draw call for all nine blades
 
 func _draw_flowers(cell: Vector2i, c: Vector2, r: float) -> void:
 	if _h(cell.x, cell.y, 20) > 0.18:
@@ -247,6 +270,11 @@ func _cliff(a: Vector2, b: Vector2, depth: float, kind: String, side: int, void_
 	if kind == "," and not void_edge:
 		base = Palette.ghostify(base, r).lerp(Palette.PAPER_LIGHT, (1.0 - r) * 0.55)
 	draw_colored_polygon(q, base)
+	# shade the face from light at the top to dark at the foot, so height reads even when flat-lit
+	var q_mid := PackedVector2Array([a + Vector2(0, depth * 0.45), b + Vector2(0, depth * 0.45), b + Vector2(0, depth), a + Vector2(0, depth)])
+	draw_colored_polygon(q_mid, Color(0.1, 0.06, 0.02, 0.30))
+	var q_low := PackedVector2Array([a + Vector2(0, depth * 0.78), b + Vector2(0, depth * 0.78), b + Vector2(0, depth), a + Vector2(0, depth)])
+	draw_colored_polygon(q_low, Color(0.1, 0.06, 0.02, 0.32))
 	var edge := Palette.INK_BROWN if (void_edge or r > 0.5) else Palette.PENCIL
 	# Strata: horizontal page-edge / soil lines.
 	var strata := PackedVector2Array()
@@ -260,10 +288,14 @@ func _cliff(a: Vector2, b: Vector2, depth: float, kind: String, side: int, void_
 	if kind == "." and not void_edge:
 		var lip := PackedVector2Array([a, b, b + Vector2(0, 6), a + Vector2(0, 6)])
 		draw_colored_polygon(lip, Color(Palette.GRASS_DARK, 0.85))
-	draw_line(a, a + Vector2(0, depth), edge, 2.0, true)
-	draw_line(b, b + Vector2(0, depth), edge, 2.0, true)
-	draw_line(a + Vector2(0, depth), b + Vector2(0, depth), edge, 2.0, true)
-	draw_line(a, b, edge, 2.0, true)
+	var ink := Palette.INK_BROWN if not void_edge else edge
+	draw_line(a, a + Vector2(0, depth), ink, 2.4, true)
+	draw_line(b, b + Vector2(0, depth), ink, 2.4, true)
+	draw_line(a + Vector2(0, depth), b + Vector2(0, depth), ink, 2.4, true)
+	draw_line(a, b, ink, 2.4, true)
+	if not void_edge:
+		# a pale lip along the top so the edge of the higher ground reads clearly
+		draw_line(a + Vector2(0, 1.6), b + Vector2(0, 1.6), Color(1, 1, 0.92, 0.9), 2.6)
 
 # --- Stairs ---------------------------------------------------------------------
 func _draw_stairs(cell: Vector2i, kind: String) -> void:

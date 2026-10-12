@@ -15,7 +15,7 @@ var _paper: ColorRect
 var _paper_vp: SubViewport
 var _paper_view: TextureRect
 var _paper_flat: ColorRect
-var _paper_vignette := 0.45
+var _paper_vignette := 0.2
 var _floor: IsoFloor
 var _actors: Node2D
 var _player: Player
@@ -115,7 +115,7 @@ func _build_background() -> void:
 		mat.set_shader_parameter(k, _paper_params()[k])
 	_paper.material = mat
 	_paper_vp.add_child(_paper)
-	_paper_vignette = float(_paper_params().get("vignette", 0.45))
+	_paper_vignette = float(_paper_params().get("vignette", 0.2))
 	# "Flat color" paper: no shader at all, just the average paper tone.
 	_paper_flat = ColorRect.new()
 	_paper_flat.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -261,6 +261,8 @@ func _build_player() -> void:
 	_camera.position_smoothing_enabled = true
 	_camera.position_smoothing_speed = 6.0
 	_player.add_child(_camera)
+	_camera.reset_smoothing()          # start on the player, not gliding in from the page origin
+	_floor.focus = _start
 	_player.floor_ref = _floor
 	_player.hit_landed.connect(func(): camera_shake(0.12, 2.5))
 	_player.fell.connect(_on_player_fell)

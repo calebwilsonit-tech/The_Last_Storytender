@@ -5,11 +5,11 @@ shader_type canvas_item;
 
 uniform vec2 scroll = vec2(0.0);          // camera position in pixels
 uniform vec2 screen_size = vec2(1280.0, 720.0);
-uniform vec4 paper_light : source_color = vec4(0.91, 0.84, 0.68, 1.0);
-uniform vec4 paper_dark : source_color = vec4(0.72, 0.60, 0.40, 1.0);
+uniform vec4 paper_light : source_color = vec4(0.94, 0.89, 0.74, 1.0);
+uniform vec4 paper_dark : source_color = vec4(0.88, 0.80, 0.62, 1.0);
 uniform vec4 script_color : source_color = vec4(0.35, 0.25, 0.15, 1.0);
 uniform float script_strength : hint_range(0.0, 1.0) = 0.12;
-uniform float vignette : hint_range(0.0, 1.0) = 0.45;
+uniform float vignette : hint_range(0.0, 1.0) = 0.2;
 // Driven by the Coherence system in Phase 3. 0 = stable, 1 = fully glitched.
 uniform float glitch : hint_range(0.0, 1.0) = 0.0;
 // Graphics settings: 0 = grain only, 1 = + fibers, 2 = + handwriting lines.
@@ -52,7 +52,7 @@ void fragment() {
 	}
 
 	float grain = fbm(px / 90.0);
-	vec3 col = mix(paper_dark.rgb, paper_light.rgb, smoothstep(0.25, 0.75, grain));
+	vec3 col = mix(paper_dark.rgb, paper_light.rgb, smoothstep(0.32, 0.68, grain));
 	if (detail >= 1.0) {
 		float fine = noise(px / 2.0);
 		col *= 0.94 + 0.06 * fine;
