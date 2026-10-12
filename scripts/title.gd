@@ -14,6 +14,7 @@ var _t := 0.0
 var _doll: Player
 
 func _ready() -> void:
+	Music.play("title")
 	get_tree().paused = false
 	GameState.in_dialogue = false
 	var bg := CanvasLayer.new()

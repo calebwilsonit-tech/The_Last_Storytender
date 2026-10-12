@@ -50,6 +50,7 @@ var _dungeon := false       # inside a memory: no fast travel from here
 func open_hub(in_dungeon: bool = false) -> void:
 	_dungeon = in_dungeon
 	_pocket = false
+	Music.push("index")
 	_enter("hub")
 
 func open_craft() -> void:
@@ -73,6 +74,8 @@ func _enter(mode: String) -> void:
 	_view.queue_redraw()
 
 func close() -> void:
+	if visible and not _pocket:
+		Music.pop()
 	visible = false
 	get_tree().paused = false
 	closed.emit()

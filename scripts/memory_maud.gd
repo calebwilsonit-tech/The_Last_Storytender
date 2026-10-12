@@ -42,6 +42,9 @@ var _serve_i := 0
 var _dough_hinted := false
 
 # --- LevelBase hooks ---------------------------------------------------------------------------------
+func _music_slot() -> String:
+	return "memory_maud"
+
 func _dungeon_extras() -> Array:
 	return [
 		{"kind": "post", "cell": Vector2i(6, 17)},
@@ -228,6 +231,7 @@ func _on_dough_burned(_b: TextBlock) -> void:
 func _start_boss() -> void:
 	_boss_started = true
 	_busy = true
+	Music.play("boss_empty_table")
 	await cinematic([{"at": _table.position, "zoom": ZOOM * 1.15, "pan": 1.8, "hold": 0.5, "lines": Story.maud_boss_intro()}])
 	_hud.set_objective(Story.MAUD_OBJECTIVES[3] % 0)
 	Telemetry.log_event("boss", {"boss": "empty_table", "what": "start"})
@@ -287,6 +291,7 @@ func _begin_reckoning() -> void:
 	_cold.damaged.connect(func(frac: float): _hud.set_boss("The Cold Shoulder", frac))
 	_cold.defeated.connect(_on_cold_beaten)
 	_cold.begin()
+	Music.play("boss_cold_shoulder", "boss_empty_table")
 	_wave_cd = 12.0
 	_hud.set_objective(Story.MAUD_FIGHT_OBJECTIVE)
 	Telemetry.log_event("boss", {"boss": "empty_table", "what": "reckoning"})
@@ -299,6 +304,7 @@ func _on_slam(at: Vector2) -> void:
 
 func _on_cold_beaten() -> void:
 	_hud.set_boss("", 0.0)
+	Music.play("victory", "memory_maud", 0.8)
 	Telemetry.log_event("boss", {"boss": "empty_table", "what": "defeated"})
 	camera_shake(0.7, 9.0)
 	_finale()

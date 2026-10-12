@@ -39,6 +39,9 @@ var _room_seen := {}
 var _darkness := 0.0
 
 # --- LevelBase hooks ------------------------------------------------------------------------
+func _music_slot() -> String:
+	return "memory_pip"
+
 func _dungeon_extras() -> Array:
 	return [
 		{"kind": "post", "cell": Vector2i(7, 16)},
@@ -240,6 +243,7 @@ func _use_door() -> void:
 func _start_boss() -> void:
 	_boss_started = true
 	_busy = true
+	Music.play("boss_spoiler")
 	await cinematic([{"at": _spoiler.position, "zoom": ZOOM * 1.2, "pan": 1.6, "hold": 0.5, "lines": Story.pip_boss_intro()}])
 	_spoiler.interval = 8.0 if GameState.is_story() else 6.5
 	_spoiler.active = true
@@ -376,11 +380,13 @@ func _begin_reckoning() -> void:
 	_hud.set_objective(Story.SPOILER_FIGHT_OBJECTIVE)
 	_spoiler.interval = 6.0 if GameState.is_story() else 5.0
 	_spoiler.begin_reckoning()
+	Music.play("boss_spoiler_reckoning", "boss_spoiler")
 	Telemetry.log_event("boss", {"boss": "spoiler", "what": "reckoning"})
 	_busy = false
 
 func _on_spoiler_beaten() -> void:
 	_hud.set_boss("", 0.0)
+	Music.play("victory", "memory_pip", 0.8)
 	Telemetry.log_event("boss", {"boss": "spoiler", "what": "defeated"})
 	camera_shake(0.7, 9.0)
 	_finale()

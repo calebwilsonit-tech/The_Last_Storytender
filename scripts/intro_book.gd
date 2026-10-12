@@ -26,6 +26,7 @@ var _going := false
 var _blot := 0.0
 
 func _ready() -> void:
+	Music.play("storybook")
 	_font = ThemeDB.get_default_theme().default_font
 	_ital = load("res://assets/fonts/IMFellEnglish-Italic.ttf")
 	_head = load("res://assets/fonts/IMFellEnglish-Regular.ttf")

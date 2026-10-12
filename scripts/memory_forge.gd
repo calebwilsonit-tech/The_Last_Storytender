@@ -29,6 +29,9 @@ var _looked := {}
 var _room_seen := {}
 
 # --- LevelBase hooks ---------------------------------------------------------------
+func _music_slot() -> String:
+	return "memory_forge"
+
 func _dungeon_extras() -> Array:
 	return [
 		{"kind": "post", "cell": Vector2i(16, 11)},
@@ -196,6 +199,7 @@ func _level_process(delta: float) -> void:
 func _start_boss() -> void:
 	_boss_started = true
 	_busy = true
+	Music.play("boss_critic")
 	await cinematic([{"at": _critic.position, "zoom": ZOOM * 1.25, "pan": 1.5, "hold": 0.5, "lines": Story.boss_intro()}])
 	_critic.active = true
 	_busy = false
@@ -270,6 +274,7 @@ func _begin_reckoning() -> void:
 	await cinematic([{"at": _critic.position, "zoom": ZOOM * 1.35, "pan": 0.9, "hold": 0.6, "lines": Story.critic_reckoning()}])
 	_hud.set_objective(Story.CRITIC_FIGHT_OBJECTIVE)
 	_critic.begin_reckoning()
+	Music.play("boss_critic_reckoning", "boss_critic")
 	Telemetry.log_event("boss", {"boss": "critic", "what": "reckoning"})
 	_busy = false
 
@@ -279,6 +284,7 @@ func _on_critic_defeated() -> void:
 	_slow_t = 0.0
 	_player.speed_mult = 1.0
 	_hud.set_boss("", 0.0)
+	Music.play("victory", "memory_forge", 0.8)
 	Telemetry.log_event("boss", {"boss": "critic", "what": "defeated"})
 	camera_shake(0.7, 9.0)
 	_finale()

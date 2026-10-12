@@ -9,7 +9,7 @@ var _row := 0
 var _font: Font
 var _ital: Font
 var _bar_rects: Array[Rect2] = []
-var _rows := ["volume", "fullscreen", "graphics", "shake", "dialogue", "tips", "log", "controls", "difficulty", "back"]
+var _rows := ["volume", "music", "fullscreen", "graphics", "shake", "dialogue", "tips", "log", "controls", "difficulty", "back"]
 var _controls: ControlsPanel
 var _graphics: GraphicsPanel
 
@@ -41,7 +41,7 @@ func close() -> void:
 
 func _row_y(i: int) -> float:
 	var extra := 22.0 if _rows[i] == "back" else 0.0   # a little air before Back
-	return PANEL.position.y + 124.0 + i * 42.0 + extra
+	return PANEL.position.y + 124.0 + i * 38.0 + extra
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible or _controls.visible or _graphics.visible:
@@ -66,6 +66,10 @@ func _adjust(dir: int) -> void:
 	match _rows[_row]:
 		"volume":
 			Settings.master_volume = clampf(Settings.master_volume + dir * 0.1, 0.0, 1.0)
+			Settings.apply()
+		"music":
+			Settings.music_volume = clampf(Settings.music_volume + dir * 0.1, 0.0, 1.0)
+			Settings.apply()
 		"fullscreen":
 			Settings.fullscreen = not Settings.fullscreen
 		"shake":
@@ -90,7 +94,7 @@ func _activate() -> void:
 			Settings.apply()
 		"graphics":
 			_graphics.open()
-		"volume", "difficulty":
+		"volume", "music", "difficulty":
 			pass
 		_:
 			_adjust(1)
@@ -107,9 +111,13 @@ func _gui_input(event: InputEvent) -> void:
 		for i in _rows.size():
 			if absf(event.position.y - (_row_y(i) - 10.0)) < 26.0 and event.position.x > PANEL.position.x and event.position.x < PANEL.end.x:
 				_row = i
-				if _rows[i] == "volume":
+				if _rows[i] == "volume" or _rows[i] == "music":
 					var bar := Rect2(740, _row_y(i) - 18.0, 160, 22)
-					Settings.master_volume = clampf((event.position.x - bar.position.x) / bar.size.x, 0.0, 1.0)
+					var v := clampf((event.position.x - bar.position.x) / bar.size.x, 0.0, 1.0)
+					if _rows[i] == "volume":
+						Settings.master_volume = v
+					else:
+						Settings.music_volume = v
 					Settings.apply()
 				else:
 					_activate()
@@ -148,6 +156,7 @@ func _draw_row(i: int) -> void:
 	var label := ""
 	match id:
 		"volume": label = "Master volume"
+		"music": label = "Music volume"
 		"fullscreen": label = "Fullscreen"
 		"shake": label = "Screen shake"
 		"dialogue": label = "Dialogue speed"
@@ -160,12 +169,13 @@ func _draw_row(i: int) -> void:
 	draw_string(_font, Vector2(x0 + 12.0, y), label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 24, Palette.INK)
 	var vx := 740.0
 	match id:
-		"volume":
+		"volume", "music":
+			var vol: float = Settings.master_volume if id == "volume" else Settings.music_volume
 			var bar := Rect2(vx, y - 18.0, 160, 22)
 			draw_rect(bar, Color(0, 0, 0, 0.15))
-			draw_rect(Rect2(bar.position, Vector2(bar.size.x * Settings.master_volume, bar.size.y)), Palette.CYAN_DEEP)
+			draw_rect(Rect2(bar.position, Vector2(bar.size.x * vol, bar.size.y)), Palette.CYAN_DEEP)
 			draw_rect(bar, Palette.INK, false, 2.0)
-			draw_string(_font, Vector2(vx + 170.0, y), "%d%%" % int(round(Settings.master_volume * 100.0)), HORIZONTAL_ALIGNMENT_LEFT, -1.0, 20, Palette.INK)
+			draw_string(_font, Vector2(vx + 170.0, y), "%d%%" % int(round(vol * 100.0)), HORIZONTAL_ALIGNMENT_LEFT, -1.0, 20, Palette.INK)
 		"fullscreen":
 			_pill(vx, y, _toggle_text(Settings.fullscreen), Settings.fullscreen)
 		"shake":

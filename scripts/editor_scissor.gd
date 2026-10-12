@@ -69,6 +69,9 @@ func _spawn_char(ch: String, cell: Vector2i, _consumed: Dictionary) -> bool:
 			return false
 	return true
 
+func _music_slot() -> String:
+	return "editor_scissor"
+
 func _level_ready() -> void:
 	for cell: Vector2i in _floor.cells.keys():
 		if _floor.cells[cell] == "c":
@@ -197,6 +200,7 @@ func _tick_cuts(delta: float) -> void:
 func _start_fight() -> void:
 	_started = true
 	_busy = true
+	Music.play("boss_scissor")
 	await cinematic([{"at": _scissor.position, "zoom": ZOOM * 1.2, "pan": 1.6, "hold": 0.5, "lines": Story.scissor_boss_intro()}])
 	await _hud.tutorial("paste")
 	_hud.set_boss("The Scissor-Man", 1.0)

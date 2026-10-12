@@ -57,6 +57,10 @@ func _spawn_char(_ch: String, _cell: Vector2i, _consumed: Dictionary) -> bool:
 func _level_ready() -> void:
 	pass
 
+## Which music slot plays in this level (see assets/music/README.md).
+func _music_slot() -> String:
+	return "overworld"
+
 func _level_process(_delta: float) -> void:
 	pass
 
@@ -100,6 +104,7 @@ func _ready() -> void:
 	_hud.set_renown()
 	_hud.set_mnemo(GameState.mnemosynth)
 	_place_dungeon_extras()
+	Music.play(_music_slot())
 	_level_ready()
 
 func _build_background() -> void:

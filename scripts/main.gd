@@ -419,6 +419,7 @@ func _update_region() -> void:
 			_hud.narrate(Story.SILENCE_WHISPER, true, 5.0)
 	else:
 		_hud.set_region(PrologueMap.REGIONS.get(r, "The Prologue Plains"))
+	Music.play("region_" + r, "overworld")
 	if r != " " and not GameState.region_seen(r):
 		GameState.set_flag("seen_" + r)
 		if r not in ["m", "s", "o"]:

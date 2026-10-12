@@ -6,6 +6,7 @@ const PATH := "user://settings.json"
 signal quality_changed
 
 var master_volume := 0.8
+var music_volume := 0.7
 var fullscreen := false
 var screen_shake := true
 var dialogue_speed := 1          # 0 slow, 1 normal, 2 fast
@@ -115,6 +116,9 @@ func apply() -> void:
 	if preset < 0:
 		set_preset_silent(_detect_preset())
 	AudioServer.set_bus_volume_db(0, linear_to_db(maxf(master_volume, 0.0001)))
+	var mus := get_node_or_null("/root/Music")
+	if mus:
+		mus.apply_volume()
 	if DisplayServer.get_name() != "headless":
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if fullscreen else DisplayServer.WINDOW_MODE_WINDOWED)
 		var w := get_window()
@@ -163,7 +167,7 @@ func save_settings() -> void:
 	var f := FileAccess.open(PATH, FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify({
-			"master_volume": master_volume, "fullscreen": fullscreen, "screen_shake": screen_shake,
+			"master_volume": master_volume, "music_volume": music_volume, "fullscreen": fullscreen, "screen_shake": screen_shake,
 			"dialogue_speed": dialogue_speed, "playtest_log": playtest_log,
 			"tutorial_tips": tutorial_tips, "preset": preset, "gfx": gfx, "bindings": bindings,
 		}))
@@ -175,6 +179,7 @@ func load_settings() -> void:
 	if typeof(data) != TYPE_DICTIONARY:
 		return
 	master_volume = float(data.get("master_volume", master_volume))
+	music_volume = float(data.get("music_volume", music_volume))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
 	screen_shake = bool(data.get("screen_shake", screen_shake))
 	dialogue_speed = int(data.get("dialogue_speed", dialogue_speed))
