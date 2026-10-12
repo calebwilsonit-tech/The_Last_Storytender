@@ -415,3 +415,11 @@ Design law from playtesting: the village is the hub, not the whole prologue. Gar
 - **Two side dungeons**, entered by portals: the **Weighing Room** (needs the Echo; reward Hourglass of Drafts) and the **Proof Room** (needs the quill; reward Censor's Monocle).
 - **Respawn:** dying outside a dungeon returns you to the last lantern post you rested at; loading a save places you beside the nearest post. Quick items: two slots with a swap button.
 - **Look:** chests, gates, spine walls and sentence stones use the weathered storybook look (see `docs/ART_BIBLE.md`).
+
+## 36. Chapter 1 dungeon design brief (planned, from playtesting)
+Dungeons from Chapter 1 onward are built from **multiple literal rooms**, not one flow of mini-games:
+- **Collect-to-open structure.** A dungeon asks you to gather several things (for example X, Y and Z, in any sensible order) from different rooms, and only then does the way to room A open. Rooms are connected, revisitable and readable as a place.
+- **Real puzzles, not mini-games.** Each room is a "get from point A to point B" problem solved with the skills the player has *at that point in the story* (Echo, Lantern/rewrite, Format, clipboard, stealth, and anything learned since). Difficulty rises across the dungeon and across chapters.
+- **Skills define the puzzle.** Design each room around a combination of known skills. Do not add a one-off minigame to a room that a skill combination could solve.
+- **Mini-games stay rare** (the 2-in-10 rule from the prologue overworld) and are never required to progress a dungeon.
+- **Scope check before building:** list the skills available at that chapter, the items to collect, and the gate each one opens. Add a reachability test for every room, as the prologue generators do.
