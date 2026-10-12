@@ -5,7 +5,18 @@ extends LevelBase
 
 const OVERWORLD := "res://scenes/main.tscn"
 const ARENA_X := 42
-const ROOM_GATES := [["g", ["a"]], ["h", ["b", "c"]], ["i", ["d"]]]
+## Echo gates: gate char -> the plates that hold it open.
+const ROOM_GATES := [["g", ["a"]], ["h", ["b", "c"]], ["i", ["d"]], ["l", ["e"]], ["n", ["j"]]]
+## Gate geometry: axis along the wall and how many cells it spans.
+const GATE_SPEC := {"g": [Vector2(0, 1), 3.0], "h": [Vector2(1, 0), 3.0], "i": [Vector2(1, 0), 3.0],
+	"l": [Vector2(0, 1), 3.0], "n": [Vector2(0, 1), 3.0], "D": [Vector2(0, 1), 5.0]}
+const TOKENS := {"T": "hammer", "U": "tongs", "V": "bellows"}
+const R_START := 0
+const R_HUB := 1
+const R_LOFT := 2
+const R_BENCH := 3
+const R_WATCH := 4
+const R_FORGE := 5
 
 var _critic: Critic
 var _shards: Array[Prop] = []
@@ -25,6 +36,8 @@ var _gate_open_seen := {}
 var _guard_spawns: Array[Vector2i] = []
 var _looked := {}
 var _room_seen := {}
+var _tokens := {}                      # kind -> true once carried
+var _door: StoryGate
 
 # --- LevelBase hooks ---------------------------------------------------------------
 func _music_slot() -> String:
@@ -32,15 +45,17 @@ func _music_slot() -> String:
 
 func _dungeon_extras() -> Array:
 	return [
-		{"kind": "post", "cell": Vector2i(16, 11)},
-		{"kind": "vault", "cell": Vector2i(7, 12), "tier": 1},
-		{"kind": "vault", "cell": Vector2i(22, 10), "tier": 2},
-		{"kind": "vault", "cell": Vector2i(33, 10), "tier": 3},
-		{"kind": "post", "cell": Vector2i(38, 12)},
-		{"kind": "mob", "cell": Vector2i(19, 11), "mob": Enemy.Kind.BARE},
-		{"kind": "mob", "cell": Vector2i(25, 13), "mob": Enemy.Kind.BARE},
-		{"kind": "mob", "cell": Vector2i(31, 12), "mob": Enemy.Kind.MITE},
-		{"kind": "mob", "cell": Vector2i(36, 10), "mob": Enemy.Kind.BARE},
+		{"kind": "post", "cell": Vector2i(18, 9)},
+		{"kind": "post", "cell": Vector2i(36, 11)},
+		{"kind": "vault", "cell": Vector2i(4, 9), "tier": 1},
+		{"kind": "vault", "cell": Vector2i(21, 1), "tier": 2},
+		{"kind": "vault", "cell": Vector2i(37, 15), "tier": 3},
+		{"kind": "mob", "cell": Vector2i(24, 10), "mob": Enemy.Kind.BARE},
+		{"kind": "mob", "cell": Vector2i(33, 12), "mob": Enemy.Kind.BARE},
+		{"kind": "mob", "cell": Vector2i(26, 3), "mob": Enemy.Kind.MITE},
+		{"kind": "mob", "cell": Vector2i(34, 3), "mob": Enemy.Kind.MITE},
+		{"kind": "mob", "cell": Vector2i(12, 25), "mob": Enemy.Kind.BARE},
+		{"kind": "mob", "cell": Vector2i(36, 15), "mob": Enemy.Kind.MITE},
 	]
 
 func _map_rows() -> Array[String]:
@@ -65,7 +80,7 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 			_floor.cells[cell] = "m"
 			_start = Iso.to_screen(Vector2(cell))
 			_map_start = _start
-		"a", "b", "c", "d":
+		"a", "b", "c", "d", "e", "j":
 			_floor.cells[cell] = "m"
 			var plate := EchoPlate.new()
 			plate.floor_ref = _floor
@@ -73,15 +88,30 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 			plate.elev = _lift_at(cell)
 			_actors.add_child(plate)
 			_plate_nodes[ch] = plate
-		"g", "h", "i":
+		"g", "h", "i", "l", "n", "D":
 			_floor.cells[cell] = "m"
 			var gate := StoryGate.new()
-			gate.axis = Vector2(0, 1)
-			gate.length = 3.0
-			gate.label = "FORGOTTEN"
+			gate.axis = GATE_SPEC[ch][0]
+			gate.length = GATE_SPEC[ch][1]
+			gate.label = "FORGOTTEN" if ch != "D" else "FORGOTTEN 0/3"
 			gate.position = Iso.to_screen(Vector2(cell))
 			_actors.add_child(gate)
-			_gate_nodes[ch] = gate
+			if ch == "D":
+				_door = gate
+			else:
+				_gate_nodes[ch] = gate
+		"T", "U", "V":
+			_floor.cells[cell] = "m"
+			var key := DungeonKey.new()
+			key.kind = TOKENS[ch]
+			key.position = Iso.to_screen(Vector2(cell))
+			key.elev = _lift_at(cell)
+			_actors.add_child(key)
+			_register(key, func(): return "Take the " + String(key.kind), func(): _take_token(key), 80.0)
+		"R":
+			_floor.cells[cell] = "m"
+			var bar := _add_redactor(cell, Vector2(1, 0), 3.0, "the tongs")
+			bar.revealed.connect(func(): _hud.narrate("The black bar lifts. Underneath, in a master's hand: 'Check the bench.'", false, 4.0))
 		"f", "y", "z":
 			_floor.cells[cell] = "m"
 			var idx := "fyz".find(ch)
@@ -164,20 +194,22 @@ func _level_ready() -> void:
 	_busy = false
 
 func _room_for(cell: Vector2i) -> int:
-	if cell.x <= 13:
-		return 0
-	if cell.x <= 27:
-		return 1
-	if cell.x <= 41:
-		return 2
-	return 3
+	if cell.x >= ARENA_X:
+		return R_FORGE
+	if cell.x <= 16:
+		return R_START
+	if cell.y <= 5:
+		return R_LOFT
+	if cell.y >= 16:
+		return R_BENCH if cell.x <= 23 else R_WATCH
+	return R_HUB
 
 func _level_process(delta: float) -> void:
 	var room := _room_for(_floor.cell_at(_player.position))
 	if not _room_seen.has(room):
 		_room_seen[room] = true
-		if room > 0 and room < 3:
-			_hud.set_objective(Story.FORGE_OBJECTIVES[room])
+		if room > R_START and room < R_FORGE:
+			_hud.set_objective(Story.FORGE_OBJECTIVES[room] if not _all_tokens() else Story.FORGE_DOOR_OPEN)
 	_tick_gates()
 	# Stepping into the forge hall wakes The Critic.
 	if not _boss_started and _floor.cell_at(_player.position).x >= ARENA_X and not GameState.in_dialogue:
@@ -361,14 +393,37 @@ func _clear_pools() -> void:
 	_pools.clear()
 
 func _room_name(cell: Vector2i) -> String:
-	return ["The Cold Hearth", "The Apprentice's Bench", "The Night Watch", "The Forge"][_room_for(cell)]
+	return ["The Cold Hearth", "The Long Hall", "The Bellows Loft", "The Apprentice's Bench", "The Night Watch", "The Forge"][_room_for(cell)]
 
 func _checkpoint_for(cell: Vector2i) -> Vector2:
 	match _room_for(cell):
-		0: return _map_start
-		1: return Iso.to_screen(Vector2(14, 11))
-		2: return Iso.to_screen(Vector2(28, 11))
-		_: return Iso.to_screen(Vector2(ARENA_X, 12))
+		R_START: return _map_start
+		R_FORGE: return Iso.to_screen(Vector2(ARENA_X, 11))
+		R_LOFT: return Iso.to_screen(Vector2(28, 6))
+		R_BENCH: return Iso.to_screen(Vector2(20, 16))
+		R_WATCH: return Iso.to_screen(Vector2(32, 16))
+		_: return Iso.to_screen(Vector2(19, 10))
+
+# --- Tokens and the forge door ----------------------------------------------------------
+func _all_tokens() -> bool:
+	return _tokens.size() >= TOKENS.size()
+
+func _take_token(key: DungeonKey) -> void:
+	_tokens[key.kind] = true
+	Telemetry.log_event("puzzle", {"p": "forge_token_" + key.kind})
+	create_tween().tween_property(key, "modulate:a", 0.0, 0.4)
+	get_tree().create_timer(0.45).timeout.connect(key.queue_free)
+	_hud.toast("Found: Garrick's %s (%d/3)" % [key.kind, _tokens.size()])
+	if is_instance_valid(_door):
+		_door.label = "FORGOTTEN %d/3" % _tokens.size()
+		_door.queue_redraw()
+	if _all_tokens():
+		_door.open()
+		_hud.set_objective(Story.FORGE_DOOR_OPEN)
+		_hud.narrate(Story.FORGE_DOOR_NARRATION, false, 5.0)
+		Telemetry.log_event("puzzle", {"p": "forge_door"})
+	else:
+		_hud.narrate(Story.FORGE_TOKEN_NARRATION[_tokens.size() - 1], false, 4.0)
 
 func _tick_gates() -> void:
 	for pair in ROOM_GATES:

@@ -126,8 +126,16 @@ const MEMORY_SWORD_NARRATION := "The memory lets go of you gently, the way a han
 const MEMORY_OBJECTIVE := "Hold up the memories: %d / 3"
 const FORGE_OBJECTIVES: Array[String] = [
 	"The gate is cold and shut. Leave a memory of yourself standing on the plate ({echo}).",
-	"Two plates, one of you. Remember twice.",
+	"Three of his tools are scattered through the forge: the Bellows Loft, the Apprentice's Bench, the Night Watch. Bring them back to the door.",
+	"One plate, one gate, then another. A memory can hold a door while you are somewhere else.",
+	"Two plates, one of you. Remember twice. The tongs are under a black bar: read it with the Lantern.",
 	"The watch is awake. Give it something to look at.",
+]
+const FORGE_DOOR_OPEN := "The forge door is open. Whatever is in there has been waiting a long time."
+const FORGE_DOOR_NARRATION := "All three tools are home. The door remembers what it was for."
+const FORGE_TOKEN_NARRATION: Array[String] = [
+	"One tool back. The bench is a little less empty.",
+	"Two. Somewhere a room full of dust is starting to hum.",
 ]
 const FORGE_GATE_OPEN := "Someone is still standing there, in the past, holding the door."
 
