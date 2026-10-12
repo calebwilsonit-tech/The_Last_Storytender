@@ -26,9 +26,12 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
+	# WASD are screen directions. The 2:1 isometric plane is squashed
+	# vertically, so halve the vertical speed to keep motion visually even.
 	var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var target := Vector2(dir.x, dir.y * 0.5) * speed
 	if dir != Vector2.ZERO:
-		velocity = velocity.move_toward(dir * speed, accel * delta)
+		velocity = velocity.move_toward(target, accel * delta)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 	move_and_slide()
@@ -53,7 +56,7 @@ func take_damage(amount: float) -> void:
 	for i in int(amount / 3.0) + 2:
 		var a := randf() * TAU
 		_splats.append({
-			"pos": Vector2.from_angle(a) * randf_range(8.0, 34.0),
+			"pos": Vector2.from_angle(a) * randf_range(8.0, 34.0) * Vector2(1, 0.5),
 			"radius": randf_range(2.0, 6.0),
 			"age": 0.0,
 		})
@@ -74,8 +77,13 @@ func _draw() -> void:
 		var fade: float = 1.0 - float(s.age) / 6.0
 		draw_circle(s.pos, s.radius, Color(inkc, 0.8 * fade))
 	if is_crumpled:
+		draw_set_transform(Vector2(0, -8), 0.0, Vector2.ONE)
 		_draw_crumpled(inkc)
 		return
+	# Contact shadow on the page, then the body lifted so feet sit at origin.
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1, 0.5))
+	draw_circle(Vector2.ZERO, 15.0, Color(0, 0, 0, 0.22))
+	draw_set_transform(Vector2(0, -20), 0.0, Vector2.ONE)
 	# Hand-drawn doodle: wobbly outline, two eyes, a little flame-tail.
 	var pts := PackedVector2Array()
 	var n := 28

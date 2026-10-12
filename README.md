@@ -7,6 +7,7 @@ Design doc: [docs/GDD.md](docs/GDD.md)
 Open this folder in Godot 4.3+ (Project Manager → Import → `project.godot`) and press F5.
 
 ## Phase 1 sandbox (current)
+- **Isometric** 2:1 view: ruled-paper diamond floor, book-stack blocks, void pits ("plot holes"), Y-sorted depth (`scripts/iso*.gd`).
 - WASD / arrows: move the Storytender
 - SPACE: take ink damage (splatters; at 0 ink the doodle crumples)
 - H: restore ink

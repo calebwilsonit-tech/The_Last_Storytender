@@ -2,7 +2,7 @@
 **Version 2.0 (Lore & Narrative Expansion)** — Central theme: *"The world is not ending; it is being edited."*
 
 ## 1. Executive Summary
-- **Genre:** 2.5D Narrative Survival / Action-Adventure
+- **Genre:** 2.5D Isometric Narrative Survival / Action-Adventure
 - **Platform:** PC (Godot 4.x)
 - **Visual style:** "Living Parchment." Ground textured like old paper, water like flowing ink, glitches like digital artifacts tearing through a physical book.
 - **Pitch:** You are a sentient doodle in the margins of an abandoned manuscript. An entity known as "The Silence" is erasing the world to return it to a blank page. Enter the memories of characters and remind them who they are before they are deleted forever.
@@ -14,7 +14,7 @@
 - **The Silence (antagonist):** avatar of the Blank Page. Whispers promises of "rest" if characters let go of their stories.
 
 ## 3. Gameplay Mechanics
-- **View/controls:** Top-down 2D with parallax depth; 8-directional WASD. Damage bleeds ink; too much damage = crumpled paper.
+- **View/controls:** **Isometric** (2:1 diamond projection, Y-sorted depth) with parallax; 8-directional WASD mapped to screen directions. Damage bleeds ink; too much damage = crumpled paper.
 - **Paper Doll system:** Layer 0 The Sketch (base) · Layer 2 Bindings (Hardcover = high defense, Softcover = high agility) · Layer 4 Tools: **The Lantern** (burns Mnemosynth; light = "Narrative Importance"; things in the dark cease to exist) and **The Quill** (locally rewrites reality).
 - **Coherence (stability meter):** low Coherence → BGM distorts/plays backwards; UI text scrambles ("Inventory" → "Ivneoryt"); at 10% the player hears knocking from their actual left/right speakers.
 
