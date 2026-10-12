@@ -212,7 +212,7 @@ static func forge_sword_start() -> Array:
 
 static func memory_sword() -> Array:
 	return [
-		line("", "The sword in your hand is still small, and still a little crooked, and you have never been so sure of a thing.", "action"),
+		line("", "The sword is small, and plain, and a little crooked. It is warm, as if someone has only just let go of it.", "action"),
 		line("", "Far above the frozen flame, an old man is holding a hammer and does not know why. You know why now.", "action"),
 	]
 

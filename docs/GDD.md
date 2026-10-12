@@ -377,8 +377,8 @@ A small cinematic system (`LevelBase.cinematic`) plays at the moments that deser
 ## 30. The opening hours, in order (current flow)
 1. New Game: choose Story or Normal, then the storybook (what a Storytender is, the Editors, the Redaction, page 41) and the doodle waking up on the page.
 2. Walk the Prologue. Lantern posts light up and open the Index (workbench, stall, levelling, map). The first Index visit hands you 15 free attribute points.
-3. Garrick's ghost sends you into his memory. **The First Sword lies in the first room**, because you need something to fight with before the Critic, and the memory cannot hold you hostage to a weapon you only get at the end. The sword counts as your weapon until Garrick forges the Quill; you carry it out to him at the end of the memory.
-4. **The Errors roam the overworld from the very start.** You begin with a **pencil stub** (about half the damage and reach of the real thing), so the first fights are small and careful; Garrick's First Sword (found at the start of his memory) and then the Quill are the real weapons. Beating Errors drops materials and gear (section 24), gives Renown, and they return when you rest at a post.
+3. Garrick's ghost sends you into his memory. You fight the Critic's Reckoning with the pencil stub (struck words fly back for 18 damage, so parrying matters most). The First Sword waits on the anvil when the Critic falls: a real melee upgrade (full damage and reach) that you carry out to Garrick.
+4. **The Errors roam the overworld from the very start.** You begin with a **pencil stub** (about half the damage and reach of the real thing), so the first fights are small and careful; Garrick's First Sword (the reward at the end of his memory) and then the Quill are the real weapons. Beating Errors drops materials and gear (section 24), gives Renown, and they return when you rest at a post.
 5. Vault trials, hidden caches behind Redaction bars (hold and aim the Lantern at the bar), dungeon vault chests and boss Reckonings feed the Level and crafting loop; the Margin Gate asks for 220 Renown.
 
 ## 31. Design decisions log (things we agreed on, in one place)

@@ -34,8 +34,8 @@ var _dissolve := -1.0    # >= 0 while dissolving into the floor
 
 # --- The Reckoning: once every memory is held up, the Critic has a body and can be fought. -------
 var reckoning := false
-var hp := 150.0
-var max_hp := 150.0
+var hp := 110.0
+var max_hp := 110.0
 var hit_r := 38.0
 var elev := 0.0
 var _dead := false
@@ -50,7 +50,7 @@ var _since_blink := 0.0
 func begin_reckoning() -> void:
 	reckoning = true
 	layers = 0
-	max_hp = 150.0 * (0.7 if GameState.is_story() else 1.0)
+	max_hp = 110.0 * (0.7 if GameState.is_story() else 1.0)
 	hp = max_hp
 	_dead = false
 	_state = ""

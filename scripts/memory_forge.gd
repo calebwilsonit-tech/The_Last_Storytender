@@ -151,12 +151,6 @@ func _level_ready() -> void:
 	_critic.defeated.connect(_on_critic_defeated)
 	_hud.set_objective(Story.FORGE_OBJECTIVES[0])
 	_hud.set_region("The Blacksmith's Regret")
-	if not GameState.has_flag("has_sword") and not GameState.has_flag("has_quill"):
-		# Garrick's crooked First Sword waits in the first room, so you can fight what is ahead.
-		_sword = _add_prop(Prop.Kind.SWORD, Vector2i(11, 12))
-		_sword.lift = 18.0
-		_register(_sword, func(): return "Take the First Sword", _take_start_sword, 90.0)
-		_hud.set_objective(Story.FORGE_SWORD_OBJECTIVE)
 	await get_tree().create_timer(2.6).timeout
 	_hud.narrate(Story.MEMORY_INTRO, false, 4.0)
 	await get_tree().create_timer(3.5).timeout
@@ -225,7 +219,7 @@ func _check_bolts() -> void:
 		if b.friendly:
 			# A rewritten word flies home and lands on the Critic.
 			if is_instance_valid(_critic) and _dist(b.position, _critic.position) < 46.0:
-				_critic.hurt(14.0)
+				_critic.hurt(18.0)
 				camera_shake(0.2, 3.0)
 				b.queue_free()
 			continue
@@ -299,31 +293,25 @@ func _finale() -> void:
 	await get_tree().create_timer(2.6).timeout
 	_critic.queue_free()
 	_hud.set_objective("")
+	_sword = _add_prop(Prop.Kind.SWORD, _floor.cell_at(_anvil.position))
+	_sword.lift = _anvil.lift + 26.0
+	_register(_sword, func(): return "Take the First Sword", _take_sword, 90.0)
+	_hud.narrate("On the anvil, something small is waiting.", false, 4.0)
 	_busy = false
-	await _complete_memory()
 
 func _handle_cue(cue: String) -> void:
 	if cue == "dissolve":
 		_critic.dissolve()
 
-func _take_start_sword() -> void:
-	if not is_instance_valid(_sword):
-		return
-	await _say(Story.forge_sword_start())
-	GameState.set_flag("has_sword")
-	_hud.toast("Found: The First Sword")
-	create_tween().tween_property(_sword, "modulate:a", 0.0, 0.6)
-	_sword.queue_free()
-	_hud.set_controls(true)
-	_hud.set_objective(Story.FORGE_OBJECTIVES[0])
-	await _hud.tutorial("quill")
-
-## The memory is done: you carry the sword out to Garrick.
-func _complete_memory() -> void:
+func _take_sword() -> void:
 	await _say(Story.memory_sword())
+	GameState.set_flag("has_sword")
 	GameState.set_flag("memory_done")
 	award_boss_drops("forge")
+	_hud.toast("Found: The First Sword")
 	_hud.narrate(Story.MEMORY_SWORD_NARRATION, false, 4.0)
+	if is_instance_valid(_sword):
+		create_tween().tween_property(_sword, "modulate:a", 0.0, 0.8)
 	await get_tree().create_timer(3.4).timeout
 	_leave()
 
