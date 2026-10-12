@@ -1,0 +1,6 @@
+# Keep line endings identical on Windows, Mac and Linux so git does not show phantom changes.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.ttf binary
+*.import -text
