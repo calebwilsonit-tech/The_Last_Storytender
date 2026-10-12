@@ -42,6 +42,7 @@ var _invuln := 0.0
 var _facing_right := true
 var _facing_back := false
 var elev := 0.0            # visual elevation in px; physics stays on the ground plane
+var preview := false       # true when drawn inside the binder's paper-doll panel
 var _last_dir := Vector2.RIGHT
 var _mouse_idle := 99.0
 var _lantern_delay := 0.0
@@ -70,6 +71,8 @@ func _input(event: InputEvent) -> void:
 		_mouse_idle = 0.0
 
 func _physics_process(delta: float) -> void:
+	if preview:
+		return
 	_atk_cd = maxf(_atk_cd - delta, 0.0)
 	_dash_cd = maxf(_dash_cd - delta, 0.0)
 	_combo_t -= delta
@@ -96,7 +99,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		# WASD are screen directions. The 2:1 isometric plane is squashed
 		# vertically, so halve the vertical speed to keep motion visually even.
-		var mult := speed_mult * (0.72 if lantern_on else 1.0)
+		var mult := speed_mult * (1.0 + GameState.equipped_stat("speed")) * (0.72 if lantern_on else 1.0)
 		var target := Vector2(dir.x, dir.y * 0.5) * speed * mult
 		if dir != Vector2.ZERO:
 			velocity = velocity.move_toward(target, accel * delta)
@@ -168,7 +171,7 @@ func _dash(dir: Vector2) -> void:
 	var d := dir if dir != Vector2.ZERO else _last_dir
 	_dash_dir = Vector2(d.x, d.y * 0.5).normalized()
 	_dash_t = 0.2
-	_dash_cd = 0.75
+	_dash_cd = 0.75 * (1.0 + GameState.equipped_stat("dash_cd"))
 	_invuln = maxf(_invuln, 0.32)
 	dashed.emit()
 
@@ -239,7 +242,8 @@ func take_damage(amount: float, lethal: bool = true) -> void:
 	if is_crumpled or (_invuln > 0.0 and lethal):
 		return
 	if lethal:
-		_invuln = 0.9
+		amount *= 1.0 - clampf(GameState.equipped_stat("armor"), 0.0, 0.8)
+		_invuln = 0.9 + GameState.equipped_stat("invuln")
 	ink = maxf(ink - amount, 0.0 if lethal else 1.0)
 	for i in int(amount / 3.0) + 2:
 		_splats.append({
@@ -285,8 +289,9 @@ func _draw() -> void:
 	var flick := 0.85 + 0.15 * sin(_t * 9.0) + 0.05 * sin(_t * 23.0)
 	# Lantern light pooled on the ground around the Storytender.
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))
-	for k in 5:
-		draw_circle(Vector2(0, 0), 92.0 - k * 15.0, Color(Palette.CYAN, (0.022 + 0.006 * k) * flick * lantern_power))
+	if not preview:
+		for k in 5:
+			draw_circle(Vector2(0, 0), 92.0 - k * 15.0, Color(Palette.CYAN, (0.022 + 0.006 * k) * flick * lantern_power))
 	draw_circle(Vector2.ZERO, 13.0, Color(0, 0, 0, 0.30))
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
 	_draw_trail()
@@ -432,6 +437,7 @@ func _draw_front(ph: float, moving: bool, flick: float) -> void:
 	_poly(PackedVector2Array([Vector2(8, -41), Vector2(13, -40), hand + Vector2(3, 0), hand + Vector2(-3, 1)]), Palette.TUNIC.darkened(0.05), 2.6)
 	draw_circle(hand, 3.2, Color("c8a888"))
 	_lantern(hand + Vector2(0, 5), flick)
+	_draw_gear_front()
 	# Scarf and hood: the face is a pool of shadow with two pale glints.
 	_poly(PackedVector2Array([Vector2(-9, -45), Vector2(9, -45), Vector2(7, -39), Vector2(-7, -39)]), Palette.CLOAK_DARK, 2.6)
 	var hood := PackedVector2Array([Vector2(-14, -45), Vector2(-17, -56), Vector2(-12, -68), Vector2(-3, -74), Vector2(4, -76), Vector2(9, -71), Vector2(15, -64), Vector2(17, -53), Vector2(14, -45)])
@@ -459,6 +465,31 @@ func _draw_back(ph: float, moving: bool, flick: float) -> void:
 	var hood := PackedVector2Array([Vector2(-14, -45), Vector2(-17, -56), Vector2(-12, -68), Vector2(-3, -74), Vector2(4, -76), Vector2(9, -71), Vector2(15, -64), Vector2(17, -53), Vector2(14, -45)])
 	_poly(hood, Palette.CLOAK)
 	draw_polyline(PackedVector2Array([Vector2(0, -46), Vector2(1, -58), Vector2(3, -70)]), Color(0, 0, 0, 0.25), 2.0)
+
+# --- Bindings (armor) and amulet, drawn from whatever is equipped --------------------------
+func _draw_gear_front() -> void:
+	var b: String = GameState.equipment["binding"]
+	if b == "hardcover_binding":
+		var cover := Color("6b4a3a")
+		var gold := Color("c9a24e")
+		_poly(PackedVector2Array([Vector2(-11, -42), Vector2(11, -42), Vector2(10, -27), Vector2(0, -23), Vector2(-10, -27)]), cover, 2.4)
+		draw_polyline(PackedVector2Array([Vector2(-8, -39), Vector2(8, -39), Vector2(7, -29), Vector2(0, -26), Vector2(-7, -29), Vector2(-8, -39)]), gold, 1.4)
+		draw_circle(Vector2(0, -33), 2.2, gold)
+		_poly(PackedVector2Array([Vector2(-17, -46), Vector2(-8, -48), Vector2(-7, -38), Vector2(-17, -38)]), cover, 2.4)
+		_poly(PackedVector2Array([Vector2(8, -48), Vector2(17, -46), Vector2(17, -38), Vector2(7, -38)]), cover, 2.4)
+		draw_line(Vector2(-16, -44), Vector2(-9, -45), gold, 1.4)
+		draw_line(Vector2(9, -45), Vector2(16, -44), gold, 1.4)
+	elif b == "softcover_binding":
+		var hide := Color("a77a52")
+		_poly(PackedVector2Array([Vector2(-10, -43), Vector2(-3, -43), Vector2(0, -34), Vector2(3, -43), Vector2(10, -43), Vector2(11, -24), Vector2(-11, -24)]), hide, 2.4)
+		for i in 5:
+			draw_line(Vector2(0, -33 + i * 2.2), Vector2(0, -32 + i * 2.2), Color("efe3c4"), 1.4)
+		draw_line(Vector2(-11, -28), Vector2(11, -28), Color(0, 0, 0, 0.3), 1.6)
+	if GameState.equipment["amulet"] == "oxford_comma":
+		draw_line(Vector2(-4, -43), Vector2(0, -35), Palette.OUTLINE, 1.6)
+		draw_line(Vector2(4, -43), Vector2(0, -35), Palette.OUTLINE, 1.6)
+		draw_circle(Vector2(0, -33), 3.4, Palette.GOLD)
+		draw_arc(Vector2(0, -33), 3.4, 0.0, TAU, 10, Palette.OUTLINE, 1.4, true)
 
 func _draw_crumpled(inkc: Color) -> void:
 	var rng := RandomNumberGenerator.new()

@@ -3,11 +3,12 @@ extends StaticBody2D
 ## Procedurally inked scenery. Objects with `ghost = true` begin as graphite
 ## pencil sketches and fill with color as the restoration wave reaches them.
 
-enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE }
+enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE, PICKUP }
 
 var kind: Kind = Kind.TREE
 var ghost := false
 var variant := 0
+var item_id := ""         # for PICKUP props
 var done := false          # a spent memory shard
 var lift := 0.0            # elevation of the cell it stands on, in px
 var _t := 0.0
@@ -56,6 +57,7 @@ func _draw() -> void:
 		Kind.ANVIL: _draw_anvil()
 		Kind.PORTAL: _draw_portal()
 		Kind.FIGURE: _draw_figure()
+		Kind.PICKUP: _draw_pickup()
 
 func _shadow(rx: float) -> void:
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
@@ -304,3 +306,14 @@ func _draw_figure() -> void:
 		var y := -62.0 + i * 7.0
 		draw_line(Vector2(-18, y), Vector2(18, y), Color(0.04, 0.06, 0.12, 0.25), 1.0)
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
+
+# --- Item pickup: the item itself, bobbing in a soft glow ---------------------------------
+func _draw_pickup() -> void:
+	_shadow(12.0)
+	var bob := sin(_t * 2.2) * 3.0
+	for rad in [30.0, 20.0]:
+		draw_circle(Vector2(0, -26 + bob), rad, Color(Palette.GOLD, 0.09))
+	ItemIcon.draw_item(self, item_id, Vector2(0, -28 + bob), 40.0)
+	for i in 3:
+		var ph := fmod(_t * 0.5 + i * 0.33, 1.0)
+		draw_circle(Vector2(-10 + i * 10, -18 - ph * 30.0), 1.5, Color(Palette.GOLD, (1.0 - ph) * 0.9))

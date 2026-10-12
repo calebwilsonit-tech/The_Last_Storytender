@@ -12,7 +12,7 @@ and meet the placeholder blacksmith. Touch the **frozen flame** in his forge to 
 Blacksmith's Regret**. Hold up three memories to the Lantern to quiet **The Critic** (his own inner voice,
 made of red ink), take the **First Sword**, and bring it back to restore the town.
 
-Controls: **WASD** move · **E / Space / Enter** speak, take, advance dialogue · **Click / J** Quill (after Garrick's lesson) · **Shift** dash · **Hold Q / right mouse** Lantern · **F1** test damage, **F2** heal.
+Controls: **WASD** move · **E / Space / Enter** speak, take, advance dialogue · **Click / J** Quill (after Garrick's lesson) · **Shift** dash · **Hold Q / right mouse** Lantern · **Tab / I** binder · **F** quick-use item · **F1** test damage, **F2** heal, **F12** wipe save.
 
 What's in:
 - Isometric 2:1 world with **elevation**: height levels, stairs, solid cliff edges, stacked-paper page edges, depth-sorted so tall terraces hide what's behind them. Maps are text (`data/*.gd`).
@@ -20,6 +20,7 @@ What's in:
 - NPCs show **missing** (static + purple glitch) vs **restored** (color + cyan glow) states; the ghost town recolors in a wave from the restored person.
 - **The Blacksmith's Regret** (`scripts/memory_forge.gd`): frozen-time forge, three memory shards on raised terraces, The Critic boss that throws discouraging-word projectiles (slow / dim debuffs), memory vignettes with Young Garrick and Wren, a quiet finale.
 - **Combat:** Quill combo, dash, and a Lantern beam that proofreads Typo-Ghoul Bares back into Bears and burns Redactor bars off the path. Garrick teaches it at a training dummy. See GDD section 11.
+- **Inventory:** a binder UI (Tab) with a paper-doll that shows equipped Bindings and amulet, a card catalog of items, quick-use, Eraser Crumbs bombs, Ink Vials, and **autosave**. See GDD section 13.
 - Plot holes (fall = lose ink, respawn safely), crumple/smooth-out recovery, typewriter dialogue with clacks, Narrator and Silence text.
 - All story text in `scripts/story.gd`. Design: `docs/GDD.md`. Art direction and your reference sheets: `docs/ART_DIRECTION.md`, `docs/art_reference/`.
 

@@ -64,6 +64,9 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 		"N", "K", "B":
 			_floor.cells[cell] = ","
 			_add_npc(ch, cell)
+		"k":
+			_floor.cells[cell] = "."
+			_add_pickup(cell, "softcover_binding")
 		"g", "x":
 			_floor.cells[cell] = "."
 			_enemy_spawns.append({"kind": Enemy.Kind.BARE if ch == "g" else Enemy.Kind.MITE, "cell": cell})
@@ -98,6 +101,12 @@ func _add_npc(ch: String, cell: Vector2i) -> void:
 		"B":
 			n.kind = Npc.Kind.BAKER
 			_register(n, func(): return "Speak", func(): await _say(Story.maud_restored() if GameState.town_restored else Story.maud_ghost()))
+
+func _notification(what: int) -> void:
+	# Remember where you were if the game is closed mid-walk.
+	if what == NOTIFICATION_WM_CLOSE_REQUEST and _player and is_instance_valid(_player):
+		GameState.spawn_cell = _floor.cell_at(_player.position)
+		GameState.save_game()
 
 func _level_ready() -> void:
 	_player.dashed.connect(_on_dashed)
@@ -215,6 +224,9 @@ func _finish_lesson() -> void:
 	_busy = true
 	await _say(Story.garrick_lesson_end())
 	_busy = false
+	_give_item("hardcover_binding")
+	_give_item("eraser_crumbs", 3)
+	_hud.narrate(Story.BINDER_HINT, false, 5.0)
 	_hud.narrate(Story.REDACTION_NOTICED, false, 4.5)
 	_spawn_enemies()
 

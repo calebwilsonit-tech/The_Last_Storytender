@@ -72,6 +72,9 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 			_critic = Critic.new()
 			_critic.position = Iso.to_screen(Vector2(cell))
 			_actors.add_child(_critic)
+		"k":
+			_floor.cells[cell] = "m"
+			_add_pickup(cell, "oxford_comma")
 		"B":
 			_floor.cells[cell] = "m"
 			var b := IsoBlock.new()

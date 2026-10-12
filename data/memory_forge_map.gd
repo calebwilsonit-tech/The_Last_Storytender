@@ -3,7 +3,7 @@ extends RefCounted
 ## The Blacksmith's Regret: the inside of Garrick's memory.
 ##   'm' memory floor   '#' plot hole   P start   E memory portal (way out)
 ##   O frozen furnace (2x2)   A anvil   Y young Garrick   w Wren   Z the Critic
-##   1 2 3 memory shards   B crates
+##   1 2 3 memory shards   B crates   k item pickup (Oxford Comma)
 ## HEIGHTS use the same format as PrologueMap.
 
 const ROWS: Array[String] = [
@@ -21,7 +21,7 @@ const ROWS: Array[String] = [
 	"  mEmPmmmmm#mmmmmmmYAmmmmmm   ",
 	"  mmmmmmmmm#mmmmmmmmmwmmmmm   ",
 	"  mmmBmmmmmmmmBmmmmmmmmm#mm   ",
-	"  mmmmmmm    mmmmmmmmmmm#mm   ",
+	"  mmmmmmk    mmmmmmmmmmm#mm   ",
 	"             mm##mmmmmBmmmm   ",
 	"             mmmmmmmmmmmmmm   ",
 	"             mmmmmmmmmmmmmm   ",

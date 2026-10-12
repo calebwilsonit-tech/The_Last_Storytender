@@ -18,6 +18,7 @@ var _player: Player
 var _camera: Camera2D
 var _hud: Hud
 var _dialogue: DialogueBox
+var _inventory: InventoryScreen
 
 var _start := Vector2.ZERO
 var _safe_pos := Vector2.ZERO
@@ -111,6 +112,7 @@ func _load_map() -> void:
 	var ov := _spawn_override()
 	if ov != Vector2i(-1, -1):
 		_start = Iso.to_screen(Vector2(ov))
+		GameState.spawn_cell = Vector2i(-1, -1)   # consumed
 
 func _parse_heights() -> void:
 	var hrows := _map_heights()
@@ -218,6 +220,11 @@ func _build_ui() -> void:
 	_hud.set_controls(_player.can_attack())
 	_dialogue = DialogueBox.new()
 	add_child(_dialogue)
+	_inventory = InventoryScreen.new()
+	add_child(_inventory)
+	_inventory.use_requested.connect(use_item)
+	GameState.inventory_changed.connect(_on_inventory_changed)
+	_on_inventory_changed()
 
 # --- Frame loop -----------------------------------------------------------------------
 func _process(delta: float) -> void:
@@ -245,6 +252,49 @@ func _update_elevation(delta: float) -> void:
 func camera_shake(duration: float = 0.4, mag: float = 6.0) -> void:
 	_shake = duration
 	_shake_mag = mag
+
+# --- Items ---------------------------------------------------------------------------------
+func _on_inventory_changed() -> void:
+	_hud.set_quickslot(GameState.quick_slot)
+
+func _give_item(id: String, n: int = 1) -> void:
+	GameState.add_item(id, n)
+	_hud.toast("Received: %s%s" % [ItemDB.info(id)["name"], "" if n == 1 else " ×%d" % n])
+
+func use_item(id: String) -> void:
+	if id == "" or GameState.count(id) <= 0 or _player.is_crumpled or _player.is_falling or GameState.in_dialogue:
+		return
+	match id:
+		"eraser_crumbs":
+			var reach := 150.0
+			var goal := _player.position + Vector2(_player.aim_ground.x, _player.aim_ground.y * 0.5) * reach
+			# Shorten the throw until it lands on the page and not inside a plot hole.
+			while reach > 30.0 and (not _floor.has_cell(_floor.cell_at(goal)) or _floor.is_pit(_floor.cell_at(goal))):
+				reach -= 25.0
+				goal = _player.position + Vector2(_player.aim_ground.x, _player.aim_ground.y * 0.5) * reach
+			GameState.remove_item(id)
+			var b := EraserBomb.new()
+			b.start = _player.position
+			b.goal = goal
+			b.elev = _floor.height_at(_player.position) * Iso.LEVEL_H
+			b.exploded.connect(func(_p: Vector2): camera_shake(0.35, 7.0))
+			_actors.add_child(b)
+		"ink_vial":
+			if _player.ink >= _player.max_ink - 0.5:
+				_hud.toast("Your ink is already full")
+				return
+			GameState.remove_item(id)
+			_player.ink = minf(_player.ink + 45.0, _player.max_ink)
+			_player.ink_changed.emit(_player.ink, _player.max_ink)
+			_hud.toast("Ink restored")
+
+func _add_pickup(cell: Vector2i, id: String) -> Prop:
+	var p := _add_prop(Prop.Kind.PICKUP, cell)
+	p.item_id = id
+	_register(p, func(): return "Take " + ItemDB.info(id)["name"], func():
+		_give_item(id)
+		p.queue_free())
+	return p
 
 # --- Crystals (Mnemosynth) --------------------------------------------------------------
 func _collect_crystals() -> void:
@@ -278,12 +328,18 @@ func _add_enemy(kind: Enemy.Kind, cell: Vector2i) -> Enemy:
 	e.position = Iso.to_screen(Vector2(cell))
 	e.elev = _lift_at(cell)
 	_actors.add_child(e)
-	e.died.connect(func(en: Enemy): drop_crystals(en.position, 2 if en.kind == Enemy.Kind.BARE else 1))
+	e.died.connect(func(en: Enemy):
+		drop_crystals(en.position, 2 if en.kind == Enemy.Kind.BARE else 1)
+		if en.kind == Enemy.Kind.BARE and randf() < 0.25:
+			_give_item("eraser_crumbs")
+		elif en.kind == Enemy.Kind.MITE and randf() < 0.3:
+			_give_item("void_ink"))
 	e.proofread.connect(_on_proofread)
 	return e
 
 func _on_proofread(e: Enemy) -> void:
 	drop_crystals(e.position, 6)
+	_give_item("ink_vial")
 	_hud.toast("Proofread: Bare → Bear")
 	if not _first_proofread:
 		_first_proofread = true
@@ -346,6 +402,16 @@ func _update_prompt() -> void:
 	_hud.set_prompt(it["prompt"].call() if not it.is_empty() else "")
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("debug_reset"):
+		GameState.reset_all()
+		get_tree().change_scene_to_file("res://scenes/main.tscn")
+		return
+	if event.is_action_pressed("inventory") and not _busy and not GameState.in_dialogue and not _player.is_falling:
+		_inventory.open()
+		return
+	if event.is_action_pressed("use_item"):
+		use_item(GameState.quick_slot)
+		return
 	if not event.is_action_pressed("interact") or _busy or GameState.in_dialogue:
 		return
 	var it := _nearest()

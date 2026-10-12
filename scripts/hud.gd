@@ -5,6 +5,8 @@ extends CanvasLayer
 
 var bottle: InkBottle
 var gauge: LanternGauge
+var _quick_icon: ItemIcon
+var _quick_label: Label
 var _mnemo: Label
 var _region: Label
 var _prompt: Label
@@ -71,6 +73,15 @@ func _ready() -> void:
 	_narr.add_theme_constant_override("outline_size", 8)
 	add_child(_narr)
 
+	_quick_icon = ItemIcon.new()
+	_quick_icon.position = Vector2(1180, 640)
+	_quick_icon.custom_minimum_size = Vector2(64, 64)
+	_quick_icon.size = Vector2(64, 64)
+	add_child(_quick_icon)
+	_quick_label = _label(20, Palette.INK_BROWN)
+	_quick_label.position = Vector2(1150, 690)
+	set_quickslot("")
+
 	_objective = _label(22, Palette.INK_BROWN)
 	_objective.position = Vector2(104, 92)
 	_objective.visible = false
@@ -100,7 +111,7 @@ func set_lantern(cur: float, mx: float) -> void:
 	gauge.set_energy(cur, mx)
 
 func set_controls(armed: bool) -> void:
-	_help.text = "WASD move  ·  E speak / take  ·  Hold Q or right mouse: Lantern" + ("  ·  Click / J: Quill  ·  Shift: dash" if armed else "  ·  Shift: dash")
+	_help.text = "WASD move  ·  E speak / take  ·  Hold Q or right mouse: Lantern" + ("  ·  Click / J: Quill  ·  Shift: dash  ·  Tab: binder  ·  F: use item" if armed else "  ·  Shift: dash  ·  Tab: binder")
 
 func set_mnemo(v: int) -> void:
 	_mnemo.text = "◆ %d" % v
@@ -178,3 +189,11 @@ func set_dark(on: bool) -> void:
 		l.add_theme_color_override("font_outline_color", halo)
 	_narr.add_theme_color_override("font_outline_color", halo)
 	_mnemo.add_theme_color_override("font_color", Palette.GOLD.lightened(0.2))
+
+## Quick-use slot (F). Shows the item and how many remain.
+func set_quickslot(id: String) -> void:
+	_quick_icon.set_item(id, 46.0)
+	_quick_icon.visible = id != ""
+	_quick_label.visible = id != ""
+	if id != "":
+		_quick_label.text = "F   ×%d" % GameState.count(id)

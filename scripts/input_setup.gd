@@ -13,6 +13,9 @@ func _ready() -> void:
 	_bind("dash", [KEY_SHIFT])
 	_bind("lantern", [KEY_Q])
 	_bind_mouse("lantern", MOUSE_BUTTON_RIGHT)
+	_bind("inventory", [KEY_TAB, KEY_I])
+	_bind("use_item", [KEY_F])
+	_bind("debug_reset", [KEY_F12])  # wipe the save and restart
 	_bind("debug_damage", [KEY_F1])   # test: take ink damage
 	_bind("debug_heal", [KEY_F2])     # test: restore ink
 

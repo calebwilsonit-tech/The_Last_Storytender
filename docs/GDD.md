@@ -93,3 +93,48 @@ Phase 2 restores a whole town from one NPC. With this structure, each restored N
 - **Mites** (scribble swarmers from the enemy sheet) are burned away by light.
 **Errors:** Bare (slow, telegraphed lunge, 12 dmg) and Mite (fast, fragile, 5 dmg). They won't walk into plot holes and lose interest if you leave their level.
 **Training:** Garrick's lesson uses a training dummy and checks strike → dash → lantern before the Redaction sends Errors into the Plains.
+
+---
+## 12. Pacing Requirement: 1-2 hours per town (added v2.3)
+**Every town (including its memories and Editor) should take a first-time player roughly 1 to 2 hours.** Length comes from content and mechanical variety, not padding.
+
+### Time budget per town (first playthrough)
+| Segment | Target | Notes |
+|---|---|---|
+| Overworld exploration and discovery | 20-25 min | Plains plus town, secrets behind Redactors, Bares to proofread, plateaus and terraces, Mnemosynth caches |
+| Memories (3 NPCs) | ~15-20 min each, 45-60 total | Each memory is a multi-room dungeon (3-4 rooms: approach, puzzle/combat room, memory shard hunt, memory boss) |
+| Town Editor boss | 10-15 min | Includes a short run-up (gathering the tools the fight needs) |
+| NPC side quests (3-4) | 15-20 min | Small errands that restore flavor (find lost words, proofread a herd, rebuild a sign) |
+| Inventory, crafting, Narrator shop | 5-10 min | Binding choices, Eraser Crumbs, Void Ink crafting |
+| **Total** | **~95-120 min** | Fast players can finish in ~60-70 |
+
+### Status of Thistledown (honest)
+Built: overworld and ghost town (about 10 min to explore), Garrick's memory (about 8-10 min), combat lesson (about 3 min). That is **roughly 20-25 minutes**. To hit 1-2 hours it still needs:
+1. **Garrick's memory** extended from one arena to 3-4 rooms (Apprenticeship hall, the Wren-nursery puzzle room with Mites, then the forge arena).
+2. **Pip's memory** (The Spoiler) and **Maud's memory** (The Empty Table), each a full dungeon.
+3. **The Scissor-Man** (Editor) with its run-up.
+4. **3-4 side quests** and a larger Plains with more secrets.
+5. A Narrator shop and a crafting loop using Void Ink.
+Until these exist, Thistledown is a vertical slice, not a complete town.
+
+### Rules to keep the length honest
+- Each memory has at least one combat room, one environmental/puzzle room, and one boss; no copy-pasted arenas.
+- Every town introduces 1-2 new mechanics (see section 10) so the 1-2 hours stay varied.
+- Autosave at every restoration, memory entrance, and boss door (implemented).
+
+---
+## 13. Inventory, Bindings & Saving (implemented v2.4)
+**The binder (Tab / I):** left page = the Storytender paper doll (Layer 0 the Sketch, Layer 2 Bindings, Layer 4 Tools) wearing whatever is equipped, with live stats; right page = a card catalog (index cards) of everything carried, with flavor text, Equip/Use buttons and a quick-use slot (F).
+
+| Item | Type | Effect | Where you get it |
+|---|---|---|---|
+| Hardcover Binding | armor | -35% damage taken, -10% speed | Garrick, after the combat lesson |
+| Softcover Binding | armor | -10% damage, +12% speed, -25% dash cooldown | The Glade, behind the Redactor bar |
+| The Oxford Comma | amulet | +0.8s grace after being hit | Hidden in Garrick's memory |
+| Eraser Crumbs | consumable | Thrown; rubs out Errors in a radius | Garrick (3), Bare drops |
+| Ink Vial | consumable | Restores ink | Proofreading a Bare |
+| Void Ink | material | Crafting (planned) | Mite drops |
+| The Bookmark | key | Fast travel (planned) | Later |
+Mnemosynth is the currency and also refuels the Lantern.
+
+**Autosave:** progress, inventory, equipment, flags and currency save automatically at every item pickup, story beat, restoration and on quit, and load on launch. **F12** wipes the save (development).

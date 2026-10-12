@@ -28,6 +28,7 @@ const RETURNED := "The sword is heavy the way a promise is heavy. Somebody shoul
 const PROOFREAD := "A mistake is not a monster. Sometimes it only wants someone to read it again."
 const REDACTOR_HINT := "A black bar hangs across the way. Something is written underneath it. Light makes things matter: hold Q, or the right mouse button."
 const REDACTOR_OPEN := "It was written there all along."
+const BINDER_HINT := "You have a binder now. Press Tab to open it, and wear what Garrick gave you."
 const REDACTION_NOTICED := "The Redaction has noticed you."
 const SWORD_NARRATION := "It was never a weapon. It was a promise somebody made to the dark."
 
@@ -209,4 +210,6 @@ static func garrick_lesson_end() -> Array:
 		line("Garrick", "Out there, the Redaction is sending Errors. Bares, mostly. Poor beasts. Spelling mistakes with teeth.", "speech"),
 		line("Garrick", "You can cut them down. Or you can hold your light on them until they remember what they were.", "speech"),
 		line("Garrick", "The second way takes longer. It's usually worth it.", "speech"),
+		line("Garrick", "Here. Hardcover. Heavy. It'll keep the Errors from reading you too closely.", "speech"),
+		line("Garrick", "And these: eraser crumbs. Throw them at anything you'd rather not read.", "speech"),
 	]
