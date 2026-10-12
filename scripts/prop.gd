@@ -8,6 +8,7 @@ enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD }
 var kind: Kind = Kind.TREE
 var ghost := false
 var variant := 0
+var lift := 0.0            # elevation of the cell it stands on, in px
 var _t := 0.0
 var _seed := 0.0
 
@@ -39,6 +40,7 @@ func _fill(c: Color, r: float) -> Color:
 	return f
 
 func _draw() -> void:
+	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
 	var r := _restoration()
 	match kind:
 		Kind.TREE: _draw_tree()
@@ -49,9 +51,9 @@ func _draw() -> void:
 		Kind.SWORD: _draw_sword()
 
 func _shadow(rx: float) -> void:
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1, 0.5))
+	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
 	draw_circle(Vector2.ZERO, rx, Color(0.15, 0.1, 0.05, 0.18))
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
 
 # --- Tree ---------------------------------------------------------------------
 func _draw_tree() -> void:
@@ -175,9 +177,9 @@ func _draw_sign() -> void:
 func _draw_sword() -> void:
 	var pulse := 0.75 + 0.25 * sin(_t * 2.4)
 	for rad in [34.0, 24.0, 15.0]:
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2(1, 0.5))
+		draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
 		draw_circle(Vector2.ZERO, rad, Color(Palette.GOLD, 0.06 * pulse))
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
 	var lift := Vector2(0, -4 + sin(_t * 1.6) * 2.0)
 	# Blade lying along the iso diagonal, as if half-erased: it dissolves toward the tip.
 	var a := Vector2(-22, 6) + lift

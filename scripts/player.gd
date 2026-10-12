@@ -18,6 +18,7 @@ var is_falling := false
 var _t := 0.0
 var _splats: Array[Dictionary] = []  # {pos, radius, age}
 var _look := 0.0
+var elev := 0.0            # visual elevation in px; physics stays on the ground plane
 
 func _ready() -> void:
 	ink = max_ink
@@ -95,17 +96,18 @@ func respawn_at(pos: Vector2) -> void:
 
 func _draw() -> void:
 	var inkc := Palette.INK
+	draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
 	for s in _splats:
 		var fade: float = 1.0 - float(s.age) / 6.0
 		draw_circle(s.pos, s.radius, Color(inkc, 0.8 * fade))
 	# Contact shadow on the page.
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1, 0.5))
+	draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))
 	draw_circle(Vector2.ZERO, 15.0, Color(0, 0, 0, 0.22))
 	var moving := velocity.length() > 20.0
 	var bob := -absf(sin(_t * 11.0)) * 3.0 if moving else sin(_t * 2.0) * 0.8
-	draw_set_transform(Vector2(0, -20 + bob), 0.0, Vector2.ONE)
+	draw_set_transform(Vector2(0, -20 + bob - elev), 0.0, Vector2.ONE)
 	if is_crumpled:
-		draw_set_transform(Vector2(0, -8), 0.0, Vector2.ONE)
+		draw_set_transform(Vector2(0, -8 - elev), 0.0, Vector2.ONE)
 		_draw_crumpled(inkc)
 		return
 	# Hand-drawn doodle: wobbly outline, two eyes that look where you walk.

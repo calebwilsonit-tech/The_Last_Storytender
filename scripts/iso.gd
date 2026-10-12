@@ -5,6 +5,7 @@ extends RefCounted
 
 const TILE_W := 64.0
 const TILE_H := 32.0
+const LEVEL_H := 28.0   # screen pixels per elevation level
 
 static func to_screen(cell: Vector2) -> Vector2:
 	return Vector2((cell.x - cell.y) * TILE_W * 0.5, (cell.x + cell.y) * TILE_H * 0.5)
@@ -21,3 +22,7 @@ static func diamond(center: Vector2, s := 1.0) -> PackedVector2Array:
 	return PackedVector2Array([
 		center + Vector2(0, -hh), center + Vector2(hw, 0),
 		center + Vector2(0, hh), center + Vector2(-hw, 0)])
+
+## Screen position of a (fractional) grid point lifted to elevation `z` (in levels).
+static func pt(cell: Vector2, z: float) -> Vector2:
+	return to_screen(cell) + Vector2(0.0, -z * LEVEL_H)

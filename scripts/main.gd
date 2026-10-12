@@ -30,12 +30,13 @@ var _busy := false
 func _ready() -> void:
 	_build_background()
 	_floor = IsoFloor.new()
-	_floor.z_index = -5
 	add_child(_floor)
 	_actors = Node2D.new()
 	_actors.y_sort_enabled = true
 	add_child(_actors)
 	_load_map()
+	_floor.build(_actors)       # slices live in the Y-sorted layer so cliffs occlude correctly
+	_add_edge_walls()
 	_build_player()
 	_build_ui()
 	GameState.mnemosynth_changed.connect(_hud.set_mnemo)
@@ -56,6 +57,7 @@ func _build_background() -> void:
 
 func _load_map() -> void:
 	var rows: Array[String] = PrologueMap.ROWS
+	_parse_heights()
 	var consumed := {}
 	for y in rows.size():
 		for x in rows[y].length():
@@ -100,6 +102,7 @@ func _load_map() -> void:
 					hp.kind = kind
 					hp.ghost = true
 					hp.variant = x + y
+					hp.lift = _lift_at(cell)
 					hp.position = Iso.to_screen(Vector2(cell) + Vector2(0.5, 0.5))
 					_actors.add_child(hp)
 				"N", "K", "B":
@@ -107,17 +110,40 @@ func _load_map() -> void:
 					_add_npc(ch, cell)
 	_add_void_walls()
 
+const STAIR_DIRS := {"e": Vector2i(1, 0), "w": Vector2i(-1, 0), "s": Vector2i(0, 1), "n": Vector2i(0, -1)}
+
+func _parse_heights() -> void:
+	var hrows: Array[String] = PrologueMap.HEIGHTS
+	for y in hrows.size():
+		for x in hrows[y].length():
+			var ch := hrows[y][x]
+			var cell := Vector2i(x, y)
+			if ch == " ":
+				continue
+			if STAIR_DIRS.has(ch):
+				_floor.stairs[cell] = STAIR_DIRS[ch]
+				# Stairs start at the level of whatever is at their low end.
+				var low: Vector2i = cell - STAIR_DIRS[ch]
+				_floor.heights[cell] = int(hrows[low.y][low.x])
+			else:
+				_floor.heights[cell] = int(ch)
+
+func _lift_at(cell: Vector2i) -> float:
+	return _floor.height_of(cell) * Iso.LEVEL_H
+
 func _add_prop(kind: Prop.Kind, cell: Vector2i, ghost: bool = false, variant: int = 0) -> Prop:
 	var p := Prop.new()
 	p.kind = kind
 	p.ghost = ghost
 	p.variant = variant
+	p.lift = _lift_at(cell)
 	p.position = Iso.to_screen(Vector2(cell))
 	_actors.add_child(p)
 	return p
 
 func _add_npc(ch: String, cell: Vector2i) -> void:
 	var n := Npc.new()
+	n.lift = _lift_at(cell)
 	n.position = Iso.to_screen(Vector2(cell))
 	_actors.add_child(n)
 	match ch:
@@ -135,6 +161,31 @@ func _add_npc(ch: String, cell: Vector2i) -> void:
 			_maud = n
 			_interactables.append({"node": n, "prompt": func(): return "Speak",
 				"action": func(): await _say(Story.maud_restored() if GameState.town_restored else Story.maud_ghost())})
+
+## Cliffs are solid: block every cell edge where the ground steps up or down
+## without a staircase.
+func _add_edge_walls() -> void:
+	for cell: Vector2i in _floor.cells.keys():
+		for step in [Vector2i(1, 0), Vector2i(0, 1)]:
+			var n: Vector2i = cell + step
+			if not _floor.cells.has(n) or _floor.edge_open(cell, n):
+				continue
+			var a: Vector2
+			var b: Vector2
+			if step.x == 1:
+				a = Iso.to_screen(Vector2(cell) + Vector2(0.5, -0.5))
+				b = Iso.to_screen(Vector2(cell) + Vector2(0.5, 0.5))
+			else:
+				a = Iso.to_screen(Vector2(cell) + Vector2(-0.5, 0.5))
+				b = Iso.to_screen(Vector2(cell) + Vector2(0.5, 0.5))
+			var body := StaticBody2D.new()
+			var seg := CollisionShape2D.new()
+			var shape := SegmentShape2D.new()
+			shape.a = a
+			shape.b = b
+			seg.shape = shape
+			body.add_child(seg)
+			add_child(body)
 
 ## Collision walls around the page edge so the Storytender can't walk off into the void.
 func _add_void_walls() -> void:
@@ -186,8 +237,9 @@ func _start_intro() -> void:
 		await get_tree().create_timer(5.6).timeout
 
 # --- Frame loop -----------------------------------------------------------------
-func _process(_delta: float) -> void:
-	_floor.focus = _player.position
+func _process(delta: float) -> void:
+	_update_elevation(delta)
+	_floor.focus = _camera.get_screen_center_position()
 	var size := get_viewport_rect().size
 	var view := size / _camera.zoom
 	var mat := _paper.material as ShaderMaterial
@@ -198,6 +250,11 @@ func _process(_delta: float) -> void:
 	_collect_crystals()
 	_update_region()
 	_update_prompt()
+
+func _update_elevation(delta: float) -> void:
+	var target := _floor.height_at(_player.position) * Iso.LEVEL_H
+	_player.elev = lerpf(_player.elev, target, 1.0 - exp(-16.0 * delta))
+	_camera.offset.y = -_player.elev
 
 func _dist(a: Vector2, b: Vector2) -> float:
 	var d := a - b
@@ -249,6 +306,9 @@ func _nearest() -> Dictionary:
 		if it["prompt"].call() == "":
 			continue
 		var d := _dist(n.position, _player.position)
+		# Different floors don't talk to each other.
+		if absf(_floor.height_at(n.position) - _floor.height_at(_player.position)) > 0.6:
+			continue
 		if d < best_d:
 			best_d = d
 			best = it

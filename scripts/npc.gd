@@ -8,6 +8,7 @@ enum Kind { BLACKSMITH, CHILD, BAKER }
 var kind: Kind = Kind.BLACKSMITH
 var display_name := "Lorem Ipsum"
 var named := false          # name revealed (Garrick remembers himself mid-scene)
+var lift := 0.0             # elevation of the cell it stands on, in px
 var tearful := false        # a single ink-blue tear for the emotional beat
 var _t := 0.0
 var _seed := 0.0
@@ -36,9 +37,9 @@ func _draw() -> void:
 	var pen := Palette.PENCIL.lerp(Palette.INK, r)
 	var s := 0.78 if kind == Kind.CHILD else 1.0
 	var breathe := sin(_t * 2.0) * 1.2
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1, 0.5))
+	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
 	draw_circle(Vector2.ZERO, 16.0 * s, Color(0.15, 0.1, 0.05, 0.2))
-	draw_set_transform(Vector2(0, breathe * 0.3), 0.0, Vector2(s, s))
+	draw_set_transform(Vector2(0, breathe * 0.3 - lift), 0.0, Vector2(s, s))
 
 	var shirt := Palette.RUST
 	var skin := Color("e9b58f")
@@ -88,7 +89,7 @@ func _draw() -> void:
 		var drip := fmod(_t * 0.5, 1.0)
 		draw_circle(head_c + Vector2(6.5, 4.0 + drip * 14.0), 2.3 - drip, Color(Palette.TEAR, 0.95 * (1.0 - drip * 0.6)))
 		draw_line(head_c + Vector2(6.5, 2.0), head_c + Vector2(6.5, 4.0 + drip * 14.0), Color(Palette.TEAR, 0.5), 1.4)
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
 
 	# Lorem ipsum: placeholder words drift up off the head until they're written in.
 	if r < 0.98:
