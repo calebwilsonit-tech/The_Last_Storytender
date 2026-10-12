@@ -146,23 +146,31 @@ func _draw() -> void:
 	for k in 3:
 		draw_circle(Vector2.ZERO, 70.0 - k * 14.0, Color(0.6, 0.85, 1.0, (0.10 + k * 0.06) * fade))
 	draw_set_transform(Vector2(0, -elev + sin(_t * 1.6) * 3.0), 0.0, Vector2.ONE)
-	var body := DrawKit.ellipse(Vector2(0, -60), 38.0, 54.0, 22, 0.22, floorf(_t * 3.0))
-	var body_col := Color("cfe9f7") if _state != "rest" else Color("e8f6ff")
-	DrawKit.shape(self, body, Color(body_col, fade), out, 3.2, floorf(_t * 3.0))
-	draw_colored_polygon(DrawKit.ellipse(Vector2(-5, -56), 22.0, 36.0, 18, 0.3, 4.0), Color("8cc4e4", fade))
-	# The shoulder: a big plate of ice toward the side it faces.
-	var sc := Vector2(0, -78) + face * 46.0
-	var plate := PackedVector2Array([sc + Vector2(-26, -26), sc + Vector2(24, -30), sc + Vector2(34, 6), sc + Vector2(0, 30), sc + Vector2(-30, 8)])
-	DrawKit.shape(self, plate, Color("eaf7ff", fade * 0.95), out, 3.4, 2.0)
-	draw_line(sc + Vector2(-14, -12), sc + Vector2(12, 6), Color(0.55, 0.78, 0.95, fade), 2.0)
-	# Its face is turned away: only the back of a hood.
-	draw_circle(Vector2(0, -112) - face * 6.0, 14.0, Color("b9dcef", fade))
-	draw_arc(Vector2(0, -112) - face * 6.0, 14.0, 0.0, TAU, 14, out, 2.6, true)
-	# Weak spot hint: the back glows gold when you are behind it.
-	if behind() or _state == "rest":
-		draw_circle(Vector2(0, -70) - face * 40.0, 12.0 + 3.0 * sin(_t * 6.0), Color(Palette.GOLD, 0.7 * fade))
-	if _flash > 0.0:
-		draw_colored_polygon(body, Color(1, 1, 1, _flash * fade))
+	var drawn := false
+	var art := Skins.art()
+	if art != null:
+		var org := Vector2(0, -elev + sin(_t * 1.6) * 3.0)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		drawn = art.draw_character(self, "cold_shoulder", {"t": _t, "flash": _flash, "fade": fade, "face": face, "weak": behind(), "warmed": warmed, "state": _state, "origin": org, "scale": 1.0})
+		draw_set_transform(org, 0.0, Vector2.ONE)
+	if not drawn:
+		var body := DrawKit.ellipse(Vector2(0, -60), 38.0, 54.0, 22, 0.22, floorf(_t * 3.0))
+		var body_col := Color("cfe9f7") if _state != "rest" else Color("e8f6ff")
+		DrawKit.shape(self, body, Color(body_col, fade), out, 3.2, floorf(_t * 3.0))
+		draw_colored_polygon(DrawKit.ellipse(Vector2(-5, -56), 22.0, 36.0, 18, 0.3, 4.0), Color("8cc4e4", fade))
+		# The shoulder: a big plate of ice toward the side it faces.
+		var sc := Vector2(0, -78) + face * 46.0
+		var plate := PackedVector2Array([sc + Vector2(-26, -26), sc + Vector2(24, -30), sc + Vector2(34, 6), sc + Vector2(0, 30), sc + Vector2(-30, 8)])
+		DrawKit.shape(self, plate, Color("eaf7ff", fade * 0.95), out, 3.4, 2.0)
+		draw_line(sc + Vector2(-14, -12), sc + Vector2(12, 6), Color(0.55, 0.78, 0.95, fade), 2.0)
+		# Its face is turned away: only the back of a hood.
+		draw_circle(Vector2(0, -112) - face * 6.0, 14.0, Color("b9dcef", fade))
+		draw_arc(Vector2(0, -112) - face * 6.0, 14.0, 0.0, TAU, 14, out, 2.6, true)
+		# Weak spot hint: the back glows gold when you are behind it.
+		if behind() or _state == "rest":
+			draw_circle(Vector2(0, -70) - face * 40.0, 12.0 + 3.0 * sin(_t * 6.0), Color(Palette.GOLD, 0.7 * fade))
+		if _flash > 0.0:
+			draw_colored_polygon(body, Color(1, 1, 1, _flash * fade))
 	if _clang > 0.0:
 		for s in _sparks:
 			draw_circle(Vector2(s["p"]), 3.0, Color(1, 0.95, 0.7, 1.0 - float(s["a"]) / 0.4))

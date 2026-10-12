@@ -115,6 +115,7 @@ class Rec extends RefCounted:
 	var inner := 1.1
 	var outer := 2.2
 	var depth := 0.0           # painter's order: smaller = further from the camera
+	var alpha := 1.0           # whole-figure opacity (fading bosses)
 	var out := Color("14111a")   # outline colour (ghostly graphite for people who are still missing)
 
 	func at(pivot: Vector2, rot: float, sx := 1.0) -> void:
@@ -150,7 +151,7 @@ class Rec extends RefCounted:
 				continue
 			apply_xf.call(p["xf"])
 			for bp in Geometry2D.offset_polygon(p["pts"], outer, Geometry2D.JOIN_ROUND):
-				ci.draw_colored_polygon(bp, out)
+				ci.draw_colored_polygon(bp, Color(out, out.a * alpha))
 		order.sort_custom(func(a, b): return a[2] < b[2] or (a[2] == b[2] and a[3] < b[3]))
 		for o in order:
 			if o[0] == "part":
@@ -158,6 +159,7 @@ class Rec extends RefCounted:
 				apply_xf.call(p["xf"])
 				var pts: PackedVector2Array = p["pts"]
 				var base: Color = (p["fill"] as Color).lerp(Color.WHITE, p["flash"])
+				base.a *= alpha
 				ci.draw_colored_polygon(pts, base)
 				var shade: float = p["shade"]
 				if shade > 0.0:

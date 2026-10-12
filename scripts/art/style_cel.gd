@@ -29,7 +29,7 @@ func _init() -> void:
 	blurb = "Chunky cel-shaded characters with heavy ink outlines, from the reference sheets."
 
 func kinds() -> Array:
-	return ["storytender", "garrick", "pip", "maud", "bare", "mite", "slug", "dangler", "censor", "ellipsis"]
+	return ["storytender", "garrick", "pip", "maud", "bare", "mite", "slug", "dangler", "censor", "ellipsis", "critic", "spoiler", "cold_shoulder", "scissor_man"]
 
 func draw_character(ci: CanvasItem, kind: String, ctx: Dictionary) -> bool:
 	match kind:
@@ -42,7 +42,20 @@ func draw_character(ci: CanvasItem, kind: String, ctx: Dictionary) -> bool:
 		"bare", "mite", "slug", "dangler", "censor", "ellipsis":
 			_enemy(ci, kind, ctx)
 			return true
+		"critic", "spoiler", "cold_shoulder", "scissor_man":
+			_boss(ci, kind, ctx)
+			return true
 	return false
+
+func _boss(ci: CanvasItem, kind: String, ctx: Dictionary) -> void:
+	_z = float(ctx.get("scale", 1.0))
+	_origin = ctx.get("origin", Vector2.ZERO)
+	_mirror = 1.0
+	var r := K.Rec.new()
+	r.inner = 1.1
+	r.outer = 2.2
+	CelBosses.build(r, kind, ctx)
+	_flush(ci, r)
 
 func _enemy(ci: CanvasItem, kind: String, ctx: Dictionary) -> void:
 	_z = float(ctx.get("scale", 1.0))

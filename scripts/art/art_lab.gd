@@ -89,6 +89,16 @@ func _cells() -> Array:
 			out.append(["bare windup", "bare", {"face": 1.0, "proof": 0.0, "state": "windup"}])
 			out.append(["bare facing left", "bare", {"face": -1.0, "proof": 0.0, "state": "idle"}])
 			out.append(["mite hurt", "mite", {"face": 1.0, "flash": 0.2}])
+		"bosses":
+			out.append(["critic", "critic", {"layers": 3, "t": 0.0}])
+			out.append(["critic (reckoning)", "critic", {"layers": 0}])
+			out.append(["critic shouting", "critic", {"layers": 2, "tele": 0.5}])
+			out.append(["spoiler", "spoiler", {}])
+			out.append(["cold shoulder (to you)", "cold_shoulder", {"face": Vector2(1, 0.3)}])
+			out.append(["cold shoulder (from behind)", "cold_shoulder", {"face": Vector2(-1, 0.3), "weak": true}])
+			out.append(["scissor-man", "scissor_man", {}])
+			out.append(["scissor-man jammed", "scissor_man", {"jam": true}])
+			out.append(["scissor-man snipping", "scissor_man", {"snip": 0.8}])
 	return out
 
 func _m(a: Dictionary, b: Dictionary) -> Dictionary:

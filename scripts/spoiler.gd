@@ -128,23 +128,31 @@ func _draw() -> void:
 		draw_circle(Vector2.ZERO, 70.0 - k * 16.0, Color(Palette.GLITCH, (0.10 + 0.06 * k) * fade))
 	draw_set_transform(Vector2(0, -lift - _hover + sin(_t * 1.4) * 6.0), 0.0, Vector2.ONE)
 	var flap := sin(_t * 2.6)
-	# Cover (dark, ominous), then the two flapping pages.
-	var cover := PackedVector2Array([Vector2(-66, 14), Vector2(66, 14), Vector2(60, -40), Vector2(-60, -40)])
-	draw_colored_polygon(cover, Color(Palette.SPOILER_INK, fade))
-	draw_polyline(PackedVector2Array([cover[0], cover[1], cover[2], cover[3], cover[0]]), Color(Palette.OUTLINE, fade), 3.0, true)
-	_page(-1.0, flap, Palette.PAGE.lerp(Color.WHITE, _flash * 2.0))
-	_page(1.0, -flap, Palette.PAGE_SHADE.lerp(Color.WHITE, _flash * 2.0))
-	draw_line(Vector2(0, 8), Vector2(0, -40), Color(Palette.OUTLINE, fade), 5.0)
-	# The torn-out last page: ragged edge, flapping loose beside it.
-	var tp := PackedVector2Array([Vector2(70, -4), Vector2(96, -16 + flap * 6.0), Vector2(100, 14), Vector2(92, 22), Vector2(86, 12), Vector2(78, 26), Vector2(72, 14)])
-	draw_colored_polygon(tp, Color(Palette.PAGE, fade))
-	draw_polyline(PackedVector2Array([tp[0], tp[1], tp[2], tp[3], tp[4], tp[5], tp[6]]), Color(Palette.OUTLINE, fade), 2.4, true)
-	draw_string(ThemeDB.get_default_theme().default_font, Vector2(80, 8), "END", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color(Palette.CRITIC_RED, fade))
-	# Eyes: gold exclamation marks, because it cannot stop telling you things.
-	for ex in [-22.0, 22.0]:
-		var wob := sin(_t * 5.0 + ex) * 1.5
-		draw_line(Vector2(ex, -34 + wob), Vector2(ex, -20 + wob), Color(Palette.SPOILER_GOLD, fade), 5.0)
-		draw_circle(Vector2(ex, -12 + wob), 3.4, Color(Palette.SPOILER_GOLD, fade))
+	var drawn := false
+	var art := Skins.art()
+	if art != null:
+		var org := Vector2(0, -lift - _hover + sin(_t * 1.4) * 6.0)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		drawn = art.draw_character(self, "spoiler", {"t": _t, "flash": _flash, "fade": fade, "origin": org, "scale": 1.0})
+		draw_set_transform(org, 0.0, Vector2.ONE)
+	if not drawn:
+		# Cover (dark, ominous), then the two flapping pages.
+		var cover := PackedVector2Array([Vector2(-66, 14), Vector2(66, 14), Vector2(60, -40), Vector2(-60, -40)])
+		draw_colored_polygon(cover, Color(Palette.SPOILER_INK, fade))
+		draw_polyline(PackedVector2Array([cover[0], cover[1], cover[2], cover[3], cover[0]]), Color(Palette.OUTLINE, fade), 3.0, true)
+		_page(-1.0, flap, Palette.PAGE.lerp(Color.WHITE, _flash * 2.0))
+		_page(1.0, -flap, Palette.PAGE_SHADE.lerp(Color.WHITE, _flash * 2.0))
+		draw_line(Vector2(0, 8), Vector2(0, -40), Color(Palette.OUTLINE, fade), 5.0)
+		# The torn-out last page: ragged edge, flapping loose beside it.
+		var tp := PackedVector2Array([Vector2(70, -4), Vector2(96, -16 + flap * 6.0), Vector2(100, 14), Vector2(92, 22), Vector2(86, 12), Vector2(78, 26), Vector2(72, 14)])
+		draw_colored_polygon(tp, Color(Palette.PAGE, fade))
+		draw_polyline(PackedVector2Array([tp[0], tp[1], tp[2], tp[3], tp[4], tp[5], tp[6]]), Color(Palette.OUTLINE, fade), 2.4, true)
+		draw_string(ThemeDB.get_default_theme().default_font, Vector2(80, 8), "END", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color(Palette.CRITIC_RED, fade))
+		# Eyes: gold exclamation marks, because it cannot stop telling you things.
+		for ex in [-22.0, 22.0]:
+			var wob := sin(_t * 5.0 + ex) * 1.5
+			draw_line(Vector2(ex, -34 + wob), Vector2(ex, -20 + wob), Color(Palette.SPOILER_GOLD, fade), 5.0)
+			draw_circle(Vector2(ex, -12 + wob), 3.4, Color(Palette.SPOILER_GOLD, fade))
 	# Purple glitch arcs.
 	for a in 3:
 		var ang := _t * 1.8 + a * TAU / 3.0
