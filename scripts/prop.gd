@@ -146,7 +146,7 @@ func _draw_art(r: float) -> bool:
 	elif kind != Kind.SWORD:
 		_shadow(float(table_len) * 24.0 if kind == Kind.TABLE else float(ART_SHADOW.get(kind, 14.0)))
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-	var ok := art.draw_prop(self, key, ctx)
+	var ok := FigureBake.draw_prop(art, self, key, ctx)
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
 	return ok
 
@@ -388,7 +388,7 @@ func _draw_figure() -> void:
 	if art != null:
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 		var key: String = ["young_garrick", "wren", "pip", "maud"][clampi(variant, 0, 3)]
-		if art.draw_character(self, key, {"t": _t, "memory": true, "restored": 1.0, "dir": Vector2(0.25, 1.0), "origin": Vector2(0, -lift), "scale": 1.0}):
+		if FigureBake.draw(art, self, key, {"t": _t, "memory": true, "restored": 1.0, "dir": Vector2(0.25, 1.0), "origin": Vector2(0, -lift), "scale": 1.0}):
 			draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
 			return
 	var shimmer := 0.55 + 0.12 * sin(_t * 3.0)

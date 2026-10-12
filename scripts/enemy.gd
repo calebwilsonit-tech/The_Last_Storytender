@@ -401,7 +401,7 @@ func _draw() -> void:
 	var art := Skins.art()
 	var styled := false
 	if art != null and _dead_t < 0.0:
-		styled = art.draw_character(self, String(Kind.keys()[kind]).to_lower(), _art_ctx())
+		styled = FigureBake.draw(art, self, String(Kind.keys()[kind]).to_lower(), _art_ctx())
 		draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
 	if styled:
 		EnemyKinds.draw_overlay(self)

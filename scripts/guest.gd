@@ -125,7 +125,7 @@ func _draw() -> void:
 	var art := Skins.art()
 	if art != null:
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-		drawn = art.draw_character(self, "guest", {"t": _t, "variant": variant, "restored": 1.0 if warm else 0.0, "fade": a, "dir": Vector2(0.3, 1.0), "origin": base, "scale": 1.0})
+		drawn = FigureBake.draw(art, self, "guest", {"t": _t, "variant": variant, "restored": 1.0 if warm else 0.0, "fade": a, "dir": Vector2(0.3, 1.0), "origin": base, "scale": 1.0})
 		draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
 		if not warm:
 			_speckle(base, a)

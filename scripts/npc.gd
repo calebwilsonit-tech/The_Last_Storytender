@@ -60,7 +60,7 @@ func _draw() -> void:
 	if art != null:
 		var ctx := {"t": _t, "restored": r, "tearful": tearful, "dir": _look_dir(), "origin": Vector2(0, breathe * 0.3 - lift), "scale": 1.0}
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-		drawn = art.draw_character(self, art_key(), ctx)
+		drawn = FigureBake.draw(art, self, art_key(), ctx)
 		draw_set_transform(Vector2(0, breathe * 0.3 - lift), 0.0, Vector2(s, s))
 	if not drawn:
 		_draw_body_original(r, pen, s, breathe)

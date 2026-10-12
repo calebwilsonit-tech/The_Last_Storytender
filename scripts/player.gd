@@ -366,7 +366,7 @@ func _draw() -> void:
 		var ctx := _art_ctx()
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 		if is_crumpled or not (_invuln > 0.0 and int(_t * 20.0) % 2 == 0):
-			if art.draw_character(self, "storytender", ctx):
+			if FigureBake.draw(art, self, "storytender", ctx):
 				return
 	if is_crumpled:
 		draw_set_transform(Vector2(0, -8 - elev), 0.0, Vector2.ONE)
