@@ -48,14 +48,14 @@ var _aim_dirs: Array = []
 
 # --- The Reckoning: once five sentences are rewritten the book comes down and can be hurt. -------
 var reckoning := false
-var hp := 140.0
-var max_hp := 140.0
+var hp := 190.0
+var max_hp := 190.0
 var hit_r := 44.0
 var _dead := false
 
 func begin_reckoning() -> void:
 	reckoning = true
-	max_hp = 140.0 * (0.7 if GameState.is_story() else 1.0)
+	max_hp = 190.0 * (0.7 if GameState.is_story() else 1.0)
 	hp = max_hp
 	_dead = false
 	certainty = 0
