@@ -312,7 +312,22 @@ func _build_ui() -> void:
 	_on_inventory_changed()
 
 # --- Frame loop -----------------------------------------------------------------------
+## Safety net: if the game believes a conversation is open but nothing is (no dialogue, card,
+## cutscene or interaction), release the player after a moment instead of leaving them frozen.
+var _stuck_t := 0.0
+func _watchdog(delta: float) -> void:
+	var busy := _busy or _in_cutscene or _dialogue.visible or _hud.tutorial_open() or get_tree().paused
+	if GameState.in_dialogue and not busy:
+		_stuck_t += delta
+		if _stuck_t > 1.5:
+			_stuck_t = 0.0
+			GameState.in_dialogue = false
+			Telemetry.log_event("watchdog_unstick", {"scene": String(name)})
+	else:
+		_stuck_t = 0.0
+
 func _process(delta: float) -> void:
+	_watchdog(delta)
 	for rd in get_tree().get_nodes_in_group("redactors"):
 		if is_instance_valid(rd):
 			rd.near = _dist(rd.position, _player.position) < 320.0

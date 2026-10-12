@@ -135,6 +135,9 @@ func set_lantern(cur: float, mx: float) -> void:
 func set_controls(_armed: bool) -> void:
 	pass
 
+func tutorial_open() -> bool:
+	return _tutorial_card.is_open()
+
 ## Shows the how-to card for a mechanic once per save. Awaitable.
 func tutorial(id: String) -> void:
 	var flag := "tut_" + id

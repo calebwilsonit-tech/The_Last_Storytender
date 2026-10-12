@@ -81,7 +81,11 @@ func noise_radius() -> float:
 	return r
 
 func can_attack() -> bool:
-	return GameState.has_flag("has_quill") or GameState.has_flag("has_sword")   # Garrick's First Sword counts until the Quill is forged
+	return true      # you start with a pencil stub; Garrick's sword and then the Quill are the real thing
+
+## The pencil stub you begin with is weaker and shorter than the sword or the Quill.
+func _tool_power() -> float:
+	return 1.0 if (GameState.has_flag("has_quill") or GameState.has_flag("has_sword")) else 0.55
 
 func _input(event: InputEvent) -> void:
 	if not preview and GameState.has_flag("format_mark") and not GameState.in_dialogue:
@@ -179,8 +183,8 @@ func _strike() -> void:
 		_combo = 1
 	_combo_t = 0.75
 	var finisher := _combo == 3
-	var dmg := (3.5 if finisher else 2.0) * (1.0 + GameState.equipped_stat("dmg"))
-	var reach := (REACH + (16.0 if finisher else 0.0)) * (1.0 + GameState.equipped_stat("reach"))
+	var dmg := (3.5 if finisher else 2.0) * (1.0 + GameState.equipped_stat("dmg")) * _tool_power()
+	var reach := (REACH + (16.0 if finisher else 0.0)) * (1.0 + GameState.equipped_stat("reach")) * (1.0 if _tool_power() >= 1.0 else 0.85)
 	_atk_cd = 0.5 if finisher else 0.3
 	_swing = 1.0
 	_swing_dir = aim_ground

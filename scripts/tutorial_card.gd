@@ -26,6 +26,10 @@ func is_open() -> bool:
 	return _open
 
 func show_card(card: Dictionary) -> void:
+	# Two cards at once used to overwrite each other's "what was the dialogue state" and leave the
+	# game frozen when they closed. Later cards now wait their turn.
+	while _open:
+		await closed
 	_card = card
 	_t = 0.0
 	_open = true

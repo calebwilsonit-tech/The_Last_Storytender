@@ -341,8 +341,7 @@ func _level_ready() -> void:
 		pass   # the oven stays; Maud is baking in it now
 	if GameState.has_flag("pip_memory_done") and is_instance_valid(_book):
 		_book.queue_free()   # the storybook has done its job
-	if GameState.has_flag("lesson_done"):
-		_spawn_enemies()
+	_spawn_enemies()      # the Errors roam from the start; you begin with a pencil stub
 	if GameState.has_flag("memory_done") and not GameState.is_restored("garrick"):
 		_hud.narrate(Story.RETURNED, false, 5.0)
 	elif not GameState.has_flag("intro_done"):
@@ -369,14 +368,12 @@ func _start_intro() -> void:
 		await _wake_up()
 	await get_tree().create_timer(1.2).timeout
 	await _hud.tutorial("move")
+	await _hud.tutorial("quill")
 	for t in Story.INTRO:
 		_hud.narrate(t, false, 3.2)
 		await get_tree().create_timer(5.6).timeout
 
 func _level_process(delta: float) -> void:
-	# The Errors only roam once you can fight them (after Garrick's sword or Quill).
-	if not _enemies_out and _player.can_attack() and not GameState.in_dialogue:
-		_spawn_enemies()
 	_tick_respawns(delta)
 	_update_region()
 	_hint_redactor()

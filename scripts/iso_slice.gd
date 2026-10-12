@@ -299,7 +299,39 @@ func _draw_faces(cell: Vector2i, kind: String, z: float) -> void:
 		else:
 			a = _p(c + Vector2(0.5, 0.5), z)
 			b = _p(c + Vector2(0.5, -0.5), z)
-		_cliff(a, b, (z - zb) * Iso.LEVEL_H, kind, side, void_edge, _restoration(cell, kind))
+		var depth := (z - zb) * Iso.LEVEL_H
+		_cliff(a, b, depth, kind, side, void_edge, _restoration(cell, kind))
+		_recover(cell, side, Rect2(minf(a.x, b.x), minf(a.y, b.y), absf(b.x - a.x), absf(b.y - a.y) + depth), z - 0.5)
+
+## Ground is painted behind every wall, so a wall that hangs in front of a nearer tile (a diagonal
+## page edge, a thick void edge) would wrongly cover that tile's top. After drawing a wall,
+## repaint the tops of the nearer tiles it overlaps, nearest last.
+func _recover(cell: Vector2i, side: int, face: Rect2, min_level: float) -> void:
+	var cands: Array[Vector2i] = []
+	for dx in range(0, 4):
+		for dy in range(0, 4):
+			if (side == 0 and dy < 1) or (side == 1 and dx < 1):
+				continue            # a wall only hides what lies beyond its own plane
+			if dx == 0 and dy == 0:
+				continue
+			cands.append(Vector2i(dx, dy))
+	cands.sort_custom(func(a: Vector2i, b: Vector2i): return a.x + a.y < b.x + b.y)
+	for off in cands:
+		var m := cell + off
+		if not floor_ref.cells.has(m) or floor_ref.stairs.has(m) or floor_ref.fade_cells.has(m):
+			continue
+		var kind: String = floor_ref.cells[m]
+		if kind == "#" or floor_ref.back_lower(m):
+			continue
+		var zm := float(floor_ref.level(m))
+		if zm < min_level:
+			continue            # lower ground in front only touches the foot of the wall
+		var q := _quad(m, zm)
+		var bb := Rect2(q[0], Vector2.ZERO)
+		for pt in q:
+			bb = bb.expand(pt)
+		if bb.intersects(face):
+			_draw_tile(m, kind, zm)
 
 func _cliff(a: Vector2, b: Vector2, depth: float, kind: String, side: int, void_edge: bool, r: float) -> void:
 	var q := PackedVector2Array([a, b, b + Vector2(0, depth), a + Vector2(0, depth)])
@@ -369,6 +401,13 @@ func _draw_stairs(cell: Vector2i, kind: String) -> void:
 			y0 = lo
 			y1 = hi
 		_box(c, x0, y0, x1, y1, base, base + float(i + 1) / n, col, edge)
+	# Steps hang over the tiles in front of them just like walls do.
+	var top := _quad(cell, base + 1.0)
+	var bot := _quad(cell, base)
+	var bb := Rect2(top[0], Vector2.ZERO)
+	for pt in top + bot:
+		bb = bb.expand(pt)
+	_recover(cell, -1, bb, base + 0.5)
 
 func _box(c: Vector2, x0: float, y0: float, x1: float, y1: float, zb: float, zt: float, col: Color, edge: Color) -> void:
 	var n_ := _p(c + Vector2(x0, y0), zt)
