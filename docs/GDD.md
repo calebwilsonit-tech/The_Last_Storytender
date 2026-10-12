@@ -59,7 +59,7 @@ Back in the overworld the sword restores Thistledown as before.
 **Rule: one memory per NPC, one boss per memory, one Editor per town.**
 Every NPC in need has exactly one memory (a Story Realm dungeon), and each memory ends in a **Memory Boss**: the embodiment of that person's specific wound (The Critic is Garrick's self-doubt). A town has 3 NPCs, so 3 memory bosses. When all three are restored, the Redaction sends the town's **Editor** (a big boss fought in the town itself, in the open). Defeating the Editor turns the town into a "Published Chapter" (safe zone). One memory per NPC, rather than several, keeps each story short and emotionally complete; deeper NPCs can earn a second memory later.
 
-**Boss principle:** you never win by dealing more damage, you win by remembering. Memory bosses are beaten by holding memories up to the Lantern while surviving their attacks. Editors are beaten by exposing and cutting their "edits" (Quill / Lantern / Eraser Crumbs).
+**Boss principle (revised, see section 27):** remembering is what makes a boss *beatable*, not what beats it. Memory bosses are a two-part fight: first the puzzle (hold up memories, rewrite sentences, seat guests) which strips their protection, then the Reckoning, a real fight where the Quill can hurt them. Editors are beaten by exposing and cutting their "edits" (Quill / Lantern / Eraser Crumbs).
 
 ### Progression table
 | Town / Biome | Memory bosses (3) | Town Editor (finale) | New mechanic introduced |
@@ -370,3 +370,26 @@ Memory bosses are a two-part fight. **Part one is the puzzle**: hold up the memo
 
 ## 28. Dungeons match the overworld
 Every memory now has two lantern posts (rest, and the Index without fast travel: workbench, stall, levelling) and **three locked vault chests (word trials, one per stretch of the dungeon, tiers 1 to 3)** with the same tier-scaled prizes. Redaction bars (the black censor bars) are read away by **holding the Lantern and aiming it at the bar**; a hint chip with the bound button now floats over any bar you are near.
+
+## 29. Cutscenes
+A small cinematic system (`LevelBase.cinematic`) plays at the moments that deserve one: letterbox bars slide in, the camera glides to the subject and pushes in, the dialogue plays over it, and the camera returns to the Storytender. In use now: every memory boss intro, the Critic's, the Spoiler's and the Cold Shoulder's Reckoning reveal, every memory boss ending, the Scissor-Man's entrance and defeat, and the Editor's tear opening in the overworld. The New Game storybook is its own cutscene. Rule of thumb: a cutscene is for a reveal, an entrance or a turning point; never for something the player is about to do again. Planned: restoration scenes moving onto the same system, the Margin Gate opening, chapter transitions.
+
+## 30. The opening hours, in order (current flow)
+1. New Game: choose Story or Normal, then the storybook (what a Storytender is, the Editors, the Redaction, page 41) and the doodle waking up on the page.
+2. Walk the Prologue. Lantern posts light up and open the Index (workbench, stall, levelling, map). The first Index visit hands you 15 free attribute points.
+3. Garrick's ghost sends you into his memory. **The First Sword lies in the first room**, because you need something to fight with before the Critic, and the memory cannot hold you hostage to a weapon you only get at the end. The sword counts as your weapon until Garrick forges the Quill; you carry it out to him at the end of the memory.
+4. **The Errors roam the overworld as soon as you are armed** (sword or Quill). Before that the Prologue is peaceful and you cannot be attacked by things you cannot answer. Beating them drops materials and gear (section 24), gives Renown, and they return when you rest at a post.
+5. Vault trials, hidden caches behind Redaction bars (hold and aim the Lantern at the bar), dungeon vault chests and boss Reckonings feed the Level and crafting loop; the Margin Gate asks for 220 Renown.
+
+## 31. Design decisions log (things we agreed on, in one place)
+- **Tone:** semi-emotional: a silly surface with something sincere underneath.
+- **Souls-like in a 2D isometric, bookish key:** Mnemosynth is souls, lantern posts are bonfires (rest, resets the page, opens the Index), levelling is spending a currency that costs more each time, bosses have a puzzle and a fight, dying drops Mnemosynth. The setting, the verbs (rewrite, remember, format), the Index hub and the word-game vaults keep it its own thing.
+- **Difficulty is chosen at New Game** (Story or Normal) and fixed for the save. Normal pays better drops (more on bosses).
+- **Height must read clearly at every graphics setting** (non-negotiable), with cut-paper art that is appealing to look at; see sections 21 and 22 for the graphics options and performance architecture aimed at integrated GPUs.
+- **The Prologue is not a chapter**; later chapters (Plot-Twist Peaks, Purple Prose Swamp, The Final Chapter) are at least 4x its size with bigger towns and more characters; dungeons and memories stay short.
+- **The grind is deliberate:** Renown from side quests, mini-dungeons or beating enemies; the roster of Errors keeps growing past six as the story goes on; level costs rise every point.
+- **Every NPC, memory and boss has its own mechanic** without feeling repetitive (callbacks are welcome).
+- **Controller is a first-class device:** rebinding for keyboard/mouse and pad, glyphs that follow the last device used, a button legend at the bottom of every menu, B backs out of menus, a slowed menu stick, letter-grid typing and a rhythm trial for pads.
+- **Menus use WASD**; a pocket workbench is the only portable crafting; shop and map live at lantern posts.
+- **Hidden items, side quests and missions** are wanted from the Prologue on (hidden caches are the first step).
+- **Known gaps:** floor tile edges ("sides") sometimes draw over props in a few spots (needs a reproduction screenshot), the Cold Shoulder and Critic are untuned against real players, level-matched Mnemosynth income for later chapters, a respec option, and rank perks.
