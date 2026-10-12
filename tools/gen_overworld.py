@@ -158,6 +158,104 @@ put(31, 40, 'R')
 for x in (31, 32):
     pass
 
+# ---- things to find: chests, riddle vaults, hidden caches ---------------------------------------------
+CHESTS = {}          # "x,y" -> reward ("mnemo:N" or "item:id:n")
+RIDDLES = {}         # id -> sentence stone + gate + chest
+RING = set()         # cells of the tree rings around vaults (never carved through)
+REWARDS = ["item:ink_vial:2", "mnemo:30", "item:warm_loaf:2", "item:eraser_crumbs:3", "mnemo:25", "item:void_ink:1",
+           "item:ink_vial:1", "mnemo:40", "item:warm_loaf:1", "item:eraser_crumbs:2", "mnemo:20", "item:ink_vial:2",
+           "mnemo:35", "item:void_ink:2"]
+_reward_i = [0]
+
+def next_reward():
+    r = REWARDS[_reward_i[0] % len(REWARDS)]
+    _reward_i[0] += 1
+    return r
+
+def area_ok(x, y, rad=5):
+    if x - rad < 1 or y - rad < 1 or x + rad >= W - 1 or y + rad >= H - 1:
+        return False
+    lv = hts[y][x]
+    if not lv.isdigit():
+        return False
+    for yy in range(y - rad, y + rad + 1):
+        for xx in range(x - rad, x + rad + 1):
+            if rows[yy][xx] != '.' or hts[yy][xx] != lv:
+                return False
+    return True
+
+def stamp_site(cx, cy, rad=4, search=30):
+    for d in range(search):
+        for dy in range(-d, d + 1):
+            for dx in range(-d, d + 1):
+                if max(abs(dx), abs(dy)) != d:
+                    continue
+                if area_ok(cx + dx, cy + dy, rad):
+                    return (cx + dx, cy + dy)
+    return None
+
+def make_ring(x, y, side):
+    """A 5x5 clearing ringed by trees, with a 3-wide opening on `side` (e/w/n/s)."""
+    for dy in range(-3, 4):
+        for dx in range(-3, 4):
+            cx_, cy_ = x + dx, y + dy
+            if max(abs(dx), abs(dy)) == 3:
+                rows[cy_][cx_] = 'T'
+                RING.add((cx_, cy_))
+            else:
+                rows[cy_][cx_] = '.'
+    ox, oy = {'e': (3, 0), 'w': (-3, 0), 's': (0, 3), 'n': (0, -3)}[side]
+    for k in (-1, 0, 1):
+        px, py = (x + ox, y + oy + k) if side in 'ew' else (x + ox + k, y + oy)
+        rows[py][px] = '.'
+        RING.discard((px, py))
+    return (x + ox, y + oy)
+
+def riddle_vault(cx, cy, side, prefix, options, suffix):
+    site = stamp_site(cx, cy)
+    if not site:
+        print("no site for riddle near", cx, cy)
+        return
+    x, y = site
+    gate = make_ring(x, y, side)
+    rows[y][x] = 'q'
+    CHESTS["%d,%d" % (x, y)] = next_reward()
+    rows[gate[1]][gate[0]] = 'U'
+    # the stone stands outside the opening, off to one side
+    sx, sy = {'e': (gate[0] + 2, gate[1] + 2), 'w': (gate[0] - 2, gate[1] + 2), 's': (gate[0] + 2, gate[1] + 2), 'n': (gate[0] + 2, gate[1] - 2)}[side]
+    if rows[sy][sx] != '.':
+        for ddx, ddy in ((2, 2), (-2, 2), (2, -2), (-2, -2), (3, 0), (-3, 0)):
+            if rows[gate[1] + ddy][gate[0] + ddx] == '.':
+                sx, sy = gate[0] + ddx, gate[1] + ddy
+                break
+    rows[sy][sx] = 'S'
+    axis = [0, 1] if side in 'ew' else [1, 0]
+    RIDDLES["r%d" % len(RIDDLES)] = {"stone": [sx, sy], "gate": list(gate), "axis": axis, "chest": [x, y],
+                                       "prefix": prefix, "options": options, "suffix": suffix}
+
+def hidden_cache(cx, cy, side):
+    """Same clearing, but its opening is covered by a Redaction bar: hold the Lantern to read it away."""
+    site = stamp_site(cx, cy)
+    if not site:
+        print("no site for cache near", cx, cy)
+        return
+    x, y = site
+    gate = make_ring(x, y, side)
+    rows[y][x] = 'q'
+    CHESTS["%d,%d" % (x, y)] = next_reward()
+    rows[gate[1]][gate[0]] = 'R'
+
+riddle_vault(34, 62, 'e', "The gate is", ["LOCKED", "RUSTED", "UNLATCHED"], ".")
+riddle_vault(58, 27, 'w', "Behind this gate is", ["NOTHING", "A TRAP", "TREASURE"], ".")
+riddle_vault(32, 87, 'e', "The lock was never", ["FIXED", "BROKEN", "INSTALLED"], ".")
+riddle_vault(92, 83, 'w', "Whoever lives here is", ["OUT", "ASLEEP", "EXPECTING YOU"], ".")
+riddle_vault(98, 22, 's', "The wall is", ["SOLID", "PAINTED ON", "A DOOR"], ".")
+hidden_cache(22, 44, 's')
+hidden_cache(34, 15, 'n')
+hidden_cache(46, 92, 'n')
+hidden_cache(84, 31, 's')
+hidden_cache(60, 59, 'n')
+
 # crystals (Mnemosynth): clusters
 def cluster(cx, cy, n, spread=3):
     placed = 0
@@ -175,8 +273,10 @@ for cx, cy, n in [(22, 58, 3), (30, 46, 3), (44, 58, 3), (54, 48, 2), (40, 12, 4
     cluster(cx, cy, n)
 
 # ---- enemies (they appear after Garrick's lesson, streamed by distance) -----------------------------
-def camp(cx, cy, g, x_, spread=3):
-    for ch, n in (('g', g), ('x', x_)):
+# g Bare (lunger)   x Mite (swarm)   l Run-on (sticky trail)   d Dangler (ranged)
+# n Censor (shielded)   z Ellipsis (blinks).  Which kinds appear grows with the story (see main.gd).
+def camp(cx, cy, kinds, spread=3):
+    for ch, n in kinds.items():
         for _ in range(n):
             for _t in range(40):
                 x, y = cx + rnd.randint(-spread, spread), cy + rnd.randint(-spread, spread)
@@ -184,26 +284,24 @@ def camp(cx, cy, g, x_, spread=3):
                     put(x, y, ch)
                     break
 
-for cx, cy, g, x_ in [(36, 50, 1, 1), (47, 58, 1, 1), (20, 60, 0, 1),
-                      (40, 15, 2, 1), (54, 24, 1, 2), (50, 14, 1, 1),
-                      (36, 80, 1, 2), (46, 82, 1, 2), (30, 85, 0, 2), (60, 92, 1, 1),
-                      (92, 27, 2, 1), (100, 31, 1, 1),
-                      (76, 76, 1, 3), (84, 80, 1, 2), (80, 72, 0, 2)]:
-    camp(cx, cy, g, x_)
+CAMPS = [
+    (36, 50, {'g': 1, 'x': 1}), (47, 58, {'g': 1, 'x': 1}),
+    (40, 15, {'d': 2, 'g': 1}), (54, 24, {'d': 1, 'x': 1}), (50, 14, {'g': 1}),
+    (36, 80, {'l': 2, 'x': 1}), (46, 82, {'l': 1, 'x': 1}), (60, 92, {'l': 1, 'd': 1}),
+    (92, 27, {'n': 1, 'g': 1, 'x': 1}), (100, 31, {'n': 1, 'g': 1}),
+    (76, 76, {'z': 2, 'x': 1, 'g': 1}), (84, 80, {'z': 1, 'x': 1}),
+]
+for cx, cy, kinds in CAMPS:
+    camp(cx, cy, kinds)
+    # the bigger camps guard a chest
+    if sum(kinds.values()) >= 3 or any(k in kinds for k in 'ldnz'):
+        for _t in range(40):
+            x, y = cx + rnd.randint(-2, 2), cy + rnd.randint(-2, 2)
+            if 0 <= x < W and 0 <= y < H and rows[y][x] == '.':
+                rows[y][x] = 'q'
+                CHESTS["%d,%d" % (x, y)] = next_reward()
+                break
 
-def validate_stairs():
-    bad = []
-    for y in range(H):
-        for x in range(W):
-            c = hts[y][x]
-            if c in DIRS:
-                dx, dy = DIRS[c]
-                lo, hi = hts[y - dy][x - dx], hts[y + dy][x + dx]
-                if not (lo.isdigit() and hi.isdigit() and int(hi) == int(lo) + 1) or not (rows[y - dy][x - dx] != ' ' and rows[y + dy][x + dx] != ' '):
-                    bad.append((x, y, c, lo, hi))
-    return bad
-
-print("bad stairs:", validate_stairs())
 # ---- reachability + trees -----------------------------------------------------------------------------
 def level(x, y):
     c = hts[y][x]
@@ -224,7 +322,7 @@ def walkable_cell(x, y, trees_block):
     ch = rows[y][x]
     if ch in ' #':
         return False
-    if ch == 'T' and trees_block:
+    if ch == 'T' and (trees_block or (x, y) in RING):
         return False
     if ch in 'HFVQ' or ch == 'R' or ch == 'L' and False:
         return ch not in 'HFVQ'
@@ -274,11 +372,11 @@ for y in range(H):
             if d and rnd.random() < d:
                 rows[y][x] = 'T'
 # keep clearings around landmarks
-POI = [(x, y) for y in range(H) for x in range(W) if rows[y][x] in 'PWYLGkoevRNKBVQ']
+POI = [(x, y) for y in range(H) for x in range(W) if rows[y][x] in 'PWYLGkoevRNKBVQqSU']
 for (px, py) in POI:
     for dy in range(-2, 3):
         for dx in range(-2, 3):
-            if rows[py + dy][px + dx] == 'T':
+            if rows[py + dy][px + dx] == 'T' and (px + dx, py + dy) not in RING:
                 rows[py + dy][px + dx] = '.'
 # make sure every landmark is reachable: carve the shortest route through trees when needed
 reach = bfs(START, True)
@@ -293,7 +391,7 @@ for (px, py) in POI:
     c = (px, py)
     while c is not None:
         x, y = c
-        if rows[y][x] == 'T':
+        if rows[y][x] == 'T' and (x, y) not in RING:
             rows[y][x] = '.'
         c = anyreach[c]
 reach = bfs(START, True)
@@ -307,7 +405,7 @@ for (px, py) in POI:
 bad_enemies = []
 for y in range(H):
     for x in range(W):
-        if rows[y][x] in 'gx' and (x, y) not in reach:
+        if rows[y][x] in 'gxldnz' and (x, y) not in reach:
             rows[y][x] = '.'
             bad_enemies.append((x, y))
 
@@ -333,8 +431,9 @@ extends RefCounted
 ##   ' ' void (edge of the page)   '.' plains floor   ',' town floor   '#' plot hole (pit)
 ##   P player start   T tree   C Mnemosynth crystal   W the tutorial sign   X town sign
 ##   H house (2x2 block)   F forge (2x2 block)   N Garrick   K Pip   B Maud
-##   V Maud's cold oven   Q Pip's storybook   g Bare   x Mite   R Redactor bar (3 wide)   D training dummy
+##   V Maud's cold oven   Q Pip's storybook   g Bare   x Mite   l Run-on   d Dangler   n Censor   z Ellipsis   R Redactor bar (3 wide)   D training dummy
 ##   Y lantern post (a waypoint)   L lore stone   G the Margin Gate
+##   q chest   S riddle stone   U riddle gate (opens when the stone is rewritten correctly)
 ##   k Softcover Binding   o Oxford Comma   e Eraser Crumbs   v Void Ink  (one-time pickups)
 ## HEIGHTS: '0'..'9' level; letters e/w/s/n are stairs rising toward that direction.
 ## REGION_ROWS: one letter per cell naming the region (see REGIONS).
@@ -344,9 +443,11 @@ const START_CELL := Vector2i(%d, %d)
 const REGIONS := %s
 const WAYPOINTS: Array[Dictionary] = %s
 const LORE := %s
+const CHESTS := %s
+const RIDDLES := %s
 
 ''' % (OX, OY, START[0], START[1], json.dumps(REGIONS), json.dumps([{"id": a, "name": b, "cell": [c[0], c[1]], "region": d} for a, b, c, d in WAYPOINTS]).replace('true', 'true'),
-       json.dumps({k: [v[0], v[1]] for k, v in LORE.items()}))
+       json.dumps({k: [v[0], v[1]] for k, v in LORE.items()}), json.dumps(CHESTS), json.dumps(RIDDLES))
 out += fmt('ROWS', rows) + "\n" + fmt('HEIGHTS', hts) + "\n" + fmt('REGION_ROWS', reg)
 out += '''
 static func region_at(cell: Vector2i) -> String:

@@ -39,7 +39,7 @@ const GFX := [
 const PRESET_NAMES := ["Low", "Balanced", "High", "Custom"]
 const PRESETS := {
 	0: {"density": 0, "paper": 1, "paper_detail": 0, "grass": 0, "outlines": 0, "strata": 0, "refresh": 0, "distance": 0, "sway": 0, "shadows": 0, "glow": 0, "see_through": 1, "vignette": 0, "smooth": 0, "fps": 1, "vsync": 1, "show_fps": 0},
-	1: {"density": 0, "paper": 2, "paper_detail": 1, "grass": 1, "outlines": 1, "strata": 1, "refresh": 1, "distance": 1, "sway": 0, "shadows": 1, "glow": 1, "see_through": 1, "vignette": 1, "smooth": 0, "fps": 1, "vsync": 1, "show_fps": 0},
+	1: {"density": 0, "paper": 1, "paper_detail": 0, "grass": 1, "outlines": 1, "strata": 1, "refresh": 1, "distance": 1, "sway": 0, "shadows": 1, "glow": 1, "see_through": 1, "vignette": 1, "smooth": 0, "fps": 1, "vsync": 1, "show_fps": 0},
 	2: {"density": 1, "paper": 3, "paper_detail": 2, "grass": 1, "outlines": 1, "strata": 1, "refresh": 2, "distance": 2, "sway": 1, "shadows": 1, "glow": 1, "see_through": 1, "vignette": 1, "smooth": 1, "fps": 1, "vsync": 1, "show_fps": 0},
 }
 var preset := -1                 # 0 Low, 1 Balanced, 2 High, 3 Custom, -1 = pick for this computer on first run
@@ -77,10 +77,12 @@ func cull_half() -> Vector2:
 	return [Vector2(480.0, 300.0), Vector2(540.0, 360.0), Vector2(660.0, 450.0)][clampi(g("distance"), 0, 2)]
 
 func ground_move_threshold() -> float:
-	return [110.0, 56.0, 28.0][clampi(g("refresh"), 0, 2)]
+	# Never let the camera travel further than the spare margin around the screen before repainting.
+	var margin := cull_half().y - 240.0 - 24.0
+	return clampf([130.0, 90.0, 40.0][clampi(g("refresh"), 0, 2)], 24.0, margin)
 
 func ground_idle_interval() -> float:
-	return [0.6, 0.25, 0.1][clampi(g("refresh"), 0, 2)]
+	return [2.0, 1.0, 0.5][clampi(g("refresh"), 0, 2)]
 
 func _detect_preset() -> int:
 	if DisplayServer.get_name() == "headless":

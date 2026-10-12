@@ -312,3 +312,26 @@ The game should be a decent sized game, and at points it should feel *absurdly* 
 
 ### Graphics options (implemented v2.12)
 Every visual cost has an option, so players on weak machines choose where to sacrifice: pixel density (renders at 1280x720 instead of native on Retina), paper background (flat color or 3 resolutions), paper shader detail, grass, tile outlines, cliff lines, ground refresh, draw distance, tree sway, shadows, glow, edge shading, smooth lines, FPS cap, VSync, FPS counter. New visual effects added later should get an option in Settings.GFX rather than being always on.
+
+
+## 22. Enemy Roster, Renown and the Grind (implemented v2.13, design law)
+### Enemy roster (it keeps growing)
+Six kinds of Error exist in the Prologue, each with its own way of fighting, and each is **unlocked by the story** so the world keeps changing:
+| Kind | Verb | Counter | Appears |
+|---|---|---|---|
+| Bare (Typo-Ghoul) | heavy lunge | proofread with the Lantern, or cut down | from the start |
+| Mite | fast swarm | light burns it off | from the start |
+| Run-on | sticky ink trail that slows you | Lantern teaches it to stop | after Pip is restored |
+| Dangling Modifier | ranged, keeps distance, flings slow words | keep moving; Lantern ties it off | after Pip is restored |
+| Censor | frontal black bar blocks the Quill | strip the bar with the Lantern, or hit from behind | after Maud is restored |
+| Ellipsis ("...") | blinks around you, then strikes | the Lantern pins it so it can be cut | after Maud is restored |
+**Later chapters add many more than six.** Each chapter introduces several new kinds (plus variants of old ones), fitted to its theme, and chapter maps are much larger, so the roster should keep widening. Rules: every new kind gets a distinct verb (not a re-skin), a Lantern interaction, a one-line intro the first time it appears, and an unlock point in the story. Keep counts moderate; variety beats numbers, and enemies are streamed by distance so big maps stay uncluttered.
+
+### Renown: the deliberate grind
+There is a small grind by design, and **the player chooses how to do it**. Renown (shown as Rank and a bar under the Mnemosynth counter) is earned by any deed: beating Errors (1 to 4 each by kind), opening chests (5), solving riddle gates (8), discovering regions (6), lighting posts (3), restoring people (35 each), bosses (40) and, later, side quests and mini-dungeons. Story gates require a minimum Renown (the Margin Gate asks for 220), so a player who ignores optional content will be a bit short and has to explore, fight, solve or run a mini-dungeon. Beating enemies is always a valid way to fill the gap.
+- Each rank widens the ink bottle (+10 max ink per rank). More perks per rank are planned.
+- Tune so the story alone gives roughly two-thirds of a gate's requirement; the rest comes from optional deeds (in the Prologue about 145 from the story, 220 needed, around 280 or more on offer optionally).
+- Later chapters scale both the requirements and the amount on offer; side quests and mini-dungeons (still to build) should be the most efficient sources, so they feel worthwhile and not skippable.
+
+### Things to do in the world (overworld density)
+The Prologue map now has 5 riddle vaults (rewrite the sentence on the stone to open the gate, a chest behind), 5 hidden caches behind redaction bars (hold the Lantern), chests guarded by enemy camps, lore stones and one-time pickups. Dense but not overwhelming: roughly one point of interest every 10 to 15 cells.

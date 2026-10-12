@@ -8,7 +8,7 @@ extends CharacterBody2D
 signal died(enemy: Enemy)
 signal proofread(enemy: Enemy)
 
-enum Kind { BARE, MITE }
+enum Kind { BARE, MITE, SLUG, DANGLER, CENSOR, ELLIPSIS }
 
 var kind: Kind = Kind.BARE
 var floor_ref: IsoFloor
@@ -50,6 +50,7 @@ var _lost_t := 0.0
 var _look_t := 0.0
 var _lured: Node2D                 # a remembered Storytender it is staring at
 var _popup := 0.0
+var x: Dictionary = {}              # state for the special kinds (see EnemyKinds)
 
 func _ready() -> void:
 	_seed = position.x * 0.017 + position.y * 0.011
@@ -68,7 +69,10 @@ func _ready() -> void:
 	_facing = Vector2.from_angle(randf() * TAU)
 	max_hp = hp
 	_col = CollisionPolygon2D.new()
-	_col.polygon = Iso.diamond(Vector2.ZERO, 0.6 if kind == Kind.BARE else 0.35)
+	if EnemyKinds.is_special(self):
+		EnemyKinds.setup(self)
+		max_hp = hp
+	_col.polygon = Iso.diamond(Vector2.ZERO, 0.6 if kind in [Kind.BARE, Kind.SLUG, Kind.CENSOR] else 0.35)
 	add_child(_col)
 	add_to_group("enemies")
 	add_to_group("hittables")
@@ -77,6 +81,10 @@ func _ready() -> void:
 # --- Interactions from the player ---------------------------------------------------------
 func hurt(dmg: float, dir_ground: Vector2) -> void:
 	if friendly or _dead_t >= 0.0:
+		return
+	if EnemyKinds.is_special(self) and EnemyKinds.blocks_hit(self, dir_ground):
+		_flash = 0.12                    # a dull clang: the bar (or the blink) took it
+		_knock = Vector2(dir_ground.x, dir_ground.y * 0.5) * 60.0
 		return
 	# Sneak attack: hitting something that hasn't noticed you (or is asleep) does double.
 	var unaware := (_state in ["idle", "return", "search"] and _alert < 0.6) or asleep_t > 0.0
@@ -102,6 +110,9 @@ func lit(delta: float) -> void:
 	if friendly or _dead_t >= 0.0:
 		return
 	_lit_now = true
+	if EnemyKinds.is_special(self):
+		EnemyKinds.on_lit(self, delta)
+		return
 	if kind == Kind.BARE:
 		_proof += delta / 2.2
 		if _proof >= 1.0:
@@ -112,6 +123,7 @@ func lit(delta: float) -> void:
 			_die()
 
 func _die() -> void:
+	EnemyKinds.release(self)
 	_dead_t = 0.0
 	remove_from_group("enemies")
 	remove_from_group("hittables")
@@ -120,6 +132,7 @@ func _die() -> void:
 	died.emit(self)
 
 func _correct() -> void:
+	EnemyKinds.release(self)
 	friendly = true
 	remove_from_group("enemies")
 	remove_from_group("hittables")
@@ -128,6 +141,11 @@ func _correct() -> void:
 	proofread.emit(self)
 
 # --- Behaviour ------------------------------------------------------------------------------
+## Ground-plane distance between two world points (the vertical axis is squashed by two).
+func _ground_to_from(a: Vector2, b: Vector2) -> Vector2:
+	var d := b - a
+	return Vector2(d.x, d.y * 2.0)
+
 func _ground_to(p: Vector2) -> Vector2:
 	var d := p - position
 	return Vector2(d.x, d.y * 2.0)
@@ -236,6 +254,8 @@ func _hostile_tick(delta: float, slow: float) -> void:
 	if asleep_t > 0.0 and _state != "hurt":
 		return
 	var sensed := _perceive(delta)
+	if EnemyKinds.is_special(self):
+		EnemyKinds.tick_always(self, delta)
 	if _state in ["idle", "return"] and _alert < 1.0:
 		_check_echo_lure()
 	var dg := _ground_to(target.position) if target else Vector2(9999, 0)
@@ -267,7 +287,9 @@ func _hostile_tick(delta: float, slow: float) -> void:
 					_state = "search"
 					_look_t = 3.0
 					return
-			if kind == Kind.BARE:
+			if EnemyKinds.is_special(self):
+				EnemyKinds.chase(self, delta, dist, dirg, slow)
+			elif kind == Kind.BARE:
 				_move(dirg, 86.0 * slow)
 				if dist < 80.0 and _cd <= 0.0 and slow == 1.0:
 					_state = "windup"
@@ -308,7 +330,7 @@ func _hostile_tick(delta: float, slow: float) -> void:
 			_move(_lunge, 340.0)
 			if not _hit_done and target and dist < 40.0:
 				_hit_done = true
-				target.take_damage(12.0 * GameState.enemy_dmg_mult(), true, "bare")
+				target.take_damage(EnemyKinds.lunge_damage(self) * GameState.enemy_dmg_mult(), true, EnemyKinds.lunge_source(self))
 				target.knockback(_lunge, 280.0)
 			if _st <= 0.0:
 				_state = "recover"
@@ -363,18 +385,22 @@ func _draw_cone() -> void:
 # --- Drawing --------------------------------------------------------------------------------
 func _draw() -> void:
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))
-	var pool := 20.0 if kind == Kind.BARE else 11.0
+	var pool := 20.0 if kind == Kind.BARE else EnemyKinds.pool(self)
 	if Settings.gfx_on("shadows"):
 		draw_circle(Vector2.ZERO, pool, Color(0, 0, 0, 0.25))
 	if _dead_t >= 0.0:
 		draw_circle(Vector2.ZERO, pool + _dead_t * 22.0, Color(Palette.INK, 0.55 * (1.0 - _dead_t / 0.7)))
 	if not friendly and _dead_t < 0.0 and asleep_t <= 0.0 and target != null and _ground_to(target.position).length() < 460.0:
 		_draw_cone()
+	draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))
+	EnemyKinds.draw_ground(self)
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
 	if kind == Kind.BARE:
 		_draw_bare()
-	else:
+	elif kind == Kind.MITE:
 		_draw_mite()
+	else:
+		EnemyKinds.draw_body(self)
 	if asleep_t > 0.0 and _dead_t < 0.0:
 		var font := ThemeDB.get_default_theme().default_font
 		for i in 3:
@@ -386,7 +412,7 @@ func _draw() -> void:
 	# Alert indicators: "?" while it is noticing you, "!" once it has.
 	if not friendly and _dead_t < 0.0:
 		var font2 := ThemeDB.get_default_theme().default_font
-		var top := -96.0 if kind == Kind.BARE else -52.0
+		var top := -96.0 if kind == Kind.BARE else (-52.0 if kind == Kind.MITE else EnemyKinds.label_top(self) - 6.0)
 		if _state == "search":
 			draw_string_outline(font2, Vector2(-5, top), "?", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 26, 6, Color(Palette.OUTLINE, 0.9))
 			draw_string(font2, Vector2(-5, top), "?", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 26, Color("c9c9d6"))

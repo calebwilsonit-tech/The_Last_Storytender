@@ -442,11 +442,34 @@ static func gate_locked() -> Array:
 		line("", "Whatever lies beyond cannot be opened until the Prologue is finished: Thistledown still has an Editor.", "action"),
 	]
 
+static func gate_renown(have: int, need: int) -> Array:
+	return [
+		line("", "The ribbon on the Margin Gate stays tied. A small tag hangs from it: 'Not enough people know your name yet.'", "action"),
+		line("", "Renown %d / %d. Beat Errors, open chests, solve riddles, light posts, explore: any of it counts. The page remembers what you do." % [have, need], "action"),
+	]
+
 static func gate_open() -> Array:
 	return [
 		line("", "The ribbon unties itself. The pages part like a curtain, and beyond them is white, and a faint sound like someone, far away, turning a page.", "action"),
 		line("", "There is nothing there yet. But there will be.", "action"),
 	]
+
+const CHEST_LINES := [
+	"Inside: something that was cut from a very early draft and has been waiting to be useful.",
+	"The lid creaks like a page turning. Whoever hid this had good taste and poor handwriting.",
+	"A tidy little hoard, labeled in a hand you almost recognise.",
+	"It was never locked, only ignored.",
+	"There is a note inside: 'if you found this, the story is going better than I feared.'",
+]
+const RIDDLE_OPEN := "The sentence settles into place, and the gate remembers it was always unlatched."
+
+## Shown the first time each new kind of Error wanders into range (keys are Enemy.Kind values).
+const ENEMY_INTRO := {
+	2: "A Run-on drags itself across the page, leaving a sticky trail behind it. Shine the Lantern on it until it learns when to stop.",
+	3: "A Dangling Modifier hangs from nothing, flinging words from a distance. Keep moving, and light it until it clings to something else.",
+	4: "A Censor stands with a black bar across its front. The Quill will not pierce it. Light the bar until it fades, or go around behind.",
+	5: "Three dots blink in and out around you. Light pins them in place, and then they can be cut.",
+}
 
 static func echo_grant() -> Array:
 	return [

@@ -2,6 +2,8 @@ extends Node
 ## Global story state (autoload as GameState).
 
 signal mnemosynth_changed(value: int)
+signal renown_changed(value: int, rank: int)
+signal rank_up(rank: int)
 signal restoration_finished
 signal inventory_changed
 
@@ -35,6 +37,38 @@ func has_flag(f: String) -> bool:
 func set_flag(f: String) -> void:
 	flags[f] = true
 	save_game()
+
+# --- Renown: how well the page knows your name -------------------------------------------------
+# Every kind of deed earns it (beating Errors, side quests, mini-dungeons, exploring, chests,
+# riddles, restoring people). Story gates ask for a minimum, so you can pick how to earn it.
+const RANK_STEPS := [0, 40, 100, 180, 280, 400, 560, 760, 1000, 1300, 1650]
+const GATE_RENOWN := {"margin_gate": 220}
+var renown := 0
+
+func rank() -> int:
+	var r := 1
+	for i in RANK_STEPS.size():
+		if renown >= RANK_STEPS[i]:
+			r = i + 1
+	return r
+
+func rank_floor() -> int:
+	return RANK_STEPS[mini(rank(), RANK_STEPS.size()) - 1]
+
+func rank_next() -> int:
+	var r := rank()
+	return RANK_STEPS[r] if r < RANK_STEPS.size() else RANK_STEPS[RANK_STEPS.size() - 1]
+
+## Each rank widens the ink bottle a little.
+func max_ink_bonus() -> float:
+	return 10.0 * (rank() - 1)
+
+func add_renown(n: int) -> void:
+	var before := rank()
+	renown += n
+	renown_changed.emit(renown, rank())
+	if rank() > before:
+		rank_up.emit(rank())
 
 func add_mnemosynth(n: int) -> void:
 	mnemosynth += n
@@ -174,7 +208,7 @@ func save_game() -> void:
 	if not autosave_enabled:
 		return
 	var data := {
-		"v": 2, "mnemosynth": mnemosynth, "ink": ink, "flags": flags.keys(),
+		"v": 2, "renown": renown, "mnemosynth": mnemosynth, "ink": ink, "flags": flags.keys(),
 		"inventory": inventory, "equipment": equipment, "quick_slot": quick_slot,
 		"sources": sources.map(func(src): return {"id": src["id"], "x": src["origin"].x, "y": src["origin"].y, "r": src["radius"]}),
 		"town_published": town_published, "difficulty": difficulty,
@@ -192,6 +226,7 @@ func load_game() -> bool:
 	if typeof(data) != TYPE_DICTIONARY:
 		return false
 	mnemosynth = int(data.get("mnemosynth", 0))
+	renown = int(data.get("renown", 0))
 	ink = float(data.get("ink", 100.0))
 	flags.clear()
 	for k in data.get("flags", []):
@@ -232,6 +267,7 @@ func _ready() -> void:
 func reset_all() -> void:
 	delete_save()
 	mnemosynth = 0
+	renown = 0
 	ink = 100.0
 	flags.clear()
 	inventory.clear()

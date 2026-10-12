@@ -154,6 +154,10 @@ var _drawn_focus := Vector2(1e9, 1e9)
 var _idle := 0.0
 var _had_marks := false
 
+## The overworld never changes its ground, so it never needs the safety repaint. Memories do.
+var static_world := false
+var _pending: Array = []                # slices waiting for a repaint (spread over a few frames)
+
 func _process(delta: float) -> void:
 	for c in marks.keys():
 		marks[c]["t"] = float(marks[c]["t"]) + delta
@@ -161,19 +165,28 @@ func _process(delta: float) -> void:
 	var animated := not marks.is_empty() or _had_marks or GameState.restore_active()
 	_had_marks = not marks.is_empty()
 	var moved := focus.distance_to(_drawn_focus) > Settings.ground_move_threshold()
-	if not (animated or moved or dirty or _idle > Settings.ground_idle_interval()):
-		return
-	if moved:
-		_drawn_focus = focus
-	_idle = 0.0
-	dirty = false
-	for sl in _slices:
-		var near := absf(sl.diag_y - focus.y) < Settings.cull_half().y + 190.0
-		if near:
+	var safety := (not static_world) and _idle > Settings.ground_idle_interval()
+	if animated or moved or dirty or safety:
+		if moved:
+			_drawn_focus = focus
+		_idle = 0.0
+		dirty = false
+		_pending.clear()
+		var half_y := Settings.cull_half().y + 190.0
+		for sl in _slices:
+			if absf(sl.diag_y - focus.y) < half_y:
+				_pending.append(sl)
+			elif sl.visible:
+				sl.visible = false
+	# Repainting the whole ground in one frame makes a visible hitch, so a repaint is spread over
+	# a few frames (all at once only while something on the ground is animating).
+	var n := _pending.size()
+	if n > 0:
+		var take := n if animated else ceili(float(n) / 4.0)
+		for i in take:
+			var sl: IsoSlice = _pending.pop_back()
 			sl.visible = true
 			sl.queue_redraw()
-		elif sl.visible:
-			sl.visible = false
 
 ## Cells that are in front of the player and taller than where they stand are drawn see-through,
 ## so the player is never lost behind a cliff. Pass an empty list to turn it off.

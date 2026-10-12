@@ -14,6 +14,7 @@ var _clip_shape: Array = []
 var _quick_icon: ItemIcon
 var _quick_label: Label
 var _mnemo: Label
+var _renown: Label
 var _region: Label
 var _prompt: PromptTag
 var _tutorial_card: TutorialCard
@@ -50,6 +51,8 @@ func _ready() -> void:
 	_mnemo.position = Vector2(104, 60)
 	set_mnemo(0)
 
+	_renown = _label(17, Color(Palette.INK_BROWN, 0.85))
+	_renown.position = Vector2(180, 66)
 	_region = _label(30, Palette.INK_BROWN)
 	_region.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	_region.grow_horizontal = Control.GROW_DIRECTION_BEGIN
@@ -139,6 +142,9 @@ func tutorial(id: String) -> void:
 		return
 	GameState.set_flag(flag)
 	await _tutorial_card.show_card(Tutorials.CARDS[id])
+
+func set_renown() -> void:
+	_renown.text = "Rank %d   %d / %d" % [GameState.rank(), GameState.renown, GameState.rank_next()]
 
 func set_mnemo(v: int) -> void:
 	_mnemo.text = "◆ %d" % v

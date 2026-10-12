@@ -93,6 +93,9 @@ func _ready() -> void:
 	_build_player()
 	_build_ui()
 	GameState.mnemosynth_changed.connect(_hud.set_mnemo)
+	GameState.renown_changed.connect(func(_v: int, _r: int): _hud.set_renown())
+	GameState.rank_up.connect(_on_rank_up)
+	_hud.set_renown()
 	_hud.set_mnemo(GameState.mnemosynth)
 	_level_ready()
 
@@ -268,7 +271,8 @@ func _build_player() -> void:
 	_player.fell.connect(_on_player_fell)
 	_player.style_changed.connect(func(st: String): _hud.set_style(st))
 	_player.crumpled.connect(_on_player_crumpled)
-	_player.ink = GameState.ink
+	_player.max_ink = 100.0 + GameState.max_ink_bonus()
+	_player.ink = minf(GameState.ink, _player.max_ink)
 	_player.elev = _floor.height_at(_start) * Iso.LEVEL_H
 	_player.ink_changed.connect(func(cur: float, _mx: float): GameState.ink = cur)
 
@@ -460,6 +464,12 @@ func _collect_crystals() -> void:
 			tw.tween_property(c, "modulate:a", 0.0, 0.25)
 			tw.tween_callback(c.queue_free)
 
+func _on_rank_up(r: int) -> void:
+	_player.max_ink = 100.0 + GameState.max_ink_bonus()
+	_player.restore_ink(10.0)
+	_hud.toast("Rank %d! The ink bottle grows." % r)
+	Telemetry.log_event("rank", {"r": r})
+
 ## Overworld levels remember which crystals were taken.
 func _crystal_collected(_c: Node2D) -> void:
 	pass
@@ -483,11 +493,18 @@ func _add_enemy(kind: Enemy.Kind, cell: Vector2i) -> Enemy:
 	e.elev = _lift_at(cell)
 	_actors.add_child(e)
 	e.died.connect(func(en: Enemy):
-		drop_crystals(en.position, 2 if en.kind == Enemy.Kind.BARE else 1)
+		GameState.add_renown(EnemyKinds.renown_value(en.kind))
+		drop_crystals(en.position, 1 if en.kind == Enemy.Kind.MITE else 2)
 		if en.kind == Enemy.Kind.BARE and randf() < 0.25:
 			_give_item("eraser_crumbs")
 		elif en.kind == Enemy.Kind.MITE and randf() < 0.3:
-			_give_item("void_ink"))
+			_give_item("void_ink")
+		elif en.kind == Enemy.Kind.SLUG and randf() < 0.4:
+			_give_item("void_ink")
+		elif en.kind == Enemy.Kind.DANGLER and randf() < 0.3:
+			_give_item("eraser_crumbs")
+		elif en.kind == Enemy.Kind.CENSOR and randf() < 0.4:
+			_give_item("ink_vial"))
 	e.proofread.connect(_on_proofread)
 	return e
 

@@ -357,6 +357,7 @@ func _finale() -> void:
 	_give_item("thimble")
 	GameState.set_flag("scissor_done")
 	GameState.add_mnemosynth(60)
+	GameState.add_renown(40)
 	await get_tree().create_timer(2.0).timeout
 	_leave()
 

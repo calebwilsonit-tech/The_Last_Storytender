@@ -45,6 +45,90 @@ func _crystal_collected(c: Node2D) -> void:
 	if c.has_meta("got_key"):
 		GameState.set_flag(c.get_meta("got_key"))
 
+# --- Chests and riddle gates ---------------------------------------------------------------
+var _riddle_stones: Dictionary = {}       # riddle id -> SentenceStone
+var _riddle_gates: Dictionary = {}        # riddle id -> StoryGate
+
+func _riddle_for(kind: String, cell: Vector2i) -> String:
+	for id in PrologueMap.RIDDLES.keys():
+		var r: Dictionary = PrologueMap.RIDDLES[id]
+		var c: Array = r[kind]
+		if Vector2i(int(c[0]), int(c[1])) == cell:
+			return id
+	return ""
+
+func _spawn_chest(cell: Vector2i) -> void:
+	var key := _got_key("chest", cell)
+	var chest := _add_prop(Prop.Kind.CHEST, cell, false, 1 if GameState.has_flag(key) else 0)
+	chest.set_meta("got_key", key)
+	_floor.blockers[cell] = true
+	_register(chest, func(): return "" if GameState.has_flag(key) else "Open the chest", func(): await _open_chest(chest, cell), 90.0)
+
+func _open_chest(chest: Prop, cell: Vector2i) -> void:
+	var key: String = chest.get_meta("got_key")
+	if GameState.has_flag(key):
+		return
+	GameState.set_flag(key)
+	GameState.add_renown(5)
+	chest.variant = 1
+	var reward: String = PrologueMap.CHESTS.get("%d,%d" % [cell.x, cell.y], "mnemo:20")
+	var parts := reward.split(":")
+	if parts[0] == "mnemo":
+		GameState.add_mnemosynth(int(parts[1]))
+		_hud.toast("Found %d Mnemosynth" % int(parts[1]))
+	else:
+		var n := int(parts[2]) if parts.size() > 2 else 1
+		_give_item(parts[1], n)
+		_hud.toast("Found: %s%s" % [ItemDB.info(parts[1])["name"], (" x%d" % n) if n > 1 else ""])
+	_hud.narrate(Story.CHEST_LINES[randi() % Story.CHEST_LINES.size()], false, 4.0)
+	Telemetry.log_event("chest", {"at": "%d,%d" % [cell.x, cell.y]})
+
+func _spawn_riddle_stone(cell: Vector2i) -> void:
+	var id := _riddle_for("stone", cell)
+	if id == "":
+		return
+	var rd: Dictionary = PrologueMap.RIDDLES[id]
+	var st := SentenceStone.new()
+	st.prefix = rd["prefix"]
+	st.options = PackedStringArray(rd["options"])
+	st.suffix = rd["suffix"]
+	st.position = Iso.to_screen(Vector2(cell))
+	st.elev = _lift_at(cell)
+	_actors.add_child(st)
+	_register(st, func(): return "Rewrite" if not st.locked else "", func(): st.rewrite(), 80.0)
+	_riddle_stones[id] = st
+	st.rewritten.connect(func(s: SentenceStone, idx: int): _on_riddle(id, s, idx))
+	if GameState.has_flag("riddle_" + id):
+		st.index = st.options.size() - 1
+		st.locked = true
+
+func _spawn_riddle_gate(cell: Vector2i) -> void:
+	var id := _riddle_for("gate", cell)
+	if id == "":
+		return
+	var rd: Dictionary = PrologueMap.RIDDLES[id]
+	var gate := StoryGate.new()
+	gate.axis = Vector2(float(rd["axis"][0]), float(rd["axis"][1]))
+	gate.length = 3.0
+	gate.label = "SENTENCE"
+	gate.position = Iso.to_screen(Vector2(cell))
+	gate.elev = _lift_at(cell)
+	_actors.add_child(gate)
+	_riddle_gates[id] = gate
+	if GameState.has_flag("riddle_" + id):
+		gate.open()
+
+func _on_riddle(id: String, stone: SentenceStone, idx: int) -> void:
+	if idx != stone.options.size() - 1:
+		return
+	stone.locked = true
+	GameState.add_renown(8)
+	GameState.set_flag("riddle_" + id)
+	if _riddle_gates.has(id):
+		_riddle_gates[id].open()
+	_hud.narrate(Story.RIDDLE_OPEN, false, 4.0)
+	Telemetry.log_event("puzzle", {"p": "riddle_" + id})
+
 # --- Lantern posts and the Margin Gate -------------------------------------------------
 func _waypoint_at(cell: Vector2i) -> Dictionary:
 	for wp: Dictionary in PrologueMap.WAYPOINTS:
@@ -70,6 +154,7 @@ func _touch_post(id: String) -> void:
 		GameState.set_flag("wp_" + id)
 		_posts[id].variant = 1
 		GameState.add_mnemosynth(10)
+		GameState.add_renown(3)
 		_hud.toast("Waypoint lit: %s" % wp["name"])
 		Telemetry.log_event("waypoint", {"id": id})
 	else:
@@ -79,10 +164,14 @@ func _touch_post(id: String) -> void:
 	GameState.save_game()
 
 func _touch_gate() -> void:
-	if GameState.town_published:
-		await _say(Story.gate_open())
-	else:
+	var need: int = GameState.GATE_RENOWN["margin_gate"]
+	if not GameState.town_published:
 		await _say(Story.gate_locked())
+	elif GameState.renown < need:
+		await _say(Story.gate_renown(GameState.renown, need))
+	else:
+		_gate_prop.variant = 1
+		await _say(Story.gate_open())
 
 func _map_available() -> bool:
 	return true
@@ -127,10 +216,19 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 		"Y":
 			_floor.cells[cell] = "."
 			_spawn_post(cell)
+		"q":
+			_floor.cells[cell] = "."
+			_spawn_chest(cell)
+		"S":
+			_floor.cells[cell] = "."
+			_spawn_riddle_stone(cell)
+		"U":
+			_floor.cells[cell] = "."
+			_spawn_riddle_gate(cell)
 		"G":
 			_floor.cells[cell] = ","
 			_floor.blockers[cell] = true
-			_gate_prop = _add_prop(Prop.Kind.GATE, cell, false, 1 if GameState.town_published else 0)
+			_gate_prop = _add_prop(Prop.Kind.GATE, cell, false, 1 if (GameState.town_published and GameState.renown >= GameState.GATE_RENOWN["margin_gate"]) else 0)
 			_register(_gate_prop, func(): return "Examine the gate", _touch_gate, 120.0)
 		"W":
 			_floor.cells[cell] = "."
@@ -176,9 +274,10 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 			_floor.cells[cell] = ","
 			_book = _add_prop(Prop.Kind.BOOK, cell)
 			_register(_book, _book_prompt, _touch_book, 90.0)
-		"g", "x":
+		"g", "x", "l", "d", "n", "z":
 			_floor.cells[cell] = "."
-			_enemy_spawns.append({"kind": Enemy.Kind.BARE if ch == "g" else Enemy.Kind.MITE, "cell": cell})
+			var ek: Enemy.Kind = {"g": Enemy.Kind.BARE, "x": Enemy.Kind.MITE, "l": Enemy.Kind.SLUG, "d": Enemy.Kind.DANGLER, "n": Enemy.Kind.CENSOR, "z": Enemy.Kind.ELLIPSIS}[ch]
+			_enemy_spawns.append({"kind": ek, "cell": cell})
 		"R":
 			_floor.cells[cell] = "."
 			_redactor = _add_redactor(cell, Vector2(1, 0), 3.0, "the way up")
@@ -223,6 +322,7 @@ func _notification(what: int) -> void:
 		GameState.save_game()
 
 func _level_ready() -> void:
+	_floor.static_world = true      # the overworld ground never changes: no safety repaints
 	_player.dashed.connect(_on_dashed)
 	_check_rift()
 	if GameState.has_flag("scissor_done") and not GameState.town_published:
@@ -296,6 +396,7 @@ func _update_region() -> void:
 		GameState.set_flag("seen_" + r)
 		if r not in ["m", "s", "o"]:
 			GameState.add_mnemosynth(10)
+			GameState.add_renown(6)
 			_hud.toast("Discovered: %s" % PrologueMap.REGIONS.get(r, ""))
 		Telemetry.log_event("region", {"r": r})
 
@@ -336,6 +437,7 @@ func _talk_pip() -> void:
 		await _say(Story.pip_restoration())
 		GameState.add_mnemosynth(30)
 		_hud.toast("Restored: Pip")
+		GameState.add_renown(35)
 	else:
 		await _say(Story.pip_ghost())
 
@@ -360,6 +462,7 @@ func _talk_maud() -> void:
 		GameState.add_mnemosynth(30)
 		_give_item("warm_loaf", 3)
 		_hud.toast("Restored: Maud")
+		GameState.add_renown(35)
 	else:
 		await _say(Story.maud_ghost())
 
@@ -391,6 +494,7 @@ func _talk_garrick() -> void:
 		await _say(Story.garrick_restoration())
 		GameState.add_mnemosynth(25)
 		_hud.toast("Restored: Garrick")
+		GameState.add_renown(35)
 		_garrick.tearful = false
 	elif GameState.has_flag("met_garrick"):
 		await _say(Story.garrick_ghost_repeat())
@@ -441,6 +545,16 @@ func _finish_lesson() -> void:
 	await _hud.tutorial("stealth")
 	_spawn_enemies()
 
+# Which kinds of Error have shown up yet depends on how far the story has gone: the Prologue starts
+# with the Bare and the Mite, and Pip's and Maud's restorations let more of the Redaction seep in.
+func _kind_unlocked(k: Enemy.Kind) -> bool:
+	match k:
+		Enemy.Kind.SLUG, Enemy.Kind.DANGLER:
+			return GameState.is_restored("pip")
+		Enemy.Kind.CENSOR, Enemy.Kind.ELLIPSIS:
+			return GameState.is_restored("maud")
+	return true
+
 # Enemies are streamed by distance: they wake when you come within about 900 px (never right on
 # top of you) and fade out far behind you. A defeated one stays away for a couple of minutes.
 var _stream_t := 0.0
@@ -481,6 +595,13 @@ func _on_death_reset() -> void:
 	for sp in _spawn_state:
 		sp["node"] = null
 
+func _introduce_enemy(k: Enemy.Kind) -> void:
+	var flag := "met_enemy_%d" % int(k)
+	if GameState.has_flag(flag) or not Story.ENEMY_INTRO.has(int(k)):
+		return
+	GameState.set_flag(flag)
+	_hud.narrate(Story.ENEMY_INTRO[int(k)], false, 6.0)
+
 func _tick_respawns(delta: float) -> void:
 	if not _enemies_out:
 		return
@@ -497,8 +618,9 @@ func _tick_respawns(delta: float) -> void:
 			if dist > 1500.0:
 				node.queue_free()
 				sp["node"] = null
-		elif dist < 900.0 and dist > 560.0 and now >= float(sp["wake"]):
+		elif dist < 900.0 and dist > 560.0 and now >= float(sp["wake"]) and _kind_unlocked(sp["kind"]):
 			var e := _add_enemy(sp["kind"], sp["cell"])
+			_introduce_enemy(sp["kind"])
 			sp["node"] = e
 			e.died.connect(func(_en): sp["wake"] = Time.get_ticks_msec() / 1000.0 + 120.0)
 

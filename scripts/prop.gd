@@ -3,7 +3,7 @@ extends StaticBody2D
 ## Procedurally inked scenery. Objects with `ghost = true` begin as graphite
 ## pencil sketches and fill with color as the restoration wave reaches them.
 
-enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE, PICKUP, BOOK, CHAIR, TABLE, OVEN, RIFT, POST, GATE }
+enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE, PICKUP, BOOK, CHAIR, TABLE, OVEN, RIFT, POST, GATE, CHEST }
 
 var kind: Kind = Kind.TREE
 var ghost := false
@@ -30,6 +30,8 @@ func _ready() -> void:
 			poly.polygon = Iso.diamond(Vector2.ZERO, 0.55)
 		Kind.OVEN:
 			poly.polygon = Iso.diamond(Vector2.ZERO, 0.95)
+		Kind.CHEST:
+			poly.polygon = Iso.diamond(Vector2.ZERO, 0.5)
 		Kind.TABLE:
 			var h := table_len * 0.5 - 0.1
 			poly.polygon = PackedVector2Array([Iso.to_screen(Vector2(-h, -0.42)), Iso.to_screen(Vector2(h, -0.42)), Iso.to_screen(Vector2(h, 0.42)), Iso.to_screen(Vector2(-h, 0.42))])
@@ -91,6 +93,7 @@ func _draw() -> void:
 		Kind.RIFT: _draw_rift()
 		Kind.POST: _draw_post()
 		Kind.GATE: _draw_gate()
+		Kind.CHEST: _draw_chest()
 
 func _shadow(rx: float) -> void:
 	if not Settings.gfx_on("shadows"):
@@ -532,3 +535,29 @@ func _draw_gate() -> void:
 		draw_line(Vector2(-27, -62), Vector2(27, -62), Color("a8483f"), 4.0)
 		draw_line(Vector2(-27, -30), Vector2(27, -30), Color("a8483f"), 4.0)
 		draw_circle(Vector2(0, -46), 8.0, Palette.INK)
+
+# --- A treasure chest (variant 1 = already opened) -----------------------------------------------
+func _draw_chest() -> void:
+	_shadow(20.0)
+	var opened := variant == 1
+	var wood := Color("a9743f")
+	var dark := Color("6e4824")
+	var ink := Color("2a1b0f")
+	var body := PackedVector2Array([Vector2(-17, 0), Vector2(17, 0), Vector2(17, -17), Vector2(-17, -17)])
+	DrawKit.shape(self, body, wood, ink, 2.4, _seed)
+	# metal bands
+	for bx in [-9.0, 9.0]:
+		draw_rect(Rect2(bx - 2.5, -17, 5, 17), Color("c9b27a"))
+		draw_rect(Rect2(bx - 2.5, -17, 5, 17), ink, false, 1.4)
+	if opened:
+		# lid tipped back, a glow inside
+		var lid := PackedVector2Array([Vector2(-17, -17), Vector2(17, -17), Vector2(14, -34), Vector2(-14, -34)])
+		DrawKit.shape(self, lid, dark, ink, 2.4, _seed + 1.0)
+		draw_rect(Rect2(-14, -20, 28, 3), Color(1.0, 0.92, 0.55, 0.5))
+	else:
+		var lid2 := PackedVector2Array([Vector2(-18, -17), Vector2(18, -17), Vector2(16, -27), Vector2(-16, -27)])
+		DrawKit.shape(self, lid2, wood.lightened(0.08), ink, 2.4, _seed + 1.0)
+		draw_rect(Rect2(-3, -23, 6, 8), Color("e6c15a"))
+		draw_rect(Rect2(-3, -23, 6, 8), ink, false, 1.4)
+		if Settings.gfx_on("glow"):
+			draw_circle(Vector2(0, -20), 22.0 + sin(_t * 3.0) * 2.0, Color(Palette.GOLD, 0.07))

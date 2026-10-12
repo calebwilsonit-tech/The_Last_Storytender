@@ -46,3 +46,6 @@ The Prologue overworld is about four times larger than before: eleven regions to
 
 ## Graphics options (for slower computers)
 Settings > Graphics has presets (Low / Balanced / High, chosen for your computer on first run; Macs and hi-DPI screens start on Balanced) and 16 individual options: pixel density, paper background resolution and detail, grass and flowers, tile outlines, cliff lines, ground refresh rate, draw distance, tree sway, shadows, glow effects, screen-edge shading, smooth line edges, frame rate limit, VSync and an FPS counter. Changing any one switches the preset to Custom. The dots beside each option show how much it helps a slow computer.
+
+## Enemies, Renown and chests
+Six kinds of Error (Bare, Mite, Run-on, Dangling Modifier, Censor, Ellipsis), unlocked as the story advances. Renown (Rank, under the Mnemosynth counter) rises from beating enemies, chests, riddle gates, exploring and restoring people; the Margin Gate needs 220. See GDD section 22.
