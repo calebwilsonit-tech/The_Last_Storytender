@@ -108,6 +108,12 @@ func _cells() -> Array:
 				out.append([k, "prop_" + k, {}])
 			out.append(["gate", "prop_gate", {"variant": 0}])
 			out.append(["gate open", "prop_gate", {"variant": 1}])
+			out.append(["dummy", "prop_dummy", {}])
+			out.append(["block", "prop_block", {"tint": Color(0.55, 0.3, 0.2), "height": 36.0}])
+			out.append(["plate", "prop_plate", {"pressed": false}])
+			out.append(["plate pressed", "prop_plate", {"pressed": true}])
+			out.append(["echo plate", "prop_echoplate", {"pressed": false}])
+			out.append(["echo pressed", "prop_echoplate", {"pressed": true}])
 			out.append(["table cold", "prop_table", {"warmth": 0.0, "table_len": 3}])
 			out.append(["table warm", "prop_table", {"warmth": 1.0, "table_len": 3}])
 		"errors":

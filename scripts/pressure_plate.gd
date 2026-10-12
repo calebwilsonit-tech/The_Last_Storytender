@@ -25,6 +25,12 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 func _draw() -> void:
+	var art := Skins.art()
+	if art != null:
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		if art.draw_prop(self, "prop_plate", {"t": _t, "pressed": pressed, "origin": Vector2(0, -elev), "scale": 1.0}):
+			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+			return
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
 	var d := Iso.diamond(Vector2.ZERO, 0.9)
 	var inset := Iso.diamond(Vector2.ZERO, 0.62)

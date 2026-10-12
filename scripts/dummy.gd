@@ -34,6 +34,14 @@ func _draw() -> void:
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))
 	draw_circle(Vector2.ZERO, 18.0, Color(0, 0, 0, 0.25))
 	var rot := sin(_t * 22.0) * _wobble * 0.16
+	var art := Skins.art()
+	if art != null:
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		if art.draw_prop(self, "prop_dummy", {"t": _t, "rot": rot, "origin": Vector2(0, -elev), "scale": 1.0}):
+			draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
+			for s in _splats:
+				draw_circle(s.pos, s.r * (1.0 - float(s.age) / 1.2), Color(Palette.INK, 0.85 * (1.0 - float(s.age) / 1.2)))
+			return
 	draw_set_transform(Vector2(0, -elev), rot, Vector2.ONE)
 	var wood := Palette.WOOD
 	draw_rect(Rect2(-3, -40, 6, 40), wood)

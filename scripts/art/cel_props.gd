@@ -24,7 +24,8 @@ const GRAPHITE := Color("3b3e4d")
 
 static func kinds() -> Array:
 	return ["prop_tree", "prop_house", "prop_forge", "prop_crystal", "prop_sign", "prop_sword", "prop_shard", "prop_anvil", "prop_portal",
-		"prop_book", "prop_chair", "prop_table", "prop_oven", "prop_rift", "prop_post", "prop_gate", "prop_chest"]
+		"prop_book", "prop_chair", "prop_table", "prop_oven", "prop_rift", "prop_post", "prop_gate", "prop_chest",
+		"prop_dummy", "prop_block", "prop_plate", "prop_echoplate"]
 
 static func build(r: K.Rec, kind: String, ctx: Dictionary) -> void:
 	match kind:
@@ -45,6 +46,10 @@ static func build(r: K.Rec, kind: String, ctx: Dictionary) -> void:
 		"prop_post": _post(r, ctx)
 		"prop_gate": _gate(r, ctx)
 		"prop_chest": _chest(r, ctx)
+		"prop_dummy": _dummy(r, ctx)
+		"prop_block": _block(r, ctx)
+		"prop_plate": _plate(r, ctx, false)
+		"prop_echoplate": _plate(r, ctx, true)
 
 static func _rng(seed_v: float, i: int) -> float:
 	return fposmod(sin((seed_v + i * 3.17) * 12.9898) * 43758.5453, 1.0)
@@ -500,3 +505,77 @@ static func _oven(r: K.Rec, ctx: Dictionary) -> void:
 		for i in 6:
 			var u := 0.1 + i * 0.16
 			ci.draw_line(DrawKit.face(left, u, 0.05), DrawKit.face(left, u, 0.95), Color(K.OUT, 0.25), 1.0))
+
+# --- Puzzle furniture ----------------------------------------------------------------------------
+static func _dummy(r: K.Rec, ctx: Dictionary) -> void:
+	var rot: float = ctx.get("rot", 0.0)
+	r.at(Vector2.ZERO, rot, 1.0)
+	var sack := Color("c9ac75")
+	r.depth = 0.0
+	r.piece(K.soft(PackedVector2Array([Vector2(-3.4, 1), Vector2(3.4, 1), Vector2(3, -42), Vector2(-3, -42)]), 1), WOOD, 0.5, true)
+	r.depth = 0.1
+	r.piece(K.soft(K.rrect(-24, -50, 24, -43, 1.6), 1), WOOD.lightened(0.1), 0.4, true)
+	r.depth = 0.2
+	r.piece(K.soft(_blob(Vector2(0, -32), 15.0, 19.0, 18, 0.08, 3.0), 1), sack, 0.55, true)
+	r.op(func(ci):
+		for rr in [11.0, 7.0, 3.0]:
+			ci.draw_arc(Vector2(0, -32), rr, 0.0, TAU, 20, Color(Palette.CRITIC_RED, 0.9), 2.0, true)
+		for i in 6:
+			var x := -10.0 + i * 4.0
+			ci.draw_line(Vector2(x, -14), Vector2(x + 2, -8), Color(K.OUT, 0.5), 1.1))
+	r.depth = 0.3
+	r.piece(K.soft(_blob(Vector2(0, -58), 10.0, 10.0, 14, 0.06, 7.0), 1), Color("d6bb85"), 0.55, true)
+	r.op(func(ci):
+		for sx in [-4.0, 4.0]:
+			ci.draw_line(Vector2(sx - 2, -61), Vector2(sx + 2, -57), K.OUT, 1.5)
+			ci.draw_line(Vector2(sx - 2, -57), Vector2(sx + 2, -61), K.OUT, 1.5)
+		ci.draw_line(Vector2(-4, -53), Vector2(4, -53), K.OUT, 1.5))
+
+static func _block(r: K.Rec, ctx: Dictionary) -> void:
+	var tint: Color = ctx.get("tint", Color("b9a07a"))
+	var height: float = ctx.get("height", 30.0)
+	var d := Iso.diamond(Vector2.ZERO, 0.9)
+	var up := Vector2(0, -height)
+	var top := PackedVector2Array([d[0] + up, d[1] + up, d[2] + up, d[3] + up])
+	var left := PackedVector2Array([d[3], d[2], d[2] + up, d[3] + up])
+	var right := PackedVector2Array([d[2], d[1], d[1] + up, d[2] + up])
+	r.depth = 0.0
+	r.piece(left, tint.darkened(0.12), 0.1, true)
+	r.piece(right, tint.darkened(0.32), 0.1, false)
+	r.depth = 0.1
+	r.piece(top, tint.lightened(0.12), 0.3, true)
+	r.op(func(ci):
+		for i in range(1, int(height / 9.0)):
+			var o := Vector2(0, -i * 9.0)
+			ci.draw_line(d[3] + o, d[2] + o, Color(1, 0.95, 0.8, 0.3), 1.0)
+			ci.draw_line(d[2] + o, d[1] + o, Color(1, 0.95, 0.8, 0.16), 1.0))
+
+static func _plate(r: K.Rec, ctx: Dictionary, echo: bool) -> void:
+	var pressed: bool = ctx.get("pressed", false)
+	var t: float = ctx.get("t", 0.0)
+	var d := Iso.diamond(Vector2.ZERO, 0.9)
+	var inset := Iso.diamond(Vector2.ZERO, 0.62)
+	var base := Color("3a4a5e") if echo else Color("5b5f70")
+	var glow := (Palette.CYAN if echo else Palette.GOLD) if pressed else (Color("5f7488") if echo else Color("8a8fa3"))
+	if pressed:
+		_glow_disc(r, Vector2.ZERO, 30.0 + sin(t * 4.0) * 3.0, Color(glow, 0.12), 1)
+	r.depth = 0.0
+	r.piece(d, base.darkened(0.15), 0.2, true)
+	r.depth = 0.1
+	r.piece(inset, glow.darkened(0.05 if pressed else 0.3), 0.0, false)
+	r.depth = 0.2
+	if echo:
+		var col := Color(1, 1, 1, 0.9) if pressed else Color(Palette.PAPER_LIGHT, 0.5)
+		r.op(func(ci):
+			var ring := func(rad: float, w: float):
+				var pts := PackedVector2Array()
+				for i in 25:
+					pts.append(Vector2(cos(TAU * i / 24.0) * rad, sin(TAU * i / 24.0) * rad * 0.5))
+				ci.draw_polyline(pts, col, w, true)
+			ring.call(12.0, 2.2)
+			ring.call(5.0, 1.8))
+	else:
+		var col2 := K.OUT if pressed else Color(Palette.PAPER_LIGHT, 0.65)
+		r.op(func(ci):
+			for dx in [-0.7, 0.7]:
+				ci.draw_string(ThemeDB.get_default_theme().default_font, Vector2(-8 + dx, 8), "B", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 24, col2))

@@ -12,6 +12,9 @@ func _ready() -> void:
 	add_child(cs)
 
 func _draw() -> void:
+	var art := Skins.art()
+	if art != null and art.draw_prop(self, "prop_block", {"tint": tint, "height": height, "origin": Vector2.ZERO, "scale": 1.0}):
+		return
 	var d := Iso.diamond(Vector2.ZERO, 0.9)
 	var up := Vector2(0, -height)
 	var top := PackedVector2Array([d[0] + up, d[1] + up, d[2] + up, d[3] + up])
