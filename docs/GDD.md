@@ -432,3 +432,11 @@ The four straight rooms are replaced by connected rooms. The Forge (the Critic f
 - **The Apprentice's Bench** (south-west): two plates, one up a stair on a raised platform, one across the room. Both echoes must hold at once to open the gate to the **hammer**; a Bare waits inside.
 - **The Night Watch** (south-east): a guard stands by the plate; lure it with an echo, then hold the plate to open the gate. The **tongs** sit behind a black Redactor bar that only the Lantern can read away.
 - Collect all three tools (any order) and the Forge Door opens. Skills used: Echo, Lantern, combat/avoiding, elevation. No mini-games required (optional vault trials remain).
+
+### Dungeon complexity ladder (design law, from playtesting)
+The Prologue dungeons are the gentle end: one hub, three wings of two rooms, one skill or two per puzzle, one token per wing. Later chapters must grow well past that:
+- **Chapter 1:** wings with three or four rooms; puzzles mix three skills; some tokens need two steps to earn (a token that opens a door that holds the real key). A second level appears (stairs up, a drop down), but keep the layout readable.
+- **Mid game:** **multi-level underground complexes.** Several floors joined by stairs, shafts, lifts and one-way drops. State carries between floors: a gate opened on floor 1 is the shortcut that lets you finish floor 3; an echo left upstairs holds a plate you need downstairs; a sentence rewritten on one floor changes a room on another. Players do specific things in a specific order ("you gotta do X to reach Y, then back up to do Z"), and the dungeon should reward drawing a map.
+- **Late game:** the whole dungeon is one big puzzle. Many skills at once, timed and reversible sections, a few backtracking loops, and optional wings with their own rewards.
+- **Rules that never change:** no mini-games required; every room solvable with the skills available at that point; every room has a reachability and solve test; bosses stay separate set pieces.
+- **Tooling note:** `tools/gen_forge.py` and `tools/draw_plans.py` (the schematic plans in `docs/dungeon_plans/`) are the template. For multi-level dungeons, extend the plans to show floors as stacked panels, and add per-floor generators with a shared reachability checker.
