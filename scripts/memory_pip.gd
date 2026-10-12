@@ -7,7 +7,7 @@ extends LevelBase
 ##  4. The Last Page  - The Spoiler: it announces the future; rewrite it before it happens.
 
 const OVERWORLD := "res://scenes/main.tscn"
-const RETURN_CELL := Vector2i(26, 13)
+const RETURN_CELL := Vector2i(26, 13) + PrologueMap.OFFSET
 const BRIDGE_CELLS: Array[Vector2i] = [Vector2i(11, 17), Vector2i(12, 17), Vector2i(13, 17)]
 const WOLF_SLEEP := 18.0
 const REGIONS := {

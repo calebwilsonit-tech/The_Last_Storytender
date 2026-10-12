@@ -9,7 +9,7 @@ extends LevelBase
 ##                    sheltering behind heavy words.
 
 const OVERWORLD := "res://scenes/main.tscn"
-const RETURN_CELL := Vector2i(26, 19)
+const RETURN_CELL := Vector2i(26, 19) + PrologueMap.OFFSET
 const TABLE_CELL := Vector2i(35, 4)
 const TABLE_LEN := 5
 const GUESTS := 6

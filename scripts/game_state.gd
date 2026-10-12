@@ -49,6 +49,13 @@ func _source_value(src: Dictionary, pos: Vector2) -> float:
 	return clampf((float(src["radius"]) - d.length()) / WAVE_SOFT_EDGE, 0.0, 1.0)
 
 ## 0..1 how "written" the world is at a position (max over every restored person).
+# --- Lantern posts (waypoints) and discovery ---------------------------------------------------
+func waypoint_lit(id: String) -> bool:
+	return has_flag("wp_" + id)
+
+func region_seen(r: String) -> bool:
+	return has_flag("seen_" + r)
+
 func restored_at(pos: Vector2) -> float:
 	if town_published:
 		return 1.0
@@ -167,7 +174,7 @@ func save_game() -> void:
 	if not autosave_enabled:
 		return
 	var data := {
-		"v": 1, "mnemosynth": mnemosynth, "ink": ink, "flags": flags.keys(),
+		"v": 2, "mnemosynth": mnemosynth, "ink": ink, "flags": flags.keys(),
 		"inventory": inventory, "equipment": equipment, "quick_slot": quick_slot,
 		"sources": sources.map(func(src): return {"id": src["id"], "x": src["origin"].x, "y": src["origin"].y, "r": src["radius"]}),
 		"town_published": town_published, "difficulty": difficulty,
@@ -202,6 +209,13 @@ func load_game() -> bool:
 	difficulty = str(data.get("difficulty", "normal"))
 	var sp: Array = data.get("spawn", [-1, -1])
 	spawn_cell = Vector2i(int(sp[0]), int(sp[1]))
+	if int(data.get("v", 1)) < 2:
+		# The overworld grew: the old 40x26 map now sits at an offset inside the larger one.
+		if spawn_cell.x >= 0:
+			spawn_cell += PrologueMap.OFFSET
+		var shift := Iso.to_screen(Vector2(PrologueMap.OFFSET))
+		for src in sources:
+			src["origin"] = Vector2(src["origin"]) + shift
 	return true
 
 func delete_save() -> void:

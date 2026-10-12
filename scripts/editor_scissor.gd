@@ -5,7 +5,7 @@ extends LevelBase
 ## cannot be cut; if his line crosses a patch, his shears JAM and he can be hurt.
 
 const OVERWORLD := "res://scenes/main.tscn"
-const RETURN_CELL := Vector2i(24, 14)
+const RETURN_CELL := Vector2i(24, 14) + PrologueMap.OFFSET
 const SHAPES := [
 	[Vector2i(0, 0)],
 	[Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)],

@@ -2,6 +2,8 @@ class_name PauseMenu
 extends CanvasLayer
 ## Esc in game: Resume, Settings, Save and return to the title, Quit.
 
+signal map_requested
+
 var _menu: MenuColumn
 var _settings: SettingsPanel
 var _view: Control
@@ -20,6 +22,7 @@ func _ready() -> void:
 	_view.add_child(_menu)
 	_menu.set_items([
 		{"id": "resume", "label": "Resume"},
+		{"id": "map", "label": "Map"},
 		{"id": "settings", "label": "Settings"},
 		{"id": "title", "label": "Save and return to title"},
 		{"id": "quit", "label": "Quit game"},
@@ -55,6 +58,8 @@ func _on_chosen(id: String) -> void:
 	match id:
 		"resume":
 			close()
+		"map":
+			map_requested.emit()
 		"settings":
 			_view.hide()
 			_settings.open()

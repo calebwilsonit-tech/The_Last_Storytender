@@ -20,6 +20,7 @@ var _hud: Hud
 var _dialogue: DialogueBox
 var _inventory: InventoryScreen
 var _pause: PauseMenu
+var _world_map: WorldMap
 
 var _start := Vector2.ZERO
 var _map_start := Vector2.ZERO     # the map's own start cell, ignoring return-spawn overrides
@@ -244,6 +245,14 @@ func _build_ui() -> void:
 	add_child(_inventory)
 	_pause = PauseMenu.new()
 	add_child(_pause)
+	_world_map = WorldMap.new()
+	var map_layer := CanvasLayer.new()
+	map_layer.layer = 55
+	map_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	map_layer.add_child(_world_map)
+	add_child(map_layer)
+	_world_map.travel_requested.connect(_on_travel_requested)
+	_pause.map_requested.connect(_open_map)
 	_inventory.use_requested.connect(use_item)
 	GameState.inventory_changed.connect(_on_inventory_changed)
 	_on_inventory_changed()
@@ -327,6 +336,8 @@ func _add_pickup(cell: Vector2i, id: String) -> Prop:
 	p.item_id = id
 	_register(p, func(): return "Take " + ItemDB.info(id)["name"], func():
 		_give_item(id)
+		if p.has_meta("got_key"):
+			GameState.set_flag(p.get_meta("got_key"))
 		p.queue_free())
 	return p
 
@@ -338,11 +349,16 @@ func _collect_crystals() -> void:
 			continue
 		if _dist(c.position, _player.position) < 30.0 and absf(c.lift - _player.elev) < 20.0:
 			_crystals.erase(c)
+			_crystal_collected(c)
 			GameState.add_mnemosynth(5)
 			_player.refuel(12.0)          # the Lantern burns Mnemosynth
 			var tw := create_tween()
 			tw.tween_property(c, "modulate:a", 0.0, 0.25)
 			tw.tween_callback(c.queue_free)
+
+## Overworld levels remember which crystals were taken.
+func _crystal_collected(_c: Node2D) -> void:
+	pass
 
 func drop_crystals(pos: Vector2, n: int) -> void:
 	for i in n:
@@ -451,6 +467,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and not GameState.in_dialogue and not _inventory.is_open() and not _pause.is_open():
 		_pause.open()
 		return
+	if event.is_action_pressed("map") and not GameState.in_dialogue and not _inventory.is_open() and not _pause.is_open() and not _world_map.is_open():
+		_open_map()
+		return
 	if event.is_action_pressed("inventory") and not _busy and not GameState.in_dialogue and not _player.is_falling:
 		_inventory.open()
 		return
@@ -465,6 +484,22 @@ func _unhandled_input(event: InputEvent) -> void:
 	_busy = true
 	await it["action"].call()
 	_busy = false
+
+# --- The map ---------------------------------------------------------------------------
+## Levels that have a world to look at override this (the overworld does).
+func _map_available() -> bool:
+	return false
+
+func _open_map() -> void:
+	if _pause.is_open():
+		_pause.close()
+	if not _map_available():
+		_hud.toast("The map only unfolds out in the world.")
+		return
+	_world_map.open(_floor.cell_at(_player.position))
+
+func _on_travel_requested(_id: String) -> void:
+	pass
 
 # --- Dialogue plumbing ----------------------------------------------------------------
 func _say(lines: Array) -> void:

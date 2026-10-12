@@ -7,8 +7,8 @@ const MEMORY_SCENE := "res://scenes/memory_forge.tscn"
 const PIP_MEMORY_SCENE := "res://scenes/memory_pip.tscn"
 const MAUD_MEMORY_SCENE := "res://scenes/memory_maud.tscn"
 const SCISSOR_SCENE := "res://scenes/editor_scissor.tscn"
-const RIFT_CELL := Vector2i(24, 13)
-const RETURN_CELL := Vector2i(30, 15)       # where you step out of the memory
+const RIFT_CELL := Vector2i(24, 13) + PrologueMap.OFFSET
+const RETURN_CELL := Vector2i(30, 15) + PrologueMap.OFFSET       # where you step out of the memory
 
 var _enemy_spawns: Array[Dictionary] = []   # {kind, cell}; enemies appear after Garrick's lesson
 var _dummy: Dummy
@@ -27,6 +27,76 @@ var _book: Prop
 var _maud_npc: Npc
 var _oven: Prop
 var _entered_town := false
+var _gate_prop: Prop
+var _posts: Dictionary = {}               # waypoint id -> Prop
+var _spawn_state: Array[Dictionary] = []
+
+func _got_key(tag: String, cell: Vector2i) -> String:
+	return "got_%s_%d_%d" % [tag, cell.x, cell.y]
+
+func _lore_id_at(cell: Vector2i) -> String:
+	for id in PrologueMap.LORE.keys():
+		var c: Array = PrologueMap.LORE[id]
+		if Vector2i(int(c[0]), int(c[1])) == cell:
+			return id
+	return ""
+
+func _crystal_collected(c: Node2D) -> void:
+	if c.has_meta("got_key"):
+		GameState.set_flag(c.get_meta("got_key"))
+
+# --- Lantern posts and the Margin Gate -------------------------------------------------
+func _waypoint_at(cell: Vector2i) -> Dictionary:
+	for wp: Dictionary in PrologueMap.WAYPOINTS:
+		if Vector2i(int(wp["cell"][0]), int(wp["cell"][1])) == cell:
+			return wp
+	return {}
+
+func _spawn_post(cell: Vector2i) -> void:
+	var wp := _waypoint_at(cell)
+	if wp.is_empty():
+		return
+	var id: String = wp["id"]
+	var post := _add_prop(Prop.Kind.POST, cell, false, 1 if GameState.waypoint_lit(id) else 0)
+	_posts[id] = post
+	_register(post, func(): return "Rest at the post" if GameState.waypoint_lit(id) else "Light the post", func(): await _touch_post(id), 100.0)
+
+func _touch_post(id: String) -> void:
+	var wp: Dictionary = {}
+	for w: Dictionary in PrologueMap.WAYPOINTS:
+		if w["id"] == id:
+			wp = w
+	if not GameState.waypoint_lit(id):
+		GameState.set_flag("wp_" + id)
+		_posts[id].variant = 1
+		GameState.add_mnemosynth(10)
+		_hud.toast("Waypoint lit: %s" % wp["name"])
+		Telemetry.log_event("waypoint", {"id": id})
+	else:
+		_hud.toast("You rest a moment by the lantern.")
+	_player.restore_ink(100.0)
+	_player.refuel(100.0)
+	GameState.save_game()
+
+func _touch_gate() -> void:
+	if GameState.town_published:
+		await _say(Story.gate_open())
+	else:
+		await _say(Story.gate_locked())
+
+func _map_available() -> bool:
+	return true
+
+func _on_travel_requested(id: String) -> void:
+	travel_to(id)
+
+## Fast travel: only to lantern posts you have lit.
+func travel_to(id: String) -> void:
+	for wp: Dictionary in PrologueMap.WAYPOINTS:
+		if wp["id"] == id and GameState.waypoint_lit(id):
+			GameState.spawn_cell = Vector2i(int(wp["cell"][0]), int(wp["cell"][1])) + Vector2i(0, 1)
+			Transition.go("res://scenes/main.tscn", Palette.PAPER_LIGHT)
+			return
 
 # --- LevelBase hooks ---------------------------------------------------------------
 func _map_rows() -> Array[String]:
@@ -45,7 +115,23 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 			_add_prop(Prop.Kind.TREE, cell, false, cell.x + cell.y)
 		"C":
 			_floor.cells[cell] = "."
-			_crystals.append(_add_prop(Prop.Kind.CRYSTAL, cell))
+			if not GameState.has_flag(_got_key("C", cell)):
+				var cr := _add_prop(Prop.Kind.CRYSTAL, cell)
+				cr.set_meta("got_key", _got_key("C", cell))
+				_crystals.append(cr)
+		"L":
+			_floor.cells[cell] = "."
+			var lore_id := _lore_id_at(cell)
+			var stone := _add_prop(Prop.Kind.SIGN, cell)
+			_register(stone, func(): return "Read", func(): await _say(Story.lore(lore_id)))
+		"Y":
+			_floor.cells[cell] = "."
+			_spawn_post(cell)
+		"G":
+			_floor.cells[cell] = ","
+			_floor.blockers[cell] = true
+			_gate_prop = _add_prop(Prop.Kind.GATE, cell, false, 1 if GameState.town_published else 0)
+			_register(_gate_prop, func(): return "Examine the gate", _touch_gate, 120.0)
 		"W":
 			_floor.cells[cell] = "."
 			var p := _add_prop(Prop.Kind.SIGN, cell)
@@ -75,9 +161,12 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 		"N", "K", "B":
 			_floor.cells[cell] = ","
 			_add_npc(ch, cell)
-		"k":
+		"k", "o", "e", "v":
 			_floor.cells[cell] = "."
-			_add_pickup(cell, "softcover_binding")
+			var pick_id: String = {"k": "softcover_binding", "o": "oxford_comma", "e": "eraser_crumbs", "v": "void_ink"}[ch]
+			if not GameState.has_flag(_got_key("k", cell)):
+				var pk := _add_pickup(cell, pick_id)
+				pk.set_meta("got_key", _got_key("k", cell))
 		"V":
 			_floor.cells[cell] = ","
 			_floor.blockers[cell] = true
@@ -195,13 +284,20 @@ func _publish_scene() -> void:
 # --- Frame helpers ---------------------------------------------------------------------
 func _update_region() -> void:
 	var cell := _floor.cell_at(_player.position)
-	if cell.x >= IsoFloor.PLAINS_X_LIMIT:
-		_hud.set_region("Thistledown — Published Chapter" if GameState.town_published else "Thistledown (Draft)")
+	var r := PrologueMap.region_at(cell)
+	if r == "t":
+		_hud.set_region("Thistledown — Prologue complete" if GameState.town_published else "Thistledown (Draft)")
 		if not _entered_town:
 			_entered_town = true
 			_hud.narrate(Story.SILENCE_WHISPER, true, 5.0)
 	else:
-		_hud.set_region("The Prologue Plains")
+		_hud.set_region(PrologueMap.REGIONS.get(r, "The Prologue Plains"))
+	if r != " " and not GameState.region_seen(r):
+		GameState.set_flag("seen_" + r)
+		if r not in ["m", "s", "o"]:
+			GameState.add_mnemosynth(10)
+			_hud.toast("Discovered: %s" % PrologueMap.REGIONS.get(r, ""))
+		Telemetry.log_event("region", {"r": r})
 
 # --- Cues ------------------------------------------------------------------------------
 func _handle_cue(cue: String) -> void:
@@ -345,51 +441,66 @@ func _finish_lesson() -> void:
 	await _hud.tutorial("stealth")
 	_spawn_enemies()
 
-func _spawn_enemies(avoid: Vector2 = Vector2(INF, INF)) -> void:
+# Enemies are streamed by distance: they wake when you come within about 900 px (never right on
+# top of you) and fade out far behind you. A defeated one stays away for a couple of minutes.
+var _stream_t := 0.0
+func _spawn_enemies(_avoid: Vector2 = Vector2(INF, INF)) -> void:
 	if _enemies_out:
 		return
 	_enemies_out = true
 	for sp in _enemy_spawns:
-		# After a death, nothing re-appears right on top of where you wake up.
-		if avoid.x != INF and _dist(Iso.to_screen(Vector2(sp["cell"])), avoid) < 520.0:
-			continue
-		_add_enemy(sp["kind"], sp["cell"])
+		_spawn_state.append({"kind": sp["kind"], "cell": sp["cell"], "node": null, "wake": 0.0})
 
 # Areas for the playtest log, and where you wake up after being crumpled.
 func _room_name(cell: Vector2i) -> String:
-	if cell.x < IsoFloor.PLAINS_X_LIMIT:
-		return "Glade" if (cell.x <= 8 and cell.y >= 18) else "Prologue Plains"
-	return "Garrick's Terrace" if (cell.x >= 28 and cell.y >= 13) else "Thistledown"
+	if PrologueMap.region_at(cell) == "t" and cell.x >= 28 + PrologueMap.OFFSET.x and cell.y >= 13 + PrologueMap.OFFSET.y:
+		return "Garrick's Terrace"
+	return PrologueMap.region_name(cell)
 
+## You wake at the nearest lit lantern post, or at the start if you have not lit one.
 func _checkpoint_for(cell: Vector2i) -> Vector2:
-	if cell.x < IsoFloor.PLAINS_X_LIMIT:
-		return _map_start
-	return Iso.to_screen(Vector2(23, 13))
+	var best := Vector2.ZERO
+	var best_d := INF
+	for wp: Dictionary in PrologueMap.WAYPOINTS:
+		if not GameState.waypoint_lit(wp["id"]):
+			continue
+		var c := Vector2i(int(wp["cell"][0]), int(wp["cell"][1]))
+		var dd := Vector2(c - cell).length()
+		if dd < best_d:
+			best_d = dd
+			best = Iso.to_screen(Vector2(c) + Vector2(0, 1))
+	if best_d < INF:
+		return best
+	if PrologueMap.region_at(cell) == "t":
+		return Iso.to_screen(Vector2(23, 13) + Vector2(PrologueMap.OFFSET))
+	return _map_start
 
 func _on_death_reset() -> void:
 	for e in get_tree().get_nodes_in_group("enemies"):
 		e.queue_free()
-	_enemies_out = false
-	if GameState.has_flag("lesson_done"):
-		_spawn_enemies(_player.position)
+	for sp in _spawn_state:
+		sp["node"] = null
 
-# Errors drift back in over time, so the Plains never stay empty.
 func _tick_respawns(delta: float) -> void:
 	if not _enemies_out:
 		return
-	_respawn_t += delta
-	if _respawn_t < 75.0:
+	_stream_t -= delta
+	if _stream_t > 0.0:
 		return
-	_respawn_t = 0.0
-	var alive := get_tree().get_nodes_in_group("enemies").size()
-	if alive >= _enemy_spawns.size() * 0.6:
-		return
-	var pool := _enemy_spawns.duplicate()
-	pool.shuffle()
-	for sp in pool:
-		if _dist(Iso.to_screen(Vector2(sp["cell"])), _player.position) > 550.0:
-			_add_enemy(sp["kind"], sp["cell"])
-			return
+	_stream_t = 0.5
+	var now := Time.get_ticks_msec() / 1000.0
+	for sp in _spawn_state:
+		var pos := Iso.to_screen(Vector2(sp["cell"]))
+		var dist := _dist(pos, _player.position)
+		var node = sp["node"]
+		if node != null and is_instance_valid(node):
+			if dist > 1500.0:
+				node.queue_free()
+				sp["node"] = null
+		elif dist < 900.0 and dist > 560.0 and now >= float(sp["wake"]):
+			var e := _add_enemy(sp["kind"], sp["cell"])
+			sp["node"] = e
+			e.died.connect(func(_en): sp["wake"] = Time.get_ticks_msec() / 1000.0 + 120.0)
 
 func _hint_redactor() -> void:
 	if _redactor_hinted or _redactor == null or not is_instance_valid(_redactor):

@@ -47,6 +47,7 @@ func _build_defs() -> void:
 		{"id": "style_bold", "label": "Bold style", "kb": K(KEY_2), "kb_alt": [], "pad": B(JOY_BUTTON_DPAD_UP), "pad_alt": []},
 		{"id": "style_italic", "label": "Italic style", "kb": K(KEY_3), "kb_alt": [], "pad": B(JOY_BUTTON_DPAD_RIGHT), "pad_alt": []},
 		{"id": "paste", "label": "Paste clipping", "kb": K(KEY_V), "kb_alt": [], "pad": B(JOY_BUTTON_RIGHT_SHOULDER), "pad_alt": []},
+		{"id": "map", "label": "Open the map", "kb": K(KEY_M), "kb_alt": [], "pad": B(JOY_BUTTON_DPAD_DOWN), "pad_alt": []},
 		{"id": "echo", "label": "Remember an Echo", "kb": K(KEY_R), "kb_alt": [], "pad": B(JOY_BUTTON_LEFT_SHOULDER), "pad_alt": []},
 	]
 

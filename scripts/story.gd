@@ -406,10 +406,47 @@ const SCISSOR_PHASE: Array[String] = [
 	"He is cutting wider, and he has begun to cut out little copies of the things that hurt.",
 	"Two cuts at once. He does not enjoy this, but he cannot stop.",
 ]
-const PUBLISHED := "Chapter One, published."
+const PUBLISHED := "The Prologue is written. Whatever comes next, it has somewhere to begin."
 
 static func _scissor(text: String, cue: String = "") -> Dictionary:
 	return line("The Scissor-Man", text, "speech", cue, Color("7a8499"))
+
+const LORE := {
+	"edge_1": "A margin note, very small: 'Start here. It gets better. (the writer, 3 a.m.)'",
+	"edge_2": "The page ends in a clean, white edge. Someone has drawn a very small door in the margin, crossed it out, and drawn it again.",
+	"meadow_1": "A stone with a sentence carved into it: 'It was a bright, cold day in April, and the clocks were striking thirteen.' Underneath, in pencil: 'Too familiar?'",
+	"meadow_2": "'Show, don't tell,' says the stone. Then it just sits there, showing.",
+	"meadow_3": "A scrap of map is tucked under this stone. It says HERE BE PLOT. The rest has been rubbed out.",
+	"orchard_1": "Every apple on this tree is a half-written idea. They taste of almost.",
+	"orchard_2": "A name is scratched into the bark: WREN. Then a heart. Then a careful correction: 'sister, not that kind of heart.'",
+	"orchard_3": "A plaque: 'First drafts are allowed to be bad.' Someone has added: 'This one was.'",
+	"wells_1": "The ink in these wells never dries. Don't stare into them too long. They tend to take notes.",
+	"wells_2": "A wishing coin sits on the rim. It is the letter Q. It did not get what it wished for.",
+	"hollow_1": "Down here the footnotes live. They are small, and numbered, and a little bitter about it.",
+	"glade_1": "A glade nobody wrote on purpose. It happened in the margins, between two sentences, and it stayed.",
+	"ridge_1": "A ruined mill. Its sails are the pages of an unfinished manuscript, still turning in a wind that is not there.",
+	"ridge_2": "From up here you can see the whole town, drafted in pencil. Somebody is going to ink it one day. Maybe you.",
+	"graves_1": "HERE LIES CHAPTER 3. (Cut for length.)",
+	"graves_2": "HERE LIES THE SIDEKICK WHO WAS ONLY EVER CALLED 'HE'. HE WAS MORE THAN THAT.",
+	"graves_3": "HERE LIES A FLASHBACK. IT WILL BE BACK.",
+	"graves_4": "HERE LIES THE ORIGINAL ENDING. NO ONE ASKED FOR IT. IT WAITED ANYWAY.",
+	"gate_1": "A sign on the gate: 'The next chapter is not yet written. Check back when the last one is finished.' Underneath, smaller: 'Please.'",
+}
+
+static func lore(id: String) -> Array:
+	return [line("", LORE.get(id, "The stone is blank, and a little embarrassed about it."), "action")]
+
+static func gate_locked() -> Array:
+	return [
+		line("", "The Margin Gate is shut, a wall of pages bound with ribbon. Its lock is shaped like a full stop.", "action"),
+		line("", "Whatever lies beyond cannot be opened until the Prologue is finished: Thistledown still has an Editor.", "action"),
+	]
+
+static func gate_open() -> Array:
+	return [
+		line("", "The ribbon unties itself. The pages part like a curtain, and beyond them is white, and a faint sound like someone, far away, turning a page.", "action"),
+		line("", "There is nothing there yet. But there will be.", "action"),
+	]
 
 static func echo_grant() -> Array:
 	return [

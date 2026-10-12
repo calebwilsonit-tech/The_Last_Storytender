@@ -3,7 +3,7 @@ extends StaticBody2D
 ## Procedurally inked scenery. Objects with `ghost = true` begin as graphite
 ## pencil sketches and fill with color as the restoration wave reaches them.
 
-enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE, PICKUP, BOOK, CHAIR, TABLE, OVEN, RIFT }
+enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE, PICKUP, BOOK, CHAIR, TABLE, OVEN, RIFT, POST, GATE }
 
 var kind: Kind = Kind.TREE
 var ghost := false
@@ -83,6 +83,8 @@ func _draw() -> void:
 		Kind.TABLE: _draw_table()
 		Kind.OVEN: _draw_oven()
 		Kind.RIFT: _draw_rift()
+		Kind.POST: _draw_post()
+		Kind.GATE: _draw_gate()
 
 func _shadow(rx: float) -> void:
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
@@ -477,3 +479,45 @@ func _draw_rift() -> void:
 		var y := -10.0 - k * 14.0
 		draw_line(Vector2(-4, y), Vector2(4, y - 6), Color("c0405a", 0.7), 1.6)
 	draw_polyline(edge_l, Color("c0405a", 0.6 + 0.3 * pulse), 1.4)
+
+# --- A lantern post: a waypoint you light once, then rest at ----------------------------------
+func _draw_post() -> void:
+	_shadow(14.0)
+	var lit := variant == 1
+	var wood := Palette.WOOD
+	DrawKit.shape(self, PackedVector2Array([Vector2(-4, 0), Vector2(4, 0), Vector2(3, -58), Vector2(-3, -58)]), wood, Palette.OUTLINE, 2.2, _seed)
+	# the arm and the hanging lantern
+	draw_line(Vector2(0, -56), Vector2(14, -56), Palette.OUTLINE, 3.0)
+	var lamp := Vector2(14, -44)
+	draw_line(Vector2(14, -56), lamp + Vector2(0, -8), Palette.OUTLINE, 1.6)
+	var glow := 0.5 + 0.5 * sin(_t * 2.6)
+	if lit:
+		draw_circle(lamp, 30.0 + glow * 3.0, Color(Palette.CYAN, 0.10))
+		draw_circle(lamp, 18.0, Color(Palette.CYAN, 0.14))
+	var body := PackedVector2Array([lamp + Vector2(-6, -8), lamp + Vector2(6, -8), lamp + Vector2(7, 8), lamp + Vector2(-7, 8)])
+	DrawKit.shape(self, body, Color("e6f7fb") if lit else Color("8a8f99"), Palette.OUTLINE, 2.0, _seed + 1.0)
+	if lit:
+		draw_circle(lamp, 4.0, Color(1, 1, 1, 0.95))
+
+# --- The Margin Gate: bound pages with a full-stop lock ----------------------------------------------
+func _draw_gate() -> void:
+	_shadow(30.0)
+	var open_ := variant == 1
+	var stone := Color("5a6478")
+	for sx in [-34.0, 34.0]:
+		DrawKit.shape(self, PackedVector2Array([Vector2(sx - 7, 0), Vector2(sx + 7, 0), Vector2(sx + 6, -96), Vector2(sx - 6, -96)]), stone, Palette.OUTLINE, 2.4, _seed + sx)
+	DrawKit.shape(self, PackedVector2Array([Vector2(-44, -96), Vector2(44, -96), Vector2(40, -108), Vector2(-40, -108)]), stone.lightened(0.06), Palette.OUTLINE, 2.4, _seed + 2.0)
+	if open_:
+		var pulse := 0.5 + 0.5 * sin(_t * 1.6)
+		draw_rect(Rect2(-27, -94, 54, 94), Color(1, 1, 1, 0.55 + 0.2 * pulse))
+		for k in 6:
+			var y := -10.0 - k * 15.0
+			draw_line(Vector2(-22, y), Vector2(22, y - 4), Color(Palette.CYAN, 0.35), 1.6)
+	else:
+		for i in 6:
+			var x0 := -27.0 + i * 9.0
+			var q := PackedVector2Array([Vector2(x0, 0), Vector2(x0 + 9, 0), Vector2(x0 + 9, -94), Vector2(x0, -94)])
+			DrawKit.shape(self, q, Color("f1e7cd") if i % 2 == 0 else Color("e3d6b4"), Palette.OUTLINE, 1.6, _seed + i)
+		draw_line(Vector2(-27, -62), Vector2(27, -62), Color("a8483f"), 4.0)
+		draw_line(Vector2(-27, -30), Vector2(27, -30), Color("a8483f"), 4.0)
+		draw_circle(Vector2(0, -46), 8.0, Palette.INK)
