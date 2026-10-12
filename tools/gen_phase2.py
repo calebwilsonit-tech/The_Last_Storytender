@@ -99,7 +99,7 @@ def tpl_echo(cx, cy, tier, region_lv):
     hint = (cx - 3, cy + 1)
     hid = "echo_hint_%d" % len(SITES)
     LORE_TEXT[hid] = ECHO_HINTS[len(SITES) % len(ECHO_HINTS)]
-    return {"type": "echo", "chest": [cx, cy], "gate": [cx, cy + 2], "axis": [1, 0], "plates": [[ax, ay], [cx + 3, cy - 4]],
+    return {"type": "echo", "chest": [cx, cy], "gate": [cx, cy + 1], "axis": [1, 0], "plates": [[ax, ay], [cx + 3, cy - 4]],
             "hint": list(hint), "hint_id": hid, "tier": tier}
 
 def tpl_words(cx, cy, tier, region_lv):
@@ -137,7 +137,7 @@ def tpl_arena(cx, cy, tier, region_lv, kinds):
         [[cx - 2, cy - 2, kinds[0]], [cx + 2, cy - 2, kinds[0]]],
         [[cx - 2, cy, kinds[1]], [cx + 2, cy, kinds[1]], [cx, cy - 1, kinds[0]]],
     ]
-    return {"type": "arena", "chest": [cx, cy - 2], "gate": [cx, cy + 4], "axis": [1, 0], "trigger": [cx, cy + 1],
+    return {"type": "arena", "chest": [cx, cy - 2], "gate": [cx, cy + 3], "axis": [1, 0], "trigger": [cx, cy + 1],
             "waves": waves, "tier": tier}
 
 def tpl_crumble(cx, cy, tier, region_lv):
