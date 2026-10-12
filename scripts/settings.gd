@@ -7,7 +7,8 @@ signal quality_changed
 
 var master_volume := 0.8
 var music_volume := 0.7
-var skin := "cutpaper"          # art style, see Skins
+var skin := "cutpaper"          # screen filter, see Skins
+var art_style := "default"      # character art, see ArtStyles
 var fullscreen := false
 var screen_shake := true
 var dialogue_speed := 1          # 0 slow, 1 normal, 2 fast
@@ -168,7 +169,7 @@ func save_settings() -> void:
 	var f := FileAccess.open(PATH, FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify({
-			"master_volume": master_volume, "music_volume": music_volume, "skin": skin, "fullscreen": fullscreen, "screen_shake": screen_shake,
+			"master_volume": master_volume, "music_volume": music_volume, "skin": skin, "art_style": art_style, "fullscreen": fullscreen, "screen_shake": screen_shake,
 			"dialogue_speed": dialogue_speed, "playtest_log": playtest_log,
 			"tutorial_tips": tutorial_tips, "preset": preset, "gfx": gfx, "bindings": bindings,
 		}))
@@ -182,6 +183,7 @@ func load_settings() -> void:
 	master_volume = float(data.get("master_volume", master_volume))
 	music_volume = float(data.get("music_volume", music_volume))
 	skin = str(data.get("skin", skin))
+	art_style = str(data.get("art_style", art_style))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
 	screen_shake = bool(data.get("screen_shake", screen_shake))
 	dialogue_speed = int(data.get("dialogue_speed", dialogue_speed))

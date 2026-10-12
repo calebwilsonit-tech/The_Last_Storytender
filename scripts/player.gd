@@ -43,6 +43,8 @@ var _walk := 0.0
 var _invuln := 0.0
 var _facing_right := true
 var _facing_back := false
+var _face_dir := Vector2(0, 1)     # where the Storytender looks, in screen space (0,1 = at the camera)
+var _swing_aim := Vector2(0, 1)
 var is_sneaking := false   # holding Ctrl/C: slower, much quieter
 var elev := 0.0            # visual elevation in px; physics stays on the ground plane
 var preview := false       # true when drawn inside the binder's paper-doll panel
@@ -188,6 +190,7 @@ func _strike() -> void:
 	_atk_cd = 0.5 if finisher else 0.3
 	_swing = 1.0
 	_swing_dir = aim_ground
+	_swing_aim = aim
 	_swing_combo = _combo
 	if absf(aim.x) > 0.15:
 		_facing_right = aim.x > 0.0
@@ -264,17 +267,23 @@ func _process(delta: float) -> void:
 	_trail = _trail.filter(func(tr): return tr.age < 0.3)
 	if velocity.length() > 20.0 and _swing <= 0.0:
 		_walk += velocity.length() * delta * 0.075
-		if absf(velocity.x) > 12.0:
-			_facing_right = velocity.x > 0.0
-		if velocity.y < -6.0:
-			_facing_back = true
-		elif velocity.y > 6.0:
-			_facing_back = false
+	# Which way the Storytender looks: where the quill swung, where the light points, else where they walk.
+	var want := Vector2.ZERO
+	if _swing > 0.0:
+		want = _swing_aim
 	elif lantern_on and not GameState.in_dialogue:
-		# While shining the light, face where the light points.
-		if absf(aim.x) > 0.2:
-			_facing_right = aim.x > 0.0
-		_facing_back = aim.y < -0.5
+		want = aim
+	elif velocity.length() > 20.0:
+		want = velocity.normalized()
+	if want != Vector2.ZERO:
+		_face_dir = _face_dir.lerp(want.normalized(), 1.0 - exp(-16.0 * delta))
+		if _face_dir.length() < 0.2:
+			_face_dir = want.normalized()
+		_face_dir = _face_dir.normalized()
+	# The original art only knows left/right and front/back; derive them from the real direction.
+	if absf(_face_dir.x) > 0.12:
+		_facing_right = _face_dir.x > 0.0
+	_facing_back = _face_dir.y < -0.35
 	for s in _splats:
 		s.age += delta
 	_splats = _splats.filter(func(s): return s.age < 6.0)
@@ -351,6 +360,13 @@ func _draw() -> void:
 	if _swing > 0.0:
 		_draw_slash()
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))
+	var art := Skins.art() if not Engine.is_editor_hint() else null
+	if art != null:
+		var ctx := _art_ctx()
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		if is_crumpled or not (_invuln > 0.0 and int(_t * 20.0) % 2 == 0):
+			if art.draw_character(self, "storytender", ctx):
+				return
 	if is_crumpled:
 		draw_set_transform(Vector2(0, -8 - elev), 0.0, Vector2.ONE)
 		_draw_crumpled(inkc)
@@ -367,6 +383,21 @@ func _draw() -> void:
 		_draw_back(ph, moving, flick)
 	else:
 		_draw_front(ph, moving, flick)
+
+## What an art style needs to know to draw the Storytender.
+func _art_ctx() -> Dictionary:
+	var weapon := "stub"
+	if GameState.has_flag("has_quill"):
+		weapon = "quill"
+	elif GameState.has_flag("has_sword"):
+		weapon = "sword"
+	return {
+		"t": _t, "moving": velocity.length() > 20.0, "phase": _walk, "facing_right": _facing_right,
+		"facing_back": _facing_back, "sneaking": is_sneaking, "crumpled": is_crumpled, "invuln": _invuln,
+		"lantern_on": lantern_on, "flick": 0.85 + 0.15 * sin(_t * 9.0) + 0.05 * sin(_t * 23.0),
+		"swing": _swing, "combo": _swing_combo, "weapon": weapon, "origin": Vector2(0, -elev), "dir": _face_dir,
+		"scale": 1.0, "binding": GameState.equipment.get("binding", ""), "amulet": GameState.equipment.get("amulet", ""),
+	}
 
 # Ground-plane helpers: points are given in ground metric (y doubled) and drawn squashed.
 func _g2s(g: Vector2) -> Vector2:

@@ -1,7 +1,7 @@
 extends CanvasLayer
 ## Art-style "Skins" (autoload as Skins). A skin is a look for the whole world: the default is the
 ## hand-built Cut Paper style; the others are screen filters so you can compare directions on the
-## real game before committing. Cycle in Settings > Art style, or press F9 anywhere.
+## real game before committing. Screen filters: F9. Character art styles (ArtStyles): F7.
 ## The filter sits under the HUD and menus (they are never restyled) and costs nothing when off.
 ## A skin may also name a sprite folder (res://skins/<id>/) for hand-made character art later.
 
@@ -31,6 +31,19 @@ func _ready() -> void:
 	add_child(_rect)
 	apply()
 
+## The active character art style (null = the original procedural art).
+func art() -> ArtStyle:
+	return ArtStyles.get_style(Settings.art_style)
+
+func cycle_art(dir: int = 1) -> void:
+	var i := (ArtStyles.index_of(Settings.art_style) + dir + ArtStyles.ORDER.size()) % ArtStyles.ORDER.size()
+	Settings.art_style = ArtStyles.ORDER[i]
+	Settings.save_settings()
+	changed.emit(Settings.art_style)
+
+func art_name() -> String:
+	return String(ArtStyles.NAMES.get(Settings.art_style, "Original"))
+
 func index_of(id: String) -> int:
 	for i in LIST.size():
 		if LIST[i]["id"] == id:
@@ -55,8 +68,13 @@ func cycle(dir: int = 1) -> void:
 	apply()
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
-		cycle(1)
+	if event is InputEventKey and event.pressed and not event.echo:
 		var hud: Object = get_tree().current_scene.get("_hud") if get_tree().current_scene else null
-		if hud:
-			hud.toast("Art style: %s" % current_name())
+		if event.keycode == KEY_F9:
+			cycle(1)
+			if hud:
+				hud.toast("Screen filter: %s" % current_name())
+		elif event.keycode == KEY_F7:
+			cycle_art(1)
+			if hud:
+				hud.toast("Character art: %s" % art_name())
