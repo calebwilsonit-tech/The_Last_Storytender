@@ -119,6 +119,7 @@ func build(parent: Node2D) -> void:
 			sl.cells.assign(by_s[s])
 			sl.diag_y = diag_y
 			sl.position = Vector2(0.0, diag_y)
+			sl.origin = sl.position
 			# Draw order comes from z_index, not from y: everything is ordered by which diagonal
 			# row of cells it belongs to, so nothing flips as you cross a cell.
 			#   flat ground tops  z = -2000 + s     (always behind every actor)
@@ -156,6 +157,7 @@ var _had_marks := false
 
 ## The overworld never changes its ground, so it never needs the safety repaint. Memories do.
 var static_world := false
+var use_chunks := false                 # flat ground comes from cached chunk textures instead
 var _pending: Array = []                # slices waiting for a repaint (spread over a few frames)
 
 func _process(delta: float) -> void:
@@ -174,6 +176,8 @@ func _process(delta: float) -> void:
 		_pending.clear()
 		var half_y := Settings.cull_half().y + 190.0
 		for sl in _slices:
+			if use_chunks and sl.mode == IsoSlice.GROUND:
+				continue
 			if absf(sl.diag_y - focus.y) < half_y:
 				_pending.append(sl)
 			elif sl.visible:
@@ -187,6 +191,16 @@ func _process(delta: float) -> void:
 			var sl: IsoSlice = _pending.pop_back()
 			sl.visible = true
 			sl.queue_redraw()
+
+## Switch flat ground between per-frame drawing and cached chunks (see GroundChunks).
+func set_chunks(on: bool) -> void:
+	use_chunks = on
+	for sl in _slices:
+		if sl.mode == IsoSlice.GROUND:
+			sl.visible = not on
+			if not on:
+				sl.queue_redraw()
+	dirty = true
 
 ## Cells that are in front of the player and taller than where they stand are drawn see-through,
 ## so the player is never lost behind a cliff. Pass an empty list to turn it off.
@@ -223,6 +237,7 @@ func set_fade(list: Array) -> void:
 			fn.cells.assign(_by_s[s])
 			fn.diag_y = (s - 0.5) * Iso.TILE_H * 0.5
 			fn.position = Vector2(0.0, fn.diag_y)
+			fn.origin = fn.position
 			fn.z_index = 3 * s
 			fn.modulate.a = FADE_ALPHA
 			_edge_parent.add_child(fn)

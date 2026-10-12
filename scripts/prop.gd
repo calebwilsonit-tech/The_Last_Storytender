@@ -16,10 +16,17 @@ var done := false          # a spent memory shard
 var lift := 0.0            # elevation of the cell it stands on, in px
 var _t := 0.0
 var _seed := 0.0
+var baking := false        # painting a tree into TreeBake's texture
+var bake_seed := 0.0
 
 func _ready() -> void:
+	if baking:
+		_seed = bake_seed
+		return                  # a picture-maker: no collision, no animation
 	_seed = position.x * 0.013 + position.y * 0.007
 	_t = _seed * 3.0
+	if kind == Kind.TREE:
+		TreeBake.ensure(self)
 	var poly := CollisionPolygon2D.new()
 	match kind:
 		Kind.TREE, Kind.SIGN:
@@ -41,6 +48,8 @@ func _ready() -> void:
 		add_child(poly)
 
 func _process(delta: float) -> void:
+	if baking:
+		return
 	_t += delta
 	# Props far from the camera keep whatever they last drew, and trees sway at half rate.
 	var cam := get_viewport().get_camera_2d()
@@ -104,8 +113,16 @@ func _shadow(rx: float) -> void:
 
 # --- Tree ---------------------------------------------------------------------
 func _draw_tree() -> void:
-	_shadow(20.0)
-	var sway := sin(_t * 1.1) * 1.6
+	if not baking:
+		_shadow(20.0)
+		var tex := TreeBake.texture(variant % 3, int(absf(_seed) * 10.0) % TreeBake.BUCKETS)
+		if tex != null:
+			# one picture instead of ~70 drawing commands; sway is a slight lean of the picture
+			var lean := sin(_t * 1.1) * 0.03 if Settings.gfx_on("sway") else 0.0
+			draw_set_transform_matrix(Transform2D(Vector2(1, 0), Vector2(lean, 1), Vector2(0, -lift)))
+			draw_texture_rect(tex, Rect2(-TreeBake.BASE, Vector2(TreeBake.SIZE)), false)
+			return
+	var sway := 0.0 if baking else sin(_t * 1.1) * 1.6
 	var trunk := PackedVector2Array([Vector2(-5, 0), Vector2(5, 0), Vector2(3.5, -34), Vector2(-3.5, -34)])
 	DrawKit.shape(self, trunk, Palette.WOOD, Palette.INK_BROWN, 2.0, _seed)
 	DrawKit.hatch(self, PackedVector2Array([trunk[0], trunk[1], trunk[2], trunk[3]]), 4, Color(Palette.INK_BROWN, 0.5))

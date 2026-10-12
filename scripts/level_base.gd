@@ -25,6 +25,7 @@ var _dialogue: DialogueBox
 var _inventory: InventoryScreen
 var _pause: PauseMenu
 var _world_map: WorldMap
+var _chunks: GroundChunks
 
 var _start := Vector2.ZERO
 var _map_start := Vector2.ZERO     # the map's own start cell, ignoring return-spawn overrides
@@ -607,6 +608,19 @@ func _unhandled_input(event: InputEvent) -> void:
 	_busy = false
 
 # --- The map ---------------------------------------------------------------------------
+## Cached ground: only for levels whose ground never changes (the overworld). It is a pure speed-up.
+func _setup_chunks() -> void:
+	var want := _floor.static_world and Settings.gfx_on("cached_ground")
+	if want and _chunks == null:
+		_chunks = GroundChunks.new()
+		add_child(_chunks)
+		_chunks.setup(_floor)
+		_floor.set_chunks(true)
+	elif not want and _chunks != null:
+		_chunks.queue_free()
+		_chunks = null
+		_floor.set_chunks(false)
+
 ## Levels that have a world to look at override this (the overworld does).
 func _map_available() -> bool:
 	return false

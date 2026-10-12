@@ -335,3 +335,10 @@ There is a small grind by design, and **the player chooses how to do it**. Renow
 
 ### Things to do in the world (overworld density)
 The Prologue map now has 5 riddle vaults (rewrite the sentence on the stone to open the gate, a chest behind), 5 hidden caches behind redaction bars (hold the Lantern), chests guarded by enemy camps, lore stones and one-time pickups. Dense but not overwhelming: roughly one point of interest every 10 to 15 cells.
+
+### Performance architecture (implemented v2.14)
+Integrated graphics (for example a 2020 Intel MacBook Pro running Windows) struggle with thousands of tiny draw calls per frame, so the overworld is built to issue very few:
+- **Cached ground (GroundChunks):** flat ground is painted once per 16 x 16 block into a texture and shown as one image. Only blocks near the camera exist. Cliff faces, stairs and holes stay live because they are depth-sorted against people. While a restoration wave spreads, the town blocks on screen repaint each frame. Option: Settings > Graphics > Cached ground.
+- **Baked trees (TreeBake):** each tree look (3 sizes x 4 variations) is painted once at 2x and every tree draws that single picture (sway is a slight lean). The dense orchard went from about 20,000 draw commands to about 1,200.
+- **Streaming:** enemies, ground chunks and far props are created and dropped by distance.
+Rule for new content: anything that appears many times (trees, rocks, grass, fences, houses) should be baked or batched, not drawn command by command each frame. Chapter maps at 4x the Prologue depend on this.

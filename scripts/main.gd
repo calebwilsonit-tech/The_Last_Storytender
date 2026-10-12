@@ -323,6 +323,8 @@ func _notification(what: int) -> void:
 
 func _level_ready() -> void:
 	_floor.static_world = true      # the overworld ground never changes: no safety repaints
+	_setup_chunks()
+	Settings.quality_changed.connect(_setup_chunks)
 	_player.dashed.connect(_on_dashed)
 	_check_rift()
 	if GameState.has_flag("scissor_done") and not GameState.town_published:

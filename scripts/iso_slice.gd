@@ -5,19 +5,22 @@ extends Node2D
 
 const GROUND := 1
 const EDGE := 2
+const CHUNK := 4       # paints a block of flat ground once, into a cached texture
 const FADE := 3        # draws only the cells that are currently hiding the player, see-through
 
 var floor_ref: IsoFloor
 var cells: Array[Vector2i] = []
 var mode := EDGE
 var diag_y := 0.0
+var origin := Vector2.ZERO       # world position that maps to this node's local (0, 0)
+var uncull := false              # chunk painters draw every cell they own
 
 static func _h(x: int, y: int, k: int = 0) -> float:
 	return fposmod(sin(float(x) * 127.1 + float(y) * 311.7 + float(k) * 74.7) * 43758.5453, 1.0)
 
 # Slice-local screen position of a grid point at elevation z.
 func _p(c: Vector2, z: float) -> Vector2:
-	return Iso.pt(c, z) - position
+	return Iso.pt(c, z) - origin
 
 func _quad(cell: Vector2i, z: float) -> PackedVector2Array:
 	var c := Vector2(cell)
@@ -37,13 +40,13 @@ func _draw() -> void:
 		var kind: String = floor_ref.cells[cell]
 		var z := float(floor_ref.level(cell))
 		var gp := Iso.pt(Vector2(cell), z)
-		if absf(gp.x - f.x) > half.x or absf(gp.y - f.y) > half.y:
+		if not uncull and (absf(gp.x - f.x) > half.x or absf(gp.y - f.y) > half.y):
 			continue
 		var solid_top := not floor_ref.stairs.has(cell) and kind != "#"
 		var faded := floor_ref.fade_cells.has(cell)
 		if (mode == EDGE and faded) or (mode == FADE and not faded):
 			continue
-		if mode == GROUND:
+		if mode == GROUND or mode == CHUNK:
 			if solid_top and not floor_ref.back_lower(cell):
 				_draw_tile(cell, kind, z)
 		elif floor_ref.stairs.has(cell):
