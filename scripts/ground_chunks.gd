@@ -15,6 +15,10 @@ var _chunks: Dictionary = {}         # Vector2i -> {vp, painter, sprite, last, t
 var _restore_was := false
 var _tick := 0
 
+func _ready() -> void:
+	# A cached chunk was painted with the settings of its day, so repaint all of them when they change.
+	Settings.quality_changed.connect(repaint_all)
+
 func setup(f: IsoFloor) -> void:
 	floor_ref = f
 	for cell: Vector2i in f.cells.keys():

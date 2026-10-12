@@ -13,6 +13,7 @@ const BUCKETS := 4
 static var instance: TreeBake
 var _tex: Dictionary = {}               # "variant_bucket" -> Texture2D
 var ready_flag := false
+var _vps: Array = []
 
 static func ensure(host: Node) -> void:
 	if instance == null or not is_instance_valid(instance):
@@ -34,6 +35,7 @@ func _ready() -> void:
 			vp.disable_3d = true
 			vp.render_target_update_mode = SubViewport.UPDATE_ONCE
 			add_child(vp)
+			_vps.append(vp)
 			var painter := Prop.new()
 			painter.kind = Prop.Kind.TREE
 			painter.variant = v
@@ -45,7 +47,14 @@ func _ready() -> void:
 			painter.position = BASE * SCALE
 			vp.add_child(painter)
 			_tex["%d_%d" % [v, b]] = vp.get_texture()
+	Settings.quality_changed.connect(_rebake)
 	# the pictures are ready a couple of frames from now
 	await get_tree().process_frame
 	await get_tree().process_frame
 	ready_flag = true
+
+func _rebake() -> void:
+	for vp: SubViewport in _vps:
+		for c in vp.get_children():
+			c.queue_redraw()
+		vp.render_target_update_mode = SubViewport.UPDATE_ONCE

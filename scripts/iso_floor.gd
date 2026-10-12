@@ -97,6 +97,9 @@ func edge_open(a: Vector2i, b: Vector2i) -> bool:
 		return level(other) == level(st) + 1   # top of the stairs
 	return false                                # sides of a staircase are walls
 
+func _ready() -> void:
+	Settings.quality_changed.connect(func(): dirty = true)
+
 func build(parent: Node2D) -> void:
 	var by_s := {}
 	for cell: Vector2i in cells.keys():

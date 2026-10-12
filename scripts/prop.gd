@@ -16,6 +16,7 @@ var done := false          # a spent memory shard
 var lift := 0.0            # elevation of the cell it stands on, in px
 var _t := 0.0
 var _seed := 0.0
+var _stale := false        # a graphics setting changed: redraw once even if static
 var baking := false        # painting a tree into TreeBake's texture
 var bake_seed := 0.0
 
@@ -27,6 +28,7 @@ func _ready() -> void:
 	_t = _seed * 3.0
 	if kind == Kind.TREE:
 		TreeBake.ensure(self)
+	Settings.quality_changed.connect(func(): _stale = true; _drawn_once = false)
 	var poly := CollisionPolygon2D.new()
 	match kind:
 		Kind.TREE, Kind.SIGN:
@@ -57,6 +59,10 @@ func _process(delta: float) -> void:
 		var d := global_position - cam.get_screen_center_position()
 		if absf(d.x) > 620.0 or absf(d.y) > 440.0:
 			return
+	if _stale:
+		_stale = false
+		queue_redraw()
+		return
 	if kind == Kind.TREE:
 		if not Settings.gfx_on("sway"):
 			if _drawn_once:
