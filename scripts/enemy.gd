@@ -48,6 +48,7 @@ var _facing := Vector2.RIGHT       # ground-plane direction it is looking
 var _last_seen := Vector2.ZERO
 var _lost_t := 0.0
 var _look_t := 0.0
+var _lured: Node2D                 # a remembered Storytender it is staring at
 var _popup := 0.0
 
 func _ready() -> void:
@@ -210,9 +211,10 @@ func _perceive(delta: float) -> bool:
 ## A remembered Storytender standing nearby draws the curious to it.
 func _check_echo_lure() -> void:
 	for e: Node2D in get_tree().get_nodes_in_group("echoes"):
-		if e.get("lures") == true and _ground_to(e.position).length() < 340.0 \
+		if e.get("lures") == true and _ground_to(e.position).length() < 420.0 \
 				and (floor_ref == null or floor_ref.has_los(position, e.position)):
 			_last_seen = e.position
+			_lured = e
 			_state = "search"
 			_look_t = 3.0
 			return
@@ -247,6 +249,8 @@ func _hostile_tick(delta: float, slow: float) -> void:
 			if _wander_t <= 0.0:
 				_wander_t = randf_range(1.0, 2.5)
 				_wander = Vector2.from_angle(randf() * TAU) if randf() > 0.4 else Vector2.ZERO
+				if _ground_to(_home).length() > 110.0:
+					_wander = _ground_to(_home).normalized()   # guards drift, but not far from their post
 			_move(_wander, 28.0)
 			if _wander == Vector2.ZERO:
 				# Standing still, it slowly scans left and right.
@@ -282,8 +286,12 @@ func _hostile_tick(delta: float, slow: float) -> void:
 			if to_last.length() > 30.0:
 				_move(to_last.normalized(), 70.0)
 			else:
-				_look_t -= delta
-				_facing = _facing.rotated(2.2 * delta)
+				if is_instance_valid(_lured) and _lured.get("lures") == true:
+					# Transfixed: it stares at the echo instead of scanning the room.
+					_look_t = 3.0
+				else:
+					_look_t -= delta
+					_facing = _facing.rotated(2.2 * delta)
 				if _look_t <= 0.0:
 					_alert = 0.3
 					_state = "return"

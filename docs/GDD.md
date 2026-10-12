@@ -277,7 +277,9 @@ The memory is now four rooms (about 20-25 minutes) instead of one hall. The firs
 |---|---|
 | The Cold Hearth | One plate, one gate. Leave an echo on the plate, walk through. Wren asleep under a blanket of oven mitts (look). |
 | The Apprentice's Bench | Two plates, both far from the gate: one on a raised platform up a staircase, one past crates and plot holes. Needs both echoes at once. Bench of tools all named Gerald (look). |
-| The Night Watch | A Bare guard stands near the plate. Record an echo near the entrance to draw it away, then record a second echo to the plate. (Killing the guard also works.) The boy asleep on the watch (look). |
+| The Night Watch | A Bare guard stands right beside the plate (walking up unaided gets you chased in about 9 runs in 10 in simulation). Lured guards stare at the echo instead of scanning, and echoes draw them from up to about 420 px. Record an echo near the entrance to draw it away, then record a second echo to the plate. (Killing the guard also works.) The boy asleep on the watch (look). |
 | The Forge | The Critic fight, unchanged. |
 
 Gates are momentary: they stay open only while every plate is held (they will not close while you are standing in them). Remembered figures can be looked at (E) for short emotional beats, so the puzzle rooms carry story too.
+
+Enemies now stay near their post: idle wandering drifts back toward home beyond about 110 px.
