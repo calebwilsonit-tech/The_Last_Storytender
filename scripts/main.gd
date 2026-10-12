@@ -181,7 +181,8 @@ func _touch_post(id: String) -> void:
 		_hud.toast("Waypoint lit: %s" % wp["name"])
 		Telemetry.log_event("waypoint", {"id": id})
 	else:
-		_hud.toast("You rest a moment by the lantern.")
+		_hud.toast("You rest by the lantern. The page resets: the Errors return.")
+	_respawn_world()
 	_player.restore_ink(100.0)
 	_player.refuel(100.0)
 	GameState.save_game()
@@ -635,6 +636,17 @@ func _checkpoint_for(cell: Vector2i) -> Vector2:
 	if PrologueMap.region_at(cell) == "t":
 		return Iso.to_screen(Vector2(23, 13) + Vector2(PrologueMap.OFFSET))
 	return _map_start
+
+## Resting at a lantern post resets the page: every Error you beat comes back (they reappear as
+## you walk away from the post, so nothing pops in on top of you).
+func _respawn_world() -> void:
+	if not _enemies_out:
+		return
+	_on_death_reset()
+	for sp in _spawn_state:
+		sp["wake"] = 0.0
+	_stream_t = 0.0
+	Telemetry.log_event("rest_respawn", {})
 
 func _on_death_reset() -> void:
 	for e in get_tree().get_nodes_in_group("enemies"):

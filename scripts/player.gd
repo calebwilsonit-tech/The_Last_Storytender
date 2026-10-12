@@ -282,7 +282,7 @@ func take_damage(amount: float, lethal: bool = true, source: String = "") -> voi
 	if is_crumpled or (_invuln > 0.0 and lethal):
 		return
 	if lethal:
-		amount *= 1.0 - clampf(GameState.equipped_stat("armor"), 0.0, 0.5)
+		amount *= 1.0 - clampf(GameState.equipped_stat("armor"), 0.0, 0.75)
 		_invuln = 0.9 + GameState.equipped_stat("invuln")
 	ink = maxf(ink - amount, 0.0 if lethal else 1.0)
 	Telemetry.log_event("damage", {"src": source if source != "" else ("fall" if not lethal else "other"), "amt": snappedf(amount, 0.1), "ink": snappedf(ink, 0.1)})

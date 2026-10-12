@@ -38,6 +38,9 @@ static func make(kind: String, tier: int, seed_v: int) -> Base:
 	g.tier = tier
 	g.rng.seed = seed_v
 	g.setup()
+	var bonus: int = GameState.attr("wit") / 5     # smarter Storytenders get extra tries
+	g.tries += bonus
+	g.max_tries += bonus
 	return g
 
 ## Picks the game for a vault: the same vault always plays the same game. On a controller the

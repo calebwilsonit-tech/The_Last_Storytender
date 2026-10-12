@@ -258,6 +258,7 @@ func _paint_left() -> void:
 	for i in lines.size():
 		_txt(lines[i], Vector2(108, 534 + i * 20), 17, Color(ink, 0.9))
 	# Difficulty is chosen at New Game and fixed for the save; shown here for reference.
+	_txt("Level %d" % GameState.level(), Vector2(372, 556), 20, Palette.INK)
 	_txt("Difficulty:  %s" % ("Story" if GameState.is_story() else "Normal"), Vector2(372, 534), 17, Color(Palette.INK, 0.7))
 
 func _pct(x: float) -> String:

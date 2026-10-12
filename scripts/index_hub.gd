@@ -106,7 +106,9 @@ func _ids() -> Array:
 	match _mode:
 		"craft": return _craft_ids()
 		"shop": return _shop_ids()
-	return ["workbench", "shop", "travel", "leave"]
+	if _mode == "level":
+		return GameState.ATTR_ORDER.duplicate()
+	return ["level", "workbench", "shop", "travel", "leave"]
 
 func _stock_rank(id: String) -> int:
 	for e: Array in ItemCatalog.SHOP_STOCK:
@@ -124,12 +126,21 @@ func _activate() -> void:
 	match _mode:
 		"hub":
 			match id:
+				"level": _enter("level")
 				"workbench": _enter("craft")
 				"shop": _enter("shop")
 				"travel":
 					close()
 					map_requested.emit()
 				"leave": close()
+		"level":
+			if GameState.attr(id) >= GameState.ATTR_CAP:
+				_say("That one is as strong as it gets.")
+			elif GameState.spend_point(id):
+				_say("%s rises to %d. You are now Level %d." % [GameState.ATTRS[id][0], GameState.attr(id), GameState.level()])
+				Telemetry.log_event("level_up", {"attr": id, "level": GameState.level()})
+			else:
+				_say("You need %d Mnemosynth." % GameState.level_cost())
 		"craft":
 			if ItemCatalog.craft(id):
 				_say("Crafted: %s" % ItemDB.info(id)["name"])
@@ -179,7 +190,7 @@ func _back() -> void:
 	else:
 		var m := _mode
 		_enter("hub")
-		_row = 0 if m == "craft" else 1
+		_row = {"level": 0, "craft": 1}.get(m, 2)
 
 # --- Input -------------------------------------------------------------------------------------
 func _input(event: InputEvent) -> void:
@@ -246,7 +257,7 @@ func _paint() -> void:
 	sb.shadow_color = Color(0, 0, 0, 0.5)
 	sb.shadow_size = 14
 	_view.draw_style_box(sb, PANEL)
-	var title: String = {"hub": "The Index", "craft": "The Workbench", "shop": "The Narrator's Stall"}[_mode]
+	var title: String = {"hub": "The Index", "craft": "The Workbench", "shop": "The Narrator's Stall", "level": "Revise Your Draft"}[_mode]
 	_txt(title, PANEL.position + Vector2(36, 62), 44, Palette.INK)
 	_view.draw_line(PANEL.position + Vector2(36, 76), PANEL.position + Vector2(PANEL.size.x - 36, 76), Color(Palette.INK, 0.45), 2.0)
 	# Mnemosynth purse
@@ -256,11 +267,12 @@ func _paint() -> void:
 	_view.draw_string(_font, PANEL.position + Vector2(PANEL.size.x - 46 - pw, 58), purse, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 22, Palette.INK_BROWN)
 	match _mode:
 		"hub": _paint_hub()
+		"level": _paint_level()
 		"craft": _paint_list(true)
 		"shop": _paint_list(false)
 	if _quip_t > 0.0 and _quip != "":
 		_view.draw_multiline_string(_ital, PANEL.position + Vector2(36, PANEL.size.y - 30), _quip, HORIZONTAL_ALIGNMENT_LEFT, PANEL.size.x - 72.0, 22, 2, Color(Palette.INK_BROWN, minf(_quip_t, 1.0)))
-	var legend: Array = [["move", "move", "Move"], ["confirm", "confirm", {"hub": "Open", "craft": "Craft", "shop": "Buy / Sell"}[_mode]]]
+	var legend: Array = [["move", "move", "Move"], ["confirm", "confirm", {"hub": "Open", "craft": "Craft", "shop": "Buy / Sell", "level": "Raise"}[_mode]]]
 	if _mode == "shop":
 		legend.append(["t:A D", "t:◄ ►", "Buy / Sell tab"])
 	legend.append(["back", "back", "Back" if _mode != "hub" and not _pocket else "Close"])
@@ -270,13 +282,14 @@ func _paint_hub() -> void:
 	var base := PANEL.position + Vector2(60, 130)
 	_txt("Every lantern post keeps a page of the Index.", base + Vector2(0, -8), 22, Palette.INK_BROWN, _ital)
 	var rows := [
+		["level", "Revise Your Draft", "Spend Mnemosynth to grow stronger, sturdier, quicker or wiser."],
 		["workbench", "The Workbench", "Turn scraps into something better."],
 		["shop", "The Narrator's Stall", "Spend and sell Mnemosynth. He narrates every sale."],
 		["travel", "The Map", "Walk the page to any post you have lit."],
 		["leave", "Leave the Index", "The lantern will keep your place."],
 	]
 	for i in rows.size():
-		var r := Rect2(base + Vector2(0, 30 + i * 96), Vector2(PANEL.size.x - 120, 82))
+		var r := Rect2(base + Vector2(0, 22 + i * 78), Vector2(PANEL.size.x - 120, 66))
 		_hit.append({"r": r, "i": i})
 		var sel := i == _row
 		_view.draw_rect(Rect2(r.position + Vector2(4, 5), r.size), Color(0, 0, 0, 0.18))
@@ -284,9 +297,52 @@ func _paint_hub() -> void:
 		_view.draw_rect(r, Palette.INK_BROWN if sel else Color(Palette.INK_BROWN, 0.5), false, 4.0 if sel else 2.0)
 		if sel:
 			_view.draw_circle(r.position + Vector2(-24, r.size.y * 0.5), 8.0, Palette.GOLD)
-		_txt(rows[i][1], r.position + Vector2(28, 36), 34, Palette.INK)
-		_txt(rows[i][2], r.position + Vector2(28, 66), 20, Color(Palette.INK, 0.65), _ital)
-	_view.draw_string(_font, PANEL.position + Vector2(PANEL.size.x - 330, PANEL.size.y - 22), "Rank %d" % GameState.rank(), HORIZONTAL_ALIGNMENT_LEFT, -1.0, 18, Color(Palette.INK, 0.5))
+		_txt(rows[i][1], r.position + Vector2(28, 30), 30, Palette.INK)
+		_txt(rows[i][2], r.position + Vector2(28, 56), 19, Color(Palette.INK, 0.65), _ital)
+	_view.draw_string(_font, PANEL.position + Vector2(PANEL.size.x - 330, PANEL.size.y - 22), "Level %d   ·   Rank %d" % [GameState.level(), GameState.rank()], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 18, Color(Palette.INK, 0.5))
+
+func _paint_level() -> void:
+	var ids := _ids()
+	_row = clampi(_row, 0, ids.size() - 1)
+	var top := PANEL.position + Vector2(36, 112)
+	for i in ids.size():
+		var key: String = ids[i]
+		var r := Rect2(top + Vector2(0, i * 62), Vector2(470, 54))
+		_hit.append({"r": r, "i": i})
+		var sel := i == _row
+		_view.draw_rect(r, Color("f8f0d8") if sel else Color("f2e8cc"))
+		_view.draw_rect(r, Palette.INK_BROWN if sel else Color(Palette.INK_BROWN, 0.5), false, 3.4 if sel else 1.8)
+		_txt(String(GameState.ATTRS[key][0]), r.position + Vector2(16, 34), 26, Palette.INK)
+		var v := GameState.attr(key)
+		var bar := Rect2(r.position + Vector2(210, 20), Vector2(190, 14))
+		_view.draw_rect(bar, Color(Palette.INK, 0.12))
+		_view.draw_rect(Rect2(bar.position, Vector2(bar.size.x * float(v) / GameState.ATTR_CAP, bar.size.y)), Palette.GOLD.darkened(0.1))
+		_view.draw_string(_font, r.position + Vector2(r.size.x - 58, 34), "%d" % v, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 24, Palette.INK)
+	var key: String = ids[_row]
+	var x := PANEL.position.x + 560.0
+	var y := PANEL.position.y + 120.0
+	_txt(String(GameState.ATTRS[key][0]), Vector2(x, y + 20), 36, Palette.INK)
+	_view.draw_multiline_string(_head, Vector2(x, y + 60), "Each point: " + String(GameState.ATTRS[key][1]) + ".", HORIZONTAL_ALIGNMENT_LEFT, 440.0, 22, 4, Color(Palette.INK, 0.9))
+	_txt("Level %d" % GameState.level(), Vector2(x, y + 190), 40, Palette.INK)
+	var cost := GameState.level_cost()
+	var ok := GameState.mnemosynth >= cost and GameState.attr(key) < GameState.ATTR_CAP
+	_txt("Next point costs %d Mnemosynth" % cost, Vector2(x, y + 230), 24, Color("3f7a3a") if ok else Color("a8402f"))
+	_txt("You have %d" % GameState.mnemosynth, Vector2(x, y + 260), 20, Color(Palette.INK, 0.6), _ital)
+	_txt("Current bonus from points:", Vector2(x, y + 310), 20, Palette.INK_BROWN, _ital)
+	var lines: PackedStringArray = []
+	var fx := {}
+	for s in ["armor", "dmg", "reach", "regen", "lantern_eff", "speed", "dash_cd", "luck", "mnemo"]:
+		var a := GameState.attr_stat(s)
+		if absf(a) > 0.0001:
+			fx[s] = a
+	if GameState.attr("ink") > 0:
+		lines.append("+%d maximum ink" % (4 * GameState.attr("ink")))
+	if GameState.attr("wit") >= 5:
+		lines.append("+%d tries in Vault Trials" % (GameState.attr("wit") / 5))
+	var txt := ItemCatalog.fx_text(fx)
+	if txt != "":
+		lines.append(txt)
+	_view.draw_multiline_string(_head, Vector2(x, y + 340), "\n".join(lines) if not lines.is_empty() else "None yet.", HORIZONTAL_ALIGNMENT_LEFT, 440.0, 19, 6, Color(Palette.INK, 0.85))
 
 func _paint_list(craft: bool) -> void:
 	var ids := _ids()

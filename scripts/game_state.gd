@@ -17,6 +17,58 @@ var spawn_cell := Vector2i(-1, -1)  # where the overworld should place the playe
 var flags: Dictionary = {}
 var in_dialogue := false
 
+# --- Levels and attributes (spent with Mnemosynth at the Index) --------------------------------
+## key -> [name, what a point does (per point)]. Level = 1 + points spent.
+const ATTRS := {
+	"ink": ["Inkwell", "+4 maximum ink"],
+	"grit": ["Thick Paper", "-1.2% damage taken"],
+	"pen": ["Penmanship", "+2% Quill damage, +0.5% reach"],
+	"wit": ["Wit", "+0.05 ink regen/s, -1% Lantern burn, and an extra try in Vault Trials every 5 points"],
+	"foot": ["Footwork", "+0.6% speed, -1% dash cooldown"],
+	"luck": ["Fortune", "+1% drop chances, +0.5% Mnemosynth found"],
+}
+const ATTR_ORDER := ["ink", "grit", "pen", "wit", "foot", "luck"]
+const ATTR_CAP := 30
+var attrs: Dictionary = {"ink": 0, "grit": 0, "pen": 0, "wit": 0, "foot": 0, "luck": 0}
+
+func attr(key: String) -> int:
+	return int(attrs.get(key, 0))
+
+func level() -> int:
+	var n := 1
+	for k in ATTR_ORDER:
+		n += attr(k)
+	return n
+
+## Mnemosynth needed for the next point; it grows with every level, like a soul cost.
+func level_cost() -> int:
+	var l := level()
+	return int(40.0 + 10.0 * l + 0.8 * l * l)
+
+func spend_point(key: String) -> bool:
+	if not ATTRS.has(key) or attr(key) >= ATTR_CAP or mnemosynth < level_cost():
+		return false
+	mnemosynth -= level_cost()
+	attrs[key] = attr(key) + 1
+	mnemosynth_changed.emit(mnemosynth)
+	inventory_changed.emit()
+	save_game()
+	return true
+
+## What the attributes add to the stat `key` (same names equipment uses).
+func attr_stat(key: String) -> float:
+	match key:
+		"armor": return 0.012 * attr("grit")
+		"dmg": return 0.02 * attr("pen")
+		"reach": return 0.005 * attr("pen")
+		"regen": return 0.05 * attr("wit")
+		"lantern_eff": return -0.01 * attr("wit")
+		"speed": return 0.006 * attr("foot")
+		"dash_cd": return -0.01 * attr("foot")
+		"luck": return 0.01 * attr("luck")
+		"mnemo": return 0.005 * attr("luck")
+	return 0.0
+
 # --- Inventory -------------------------------------------------------------------------
 var inventory: Dictionary = {}                     # item id -> count
 var equipment: Dictionary = {"binding": "", "amulet": ""}
@@ -61,7 +113,7 @@ func rank_next() -> int:
 
 ## Each rank widens the ink bottle a little.
 func max_ink_bonus() -> float:
-	return 10.0 * (rank() - 1)
+	return 10.0 * (rank() - 1) + 4.0 * attr("ink")
 
 func add_renown(n: int) -> void:
 	if n > 0:
@@ -200,7 +252,7 @@ func toggle_equip(id: String) -> void:
 
 ## Sum of a stat across everything equipped (armor, speed, dash_cd, invuln).
 func equipped_stat(key: String) -> float:
-	var total := 0.0
+	var total := attr_stat(key)
 	for slot in equipment:
 		var id: String = equipment[slot]
 		if id != "":
@@ -216,7 +268,7 @@ func save_game() -> void:
 		"inventory": inventory, "equipment": equipment, "quick_slot": quick_slot,
 		"sources": sources.map(func(src): return {"id": src["id"], "x": src["origin"].x, "y": src["origin"].y, "r": src["radius"]}),
 		"town_published": town_published, "difficulty": difficulty,
-		"spawn": [spawn_cell.x, spawn_cell.y],
+		"spawn": [spawn_cell.x, spawn_cell.y], "attrs": attrs,
 	}
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
@@ -246,6 +298,9 @@ func load_game() -> bool:
 		sources.append({"id": str(sd["id"]), "origin": Vector2(float(sd["x"]), float(sd["y"])), "radius": float(sd["r"])})
 	town_published = bool(data.get("town_published", false))
 	difficulty = str(data.get("difficulty", "normal"))
+	attrs = {"ink": 0, "grit": 0, "pen": 0, "wit": 0, "foot": 0, "luck": 0}
+	for k in data.get("attrs", {}):
+		attrs[str(k)] = int(data["attrs"][k])
 	var sp: Array = data.get("spawn", [-1, -1])
 	spawn_cell = Vector2i(int(sp[0]), int(sp[1]))
 	if int(data.get("v", 1)) < 2:
@@ -276,6 +331,7 @@ func reset_all() -> void:
 	flags.clear()
 	inventory.clear()
 	equipment = {"binding": "", "amulet": ""}
+	attrs = {"ink": 0, "grit": 0, "pen": 0, "wit": 0, "foot": 0, "luck": 0}
 	quick_slot = ""
 	sources.clear()
 	town_published = false
