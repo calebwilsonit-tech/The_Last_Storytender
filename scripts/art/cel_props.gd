@@ -89,7 +89,8 @@ static func _tree(r: K.Rec, ctx: Dictionary) -> void:
 	r.op(func(ci):
 		for i in 7:
 			var p := c + Vector2(-16.0 + _rng(sd, i) * 32.0, -10.0 + _rng(sd, i + 9) * 24.0)
-			ci.draw_arc(p, 3.4, PI * 0.15, PI * 0.85, 6, Color(K.OUT, 0.5), 1.0, true)
+			var lean := -1.0 if i % 2 == 0 else 1.0
+			ci.draw_line(p, p + Vector2(4.0 * lean, -2.2), Color(K.OUT, 0.4), 1.1)
 		for i in 4:
 			var q := c + Vector2(-14.0 + _rng(sd, i + 20) * 20.0, -14.0 + _rng(sd, i + 30) * 10.0)
 			ci.draw_circle(q, 1.5, Color(LEAF.lightened(0.35), 0.8)))

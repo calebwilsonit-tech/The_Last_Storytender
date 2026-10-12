@@ -15,6 +15,10 @@ var diag_y := 0.0
 var origin := Vector2.ZERO       # world position that maps to this node's local (0, 0)
 var uncull := false              # chunk painters draw every cell they own
 
+## Ink Cel terrain: flat colour, hard-edged cel shadows and a heavy contour on every wall.
+static func _cel() -> bool:
+	return Settings.art_style == "cel"
+
 static func _h(x: int, y: int, k: int = 0) -> float:
 	return fposmod(sin(float(x) * 127.1 + float(y) * 311.7 + float(k) * 74.7) * 43758.5453, 1.0)
 
@@ -343,6 +347,9 @@ func _cliff(a: Vector2, b: Vector2, depth: float, kind: String, side: int, void_
 	if kind == "," and not void_edge:
 		base = Palette.ghostify(base, r).lerp(Palette.PAPER_LIGHT, (1.0 - r) * 0.55)
 	draw_colored_polygon(q, base)
+	if _cel():
+		_cliff_cel(a, b, depth, kind, void_edge, base)
+		return
 	# shade the face from light at the top to dark at the foot, so height reads even when flat-lit
 	var q_mid := PackedVector2Array([a + Vector2(0, depth * 0.45), b + Vector2(0, depth * 0.45), b + Vector2(0, depth), a + Vector2(0, depth)])
 	draw_colored_polygon(q_mid, Color(0.1, 0.06, 0.02, 0.30))
@@ -372,6 +379,31 @@ func _cliff(a: Vector2, b: Vector2, depth: float, kind: String, side: int, void_
 	if not void_edge:
 		# a pale lip along the top so the edge of the higher ground reads clearly
 		draw_line(a + Vector2(0, 1.6), b + Vector2(0, 1.6), Color(1, 1, 0.92, 0.9), 2.6)
+
+## The Ink Cel wall: flat face, one hard shadow band at the foot, thin strata, heavy contour.
+func _cliff_cel(a: Vector2, b: Vector2, depth: float, kind: String, void_edge: bool, base: Color) -> void:
+	var foot := minf(depth * 0.34, 14.0)
+	var shade := CelKit.shade_of(base)
+	draw_colored_polygon(PackedVector2Array([a + Vector2(0, depth - foot), b + Vector2(0, depth - foot), b + Vector2(0, depth), a + Vector2(0, depth)]), shade)
+	var strata := PackedVector2Array()
+	var i := 1
+	while Settings.gfx_on("strata") and i * 8.0 < depth - 2.0:
+		strata.append_array([a + Vector2(0, i * 8.0), b + Vector2(0, i * 8.0)])
+		i += 1
+	if not strata.is_empty():
+		draw_multiline(strata, Color(CelKit.OUT, 0.2), 1.0)
+	if kind == "." and not void_edge:
+		var lip := PackedVector2Array([a, b, b + Vector2(0, 6), a + Vector2(0, 6)])
+		draw_colored_polygon(lip, Color("4c7d42"))
+		draw_line(a + Vector2(0, 6), b + Vector2(0, 6), Color(CelKit.OUT, 0.55), 1.0)
+	var ink := CelKit.OUT
+	var ow := 2.3
+	draw_line(a, a + Vector2(0, depth), ink, ow, true)
+	draw_line(b, b + Vector2(0, depth), ink, ow, true)
+	draw_line(a + Vector2(0, depth), b + Vector2(0, depth), ink, ow, true)
+	draw_line(a, b, ink, ow, true)
+	if not void_edge:
+		draw_line(a + Vector2(0, 2.2), b + Vector2(0, 2.2), Color(1, 1, 0.92, 0.85), 1.8)
 
 # --- Stairs ---------------------------------------------------------------------
 func _draw_stairs(cell: Vector2i, kind: String) -> void:
@@ -424,7 +456,7 @@ func _box(c: Vector2, x0: float, y0: float, x1: float, y1: float, zb: float, zt:
 	for poly in [left, right, top]:
 		var loop: PackedVector2Array = poly.duplicate()
 		loop.append(poly[0])
-		draw_polyline(loop, Color("0c0906", 0.9), 1.7, true)
+		draw_polyline(loop, CelKit.OUT if _cel() else Color("0c0906", 0.9), 2.1 if _cel() else 1.7, true)
 
 # --- Plot holes -----------------------------------------------------------------
 func _draw_pit(cell: Vector2i, z: float) -> void:
@@ -436,8 +468,10 @@ func _draw_pit(cell: Vector2i, z: float) -> void:
 	draw_colored_polygon(d, Color(0.04, 0.03, 0.08))
 	draw_colored_polygon(l, Color(0.34, 0.24, 0.14))
 	draw_colored_polygon(rr, Color(0.25, 0.17, 0.1))
+	if _cel():
+		draw_colored_polygon(PackedVector2Array([d[3], d[2], d[2] + Vector2(0, 5), d[3] + Vector2(0, 5)]), Color(0.45, 0.33, 0.2))
 	var ang := Time.get_ticks_msec() / 900.0
 	draw_arc(c + Vector2(0, 3), 7.0, ang, ang + 4.0, 12, Color(0.55, 0.5, 0.8, 0.35), 1.4, true)
 	var loop := d.duplicate()
 	loop.append(d[0])
-	draw_polyline(loop, Palette.INK, 2.0, true)
+	draw_polyline(loop, CelKit.OUT if _cel() else Palette.INK, 2.4 if _cel() else 2.0, true)
