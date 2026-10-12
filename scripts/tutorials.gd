@@ -35,6 +35,11 @@ const CARDS := {
 		"body": "Some sentences have one word that can change. Strike the word, or stand close and interact, and the story follows.",
 		"items": [{"a": "attack", "t": "Strike the word"}, {"a": "interact", "t": "Rewrite it"}],
 	},
+	"spoiler": {
+		"title": "The book reads aloud",
+		"body": "The Spoiler fans paper cuts and dives at you. Every few moves it stops and reads a sentence aloud while a ring counts down. Strike the book itself with the Quill before the ring empties and the sentence is rewritten. Swat the paper cuts, or dash between them.",
+		"items": [{"a": "attack", "t": "Strike the book / swat paper"}, {"a": "dash", "t": "Dash"}],
+	},
 	"format": {
 		"title": "Format",
 		"body": "Pick a style, then strike a block of text. Words in this kitchen have weight.",

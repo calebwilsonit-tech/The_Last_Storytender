@@ -139,7 +139,9 @@ func _level_ready() -> void:
 	_spoiler.target = _player
 	_spoiler.speak.connect(_on_spoiler_speak)
 	_spoiler.damaged.connect(func(frac: float): _hud.set_boss("The Spoiler", frac))
-	_spoiler.struck.connect(_on_spoiler_struck)
+	_spoiler.rewritten.connect(_on_spoiler_rewritten)
+	_spoiler.fired.connect(_on_spoiler_fired)
+	_spoiler.slam.connect(_on_spoiler_slam)
 	_spoiler.defeated_fight.connect(_on_spoiler_beaten)
 	_hud.set_region("The Last Page")
 	_hud.set_objective(Story.PIP_OBJECTIVES[0])
@@ -167,6 +169,7 @@ func _level_process(delta: float) -> void:
 		_start_boss()
 	_tick_wolves(delta)
 	_tick_hazards(delta)
+	_check_pages()
 	_tick_palette(delta)
 
 func _on_room(room: int) -> void:
@@ -245,6 +248,7 @@ func _start_boss() -> void:
 	_busy = true
 	Music.play("boss_spoiler")
 	await cinematic([{"at": _spoiler.position, "zoom": ZOOM * 1.2, "pan": 1.6, "hold": 0.5, "lines": Story.pip_boss_intro()}])
+	await _hud.tutorial("spoiler")
 	_spoiler.interval = 8.0 if GameState.is_story() else 6.5
 	_spoiler.active = true
 	Telemetry.log_event("boss", {"boss": "spoiler", "what": "start"})
@@ -253,7 +257,7 @@ func _start_boss() -> void:
 
 ## How long you have to rewrite a spoiler: shrinks as the Spoiler warms up.
 func _window() -> float:
-	return maxf(5.0 - 0.45 * _rewrites, 3.2) + GameState.spoiler_window_bonus()
+	return maxf(5.6 - 0.4 * _rewrites, 3.8) + GameState.spoiler_window_bonus()
 
 func _free_arena_cell(avoid: Vector2i, min_dist: float) -> Vector2i:
 	var pool := _arena_cells.duplicate()
@@ -275,13 +279,20 @@ func _on_spoiler_speak() -> void:
 		_spawn_spoiler_event()
 
 func _spawn_spoiler_event() -> void:
-	var kind := "collapse" if randf() < 0.6 else "wolves"
+	var roll := randf()
+	var kind := "collapse" if roll < 0.4 else ("wolves" if roll < 0.7 else "lightning")
 	var cells: Array[Vector2i] = []
 	var prefix := ""
 	var options := []
 	var region_name := ""
 	var center := Vector2i.ZERO
-	if kind == "collapse":
+	if kind == "wolves":
+		region_name = WOLF_SIDES.keys()[randi() % WOLF_SIDES.size()]
+		cells.assign(WOLF_SIDES[region_name])
+		center = cells[0]
+		prefix = "Wolves from the %s" % region_name
+		options = ["ATTACK", "NAP"]
+	else:
 		region_name = REGIONS.keys()[randi() % REGIONS.size()]
 		center = REGIONS[region_name]
 		for dx in range(-1, 2):
@@ -289,58 +300,79 @@ func _spawn_spoiler_event() -> void:
 				var c := center + Vector2i(dx, dy)
 				if _arena_cells.has(c):
 					cells.append(c)
-		prefix = "The floor beneath the %s" % region_name
-		options = ["COLLAPSES", "BLOOMS"]
-	else:
-		region_name = WOLF_SIDES.keys()[randi() % WOLF_SIDES.size()]
-		cells.assign(WOLF_SIDES[region_name])
-		center = cells[0]
-		prefix = "Wolves from the %s" % region_name
-		options = ["ATTACK", "NAP"]
+		if kind == "collapse":
+			prefix = "The floor beneath the %s" % region_name
+			options = ["COLLAPSES", "BLOOMS"]
+		else:
+			prefix = "Lightning in the %s" % region_name
+			options = ["STRIKES", "SPARKLES"]
 	var window := _window()
-	var at := _free_arena_cell(center, 4.0)
-	var st := SentenceStone.new()
-	st.prefix = prefix
-	st.options = PackedStringArray(options)
-	st.suffix = "."
-	st.position = Iso.to_screen(Vector2(at))
-	st.elev = _lift_at(at)
-	st.ttl_max = window
-	st.ttl = window
-	_actors.add_child(st)
-	_register(st, func(): return "Rewrite" if not st.locked else "", func(): st.rewrite(), 80.0)
-	var hz := {"kind": kind, "cells": cells, "stone": st, "t": window, "phase": "warn", "orig": {}}
+	var hz := {"kind": kind, "cells": cells, "stone": null, "t": window, "phase": "warn", "orig": {}}
 	_hazards.append(hz)
 	for c in cells:
 		_floor.marks[c] = {"kind": "crack", "t": 0.0}
-	_spoiler.announce("%s %s." % [prefix, options[0]], window - 0.5)
+	_spoiler.announce("%s %s." % [prefix, options[0]], window)
 	Telemetry.log_event("boss", {"boss": "spoiler", "what": "spoke", "kind": kind, "window": snappedf(window, 0.1)})
-	st.rewritten.connect(func(s: SentenceStone, idx: int): _on_spoiler_stone(hz, s, idx))
 
-func _on_spoiler_stone(hz: Dictionary, stone: SentenceStone, idx: int) -> void:
-	if hz["phase"] != "warn" or idx != 1:
-		return
+## The Quill struck the book while it was reading: the oldest sentence it is still reading is rewritten.
+func _on_spoiler_rewritten() -> void:
+	for hz in _hazards:
+		if hz["phase"] == "warn":
+			_rewrite_hazard(hz)
+			return
+
+func _rewrite_hazard(hz: Dictionary) -> void:
 	if _reckoning:
 		_cancel_hazard(hz)
-		_spoiler.hurt(12.0)      # a rewritten sentence lands on the book itself
+		_hud.toast("Struck out")
 		return
 	Telemetry.log_event("boss", {"boss": "spoiler", "what": "rewritten", "n": _rewrites + 1})
 	hz["phase"] = "rewritten"
 	hz["t"] = 8.0
-	stone.locked = true
-	stone.ttl = -1.0
 	for c in hz["cells"]:
 		_floor.marks[c] = {"kind": "flower", "t": 0.0}
 	if hz["kind"] == "wolves":
 		drop_crystals(Iso.to_screen(Vector2(hz["cells"][0])), 2)
 	_rewrites += 1
+	_spoiler.rewrites = _rewrites
 	_spoiler.certainty = maxi(5 - _rewrites, 0)
-	_spoiler.recoil()
 	camera_shake(0.4, 5.0)
 	_hud.set_objective(Story.PIP_OBJECTIVES[3] % _rewrites)
 	_hud.narrate(Story.PIP_REWRITE_NARRATION[mini(_rewrites, 5) - 1], false, 3.5)
 	if _rewrites >= 5:
 		_begin_reckoning()
+
+# --- The Spoiler's paper ---------------------------------------------------------------------------------
+func _on_spoiler_fired(origin: Vector2, dirs: Array, speed: float) -> void:
+	for d: Vector2 in dirs:
+		var pc := PageCut.new()
+		pc.floor_ref = _floor
+		pc.position = origin
+		pc.vel = d * speed
+		_actors.add_child(pc)
+
+func _on_spoiler_slam(at: Vector2) -> void:
+	camera_shake(0.35, 6.0)
+	if _player.is_falling or _player.is_crumpled:
+		return
+	if _dist(at, _player.position) < 76.0 and absf(_floor.height_at(at) - _floor.height_at(_player.position)) < 0.7:
+		_player.take_damage(14.0 * GameState.enemy_dmg_mult(), true, "spoiler_dive")
+		_player.knockback((_player.position - at).normalized(), 320.0)
+
+func _check_pages() -> void:
+	if _player.is_falling or _player.is_crumpled:
+		return
+	for pc: PageCut in get_tree().get_nodes_in_group("page_cuts"):
+		if _dist(pc.position, _player.position) > 20.0:
+			continue
+		if absf(_floor.height_at(pc.position) - _floor.height_at(_player.position)) > 0.7:
+			continue
+		_player.take_damage(8.0 * GameState.enemy_dmg_mult(), true, "spoiler_page")
+		pc.queue_free()
+
+func _clear_pages() -> void:
+	for pc in get_tree().get_nodes_in_group("page_cuts"):
+		pc.queue_free()
 
 var _reckoning := false
 
@@ -355,18 +387,11 @@ func _cancel_hazard(hz: Dictionary) -> void:
 		_floor.marks[c] = {"kind": "flower", "t": 0.0}
 	camera_shake(0.3, 4.0)
 
-## Striking the Spoiler itself edits its schedule: the oldest sentence that has not come true yet is struck out.
-func _on_spoiler_struck() -> void:
-	for hz in _hazards:
-		if hz["phase"] == "warn":
-			_cancel_hazard(hz)
-			_hud.toast("Struck out")
-			return
-
 ## Five sentences rewritten: the Spoiler comes down to eye level and can be hurt.
 func _begin_reckoning() -> void:
 	_busy = true
 	_spoiler.active = false
+	_clear_pages()
 	await get_tree().create_timer(1.2).timeout
 	for hz in _hazards:
 		for c in hz["cells"]:
@@ -385,6 +410,7 @@ func _begin_reckoning() -> void:
 	_busy = false
 
 func _on_spoiler_beaten() -> void:
+	_clear_pages()
 	_hud.set_boss("", 0.0)
 	Music.play("victory", "memory_pip", 0.8)
 	Telemetry.log_event("boss", {"boss": "spoiler", "what": "defeated"})
@@ -421,6 +447,8 @@ func _tick_hazards(delta: float) -> void:
 					_hazards.erase(hz)
 			"done":
 				if hz["t"] <= 0.0:
+					for c in cells:
+						_floor.marks.erase(c)
 					if is_instance_valid(st):
 						st.queue_free()
 					_hazards.erase(hz)
@@ -439,6 +467,14 @@ func _trigger(hz: Dictionary) -> void:
 		hz["phase"] = "active"
 		hz["t"] = 7.0
 		camera_shake(0.3, 4.0)
+	elif hz["kind"] == "lightning":
+		for c in hz["cells"]:
+			_floor.marks[c] = {"kind": "wipe", "t": 0.0}
+		if hz["cells"].has(_floor.cell_at(_player.position)) and not _player.is_falling:
+			_player.take_damage(16.0 * GameState.enemy_dmg_mult(), true, "spoiler_lightning")
+		camera_shake(0.45, 7.0)
+		hz["phase"] = "done"
+		hz["t"] = 0.45
 	else:
 		for c in hz["cells"]:
 			_add_enemy(Enemy.Kind.MITE, c)
@@ -518,12 +554,14 @@ func _on_death_reset() -> void:
 			if is_instance_valid(hz["stone"]):
 				hz["stone"].queue_free()
 		_hazards.clear()
+		_clear_pages()
 		if _reckoning:
 			_spoiler.reset_fight()
 			return
 		_rewrites = maxi(_rewrites - 1, 0)
+		_spoiler.rewrites = _rewrites
 		_spoiler.certainty = 5 - _rewrites
-		_spoiler._cd = 3.0
+		_spoiler.reset_moves()
 		_hud.set_objective(Story.PIP_OBJECTIVES[3] % _rewrites)
 		Telemetry.log_event("boss", {"boss": "spoiler", "what": "player_died", "rewrites": _rewrites})
 

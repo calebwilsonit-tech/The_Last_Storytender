@@ -259,7 +259,7 @@ const PIP_OBJECTIVES: Array[String] = [
 	"Strike the word with your Quill (or press {interact}) to rewrite the sentence",
 	"Get past the wolves, and rewrite the gate",
 	"Climb the tower and find the Torn Page",
-	"Rewrite the spoilers: %d / 5",
+	"Strike the book while it reads aloud: %d / 5",
 	"Turn the page with Pip",
 ]
 const PIP_REWRITE_NARRATION: Array[String] = [
@@ -301,13 +301,13 @@ static func pip_boss_intro() -> Array:
 		line("", "Its words are enormous and they are not lying: when it says the floor will fall, the floor falls. But they are written in ink, and ink can be rewritten.", "action"),
 	]
 
-const SPOILER_FIGHT_OBJECTIVE := "The Spoiler is on the page now. Strike it with the Quill, or rewrite its sentences, to knock the last chapter out of it."
+const SPOILER_FIGHT_OBJECTIVE := "The Spoiler is on the page now. Strike it with the Quill. Striking it while it reads a sentence rewrites that sentence and wounds it badly."
 
 static func spoiler_reckoning() -> Array:
 	return [
 		line("", "The book sinks out of the air until it hangs at the height of your eyes. Its pages are shaking. It has run out of things to say that you haven't already changed.", "action"),
 		_sp("...Fine. If you're so sure of the ending, come and take it."),
-		line("", "It is still the Spoiler, and the next spoiler is already loading. But it is made of paper now, and paper can be written on. Strike it, or strike out what it says.", "action"),
+		line("", "It is still the Spoiler, and the next spoiler is already loading. But it is made of paper now, and paper can be written on. Strike it, and when it stops to read, strike harder.", "action"),
 	]
 
 static func pip_finale() -> Array:
