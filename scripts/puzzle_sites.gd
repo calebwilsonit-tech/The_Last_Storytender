@@ -107,8 +107,10 @@ func _tick_echo(id: String) -> void:
 func _setup_words(id: String, sd: Dictionary) -> void:
 	var done := solved(id)
 	var stones: Array[SentenceStone] = []
+	var n_st: int = sd["stones"].size()
 	for d: Dictionary in sd["stones"]:
 		var st := SentenceStone.new()
+		st.tablet_dx = (float(stones.size()) - (n_st - 1) * 0.5) * 28.0
 		st.prefix = d["prefix"]
 		st.options = PackedStringArray(d["options"])
 		st.suffix = d["suffix"]

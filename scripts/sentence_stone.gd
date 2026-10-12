@@ -14,6 +14,7 @@ var locked := false           # once true, the sentence can no longer be changed
 var ttl_max := 5.0            # what a full timer bar represents
 var ttl := -1.0               # > 0 for the Spoiler's ephemeral sentences (seconds left)
 var elev := 0.0
+var tablet_dx := 0.0          # slides the page sideways so neighbouring stones do not cover each other
 var hit_r := 24.0
 var _t := 0.0
 var _flash := 0.0
@@ -53,14 +54,16 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	var font := ThemeDB.get_default_theme().default_font
-	var sz := 22
+	var sz := 18
 	var full := "%s %s%s" % [prefix, options[index], suffix]
 	var pw := font.get_string_size(prefix + " ", HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz).x
 	var ww := font.get_string_size(options[index], HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz).x
 	var sw := font.get_string_size(suffix, HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz).x
-	var total := pw + ww + sw
+	var psz := 13
+	var ptw := font.get_string_size(prefix, HORIZONTAL_ALIGNMENT_LEFT, -1.0, psz).x
+	var total := maxf(ptw, ww + sw)   # two lines (prefix over the word) keep each tablet narrow
 	var hover := sin(_t * 1.8) * 3.0
-	var lift := elev + 44.0 + hover
+	var lift := elev + 52.0 + hover
 	# Shadow and post.
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))
 	draw_circle(Vector2.ZERO, 16.0, Color(0, 0, 0, 0.25))
@@ -76,9 +79,10 @@ func _draw() -> void:
 	draw_rect(Rect2(-14, -lift + 12.0, 28, 4), wood)
 	draw_rect(Rect2(-14, -lift + 12.0, 28, 4), Palette.OUTLINE, false, 1.6)
 	# The tablet.
+	draw_set_transform(Vector2(tablet_dx, -elev), 0.0, Vector2.ONE)
 	var good := is_good()
 	var tint := Color("d9efd0") if good else Color("f6dcc8")
-	var r := Rect2(-total * 0.5 - 14.0, -lift - 20.0, total + 28.0, 36.0)
+	var r := Rect2(-total * 0.5 - 8.0, -lift - 34.0, total + 16.0, 46.0)
 	var glow := Palette.CYAN if _flash > 0.0 else (Palette.GOLD if not locked else Palette.GRASS)
 	draw_rect(Rect2(r.position - Vector2(5, 5), r.size + Vector2(10, 10)), Color(glow, 0.20 + _flash * 0.5))
 	draw_rect(r, tint)
@@ -88,16 +92,16 @@ func _draw() -> void:
 	draw_colored_polygon(PackedVector2Array([fc, fc + Vector2(-11, 0), fc + Vector2(0, -11)]), tint.darkened(0.12))
 	draw_line(fc + Vector2(-11, 0), fc + Vector2(0, -11), Palette.OUTLINE, 1.6)
 	draw_line(r.position + Vector2(10, 0), r.position + Vector2(10, -8), Color("a8483f"), 3.0)
-	for k in 2:
-		draw_line(r.position + Vector2(6, 10 + k * 14), r.position + Vector2(r.size.x - 6, 10 + k * 14), Color(Palette.INK_BROWN, 0.08), 1.0)
-	var x := r.position.x + 14.0
-	var y := r.position.y + 26.0
-	draw_string(font, Vector2(x, y), prefix + " ", HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz, Palette.INK)
+	var cx := r.position.x + r.size.x * 0.5
+	var y1 := r.position.y + 17.0
+	var y2 := r.position.y + 38.0
+	draw_string(font, Vector2(cx - ptw * 0.5, y1), prefix, HORIZONTAL_ALIGNMENT_LEFT, -1.0, psz, Palette.INK)
+	var wx := cx - (ww + sw) * 0.5
 	var wcol := Color("2f8a45") if good else Color("c03b2b")
-	draw_string_outline(font, Vector2(x + pw, y), options[index], HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz, 4, Color(1, 1, 1, 0.8))
-	draw_string(font, Vector2(x + pw, y), options[index], HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz, wcol)
-	draw_line(Vector2(x + pw, y + 3), Vector2(x + pw + ww, y + 3), wcol, 2.0)
-	draw_string(font, Vector2(x + pw + ww, y), suffix, HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz, Palette.INK)
+	draw_string_outline(font, Vector2(wx, y2), options[index], HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz, 4, Color(1, 1, 1, 0.8))
+	draw_string(font, Vector2(wx, y2), options[index], HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz, wcol)
+	draw_line(Vector2(wx, y2 + 3), Vector2(wx + ww, y2 + 3), wcol, 2.0)
+	draw_string(font, Vector2(wx + ww, y2), suffix, HORIZONTAL_ALIGNMENT_LEFT, -1.0, sz, Palette.INK)
 	if locked:
 		draw_string(font, Vector2(r.position.x + 6, r.position.y - 6), "written", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color(Palette.GRASS_DARK, 0.9))
 	if ttl >= 0.0 and not locked:
