@@ -406,6 +406,7 @@ func _handle_cue(cue: String) -> void:
 func _turn_the_page() -> void:
 	await _say(Story.pip_resolution())
 	GameState.set_flag("pip_memory_done")
+	award_boss_drops("pip")
 	GameState.add_mnemosynth(40)
 	_give_item("bookmark")
 	_hud.set_objective("")

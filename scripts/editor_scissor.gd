@@ -358,6 +358,7 @@ func _finale() -> void:
 	GameState.set_flag("scissor_done")
 	GameState.add_mnemosynth(60)
 	GameState.add_renown(40)
+	award_boss_drops("scissor")
 	await get_tree().create_timer(2.0).timeout
 	_leave()
 

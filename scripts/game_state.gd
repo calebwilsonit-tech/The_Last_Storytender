@@ -64,6 +64,8 @@ func max_ink_bonus() -> float:
 	return 10.0 * (rank() - 1)
 
 func add_renown(n: int) -> void:
+	if n > 0:
+		n = roundi(n * (1.0 + equipped_stat("renown")))
 	var before := rank()
 	renown += n
 	renown_changed.emit(renown, rank())
@@ -71,6 +73,8 @@ func add_renown(n: int) -> void:
 		rank_up.emit(rank())
 
 func add_mnemosynth(n: int) -> void:
+	if n > 0:
+		n = roundi(n * (1.0 + equipped_stat("mnemo")))
 	mnemosynth += n
 	mnemosynth_changed.emit(mnemosynth)
 

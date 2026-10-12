@@ -302,7 +302,10 @@ func _card(i: int) -> void:
 	_view.draw_line(r.position + Vector2(0, 22), r.position + Vector2(r.size.x, 22), Color("d96a6a", 0.7), 1.6)
 	for k in 3:
 		_view.draw_line(r.position + Vector2(0, 62 + k * 18), r.position + Vector2(r.size.x, 62 + k * 18), Color(0.45, 0.55, 0.75, 0.2), 1.0)
-	_view.draw_rect(r, Palette.INK_BROWN if sel else Color(Palette.INK_BROWN, 0.55), false, 3.2 if sel else 1.6)
+	var rc := ItemDB.rarity_color(id)
+	_view.draw_rect(r, rc if sel else Color(rc, 0.75), false, 3.6 if sel else 2.4)
+	if ItemDB.rarity(id) != "common":
+		_view.draw_rect(Rect2(r.position + Vector2(r.size.x - 14, 0), Vector2(14, 14)), rc)
 	if i == _hover and not sel:
 		_view.draw_rect(r, Color(Palette.CYAN, 0.12))
 	ItemIcon.draw_item(_view, id, r.position + Vector2(r.size.x * 0.5, 52), 44.0)
@@ -327,7 +330,7 @@ func _details() -> void:
 	var info := ItemDB.info(id)
 	var base := Vector2(692, 506)
 	_txt(info["name"], base, 26, Palette.INK)
-	_txt(ItemDB.type_label(id), base + Vector2(0, 19), 15, Color(Palette.INK, 0.55), true)
+	_txt("%s  ·  %s" % [ItemDB.rarity(id).capitalize(), ItemDB.type_label(id)], base + Vector2(0, 19), 15, ItemDB.rarity_color(id).darkened(0.1), true)
 	_wrap(info["desc"], base + Vector2(0, 42), 450.0, 17, Color(Palette.INK, 0.9))
 	_wrap("\"%s\"" % info["flavor"], base + Vector2(0, 90), 450.0, 17, Color(Palette.INK_BROWN, 0.9), true)
 	var x := 692.0

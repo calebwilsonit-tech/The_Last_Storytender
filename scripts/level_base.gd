@@ -465,6 +465,40 @@ func use_item(id: String) -> void:
 			_player.ink = minf(_player.ink + 45.0, _player.max_ink)
 			_player.ink_changed.emit(_player.ink, _player.max_ink)
 			_hud.toast("Ink restored")
+		_:
+			_use_data_item(id)
+
+## Consumables defined in ItemCatalog by a "use" dictionary: ink, lantern, sleep, renown, mnemo.
+func _use_data_item(id: String) -> void:
+	var use: Dictionary = ItemDB.info(id).get("use", {})
+	if use.is_empty():
+		return
+	var did := false
+	if use.has("ink") and _player.ink < _player.max_ink - 0.5:
+		_player.ink = minf(_player.ink + float(use["ink"]), _player.max_ink)
+		_player.ink_changed.emit(_player.ink, _player.max_ink)
+		did = true
+	if use.has("lantern") and _player.lantern_energy < 99.0:
+		_player.refuel(float(use["lantern"]))
+		did = true
+	if use.has("sleep"):
+		var n := 0
+		for e in get_tree().get_nodes_in_group("enemies"):
+			if is_instance_valid(e) and _dist(e.position, _player.position) < float(use.get("radius", 240.0)) and not e.friendly:
+				e.sleep_for(float(use["sleep"]))
+				n += 1
+		did = did or n > 0
+	if use.has("renown"):
+		GameState.add_renown(int(use["renown"]))
+		did = true
+	if use.has("mnemo"):
+		GameState.add_mnemosynth(int(use["mnemo"]))
+		did = true
+	if not did:
+		_hud.toast("That wouldn't do anything right now")
+		return
+	GameState.remove_item(id)
+	_hud.toast(String(use.get("msg", "Used " + ItemDB.info(id)["name"])))
 
 func _add_pickup(cell: Vector2i, id: String) -> Prop:
 	var p := _add_prop(Prop.Kind.PICKUP, cell)
@@ -522,18 +556,20 @@ func _add_enemy(kind: Enemy.Kind, cell: Vector2i) -> Enemy:
 	e.died.connect(func(en: Enemy):
 		GameState.add_renown(EnemyKinds.renown_value(en.kind))
 		drop_crystals(en.position, 1 if en.kind == Enemy.Kind.MITE else 2)
-		if en.kind == Enemy.Kind.BARE and randf() < 0.25:
-			_give_item("eraser_crumbs")
-		elif en.kind == Enemy.Kind.MITE and randf() < 0.3:
-			_give_item("void_ink")
-		elif en.kind == Enemy.Kind.SLUG and randf() < 0.4:
-			_give_item("void_ink")
-		elif en.kind == Enemy.Kind.DANGLER and randf() < 0.3:
-			_give_item("eraser_crumbs")
-		elif en.kind == Enemy.Kind.CENSOR and randf() < 0.4:
-			_give_item("ink_vial"))
+		_award_drops(DropTables.roll_mob(String(Enemy.Kind.keys()[en.kind]).to_lower())))
 	e.proofread.connect(_on_proofread)
 	return e
+
+## Gives the result of a DropTables roll (kills and bosses), with one toast per item.
+func _award_drops(drops: Array) -> void:
+	for d: Array in drops:
+		_give_item(String(d[0]), int(d[1]))
+
+## Extra boss loot, rolled every time the boss is beaten (chances scale with difficulty).
+func award_boss_drops(boss_id: String) -> void:
+	var drops := DropTables.roll_boss(boss_id)
+	_award_drops(drops)
+	Telemetry.log_event("boss_drops", {"boss": boss_id, "drops": drops.map(func(d): return d[0])})
 
 func _on_proofread(e: Enemy) -> void:
 	drop_crystals(e.position, 6)

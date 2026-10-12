@@ -150,4 +150,8 @@ static func draw_item(ci: CanvasItem, id: String, c: Vector2, sz: float) -> void
 				st2.append(c + Vector2(0, 0) * u + Vector2(cos(a2), sin(a2)) * (6.0 if k % 2 == 0 else 2.6) * u)
 			_o(ci, st2, Color("d8b45e"), 1.4)
 		_:
-			ci.draw_circle(c, 10.0 * u, Palette.PENCIL)
+			var ic: Dictionary = ItemDB.info(id).get("icon", {})
+			if ic.is_empty():
+				ci.draw_circle(c, 10.0 * u, Palette.PENCIL)
+			else:
+				ItemShapes.draw(ci, String(ic["s"]), c, u, Color(String(ic["c"])), Color(String(ic["c2"])))

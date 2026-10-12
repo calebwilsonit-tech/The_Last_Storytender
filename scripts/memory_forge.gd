@@ -262,6 +262,7 @@ func _take_sword() -> void:
 	await _say(Story.memory_sword())
 	GameState.set_flag("has_sword")
 	GameState.set_flag("memory_done")
+	award_boss_drops("forge")
 	_hud.toast("Found: The First Sword")
 	_hud.narrate(Story.MEMORY_SWORD_NARRATION, false, 4.0)
 	if is_instance_valid(_sword):

@@ -364,6 +364,7 @@ func _handle_cue(cue: String) -> void:
 func _sit_with_maud() -> void:
 	await _say(Story.maud_resolution())
 	GameState.set_flag("maud_memory_done")
+	award_boss_drops("maud")
 	GameState.add_mnemosynth(40)
 	_hud.set_objective("")
 	await get_tree().create_timer(3.0).timeout

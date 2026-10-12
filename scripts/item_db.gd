@@ -137,7 +137,25 @@ const ITEMS := {
 }
 
 static func info(id: String) -> Dictionary:
-	return ITEMS.get(id, {"name": id, "type": "key", "desc": "", "flavor": ""})
+	if ITEMS.has(id):
+		return ITEMS[id]
+	if ItemCatalog.ITEMS.has(id):
+		var d: Dictionary = ItemCatalog.ITEMS[id]
+		if not d.has("desc") and d.has("fx"):
+			var d2 := d.duplicate()
+			d2["desc"] = ItemCatalog.fx_text(d["fx"])
+			return d2
+		return d
+	return {"name": id, "type": "key", "desc": "", "flavor": ""}
+
+static func rarity(id: String) -> String:
+	var r: String = info(id).get("rarity", "")
+	if r != "":
+		return r
+	return {"binding": "uncommon", "amulet": "uncommon", "material": "common", "consumable": "common"}.get(info(id)["type"], "rare")
+
+static func rarity_color(id: String) -> Color:
+	return ItemCatalog.RARITY_COLORS[rarity(id)]
 
 static func type_label(id: String) -> String:
 	match info(id)["type"]:
