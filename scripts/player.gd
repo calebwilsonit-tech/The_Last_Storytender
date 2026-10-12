@@ -442,8 +442,9 @@ func _legs(ph: float, moving: bool) -> void:
 
 func _lantern(at: Vector2, flick: float) -> void:
 	# Hanging lantern: chain, iron frame, glowing cyan core, soft halo.
-	for k in 4:
-		draw_circle(at + Vector2(0, 7), 26.0 - k * 5.0, Color(Palette.CYAN, 0.045 * flick * lantern_power))
+	if Settings.gfx_on("glow"):
+		for k in 4:
+			draw_circle(at + Vector2(0, 7), 26.0 - k * 5.0, Color(Palette.CYAN, 0.045 * flick * lantern_power))
 	draw_line(at + Vector2(0, -5), at + Vector2(0, 0), Palette.OUTLINE, 2.0)
 	_poly(PackedVector2Array([at + Vector2(-3, 0), at + Vector2(3, 0), at + Vector2(5, 3), at + Vector2(-5, 3)]), Color("3a3f4a"), 2.0)
 	_poly(PackedVector2Array([at + Vector2(-5, 3), at + Vector2(5, 3), at + Vector2(5, 13), at + Vector2(-5, 13)]), Color(Palette.CYAN, 0.95), 2.2)

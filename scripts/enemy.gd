@@ -364,7 +364,8 @@ func _draw_cone() -> void:
 func _draw() -> void:
 	draw_set_transform(Vector2(0, -elev), 0.0, Vector2(1, 0.5))
 	var pool := 20.0 if kind == Kind.BARE else 11.0
-	draw_circle(Vector2.ZERO, pool, Color(0, 0, 0, 0.25))
+	if Settings.gfx_on("shadows"):
+		draw_circle(Vector2.ZERO, pool, Color(0, 0, 0, 0.25))
 	if _dead_t >= 0.0:
 		draw_circle(Vector2.ZERO, pool + _dead_t * 22.0, Color(Palette.INK, 0.55 * (1.0 - _dead_t / 0.7)))
 	if not friendly and _dead_t < 0.0 and asleep_t <= 0.0 and target != null and _ground_to(target.position).length() < 460.0:

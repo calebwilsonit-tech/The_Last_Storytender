@@ -26,11 +26,12 @@ func _restoration(cell: Vector2i, kind: String) -> float:
 
 func _draw() -> void:
 	var f := floor_ref.focus
+	var half := Settings.cull_half()
 	for cell in cells:
 		var kind: String = floor_ref.cells[cell]
 		var z := float(floor_ref.level(cell))
 		var gp := Iso.pt(Vector2(cell), z)
-		if absf(gp.x - f.x) > 500.0 or absf(gp.y - f.y) > 330.0:
+		if absf(gp.x - f.x) > half.x or absf(gp.y - f.y) > half.y:
 			continue
 		if floor_ref.stairs.has(cell):
 			_draw_stairs(cell, kind)
@@ -76,9 +77,12 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 			draw_colored_polygon(d, Color(Palette.COBBLE, (0.30 if checker else 0.20) * r))
 		elif checker:
 			draw_colored_polygon(d, Color(1, 1, 1, 0.07))
-	var loop := d.duplicate()
-	loop.append(d[0])
-	draw_polyline(loop, Color(line_col, 0.20 + 0.10 * (1.0 - r)), 1.2, false)
+	if Settings.gfx_on("outlines"):
+		var loop := d.duplicate()
+		loop.append(d[0])
+		draw_polyline(loop, Color(line_col, 0.20 + 0.10 * (1.0 - r)), 1.2, false)
+	if not Settings.gfx_on("grass"):
+		return
 	var c := _p(Vector2(cell), z)
 	if kind == ".":
 		_draw_grass(cell, c)
@@ -247,7 +251,7 @@ func _cliff(a: Vector2, b: Vector2, depth: float, kind: String, side: int, void_
 	# Strata: horizontal page-edge / soil lines.
 	var strata := PackedVector2Array()
 	var i := 1
-	while i * 7.0 < depth:
+	while Settings.gfx_on("strata") and i * 7.0 < depth:
 		var o := Vector2(0, i * 7.0)
 		strata.append_array([a + o, b + o])
 		i += 1

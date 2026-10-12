@@ -12,6 +12,10 @@ const ZOOM := 1.5
 const STAIR_DIRS := {"e": Vector2i(1, 0), "w": Vector2i(-1, 0), "s": Vector2i(0, 1), "n": Vector2i(0, -1)}
 
 var _paper: ColorRect
+var _paper_vp: SubViewport
+var _paper_view: TextureRect
+var _paper_flat: ColorRect
+var _paper_vignette := 0.45
 var _floor: IsoFloor
 var _actors: Node2D
 var _player: Player
@@ -96,15 +100,53 @@ func _build_background() -> void:
 	var bg := CanvasLayer.new()
 	bg.layer = -10
 	add_child(bg)
+	# The parchment shader is expensive per pixel, and it is soft grain, so it renders into a
+	# smaller viewport and is stretched to fill the screen. Settings > Graphics sets the size.
+	_paper_vp = SubViewport.new()
+	_paper_vp.disable_3d = true
+	_paper_vp.transparent_bg = false
+	_paper_vp.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	bg.add_child(_paper_vp)
 	_paper = ColorRect.new()
-	_paper.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_paper.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var mat := ShaderMaterial.new()
 	mat.shader = PARCHMENT_SHADER
 	for k in _paper_params():
 		mat.set_shader_parameter(k, _paper_params()[k])
 	_paper.material = mat
-	bg.add_child(_paper)
+	_paper_vp.add_child(_paper)
+	_paper_vignette = float(_paper_params().get("vignette", 0.45))
+	# "Flat color" paper: no shader at all, just the average paper tone.
+	_paper_flat = ColorRect.new()
+	_paper_flat.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_paper_flat.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var pl: Color = _paper_params().get("paper_light", Color(0.91, 0.84, 0.68))
+	var pd: Color = _paper_params().get("paper_dark", Color(0.72, 0.60, 0.40))
+	_paper_flat.color = pl.lerp(pd, 0.35)
+	bg.add_child(_paper_flat)
+	_paper_view = TextureRect.new()
+	_paper_view.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_paper_view.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_paper_view.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_paper_view.stretch_mode = TextureRect.STRETCH_SCALE
+	_paper_view.texture = _paper_vp.get_texture()
+	_paper_view.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	bg.add_child(_paper_view)
+	Settings.quality_changed.connect(_apply_paper_scale)
+	_apply_paper_scale()
+
+func _apply_paper_scale() -> void:
+	var sc := Settings.paper_scale()
+	var flat := sc <= 0.0
+	_paper_view.visible = not flat
+	_paper_flat.visible = flat
+	_paper_vp.render_target_update_mode = SubViewport.UPDATE_DISABLED if flat else SubViewport.UPDATE_ALWAYS
+	var size := Vector2i(int(1280.0 * maxf(sc, 0.25)) + 1, int(720.0 * maxf(sc, 0.25)) + 1)
+	_paper_vp.size = size
+	_paper.size = Vector2(size)
+	var mat := _paper.material as ShaderMaterial
+	mat.set_shader_parameter("detail", float(Settings.g("paper_detail")))
+	mat.set_shader_parameter("vignette", _paper_vignette if Settings.gfx_on("vignette") else 0.0)
 
 # --- Map loading ---------------------------------------------------------------------
 func _load_map() -> void:

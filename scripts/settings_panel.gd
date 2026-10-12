@@ -9,8 +9,9 @@ var _row := 0
 var _font: Font
 var _ital: Font
 var _bar_rects: Array[Rect2] = []
-var _rows := ["volume", "fullscreen", "shake", "dialogue", "tips", "log", "controls", "difficulty", "back"]
+var _rows := ["volume", "fullscreen", "graphics", "shake", "dialogue", "tips", "log", "controls", "difficulty", "back"]
 var _controls: ControlsPanel
+var _graphics: GraphicsPanel
 
 const PANEL := Rect2(310, 80, 660, 560)
 
@@ -24,6 +25,9 @@ func _ready() -> void:
 	_controls = ControlsPanel.new()
 	add_child(_controls)
 	_controls.closed.connect(queue_redraw)
+	_graphics = GraphicsPanel.new()
+	add_child(_graphics)
+	_graphics.closed.connect(queue_redraw)
 
 func open() -> void:
 	_row = 0
@@ -37,10 +41,10 @@ func close() -> void:
 
 func _row_y(i: int) -> float:
 	var extra := 22.0 if _rows[i] == "back" else 0.0   # a little air before Back
-	return PANEL.position.y + 130.0 + i * 46.0 + extra
+	return PANEL.position.y + 124.0 + i * 42.0 + extra
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not visible or _controls.visible:
+	if not visible or _controls.visible or _graphics.visible:
 		return
 	if MenuInput.back(event):
 		get_viewport().set_input_as_handled()
@@ -84,6 +88,8 @@ func _activate() -> void:
 		"dialogue":
 			Settings.dialogue_speed = (Settings.dialogue_speed + 1) % 3
 			Settings.apply()
+		"graphics":
+			_graphics.open()
 		"volume", "difficulty":
 			pass
 		_:
@@ -141,6 +147,7 @@ func _draw_row(i: int) -> void:
 		"fullscreen": label = "Fullscreen"
 		"shake": label = "Screen shake"
 		"dialogue": label = "Dialogue speed"
+		"graphics": label = "Graphics (for slower computers)"
 		"tips": label = "Tutorial tips"
 		"log": label = "Playtest log (F10 saves a report)"
 		"controls": label = "Controls (keyboard, mouse, controller)"
@@ -163,6 +170,8 @@ func _draw_row(i: int) -> void:
 			_pill(vx, y, _toggle_text(Settings.playtest_log), Settings.playtest_log)
 		"tips":
 			_pill(vx, y, _toggle_text(Settings.tutorial_tips), Settings.tutorial_tips)
+		"graphics":
+			draw_string(_font, Vector2(vx, y), "%s  ▸" % Settings.PRESET_NAMES[clampi(Settings.preset, 0, 3)], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 22, Palette.INK_BROWN)
 		"controls":
 			draw_string(_font, Vector2(vx, y), "Open  ▸", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 22, Palette.INK_BROWN)
 		"dialogue":

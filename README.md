@@ -43,3 +43,6 @@ Fonts: IM Fell English (SIL OFL, `assets/fonts/OFL.txt`).
 
 ## The world and the map
 The Prologue overworld is about four times larger than before: eleven regions to explore (Page's Edge, Margins Meadow, Old Meadow, Thistledown, Whispering Orchard, Ink-Wells, Footnote Hollow, Hushed Glade, Mill Ridge, the Graveyard of Deleted Scenes and the Margin Gate). Light lantern posts to rest and set your respawn point. Press **M** (D-pad down on a controller, or Map in the pause menu) to open the map: it shows what you have discovered, and you can travel between lit posts that are far apart. The first world is called the Prologue; the chapters come after. See GDD section 21.
+
+## Graphics options (for slower computers)
+Settings > Graphics has presets (Low / Balanced / High, chosen for your computer on first run; Macs and hi-DPI screens start on Balanced) and 16 individual options: pixel density, paper background resolution and detail, grass and flowers, tile outlines, cliff lines, ground refresh rate, draw distance, tree sway, shadows, glow effects, screen-edge shading, smooth line edges, frame rate limit, VSync and an FPS counter. Changing any one switches the preset to Custom. The dots beside each option show how much it helps a slow computer.

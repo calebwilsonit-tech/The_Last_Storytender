@@ -20,7 +20,7 @@ static func wobble(a: Vector2, b: Vector2, seed_v: float, amp: float = 1.2, step
 static func line(ci: CanvasItem, a: Vector2, b: Vector2, color: Color, width: float = 2.0, seed_v: float = 0.0, amp: float = 1.2) -> void:
 	if color.a <= 0.01:
 		return
-	ci.draw_polyline(wobble(a, b, seed_v, amp), color, width, true)
+	ci.draw_polyline(wobble(a, b, seed_v, amp), color, width, Settings.gfx_on("smooth"))
 
 static func outline(ci: CanvasItem, pts: PackedVector2Array, color: Color, width: float = 2.0, seed_v: float = 0.0, amp: float = 1.0) -> void:
 	for i in pts.size():
@@ -38,7 +38,7 @@ static func hatch(ci: CanvasItem, q: PackedVector2Array, count: int, color: Colo
 		return
 	for i in range(1, count):
 		var t := float(i) / count
-		ci.draw_line(q[0].lerp(q[3], t), q[1].lerp(q[2], t), color, width, true)
+		ci.draw_line(q[0].lerp(q[3], t), q[1].lerp(q[2], t), color, width, Settings.gfx_on("smooth"))
 
 ## Point on a quad face: u across (a->b), v up (a->d).
 static func face(q: PackedVector2Array, u: float, v: float) -> Vector2:

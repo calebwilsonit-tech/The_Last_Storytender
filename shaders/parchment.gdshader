@@ -12,6 +12,8 @@ uniform float script_strength : hint_range(0.0, 1.0) = 0.12;
 uniform float vignette : hint_range(0.0, 1.0) = 0.45;
 // Driven by the Coherence system in Phase 3. 0 = stable, 1 = fully glitched.
 uniform float glitch : hint_range(0.0, 1.0) = 0.0;
+// Graphics settings: 0 = grain only, 1 = + fibers, 2 = + handwriting lines.
+uniform float detail = 2.0;
 
 float hash(vec2 p) {
 	p = fract(p * vec2(123.34, 456.21));
@@ -50,20 +52,22 @@ void fragment() {
 	}
 
 	float grain = fbm(px / 90.0);
-	float fine = noise(px / 2.0);
 	vec3 col = mix(paper_dark.rgb, paper_light.rgb, smoothstep(0.25, 0.75, grain));
-	col *= 0.94 + 0.06 * fine;
-
-	// Paper fibers: short streaks.
-	float fiber = noise(vec2(px.x / 3.0, px.y / 60.0)) * noise(vec2(px.x / 60.0, px.y / 3.0));
-	col -= fiber * 0.06;
-
-	// Old Script: faint illegible handwriting lines in the ground.
-	float line_y = fract(px.y / 28.0);
-	float line_mask = 1.0 - smoothstep(0.0, 0.2, abs(line_y - 0.5));
-	float scribble = step(0.45, noise(vec2(px.x / 9.0, floor(px.y / 28.0) * 7.0)));
-	float wob = noise(vec2(px.x / 5.0, px.y / 28.0));
-	col = mix(col, script_color.rgb, line_mask * scribble * wob * script_strength * 0.6);
+	if (detail >= 1.0) {
+		float fine = noise(px / 2.0);
+		col *= 0.94 + 0.06 * fine;
+		// Paper fibers: short streaks.
+		float fiber = noise(vec2(px.x / 3.0, px.y / 60.0)) * noise(vec2(px.x / 60.0, px.y / 3.0));
+		col -= fiber * 0.06;
+	}
+	if (detail >= 2.0) {
+		// Old Script: faint illegible handwriting lines in the ground.
+		float line_y = fract(px.y / 28.0);
+		float line_mask = 1.0 - smoothstep(0.0, 0.2, abs(line_y - 0.5));
+		float scribble = step(0.45, noise(vec2(px.x / 9.0, floor(px.y / 28.0) * 7.0)));
+		float wob = noise(vec2(px.x / 5.0, px.y / 28.0));
+		col = mix(col, script_color.rgb, line_mask * scribble * wob * script_strength * 0.6);
+	}
 
 	// Vignette
 	vec2 d = UV - 0.5;

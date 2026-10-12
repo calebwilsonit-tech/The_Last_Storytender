@@ -47,12 +47,18 @@ func _process(delta: float) -> void:
 		if absf(d.x) > 620.0 or absf(d.y) > 440.0:
 			return
 	if kind == Kind.TREE:
-		_skip = not _skip
-		if _skip:
-			return
+		if not Settings.gfx_on("sway"):
+			if _drawn_once:
+				return        # a still tree draws once and keeps it
+			_drawn_once = true
+		else:
+			_skip = not _skip
+			if _skip:
+				return
 	queue_redraw()
 
 var _skip := false
+var _drawn_once := false
 
 func _restoration() -> float:
 	return GameState.restored_at(global_position) if ghost else 1.0
@@ -87,6 +93,8 @@ func _draw() -> void:
 		Kind.GATE: _draw_gate()
 
 func _shadow(rx: float) -> void:
+	if not Settings.gfx_on("shadows"):
+		return
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
 	draw_circle(Vector2.ZERO, rx, Color(0.15, 0.1, 0.05, 0.18))
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
@@ -195,8 +203,9 @@ func _draw_crystal() -> void:
 	_shadow(9.0)
 	var bob := sin(_t * 2.2) * 3.0
 	var c := Vector2(0, -22 + bob)
-	for rad in [26.0, 18.0]:
-		draw_circle(c, rad, Color(Palette.GOLD, 0.07))
+	if Settings.gfx_on("glow"):
+		for rad in [26.0, 18.0]:
+			draw_circle(c, rad, Color(Palette.GOLD, 0.07))
 	var pts := PackedVector2Array([c + Vector2(0, -12), c + Vector2(8, -2), c + Vector2(5, 10), c + Vector2(-5, 10), c + Vector2(-8, -2)])
 	DrawKit.shape(self, pts, Color(Palette.GOLD, 0.95), Palette.INK_BROWN, 1.8, _seed)
 	draw_line(c + Vector2(-2, -8), c + Vector2(-3, 2), Color(1, 1, 1, 0.7), 1.6)
@@ -491,7 +500,7 @@ func _draw_post() -> void:
 	var lamp := Vector2(14, -44)
 	draw_line(Vector2(14, -56), lamp + Vector2(0, -8), Palette.OUTLINE, 1.6)
 	var glow := 0.5 + 0.5 * sin(_t * 2.6)
-	if lit:
+	if lit and Settings.gfx_on("glow"):
 		draw_circle(lamp, 30.0 + glow * 3.0, Color(Palette.CYAN, 0.10))
 		draw_circle(lamp, 18.0, Color(Palette.CYAN, 0.14))
 	var body := PackedVector2Array([lamp + Vector2(-6, -8), lamp + Vector2(6, -8), lamp + Vector2(7, 8), lamp + Vector2(-7, 8)])

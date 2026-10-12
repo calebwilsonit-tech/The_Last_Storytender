@@ -309,3 +309,6 @@ The game should be a decent sized game, and at points it should feel *absurdly* 
 - Give relief inside the long parts: lantern posts to rest at, safe pockets, and the occasional shortcut that rewards exploration.
 - Keep the **memories and dungeons short**; the long stretches belong to the chapters themselves, which scale at 4x the Prologue or more.
 - Track it in playtest reports: record time per region and flag any stretch where players quit or stall, so "long on purpose" never turns into "long and dull".
+
+### Graphics options (implemented v2.12)
+Every visual cost has an option, so players on weak machines choose where to sacrifice: pixel density (renders at 1280x720 instead of native on Retina), paper background (flat color or 3 resolutions), paper shader detail, grass, tile outlines, cliff lines, ground refresh, draw distance, tree sway, shadows, glow, edge shading, smooth lines, FPS cap, VSync, FPS counter. New visual effects added later should get an option in Settings.GFX rather than being always on.
