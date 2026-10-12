@@ -344,6 +344,13 @@ func _draw_portal() -> void:
 # --- Frozen figures of the remembered past (young Garrick, Wren) ---------------------------
 func _draw_figure() -> void:
 	_shadow(12.0)
+	var art := Skins.art()
+	if art != null:
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		var key: String = ["young_garrick", "wren", "pip", "maud"][clampi(variant, 0, 3)]
+		if art.draw_character(self, key, {"t": _t, "memory": true, "restored": 1.0, "dir": Vector2(0.25, 1.0), "origin": Vector2(0, -lift), "scale": 1.0}):
+			draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
+			return
 	var shimmer := 0.55 + 0.12 * sin(_t * 3.0)
 	var fill := Color(0.45, 0.8, 0.95, shimmer)
 	var edge := Color(Palette.CYAN, 0.95)

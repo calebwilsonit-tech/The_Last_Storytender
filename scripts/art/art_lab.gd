@@ -3,7 +3,7 @@ extends Node2D
 ## screen (Art Lab) or press F8 in the overworld. A / D change style, W / S change sheet, Q / E zoom,
 ## Space cycles the background, Esc leaves.
 
-const SHEETS := ["storytender", "friends", "errors", "bosses"]
+const SHEETS := ["storytender", "friends", "errors", "bosses", "memories"]
 const BGS := [Color("e9dcb7"), Color("7aa35a"), Color("1c2030")]
 
 var style_id := ""
@@ -81,6 +81,12 @@ func _cells() -> Array:
 			out.append(["garrick half", "garrick", _m(base2, {"dir": Vector2(0, 1), "restored": 0.5})])
 			out.append(["garrick tearful", "garrick", _m(base2, {"dir": Vector2(0, 1), "tearful": true})])
 			out.append(["maud missing", "maud", _m(base2, {"dir": Vector2(0, 1), "restored": 0.0})])
+		"memories":
+			for k in ["young_garrick", "wren", "pip", "maud"]:
+				out.append([k + " memory", k, {"memory": true, "restored": 1.0, "dir": Vector2(0.25, 1)}])
+			for v in 3:
+				out.append(["guest %d seated" % v, "guest", {"variant": v, "restored": 1.0, "dir": Vector2(0.3, 1)}])
+				out.append(["guest %d erased-to-be" % v, "guest", {"variant": v, "restored": 0.0, "dir": Vector2(0.3, 1)}])
 		"errors":
 			for k in ["bare", "mite", "slug", "dangler", "censor", "ellipsis"]:
 				out.append([k, k, {"face": 1.0, "proof": 0.0, "state": "idle"}])

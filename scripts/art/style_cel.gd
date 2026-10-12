@@ -29,14 +29,14 @@ func _init() -> void:
 	blurb = "Chunky cel-shaded characters with heavy ink outlines, from the reference sheets."
 
 func kinds() -> Array:
-	return ["storytender", "garrick", "pip", "maud", "bare", "mite", "slug", "dangler", "censor", "ellipsis", "critic", "spoiler", "cold_shoulder", "scissor_man"]
+	return ["storytender", "garrick", "pip", "maud", "young_garrick", "wren", "guest", "bare", "mite", "slug", "dangler", "censor", "ellipsis", "critic", "spoiler", "cold_shoulder", "scissor_man"]
 
 func draw_character(ci: CanvasItem, kind: String, ctx: Dictionary) -> bool:
 	match kind:
 		"storytender":
 			_storytender(ci, ctx)
 			return true
-		"garrick", "pip", "maud":
+		"garrick", "pip", "maud", "young_garrick", "wren", "guest":
 			_person(ci, kind, ctx)
 			return true
 		"bare", "mite", "slug", "dangler", "censor", "ellipsis":
@@ -69,7 +69,7 @@ func _enemy(ci: CanvasItem, kind: String, ctx: Dictionary) -> void:
 	_mirror = 1.0
 
 func _person(ci: CanvasItem, kind: String, ctx: Dictionary) -> void:
-	var sp: Dictionary = CelPeople.spec(kind)
+	var sp: Dictionary = CelPeople.guest_spec(int(ctx.get("variant", 0))) if kind == "guest" else CelPeople.spec(kind)
 	_z = float(ctx.get("scale", 1.0)) * float(sp.get("k", 1.0))
 	_origin = ctx.get("origin", Vector2.ZERO)
 	var r := K.Rec.new()

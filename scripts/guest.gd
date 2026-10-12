@@ -118,25 +118,37 @@ func _draw() -> void:
 		for k in 3:
 			draw_colored_polygon(DrawKit.ellipse(Vector2(0, -34 - seat_lift * 0.3), 18.0 + k * 6.0, 28.0 + k * 7.0, 20), Color(Palette.GOLD, (0.10 - k * 0.025) * a))
 	var base := Vector2(0, -seat_lift + bob)
-	DrawKit.shape(self, DrawKit.ellipse(base + Vector2(0, -22), 11.0, 15.0, 16, 0.05, _seed), Color(body_col, a), Color(edge, a), 2.4, _seed)
-	DrawKit.shape(self, DrawKit.ellipse(base + Vector2(0, -42), 8.5, 8.5, 14, 0.05, _seed + 1.0), Color(body_col.lightened(0.1), a), Color(edge, a), 2.4, _seed + 1.0)
-	match variant % 3:
-		0:  # a hat
-			DrawKit.shape(self, PackedVector2Array([base + Vector2(-10, -47), base + Vector2(10, -47), base + Vector2(6, -58), base + Vector2(-6, -58)]), Color(body_col.darkened(0.3), a), Color(edge, a), 2.0, _seed + 2.0)
-		1:  # a scarf
-			draw_line(base + Vector2(-9, -34), base + Vector2(9, -34), Color(Palette.CRITIC_RED if warm else edge, a), 4.0)
-		_:  # a bonnet
-			draw_arc(base + Vector2(0, -44), 10.0, PI, TAU, 10, Color(Palette.PAGE, a), 4.0, true)
-	if warm:
-		draw_circle(base + Vector2(-3, -43), 1.4, Palette.OUTLINE)
-		draw_circle(base + Vector2(3, -43), 1.4, Palette.OUTLINE)
-	else:
-		# Television-static speckle and a glitchy tear, as with every forgotten thing.
-		var rng := RandomNumberGenerator.new()
-		rng.seed = int(_t * 8.0) * 131 + int(_seed * 100.0)
-		for i in 40:
-			var p := base + Vector2(rng.randf_range(-11.0, 11.0), rng.randf_range(-52.0, -6.0))
-			var q := (p - base - Vector2(0, -22)) / Vector2(11, 15)
-			if q.length() < 1.0 or (p - base - Vector2(0, -42)).length() < 8.5:
-				var v := rng.randf()
-				draw_rect(Rect2(p, Vector2(2, 2)), Color(Color.WHITE if v > 0.5 else (Palette.GLITCH if v > 0.35 else Color.BLACK), 0.8 * a))
+	var drawn := false
+	var art := Skins.art()
+	if art != null:
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		drawn = art.draw_character(self, "guest", {"t": _t, "variant": variant, "restored": 1.0 if warm else 0.0, "fade": a, "dir": Vector2(0.3, 1.0), "origin": base, "scale": 1.0})
+		draw_set_transform(Vector2(0, -elev), 0.0, Vector2.ONE)
+		if not warm:
+			_speckle(base, a)
+	if not drawn:
+		DrawKit.shape(self, DrawKit.ellipse(base + Vector2(0, -22), 11.0, 15.0, 16, 0.05, _seed), Color(body_col, a), Color(edge, a), 2.4, _seed)
+		DrawKit.shape(self, DrawKit.ellipse(base + Vector2(0, -42), 8.5, 8.5, 14, 0.05, _seed + 1.0), Color(body_col.lightened(0.1), a), Color(edge, a), 2.4, _seed + 1.0)
+		match variant % 3:
+			0:  # a hat
+				DrawKit.shape(self, PackedVector2Array([base + Vector2(-10, -47), base + Vector2(10, -47), base + Vector2(6, -58), base + Vector2(-6, -58)]), Color(body_col.darkened(0.3), a), Color(edge, a), 2.0, _seed + 2.0)
+			1:  # a scarf
+				draw_line(base + Vector2(-9, -34), base + Vector2(9, -34), Color(Palette.CRITIC_RED if warm else edge, a), 4.0)
+			_:  # a bonnet
+				draw_arc(base + Vector2(0, -44), 10.0, PI, TAU, 10, Color(Palette.PAGE, a), 4.0, true)
+		if warm:
+			draw_circle(base + Vector2(-3, -43), 1.4, Palette.OUTLINE)
+			draw_circle(base + Vector2(3, -43), 1.4, Palette.OUTLINE)
+		else:
+			_speckle(base, a)
+
+func _speckle(base: Vector2, a: float) -> void:
+	# Television-static speckle and a glitchy tear, as with every forgotten thing.
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(_t * 8.0) * 131 + int(_seed * 100.0)
+	for i in 40:
+		var p := base + Vector2(rng.randf_range(-11.0, 11.0), rng.randf_range(-52.0, -6.0))
+		var q := (p - base - Vector2(0, -22)) / Vector2(11, 15)
+		if q.length() < 1.0 or (p - base - Vector2(0, -42)).length() < 8.5:
+			var v := rng.randf()
+			draw_rect(Rect2(p, Vector2(2, 2)), Color(Color.WHITE if v > 0.5 else (Palette.GLITCH if v > 0.35 else Color.BLACK), 0.8 * a))

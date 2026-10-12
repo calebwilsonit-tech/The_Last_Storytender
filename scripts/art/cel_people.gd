@@ -30,7 +30,32 @@ static func spec(kind: String) -> Dictionary:
 				"shirt": Color("efe4cf"), "sleeve": Color("efe4cf"), "pants": Color("5b4a44"), "boots": Color("4a3a30"),
 				"apron": Color("fbf6e8"), "bracer": Color(0, 0, 0, 0), "belly": 0.35, "held": "loaf", "cheeks": true, "hat": "chef",
 			}
+		"young_garrick":
+			var y := spec("garrick")
+			y["skin"] = Color("d6b094"); y["hair"] = Color("4a3426"); y["hair_style"] = "tuft"; y["beard"] = Color(0, 0, 0, 0)
+			y["mouth"] = 0.15; y["brow"] = 0.7; y["belly"] = 0.0; y["torso_w"] = 11.6
+			return y
+		"wren":
+			return {
+				"k": 0.9, "skin": Color("e6bf9c"), "hair": Color("3a2b30"), "hair_style": "tuft", "beard": Color(0, 0, 0, 0),
+				"brow": 0.3, "mouth": 0.1, "eye_r": 1.4, "head_r": 12.4, "head_ry": 12.6, "torso_w": 10.0, "torso_d": 6.8,
+				"shirt": Color("8a5e7a"), "sleeve": Color("8a5e7a"), "pants": Color("5a4a5e"), "boots": Color("4a3a30"),
+				"apron": Color("b98ca8"), "bracer": Color(0, 0, 0, 0), "belly": 0.1, "held": "lantern", "cheeks": true,
+			}
 	return {}
+
+## The Empty Table's guests: anonymous townsfolk, told apart by a hat, a scarf or a bonnet.
+static func guest_spec(variant: int) -> Dictionary:
+	var v := variant % 3
+	var sp := {
+		"k": 0.95, "skin": [Color("e2b592"), Color("c99d7c"), Color("efc7a2")][v], "hair": [Color("5a4636"), Color("2f2a33"), Color("a68a62")][v],
+		"hair_style": ["none", "tuft", "none"][v], "beard": Color(0, 0, 0, 0),
+		"brow": 0.3, "mouth": 0.2, "eye_r": 1.3, "head_r": 12.0, "head_ry": 12.2, "torso_w": 10.0 + v, "torso_d": 6.8,
+		"shirt": [Color("7d6a52"), Color("6b7f6a"), Color("8a6a7a")][v], "sleeve": [Color("7d6a52"), Color("6b7f6a"), Color("8a6a7a")][v],
+		"pants": Color("4a4048"), "boots": Color("3b2b21"), "apron": Color(0, 0, 0, 0), "bracer": Color(0, 0, 0, 0), "belly": 0.1, "held": "", "cheeks": true,
+		"hat": ["bowler", "", "bonnet"][v], "scarf": [Color(0, 0, 0, 0), Color("b5483c"), Color(0, 0, 0, 0)][v],
+	}
+	return sp
 
 ## Builds one person into the recorder. `ctx` carries t, dir, restored (0..1), moving, phase, tearful.
 static func build(r: K.Rec, sp: Dictionary, phi: float, t: float, ctx: Dictionary) -> void:
@@ -39,9 +64,20 @@ static func build(r: K.Rec, sp: Dictionary, phi: float, t: float, ctx: Dictionar
 	var ac := absf(c)
 	var as_ := absf(s)
 	var rest: float = ctx.get("restored", 1.0)
+	var mem: bool = ctx.get("memory", false)
 	var g := func(col: Color) -> Color:
+		if mem:
+			# a remembered person: the same cel colours, washed through cyan light
+			return col.lerp(Color(0.55, 0.85, 0.98), 0.42)
 		return Palette.ghostify(col, rest).lerp(Palette.STATIC_GRAY, (1.0 - rest) * 0.35)
 	var pen: Color = Palette.STATIC_GRAY.lightened(0.35).lerp(Palette.OUTLINE, rest)
+	if mem:
+		pen = Color("3a8fb5")
+		r.alpha = 0.78 + 0.1 * sin(t * 3.0)
+		if Settings.gfx_on("glow"):
+			r.glow(func(ci):
+				for k in 3:
+					ci.draw_circle(Vector2(0, -26), 30.0 + k * 8.0, Color(Palette.CYAN, 0.05)))
 	r.out = pen
 	var px := func(xl: float, zl: float) -> float: return xl * c + zl * s
 	var dp := func(xl: float, zl: float) -> float: return zl * c - xl * s
@@ -90,6 +126,12 @@ static func build(r: K.Rec, sp: Dictionary, phi: float, t: float, ctx: Dictionar
 			g.call(apron), 0.26, true, 0.0, true, 1)
 		r.op(func(ci): ci.draw_line(Vector2(ax - aw * 0.78, -34.5), Vector2(ax + aw * 0.78, -34.5), Color(pen, 0.6), 1.0))
 		r.depth = 0.0
+	var scarf: Color = sp.get("scarf", Color(0, 0, 0, 0))
+	if scarf.a > 0.01:
+		r.depth = 0.1
+		r.piece(K.rrect(-tw * 0.82, -37.0, tw * 0.82, -32.4, 1.6), g.call(scarf), 0.4, true)
+		r.piece(K.rrect(tw * 0.2, -34.0, tw * 0.62, -24.0, 1.2), g.call(scarf).darkened(0.08), 0.4, true)
+		r.depth = 0.0
 	# belt
 	r.piece(K.rrect(-tw * 1.04, -22.4, tw * 1.04, -19.6, 1.0), (g.call(sp["pants"]) as Color).darkened(0.25), 0.3, false)
 	# ---- arms
@@ -97,6 +139,13 @@ static func build(r: K.Rec, sp: Dictionary, phi: float, t: float, ctx: Dictionar
 	_arms(r, sp, g, px, dp, c, s, Wt, Dt, t, breathe, held, pen)
 	# ---- head
 	_head(r, sp, g, px, dp, c, s, t, breathe, skin, pen, ctx)
+	if mem:
+		# the recording is slightly worn: scanline gaps
+		r.depth = 5.0
+		r.op(func(ci):
+			for i in 9:
+				var y := -52.0 + i * 6.0
+				ci.draw_line(Vector2(-16, y), Vector2(16, y), Color(0.04, 0.06, 0.12, 0.18), 1.0))
 
 static func _arms(r: K.Rec, sp: Dictionary, g: Callable, px: Callable, dp: Callable, c: float, s: float, Wt: float, Dt: float, t: float, breathe: float, held: String, pen: Color) -> void:
 	var sleeve: Color = g.call(sp["sleeve"])
@@ -132,6 +181,11 @@ static func _arms(r: K.Rec, sp: Dictionary, g: Callable, px: Callable, dp: Calla
 
 static func _held_item(r: K.Rec, held: String, hand: Vector2, c: float, s: float, g: Callable, pen: Color) -> void:
 	match held:
+		"lantern":
+			r.depth += 0.2
+			var lp := hand + Vector2(0, 6.0)
+			r.glow(func(ci): ci.draw_circle(lp, 13.0, Color(1, 0.9, 0.6, 0.2)))
+			r.piece(K.rrect(lp.x - 3.0, lp.y - 4.0, lp.x + 3.0, lp.y + 4.0, 1.0), Color("ffe9a8"), 0.2, true)
 		"hammer":
 			var flip := 1.0 if s >= -0.05 else -1.0
 			r.at(hand + Vector2(0, 1.0), 0.25 * flip, flip)
@@ -215,6 +269,15 @@ static func _head(r: K.Rec, sp: Dictionary, g: Callable, px: Callable, dp: Calla
 		# grey hair showing under the hat band
 		r.depth = 0.615
 		r.piece(K.soft(PackedVector2Array([Vector2(-R * 0.98, cy - 1.0), Vector2(-R * 0.8, cy - 8.5), Vector2(R * 0.8, cy - 8.5), Vector2(R * 0.98, cy - 1.0), Vector2(R * 0.8, cy - 4.0), Vector2(-R * 0.8, cy - 4.0)]), 1), g.call(hair), 0.25, false, 0.0, false)
+	if hat == "bowler":
+		r.depth = 0.64
+		var bc2: Color = g.call(Color("4a4048"))
+		r.piece(K.soft(K.ell(Vector2(0, cy - RY + 1.0), R * 1.25, 2.6, 16), 1), bc2.darkened(0.1), 0.4, true)
+		r.piece(K.soft(PackedVector2Array([Vector2(-R * 0.82, cy - RY + 1.5), Vector2(-R * 0.7, cy - RY - 7.5), Vector2(R * 0.7, cy - RY - 7.5), Vector2(R * 0.82, cy - RY + 1.5)]), 2), bc2, 0.4, true)
+	elif hat == "bonnet":
+		r.depth = 0.64
+		var nc: Color = g.call(Color("f3ecd8"))
+		r.piece(K.soft(PackedVector2Array([Vector2(-R * 1.05, cy + 5.0), Vector2(-R * 1.0, cy - 5.0), Vector2(-R * 0.5, cy - RY - 2.0), Vector2(R * 0.5, cy - RY - 2.0), Vector2(R * 1.0, cy - 5.0), Vector2(R * 1.05, cy + 5.0), Vector2(R * 0.7, cy - 2.0), Vector2(-R * 0.7, cy - 2.0)]), 2), nc, 0.35, true)
 	var beard: Color = sp.get("beard", Color(0, 0, 0, 0))
 	if beard.a > 0.01 and c > -0.3:
 		r.depth = 0.63
