@@ -294,3 +294,10 @@ Enemies now stay near their post: idle wandering drifts back toward home beyond 
 - **Map (key M, or Map in the pause menu):** shows only the regions you have discovered. You can fast travel between lit posts, but only to posts at least 40 cells away, so travel is for long backtracks, not shortcuts.
 - **Enemies stream by distance** (wake within about 900 px, never on top of you, fade out far behind you) so a big world stays fast.
 - **Planned, not yet built:** hidden items that need finding or a puzzle to reach, and side quests and missions. They do not have to live in the Prologue; the first chapter after it is the better home.
+
+### Scale rule for future chapters (design law)
+- The Prologue (132 x 104 cells, about 13,700 cells) is the **starter** size and is fine as it is.
+- **Every later chapter is at least 4x the Prologue's area**: about 55,000 cells or more (roughly 264 x 208). Chapters keep growing from there, with more characters, a larger town to restore, more regions, and more hidden finds, side quests and missions.
+- Memories and dungeons stay small; the chapter itself is the thing that is large and rewards exploration.
+- Fast travel only exists where it earns its place (long distances), and gets more useful as chapters grow.
+- **Technical prerequisite before building Chapter One:** the ground is currently redrawn from per-cell commands, which will not hold at 4x. Chapter maps need chunked ground (cache each chunk as a texture or mesh and only repaint chunks that change, such as restoration waves), props and enemies streamed by distance, region data per chunk, and the map generator extended to produce multi-region chapters. Treat that engine work as the first task of Chapter One.
