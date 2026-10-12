@@ -152,6 +152,7 @@ func _level_ready() -> void:
 
 func _start_intro() -> void:
 	await get_tree().create_timer(1.2).timeout
+	await _hud.tutorial("move")
 	for t in Story.INTRO:
 		_hud.narrate(t, false, 3.2)
 		await get_tree().create_timer(5.6).timeout
@@ -285,6 +286,7 @@ func _talk_garrick() -> void:
 			_hud.toast("Received: Garrick's Quill")
 			_hud.set_controls(true)
 			_set_tutorial(1)
+			await _hud.tutorial("quill")
 		elif _tutorial >= 1 and _tutorial <= 3:
 			await _say(Story.garrick_lesson_hint(_tutorial))
 		else:
@@ -305,12 +307,13 @@ func _set_tutorial(step: int) -> void:
 	_tutorial = step
 	match step:
 		1:
-			_hud.set_objective("Strike the training dummy: %d / 3   (click or J)" % _strikes)
+			_hud.set_objective("Strike the training dummy: %d / 3   ({attack})" % _strikes)
 		2:
-			_hud.set_objective("Dash with Shift")
+			_hud.set_objective("Dash with {dash}")
 		3:
 			_lantern_time = 0.0
-			_hud.set_objective("Hold Q or right mouse: shine your Lantern")
+			_hud.set_objective("Hold {lantern}: shine your Lantern")
+			_hud.tutorial("lantern")
 		_:
 			_hud.set_objective("")
 
@@ -318,7 +321,7 @@ func _on_dummy_struck() -> void:
 	if _tutorial != 1:
 		return
 	_strikes += 1
-	_hud.set_objective("Strike the training dummy: %d / 3   (click or J)" % mini(_strikes, 3))
+	_hud.set_objective("Strike the training dummy: %d / 3   ({attack})" % mini(_strikes, 3))
 	if _strikes >= 3:
 		_set_tutorial(2)
 
@@ -338,6 +341,8 @@ func _finish_lesson() -> void:
 	_give_item("eraser_crumbs", 2)
 	_hud.narrate(Story.BINDER_HINT, false, 5.0)
 	_hud.narrate(Story.REDACTION_NOTICED, false, 4.5)
+	await _hud.tutorial("binder")
+	await _hud.tutorial("stealth")
 	_spawn_enemies()
 
 func _spawn_enemies(avoid: Vector2 = Vector2(INF, INF)) -> void:

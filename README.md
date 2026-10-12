@@ -34,3 +34,9 @@ Fonts: IM Fell English (SIL OFL, `assets/fonts/OFL.txt`).
 
 ## Phase 1 systems still present
 - Parchment shader (`shaders/parchment.gdshader`, exposes a `glitch` uniform for Phase 3) and the ink-bottle health bar.
+
+
+## Controller, rebinding and tutorial cards
+- **Controller:** left stick moves, right stick aims, A interact, X (or RT) Quill, LT Lantern (hold), B dash, L3 creep, View binder, Y quick item, D-pad left/up/right Underline/Bold/Italic, RB paste, LB Echo, Menu pauses. Glyphs follow the pad in use (Xbox, PlayStation shapes, Nintendo).
+- **Settings > Controls** rebinds keyboard/mouse and controller separately (an input already in use is swapped). Saved with your settings.
+- **No always-on button bar.** Things you can interact with show a prompt chip with the right button, and the first time a mechanic unlocks (walking, Lantern, Quill, binder, stealth, and the starts of Pip's, Maud's and Garrick's memories and the Scissor-Man) a tutorial card explains it. Turn the cards off in Settings > Tutorial tips.

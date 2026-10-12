@@ -28,14 +28,14 @@ const RETURNED := "The sword is heavy the way a promise is heavy. Somebody shoul
 const PROOFREAD := "A mistake is not a monster. Sometimes it only wants someone to read it again."
 const REDACTOR_HINT := "A black bar hangs across the way. Something is written underneath it. Light makes things matter: hold Q, or the right mouse button."
 const REDACTOR_OPEN := "It was written there all along."
-const BINDER_HINT := "You have a binder now. Press Tab to open it, and wear what Garrick gave you."
+const BINDER_HINT := "You have a binder now. Press {inventory} to open it, and wear what Garrick gave you."
 const REDACTION_NOTICED := "The Redaction has noticed you."
 const SWORD_NARRATION := "It was never a weapon. It was a promise somebody made to the dark."
 
 # ---- Signs -------------------------------------------------------------------
 static func tutorial_sign() -> Array:
 	return [
-		line("", "WASD to walk.   E to speak, or to pick up what was forgotten.", "sign"),
+		line("", "{move} to walk.   {interact} to speak, or to pick up what was forgotten.", "sign"),
 		line("", "Mind the plot holes.", "sign"),
 	]
 
@@ -123,7 +123,7 @@ const MEMORY_SHARD_NARRATION: Array[String] = [
 const MEMORY_SWORD_NARRATION := "The memory lets go of you gently, the way a hand lets go of a hand."
 const MEMORY_OBJECTIVE := "Hold up the memories: %d / 3"
 const FORGE_OBJECTIVES: Array[String] = [
-	"The gate is cold and shut. Leave a memory of yourself standing on the plate (R).",
+	"The gate is cold and shut. Leave a memory of yourself standing on the plate ({echo}).",
 	"Two plates, one of you. Remember twice.",
 	"The watch is awake. Give it something to look at.",
 ]
@@ -229,7 +229,7 @@ static func garrick_lesson_end() -> Array:
 # ---- Pip's memory: The Last Page --------------------------------------------------
 const PIP_BOOK_HINT := "A storybook lies open on the ground, its last page torn out. The words on the pages keep rearranging themselves. You will need something that can rewrite them."
 const PIP_INTRO := "Every page is bright and printed. Every sentence is waiting to be true."
-const PIP_STONE_HINT := "A sentence stands here with one word that can change. Strike it with the Quill, or press E."
+const PIP_STONE_HINT := "A sentence stands here with one word that can change. Strike it with the Quill, or press {interact}."
 const PIP_BRIDGE_HOLDS := "The bridge held. All it needed was one different word."
 const PIP_WOLVES_ASLEEP := "The wolves are asleep. The sentence will not stay true forever."
 const PIP_WOLVES_WAKE := "The word wears off. The wolves stir."
@@ -237,7 +237,7 @@ const PIP_GATE_OPEN := "Open. Sometimes the whole story is waiting on a single w
 const PIP_TOWER_HINT := "A tower of pages, with black bars across the stairs. Light shows what is written underneath."
 const PIP_DOOR_LOCKED := "A door made of bound pages, with a slot the shape of a missing page."
 const PIP_OBJECTIVES: Array[String] = [
-	"Strike the word with your Quill (or press E) to rewrite the sentence",
+	"Strike the word with your Quill (or press {interact}) to rewrite the sentence",
 	"Get past the wolves, and rewrite the gate",
 	"Climb the tower and find the Torn Page",
 	"Rewrite the spoilers: %d / 5",
@@ -320,7 +320,7 @@ static func pip_restoration() -> Array:
 const MAUD_OVEN_HINT := "The oven is cold. Not just unlit: cold the way a room is cold when everyone has left it. Something else has to teach your Quill a new edge before you can reach what is in the ashes."
 const MAUD_INTRO := "Flour on every surface. The smell of bread that is not baking."
 const MAUD_OBJECTIVES: Array[String] = [
-	"Press 1 (Underline), then strike the word BREAD with your Quill",
+	"Press {style_underline} (Underline), then strike the word BREAD with your Quill",
 	"Make SALT heavy (2: Bold) and send it sliding (3: Italic) onto the plate",
 	"Dough cannot be rushed. Wait for it to rise, then underline it. Your Lantern's warmth helps",
 	"Seat the guests: %d / 6.  Hold your Lantern on them to lead them to a chair",
@@ -352,7 +352,7 @@ static func maud_oven_enter() -> Array:
 static func maud_format_grant() -> Array:
 	return [
 		line("", "The Quill hums. It has learned a new edge: it can format.", "action"),
-		line("", "Press 1, 2 or 3 to choose Underline, Bold or Italic, then strike a word. Words in this kitchen have weight.", "action"),
+		line("", "Press {style_underline}, {style_bold} or {style_italic} to choose Underline, Bold or Italic, then strike a word. Words in this kitchen have weight.", "action"),
 	]
 
 static func maud_boss_intro() -> Array:
@@ -395,7 +395,7 @@ static func maud_restoration() -> Array:
 # ---- The Scissor-Man ("Cut Content"): Thistledown's Editor --------------------------------
 const RIFT_NARRATION := "With the last of them remembered, something in the sky begins to cut. A seam opens in the middle of the square."
 const SCISSOR_OBJECTIVES: Array[String] = [
-	"Pick up a clipping (strike it with the Quill), then press V to paste it onto his cut line",
+	"Pick up a clipping (strike it with the Quill), then press {paste} to paste it onto his cut line",
 	"Strike him while his shears are jammed!",
 	"Hold up the lantern",
 ]
@@ -413,7 +413,7 @@ static func _scissor(text: String, cue: String = "") -> Dictionary:
 
 static func echo_grant() -> Array:
 	return [
-		line("", "The lantern remembers more than you do. Press R, walk somewhere, and press R again: a ghost of you will play it back and then stand where it ended.", "action"),
+		line("", "The lantern remembers more than you do. Press {echo}, walk somewhere, and press {echo} again: a ghost of you will play it back and then stand where it ended.", "action"),
 		line("", "A remembered you has weight. It can hold a plate down, and the curious are drawn to it. You can keep two.", "action"),
 	]
 
@@ -447,7 +447,7 @@ static func scissor_boss_intro() -> Array:
 		_scissor("Cut for pacing."),
 		_scissor("Cut for length. Cut for 'it doesn't serve the story.'"),
 		_scissor("Everything has a page count. Yours is up."),
-		line("", "Every cut leaves a clipping behind. Strike a clipping to pick it up, and press V to paste it back. Paper that has been patched, scissors will not cut.", "action"),
+		line("", "Every cut leaves a clipping behind. Strike a clipping to pick it up, and press {paste} to paste it back. Paper that has been patched, scissors will not cut.", "action"),
 	]
 
 static func scissor_finale() -> Array:

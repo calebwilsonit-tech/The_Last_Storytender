@@ -151,6 +151,7 @@ func _level_ready() -> void:
 	_hud.show_toolbar(true)
 	_busy = true
 	await _say(Story.maud_format_grant())
+	await _hud.tutorial("format")
 	_busy = false
 	_hud.narrate(Story.MAUD_INTRO, false, 4.0)
 

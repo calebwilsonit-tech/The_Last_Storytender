@@ -9,7 +9,8 @@ var _row := 0
 var _font: Font
 var _ital: Font
 var _bar_rects: Array[Rect2] = []
-var _rows := ["volume", "fullscreen", "shake", "dialogue", "log", "difficulty", "back"]
+var _rows := ["volume", "fullscreen", "shake", "dialogue", "tips", "log", "controls", "difficulty", "back"]
+var _controls: ControlsPanel
 
 const PANEL := Rect2(310, 80, 660, 560)
 
@@ -20,6 +21,9 @@ func _ready() -> void:
 	visible = false
 	_font = ThemeDB.get_default_theme().default_font
 	_ital = load("res://assets/fonts/IMFellEnglish-Italic.ttf")
+	_controls = ControlsPanel.new()
+	add_child(_controls)
+	_controls.closed.connect(queue_redraw)
 
 func open() -> void:
 	_row = 0
@@ -33,10 +37,10 @@ func close() -> void:
 
 func _row_y(i: int) -> float:
 	var extra := 22.0 if _rows[i] == "back" else 0.0   # a little air before Back
-	return PANEL.position.y + 130.0 + i * 56.0 + extra
+	return PANEL.position.y + 130.0 + i * 46.0 + extra
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not visible:
+	if not visible or _controls.visible:
 		return
 	if MenuInput.back(event):
 		get_viewport().set_input_as_handled()
@@ -66,6 +70,8 @@ func _adjust(dir: int) -> void:
 			Settings.dialogue_speed = clampi(Settings.dialogue_speed + dir, 0, 2)
 		"log":
 			Settings.playtest_log = not Settings.playtest_log
+		"tips":
+			Settings.tutorial_tips = not Settings.tutorial_tips
 	Settings.apply()
 	queue_redraw()
 
@@ -73,6 +79,8 @@ func _activate() -> void:
 	match _rows[_row]:
 		"back":
 			close()
+		"controls":
+			_controls.open()
 		"dialogue":
 			Settings.dialogue_speed = (Settings.dialogue_speed + 1) % 3
 			Settings.apply()
@@ -133,7 +141,9 @@ func _draw_row(i: int) -> void:
 		"fullscreen": label = "Fullscreen"
 		"shake": label = "Screen shake"
 		"dialogue": label = "Dialogue speed"
+		"tips": label = "Tutorial tips"
 		"log": label = "Playtest log (F10 saves a report)"
+		"controls": label = "Controls (keyboard, mouse, controller)"
 		"difficulty": label = "Difficulty"
 		"back": label = "Back"
 	draw_string(_font, Vector2(x0 + 12.0, y), label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 24, Palette.INK)
@@ -151,6 +161,10 @@ func _draw_row(i: int) -> void:
 			_pill(vx, y, _toggle_text(Settings.screen_shake), Settings.screen_shake)
 		"log":
 			_pill(vx, y, _toggle_text(Settings.playtest_log), Settings.playtest_log)
+		"tips":
+			_pill(vx, y, _toggle_text(Settings.tutorial_tips), Settings.tutorial_tips)
+		"controls":
+			draw_string(_font, Vector2(vx, y), "Open  ▸", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 22, Palette.INK_BROWN)
 		"dialogue":
 			var names := ["Slow", "Normal", "Fast"]
 			draw_string(_font, Vector2(vx, y), "◂  %s  ▸" % names[Settings.dialogue_speed], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 22, Palette.INK)

@@ -140,7 +140,10 @@ func _level_ready() -> void:
 	_hud.narrate(Story.MEMORY_INTRO, false, 4.0)
 	await get_tree().create_timer(3.5).timeout
 	_busy = true
-	await _say(Story.echo_grant())
+	if Settings.tutorial_tips:
+		await _hud.tutorial("echo")
+	else:
+		await _say(Story.echo_grant())
 	_busy = false
 
 func _room_for(cell: Vector2i) -> int:
@@ -336,7 +339,7 @@ func _toggle_echo() -> void:
 	_recording = e
 	e.recorded.connect(_on_echo_recorded)
 	e.discarded.connect(func(_x): _recording = null)
-	_hud.toast("Remembering... walk, then press R again.")
+	_hud.toast("Remembering... walk, then press {echo} again.")
 	Telemetry.log_event("puzzle", {"p": "echo_start"})
 
 func _on_echo_recorded(e: Echo) -> void:

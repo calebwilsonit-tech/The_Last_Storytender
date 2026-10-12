@@ -122,7 +122,7 @@ func _on_picked(c: Clipping) -> void:
 	if not is_instance_valid(c) or not _clippings.has(c):
 		return
 	if not _held.is_empty():
-		_hud.toast("Your clipboard is full. Paste it first (V).")
+		_hud.toast("Your clipboard is full. Paste it first ({paste}).")
 		return
 	_held.assign(c.shape)
 	_clippings.erase(c)
@@ -198,6 +198,7 @@ func _start_fight() -> void:
 	_started = true
 	_busy = true
 	await _say(Story.scissor_boss_intro())
+	await _hud.tutorial("paste")
 	_hud.set_boss("The Scissor-Man", 1.0)
 	_hud.set_objective(Story.SCISSOR_OBJECTIVES[0])
 	_snip_cd = 5.0

@@ -147,7 +147,11 @@ func _physics_process(delta: float) -> void:
 func _update_aim() -> void:
 	var body := global_position + Vector2(0, -elev - 20.0)
 	var d := get_global_mouse_position() - body
-	if _mouse_idle < 3.0 and d.length() > 4.0:
+	var stick := Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
+	if stick.length() > 0.35:
+		aim = stick.normalized()    # right stick aims
+		_mouse_idle = 99.0
+	elif _mouse_idle < 3.0 and d.length() > 4.0:
 		aim = d.normalized()
 	else:
 		aim = _last_dir

@@ -108,7 +108,7 @@ func _show_line(l: Dictionary) -> void:
 	_tab_style.bg_color = l.get("tint", Palette.INK_BROWN)
 	_name_tab.visible = who != ""
 	_name_label.text = who
-	var body: String = l["text"]
+	var body: String = InputSetup.fmt(l["text"])
 	match style:
 		"action":
 			body = "[i]%s[/i]" % body

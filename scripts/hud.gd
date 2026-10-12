@@ -15,10 +15,10 @@ var _quick_icon: ItemIcon
 var _quick_label: Label
 var _mnemo: Label
 var _region: Label
-var _prompt: Label
+var _prompt: PromptTag
+var _tutorial_card: TutorialCard
 var _toast: Label
 var _narr: RichTextLabel
-var _help: Label
 var _narr_tween: Tween
 var _toast_tween: Tween
 var _region_tween: Tween
@@ -56,10 +56,10 @@ func _ready() -> void:
 	_region.position = Vector2(1240, 18)
 	_region.modulate.a = 0.0
 
-	_prompt = _label(24, Palette.INK)
-	_prompt.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	_prompt.position = Vector2(540, 520)
-	_prompt.visible = false
+	_prompt = PromptTag.new()
+	_prompt.position = Vector2(240, 496)
+	_prompt.size = Vector2(800, 56)
+	add_child(_prompt)
 
 	_toast = _label(28, Palette.INK_BROWN)
 	_toast.position = Vector2(440, 130)
@@ -107,9 +107,8 @@ func _ready() -> void:
 	_debuff.position = Vector2(440, 200)
 	_debuff.modulate.a = 0.0
 
-	_help = _label(15, Color(Palette.INK_BROWN, 0.7))
-	_help.text = "WASD move  ·  E speak / take  ·  Hold Q or right mouse: Lantern  ·  Shift: dash"
-	_help.position = Vector2(20, 690)
+	_tutorial_card = TutorialCard.new()
+	add_child(_tutorial_card)
 
 func _label(size: int, col: Color) -> Label:
 	var l := Label.new()
@@ -128,15 +127,24 @@ func set_ink(cur: float, mx: float) -> void:
 func set_lantern(cur: float, mx: float) -> void:
 	gauge.set_energy(cur, mx)
 
-func set_controls(armed: bool) -> void:
-	_help.text = "WASD move  ·  E speak / take  ·  Hold Q or right mouse: Lantern" + ("  ·  Click / J: Quill  ·  Shift: dash  ·  Ctrl/C: creep  ·  Tab: binder  ·  F: use item" if armed else "  ·  Shift: dash  ·  Tab: binder")
+## Controls are taught by tutorial cards the first time something unlocks, not by an
+## always-on bar. (Kept so older call sites keep working.)
+func set_controls(_armed: bool) -> void:
+	pass
+
+## Shows the how-to card for a mechanic once per save. Awaitable.
+func tutorial(id: String) -> void:
+	var flag := "tut_" + id
+	if not Settings.tutorial_tips or GameState.has_flag(flag) or not Tutorials.CARDS.has(id):
+		return
+	GameState.set_flag(flag)
+	await _tutorial_card.show_card(Tutorials.CARDS[id])
 
 func set_mnemo(v: int) -> void:
 	_mnemo.text = "◆ %d" % v
 
 func set_prompt(text: String) -> void:
-	_prompt.visible = text != ""
-	_prompt.text = "[E]  " + text
+	_prompt.set_text(text)
 
 func set_region(text: String) -> void:
 	if text == _region_text:
@@ -153,6 +161,7 @@ func set_region(text: String) -> void:
 	_region_tween.tween_property(_region, "modulate:a", 0.0, 1.5)
 
 func toast(text: String) -> void:
+	text = InputSetup.fmt(text)
 	_toast.text = text
 	_toast.position.x = 640.0 - _toast.get_minimum_size().x * 0.5
 	if _toast_tween:
@@ -165,6 +174,7 @@ func toast(text: String) -> void:
 
 ## Narrator (warm, italic) or Silence (cold, small, whispered). Non-blocking.
 func narrate(text: String, silence: bool = false, hold: float = 4.0) -> void:
+	text = InputSetup.fmt(text)
 	var col := Palette.SILENCE if silence else (Palette.PAPER_LIGHT if _dark else Palette.INK_BROWN)
 	_narr.add_theme_color_override("default_color", col)
 	_narr.text = "[center][i]%s[/i][/center]" % text
@@ -178,6 +188,7 @@ func narrate(text: String, silence: bool = false, hold: float = 4.0) -> void:
 	await _narr_tween.finished
 
 func set_objective(text: String) -> void:
+	text = InputSetup.fmt(text)
 	_objective.visible = text != ""
 	_objective.text = text
 

@@ -129,6 +129,7 @@ func _level_ready() -> void:
 	_hud.set_region("The Last Page")
 	_hud.set_objective(Story.PIP_OBJECTIVES[0])
 	await get_tree().create_timer(2.4).timeout
+	await _hud.tutorial("rewrite")
 	_hud.narrate(Story.PIP_INTRO, false, 4.0)
 
 # --- Frame loop ---------------------------------------------------------------------------------

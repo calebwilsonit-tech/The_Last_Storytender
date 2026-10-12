@@ -10,6 +10,8 @@ func _init() -> void:
 	custom_minimum_size = Vector2(190, 56)
 
 func _ready() -> void:
+	InputSetup.device_changed.connect(func(_d): queue_redraw())
+	InputSetup.bindings_changed.connect(queue_redraw)
 	_font = ThemeDB.get_default_theme().default_font
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -38,4 +40,7 @@ func _draw() -> void:
 				draw_set_transform_matrix(Transform2D(Vector2(1, 0), Vector2(-0.35, 1), Vector2(r.position.x + 22, r.position.y + 36)))
 				draw_string(_font, Vector2.ZERO, glyph, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 32, col)
 				draw_set_transform_matrix(Transform2D.IDENTITY)
-		draw_string(_font, Vector2(r.position.x + 4, r.position.y + 14), styles[i][2], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color(Palette.INK, 0.55))
+		var key_text := InputSetup.action_text("style_" + styles[i][0])
+		if key_text.begins_with("D-pad"):
+			key_text = {"D-pad Left": "◄", "D-pad Up": "▲", "D-pad Right": "►"}.get(key_text, key_text)
+		draw_string(_font, Vector2(r.position.x + 4, r.position.y + 14), key_text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color(Palette.INK, 0.55))
