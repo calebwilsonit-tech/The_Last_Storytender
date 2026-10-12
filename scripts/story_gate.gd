@@ -31,6 +31,12 @@ func open() -> void:
 	_poly.set_deferred("disabled", true)
 	opened.emit()
 
+func close() -> void:
+	if not is_open:
+		return
+	is_open = false
+	_poly.set_deferred("disabled", false)
+
 func _process(delta: float) -> void:
 	_t += delta
 	_slide = move_toward(_slide, 1.0 if is_open else 0.0, delta / 1.2)

@@ -4,7 +4,8 @@ extends LevelBase
 ## quiet The Critic (his own doubt), and the First Sword is waiting on the anvil.
 
 const OVERWORLD := "res://scenes/main.tscn"
-const ARENA_X := 13
+const ARENA_X := 42
+const ROOM_GATES := [["g", ["a"]], ["h", ["b", "c"]], ["i", ["d"]]]
 
 var _critic: Critic
 var _shards: Array[Prop] = []
@@ -18,6 +19,14 @@ var _pools: Array[Dictionary] = []   # {cells, t, phase}
 var _pool_tick := 0.0
 var _slow_t := 0.0
 var _dim_t := 0.0
+var _plate_nodes: Dictionary = {}      # char -> EchoPlate
+var _gate_nodes: Dictionary = {}       # char -> StoryGate
+var _gate_open_seen := {}
+var _echoes: Array[Echo] = []
+var _recording: Echo
+var _guard_spawns: Array[Vector2i] = []
+var _looked := {}
+var _room_seen := {}
 
 # --- LevelBase hooks ---------------------------------------------------------------
 func _map_rows() -> Array[String]:
@@ -41,6 +50,32 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 		"P":
 			_floor.cells[cell] = "m"
 			_start = Iso.to_screen(Vector2(cell))
+			_map_start = _start
+		"a", "b", "c", "d":
+			_floor.cells[cell] = "m"
+			var plate := EchoPlate.new()
+			plate.floor_ref = _floor
+			plate.position = Iso.to_screen(Vector2(cell))
+			plate.elev = _lift_at(cell)
+			_actors.add_child(plate)
+			_plate_nodes[ch] = plate
+		"g", "h", "i":
+			_floor.cells[cell] = "m"
+			var gate := StoryGate.new()
+			gate.axis = Vector2(0, 1)
+			gate.length = 3.0
+			gate.label = "FORGOTTEN"
+			gate.position = Iso.to_screen(Vector2(cell))
+			_actors.add_child(gate)
+			_gate_nodes[ch] = gate
+		"f", "y", "z":
+			_floor.cells[cell] = "m"
+			var idx := "fyz".find(ch)
+			var fig := _add_prop(Prop.Kind.FIGURE, cell, false, 1 if ch == "f" else 0)
+			_register(fig, func(): return "" if _looked.has(idx) else "Look", func(): await _look(idx), 80.0)
+		"Q":
+			_floor.cells[cell] = "m"
+			_guard_spawns.append(cell)
 		"E":
 			_floor.cells[cell] = "m"
 			var portal := _add_prop(Prop.Kind.PORTAL, cell)
@@ -90,17 +125,40 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 	return true
 
 func _level_ready() -> void:
+	for plate: EchoPlate in _plate_nodes.values():
+		plate.player = _player
+	for c in _guard_spawns:
+		_add_enemy(Enemy.Kind.BARE, c)
 	_hud.set_dark(true)
 	_player.lantern_power = 1.7
 	_critic.target = _player
 	_critic.fired.connect(_on_critic_fired)
 	_critic.pool_requested.connect(_on_pool)
-	_hud.set_objective(Story.MEMORY_OBJECTIVE % 0)
+	_hud.set_objective(Story.FORGE_OBJECTIVES[0])
 	_hud.set_region("The Blacksmith's Regret")
 	await get_tree().create_timer(2.6).timeout
 	_hud.narrate(Story.MEMORY_INTRO, false, 4.0)
+	await get_tree().create_timer(3.5).timeout
+	_busy = true
+	await _say(Story.echo_grant())
+	_busy = false
+
+func _room_for(cell: Vector2i) -> int:
+	if cell.x <= 13:
+		return 0
+	if cell.x <= 27:
+		return 1
+	if cell.x <= 41:
+		return 2
+	return 3
 
 func _level_process(delta: float) -> void:
+	var room := _room_for(_floor.cell_at(_player.position))
+	if not _room_seen.has(room):
+		_room_seen[room] = true
+		if room > 0 and room < 3:
+			_hud.set_objective(Story.FORGE_OBJECTIVES[room])
+	_tick_gates()
 	# Stepping into the forge hall wakes The Critic.
 	if not _boss_started and _floor.cell_at(_player.position).x >= ARENA_X and not GameState.in_dialogue:
 		_start_boss()
@@ -248,12 +306,79 @@ func _clear_pools() -> void:
 	_pools.clear()
 
 func _room_name(cell: Vector2i) -> String:
-	return "The Forge" if cell.x >= ARENA_X else "Antechamber"
+	return ["The Cold Hearth", "The Apprentice's Bench", "The Night Watch", "The Forge"][_room_for(cell)]
 
 func _checkpoint_for(cell: Vector2i) -> Vector2:
-	return Iso.to_screen(Vector2(13, 12)) if cell.x >= ARENA_X else _map_start
+	match _room_for(cell):
+		0: return _map_start
+		1: return Iso.to_screen(Vector2(14, 11))
+		2: return Iso.to_screen(Vector2(28, 11))
+		_: return Iso.to_screen(Vector2(ARENA_X, 12))
+
+# --- Echoes: Garrick's memory verb ----------------------------------------------------------------------
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("echo") and not get_tree().paused and not GameState.in_dialogue and not _busy \
+			and not _player.is_falling and not _player.is_crumpled:
+		_toggle_echo()
+
+func _toggle_echo() -> void:
+	if is_instance_valid(_recording):
+		_recording.stop_record()
+		return
+	if _echoes.size() >= 2:
+		var old: Echo = _echoes.pop_front()
+		if is_instance_valid(old):
+			old.queue_free()
+	var e := Echo.new()
+	e.floor_ref = _floor
+	e.player = _player
+	_actors.add_child(e)
+	_recording = e
+	e.recorded.connect(_on_echo_recorded)
+	e.discarded.connect(func(_x): _recording = null)
+	_hud.toast("Remembering... walk, then press R again.")
+	Telemetry.log_event("puzzle", {"p": "echo_start"})
+
+func _on_echo_recorded(e: Echo) -> void:
+	_recording = null
+	_echoes.append(e)
+	_hud.toast("Remembered. It will play it back, and stay.")
+	Telemetry.log_event("puzzle", {"p": "echo_set", "n": _echoes.size()})
+
+func _clear_echoes() -> void:
+	for e in _echoes:
+		if is_instance_valid(e):
+			e.queue_free()
+	_echoes.clear()
+	if is_instance_valid(_recording):
+		_recording.queue_free()
+	_recording = null
+
+func _tick_gates() -> void:
+	for pair in ROOM_GATES:
+		var gk: String = pair[0]
+		if not _gate_nodes.has(gk):
+			continue
+		var gate: StoryGate = _gate_nodes[gk]
+		var want := true
+		for pk: String in pair[1]:
+			if not _plate_nodes.has(pk) or not (_plate_nodes[pk] as EchoPlate).pressed:
+				want = false
+		if want and not gate.is_open:
+			gate.open()
+			if not _gate_open_seen.has(gk):
+				_gate_open_seen[gk] = true
+				_hud.narrate(Story.FORGE_GATE_OPEN, false, 4.0)
+				Telemetry.log_event("puzzle", {"p": "echo_gate_" + gk})
+		elif not want and gate.is_open and _dist(_player.position, gate.position) > 90.0:
+			gate.close()
+
+func _look(idx: int) -> void:
+	_looked[idx] = true
+	await _say(Story.forge_look(idx))
 
 func _on_death_reset() -> void:
+	_clear_echoes()
 	_clear_bolts()
 	_clear_pools()
 	_slow_t = 0.0

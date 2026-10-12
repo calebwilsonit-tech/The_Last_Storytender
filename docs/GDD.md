@@ -257,7 +257,8 @@ Every NPC memory, and every boss, gets its **own signature mechanic**. Do not re
 ### Mechanic Registry
 | Owner | Signature mechanic | Notes |
 |---|---|---|
-| Garrick (memory + town tutorial) | Lantern / remembering, proofreading | Combat basics |
+| Garrick (town tutorial) | Lantern / proofreading | Combat basics |
+| Garrick's memory | **Echoes** (record a few seconds of yourself; the ghost replays and stays) | Holds plates, lures guards; Critic boss unchanged |
 | Pip | Rewrite (Quill changes a word in a sentence) | Spoiler boss |
 | Maud | Format marks (underline / bold / italic as physics), waiting, guest herding, cover | Guest boss |
 | Scissor-Man | Clipboard: cut, copy, paste, jam | Boss only |
@@ -265,3 +266,18 @@ Every NPC memory, and every boss, gets its **own signature mechanic**. Do not re
 
 ### Pool of unused mechanics (for future NPCs and towns)
 Fold / reorder pages; strike-through (cross out an obstacle, but it costs a word); footnote portals; unreliable narrator (dialogue hints lie in a pattern); undo / rewind; index sorting (alphabetical order puzzles); Lorem-ipsum cipher; tracing paper overlays; anagram doors; font-size / scale physics; highlighter colors; layered transparency; flipbook / timeline scrub.
+
+
+## 20. Garrick's Memory, Expanded: "The Blacksmith's Regret" (implemented v2.10)
+The memory is now four rooms (about 20-25 minutes) instead of one hall. The first three teach and use a new signature verb, **Echoes**, then the Critic boss is unchanged.
+
+**Echoes (key R).** Press R to start remembering, walk, press R again (or 9 s runs out). A cyan ghost appears at your start point, replays the walk, and then stands where the memory ended. You can keep **two**; a third recording replaces the oldest. An echo has weight (it presses Echo Plates) and the curious are drawn to it (idle or returning enemies within about 340 px with line of sight go and search around it). Dying clears all echoes.
+
+| Room | Idea |
+|---|---|
+| The Cold Hearth | One plate, one gate. Leave an echo on the plate, walk through. Wren asleep under a blanket of oven mitts (look). |
+| The Apprentice's Bench | Two plates, both far from the gate: one on a raised platform up a staircase, one past crates and plot holes. Needs both echoes at once. Bench of tools all named Gerald (look). |
+| The Night Watch | A Bare guard stands near the plate. Record an echo near the entrance to draw it away, then record a second echo to the plate. (Killing the guard also works.) The boy asleep on the watch (look). |
+| The Forge | The Critic fight, unchanged. |
+
+Gates are momentary: they stay open only while every plate is held (they will not close while you are standing in them). Remembered figures can be looked at (E) for short emotional beats, so the puzzle rooms carry story too.

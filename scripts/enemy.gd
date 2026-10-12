@@ -207,6 +207,16 @@ func _perceive(delta: float) -> bool:
 		_alert = maxf(_alert - 0.35 * delta, 0.0)
 	return rate > 0.0
 
+## A remembered Storytender standing nearby draws the curious to it.
+func _check_echo_lure() -> void:
+	for e: Node2D in get_tree().get_nodes_in_group("echoes"):
+		if e.get("lures") == true and _ground_to(e.position).length() < 340.0 \
+				and (floor_ref == null or floor_ref.has_los(position, e.position)):
+			_last_seen = e.position
+			_state = "search"
+			_look_t = 3.0
+			return
+
 ## Wake the neighbours: when one Error notices you, the ones beside it do too.
 func _raise_alarm() -> void:
 	for e in get_tree().get_nodes_in_group("enemies"):
@@ -224,6 +234,8 @@ func _hostile_tick(delta: float, slow: float) -> void:
 	if asleep_t > 0.0 and _state != "hurt":
 		return
 	var sensed := _perceive(delta)
+	if _state in ["idle", "return"] and _alert < 1.0:
+		_check_echo_lure()
 	var dg := _ground_to(target.position) if target else Vector2(9999, 0)
 	var dist := dg.length()
 	var dirg := dg.normalized() if dist > 0.01 else Vector2.RIGHT

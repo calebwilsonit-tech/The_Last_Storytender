@@ -122,6 +122,12 @@ const MEMORY_SHARD_NARRATION: Array[String] = [
 ]
 const MEMORY_SWORD_NARRATION := "The memory lets go of you gently, the way a hand lets go of a hand."
 const MEMORY_OBJECTIVE := "Hold up the memories: %d / 3"
+const FORGE_OBJECTIVES: Array[String] = [
+	"The gate is cold and shut. Leave a memory of yourself standing on the plate (R).",
+	"Two plates, one of you. Remember twice.",
+	"The watch is awake. Give it something to look at.",
+]
+const FORGE_GATE_OPEN := "Someone is still standing there, in the past, holding the door."
 
 static func _y(text: String) -> Dictionary:
 	return line("Young Garrick", text, "speech", "", Palette.CYAN_DEEP)
@@ -404,6 +410,30 @@ const PUBLISHED := "Chapter One, published."
 
 static func _scissor(text: String, cue: String = "") -> Dictionary:
 	return line("The Scissor-Man", text, "speech", cue, Color("7a8499"))
+
+static func echo_grant() -> Array:
+	return [
+		line("", "The lantern remembers more than you do. Press R, walk somewhere, and press R again: a ghost of you will play it back and then stand where it ended.", "action"),
+		line("", "A remembered you has weight. It can hold a plate down, and the curious are drawn to it. You can keep two.", "action"),
+	]
+
+static func forge_look(idx: int) -> Array:
+	match idx:
+		0:
+			return [
+				line("", "A small girl asleep by the cold hearth, under a blanket made of oven mitts. She would not go to bed unless the forge was lit.", "action"),
+				line("", "'It's the only thing in the house that's awake,' she told him. He lit it every night after that, even when there was nothing to forge.", "action"),
+			]
+		1:
+			return [
+				line("", "Every tool on the bench has a name scratched into the handle. Hammer: Gerald. Tongs: Also Gerald. Chisel: He ran out of names around week three.", "action"),
+				line("", "Under the vise, a note in a child's writing: 'You are allowed to stop for today.' It is signed with a drawing of a very small sword.", "action"),
+			]
+		_:
+			return [
+				line("", "The night watch was meant to be a grown man with a lantern. It was a boy with a hammer and a stool, and he fell asleep every night at the third hour.", "action"),
+				line("", "Every night, someone put a blanket over him and told nobody. He never worked out who. He knew, though. He just never said.", "action"),
+			]
 
 static func scissor_rift_enter() -> Array:
 	return [
