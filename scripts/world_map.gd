@@ -194,6 +194,10 @@ func _gui_input(event: InputEvent) -> void:
 
 # --- Drawing --------------------------------------------------------------------------------------
 func _draw() -> void:
+	_draw_body()
+	MenuLegend.draw(self, [["move","move","Move"], ["confirm","confirm","Travel"], ["back","back","Close"]])
+
+func _draw_body() -> void:
 	draw_rect(Rect2(Vector2.ZERO, Vector2(1280, 720)), Color(0.02, 0.02, 0.05, 0.78))
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color("efe2c2")

@@ -43,7 +43,7 @@ func _process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if not _open:
 		return
-	if _t > 0.35 and (event.is_action_pressed("interact") or event.is_action_pressed("ui_cancel") or event.is_action_pressed("ui_accept")):
+	if _t > 0.35 and (event.is_action_pressed("interact") or MenuInput.back(event) or event.is_action_pressed("ui_accept")):
 		get_viewport().set_input_as_handled()
 		_open = false
 		visible = false
@@ -53,6 +53,10 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()   # nothing else reacts while the card is up
 
 func _draw() -> void:
+	_draw_body()
+	MenuLegend.draw(self, [["confirm","confirm","Got it"]])
+
+func _draw_body() -> void:
 	if not _open:
 		return
 	var a := clampf(_t / 0.25, 0.0, 1.0)

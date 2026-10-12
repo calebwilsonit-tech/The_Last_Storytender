@@ -87,7 +87,7 @@ func _selected() -> String:
 func _input(event: InputEvent) -> void:
 	if not visible:
 		return
-	if event.is_action_pressed("inventory") or event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("inventory") or MenuInput.back(event):
 		get_viewport().set_input_as_handled()
 		close()
 		return
@@ -186,6 +186,10 @@ func _wrap(s: String, pos: Vector2, width: float, size: int, col: Color, italic 
 	_view.draw_multiline_string(_ital if italic else _font, pos, s, HORIZONTAL_ALIGNMENT_LEFT, width, size, 4, col)
 
 func _paint() -> void:
+	_paint_body()
+	MenuLegend.draw(_view, [["move","move","Move"], ["confirm","confirm","Use / Equip"], ["t:Q","","Quick slot"], ["back","back","Close"]])
+
+func _paint_body() -> void:
 	_buttons.clear()
 	_slot_rects.clear()
 	var v := _view
@@ -213,7 +217,6 @@ func _paint() -> void:
 		v.draw_arc(Vector2(640, ry), 15.0, 0.0, TAU, 18, Color("9aa0ad"), 5.0, true)
 	_paint_left()
 	_paint_right()
-	_txt("Tab / Esc close   ·   WASD, arrows or mouse   ·   Enter use / equip   ·   Q set quick-use (F)", Vector2(90, 678), 16, Color("d8c8a8"))
 
 func _paint_left() -> void:
 	var ink := Palette.INK
@@ -249,10 +252,9 @@ func _paint_left() -> void:
 		"Lantern burn   %s     Ink regen   %.1f/s" % [_pct(GameState.equipped_stat("lantern_eff")), GameState.equipped_stat("regen")],
 	]
 	for i in lines.size():
-		_txt(lines[i], Vector2(108, 546 + i * 24), 18, Color(ink, 0.9))
+		_txt(lines[i], Vector2(108, 534 + i * 20), 17, Color(ink, 0.9))
 	# Difficulty is chosen at New Game and fixed for the save; shown here for reference.
-	_txt("Difficulty:  %s" % ("Story" if GameState.is_story() else "Normal"), Vector2(372, 570), 18, Color(Palette.INK, 0.7))
-	_txt("Layer 0 · The Sketch      Layer 2 · Bindings      Layer 4 · Tools", Vector2(108, 648), 14, Color(ink, 0.45), true)
+	_txt("Difficulty:  %s" % ("Story" if GameState.is_story() else "Normal"), Vector2(372, 534), 17, Color(Palette.INK, 0.7))
 
 func _pct(x: float) -> String:
 	if absf(x) < 0.001:

@@ -61,7 +61,7 @@ func _process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if not visible or game == null:
 		return
-	if event.is_action_pressed("ui_cancel"):
+	if MenuInput.back(event):
 		get_viewport().set_input_as_handled()
 		_close(false)
 		return
@@ -107,7 +107,7 @@ func _paint() -> void:
 		var bar := Rect2(panel.position.x + 50 + game.max_tries * 34, panel.end.y - 40, 280, 14)
 		_view.draw_rect(bar, Color(0, 0, 0, 0.2))
 		_view.draw_rect(Rect2(bar.position, Vector2(bar.size.x * f, bar.size.y)), Color("c9822b") if f > 0.25 else Color("b8402f"))
-	_view.draw_string(_head, panel.position + Vector2(panel.size.x - 160, panel.size.y - 22), "Esc: walk away", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 20, Palette.INK_BROWN)
+	MenuLegend.draw(_view, [["move", "move", "Move"], ["confirm", "confirm", "Confirm"], ["back", "back", "Walk away"]], vs)
 	var area := Rect2(panel.position + Vector2(30, 120), Vector2(panel.size.x - 60, panel.size.y - 190))
 	game.draw(_view, area, _font, _head)
 	if game.message != "":

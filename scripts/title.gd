@@ -105,6 +105,10 @@ func _on_chosen(id: String) -> void:
 			get_tree().quit()
 
 func _paint() -> void:
+	_paint_body()
+	MenuLegend.draw(_view, [["move","move","Move"], ["confirm","confirm","Select"]])
+
+func _paint_body() -> void:
 	var font := ThemeDB.get_default_theme().default_font
 	var ital := load("res://assets/fonts/IMFellEnglish-Italic.ttf") as Font
 	var ink := Palette.INK

@@ -119,6 +119,10 @@ func _toggle_text(on: bool) -> String:
 	return "ON" if on else "OFF"
 
 func _draw() -> void:
+	_draw_body()
+	MenuLegend.draw(self, [["move","move","Move"], ["t:A D","t:◄ ►","Change"], ["back","back","Back"]])
+
+func _draw_body() -> void:
 	draw_rect(Rect2(Vector2.ZERO, Vector2(1280, 720)), Color(0.02, 0.02, 0.05, 0.6))
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Palette.PAPER_LIGHT

@@ -46,4 +46,7 @@ static func accept(event: InputEvent) -> bool:
 	return event.is_action_pressed("interact") or event.is_action_pressed("ui_accept")
 
 static func back(event: InputEvent) -> bool:
+	# B / Circle backs out of menus. (In the world B is Dash, so only menus call this.)
+	if event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_B:
+		return true
 	return event.is_action_pressed("ui_cancel")

@@ -33,6 +33,10 @@ func _ready() -> void:
 	_settings.closed.connect(func(): _view.show())
 
 func _paint() -> void:
+	_paint_body()
+	MenuLegend.draw(_view, [["move","move","Move"], ["confirm","confirm","Select"], ["back","back","Resume"]])
+
+func _paint_body() -> void:
 	_view.draw_rect(Rect2(Vector2.ZERO, Vector2(1280, 720)), Color(0.02, 0.02, 0.05, 0.6))
 	var font := ThemeDB.get_default_theme().default_font
 	_view.draw_string(font, Vector2(480, 200), "Paused", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 64, Palette.PAPER_LIGHT)
