@@ -98,6 +98,10 @@ func _input(event: InputEvent) -> void:
 		_primary()
 	elif event is InputEventKey and event.pressed and event.keycode == KEY_Q:
 		_set_quick()
+	elif event.is_action_pressed("use_item"):
+		_set_quick()                       # on a controller: the use button files the item into the active slot
+	elif event.is_action_pressed("quick_switch"):
+		GameState.switch_quick()
 	else:
 		return
 	get_viewport().set_input_as_handled()
@@ -191,7 +195,7 @@ func _wrap(s: String, pos: Vector2, width: float, size: int, col: Color, italic 
 
 func _paint() -> void:
 	_paint_body()
-	MenuLegend.draw(_view, [["move","move","Move"], ["confirm","confirm","Use / Equip"], ["t:Q","","Quick slot"], ["back","back","Close"]])
+	MenuLegend.draw(_view, [["move","move","Move"], ["confirm","confirm","Use / Equip"], ["a:use_item","a:use_item","Set quick slot"], ["a:quick_switch","a:quick_switch","Swap slot"], ["back","back","Close"]])
 
 func _paint_body() -> void:
 	_buttons.clear()
@@ -326,8 +330,9 @@ func _card(i: int) -> void:
 	if GameState.is_equipped(id):
 		_view.draw_rect(Rect2(r.position + Vector2(4, r.size.y - 22), Vector2(46, 16)), Palette.GOLD)
 		_txt("WORN", r.position + Vector2(8, r.size.y - 9), 12, Palette.INK)
-	if GameState.quick_slot == id:
-		_txt("F", r.position + Vector2(r.size.x - 18, 40), 20, Palette.CRITIC_RED)
+	var qi := GameState.quick_slots.find(id)
+	if qi >= 0:
+		_txt(str(qi + 1), r.position + Vector2(r.size.x - 18, 40), 20, Palette.CRITIC_RED if qi == GameState.quick_active else Palette.INK_BROWN)
 
 func _details() -> void:
 	var id := _selected()
@@ -343,7 +348,7 @@ func _details() -> void:
 	var t: String = info["type"]
 	if t == "consumable":
 		x = _button(x, "Use", func(): _primary())
-		x = _button(x, "Set quick-use (F)", func(): _set_quick())
+		x = _button(x, "Set quick slot %d" % (GameState.quick_active + 1), func(): _set_quick())
 	elif t == "binding" or t == "amulet":
 		x = _button(x, "Unequip" if GameState.is_equipped(id) else "Equip", func(): _primary())
 

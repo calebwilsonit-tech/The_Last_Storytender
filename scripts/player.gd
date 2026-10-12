@@ -199,6 +199,9 @@ func _strike() -> void:
 	velocity += Vector2(aim_ground.x, aim_ground.y * 0.5) * (170.0 if finisher else 120.0)
 	attacked.emit()
 	var hit_any := false
+	var bolt: Node = null              # a swing can rewrite only ONE word out of the air: the nearest
+	var bolt_d := INF
+	var bolt_dir := Vector2.ZERO
 	for e in get_tree().get_nodes_in_group("hittables"):
 		if not is_instance_valid(e):
 			continue
@@ -210,7 +213,16 @@ func _strike() -> void:
 			continue
 		if not _same_floor(e):
 			continue
+		if e.is_in_group("bolts"):
+			if dg.length() < bolt_d:
+				bolt = e
+				bolt_d = dg.length()
+				bolt_dir = dg.normalized()
+			continue
 		e.hurt(dmg, dg.normalized())
+		hit_any = true
+	if bolt != null:
+		bolt.hurt(dmg, bolt_dir)
 		hit_any = true
 	if hit_any:
 		hit_landed.emit()

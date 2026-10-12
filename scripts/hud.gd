@@ -13,6 +13,9 @@ var _clip_view: Control
 var _clip_shape: Array = []
 var _quick_icon: ItemIcon
 var _quick_label: Label
+var _quick_icon2: ItemIcon       # the other quick slot, dimmed, one press of the swap button away
+var _quick_label2: Label
+var _quick_hint: Label
 var _mnemo: Label
 var _renown: Label
 var _region: Label
@@ -101,7 +104,18 @@ func _ready() -> void:
 	add_child(_quick_icon)
 	_quick_label = _label(20, Palette.INK_BROWN)
 	_quick_label.position = Vector2(1150, 690)
-	set_quickslot("")
+	_quick_icon2 = ItemIcon.new()
+	_quick_icon2.position = Vector2(1112, 656)
+	_quick_icon2.custom_minimum_size = Vector2(52, 52)
+	_quick_icon2.size = Vector2(52, 52)
+	_quick_icon2.modulate = Color(1, 1, 1, 0.6)
+	add_child(_quick_icon2)
+	_quick_label2 = _label(16, Palette.INK_BROWN)
+	_quick_label2.position = Vector2(1118, 702)
+	_quick_hint = _label(16, Palette.INK_BROWN)
+	_quick_hint.position = Vector2(1112, 620)
+	InputSetup.device_changed.connect(func(_d: String): refresh_quick())
+	refresh_quick()
 
 	_objective = _label(22, Palette.INK_BROWN)
 	_objective.position = Vector2(104, 92)
@@ -228,13 +242,23 @@ func set_dark(on: bool) -> void:
 	_narr.add_theme_color_override("font_outline_color", halo)
 	_mnemo.add_theme_color_override("font_color", Palette.GOLD.lightened(0.2))
 
-## Quick-use slot (F). Shows the item and how many remain.
-func set_quickslot(id: String) -> void:
+## The two quick-use slots. The use button fires the bright one; the swap button trades them. The button
+## names follow whichever device you touched last (keyboard or controller).
+func refresh_quick() -> void:
+	var id := GameState.quick_slot
+	var other := GameState.quick_other()
 	_quick_icon.set_item(id, 46.0)
 	_quick_icon.visible = id != ""
 	_quick_label.visible = id != ""
 	if id != "":
-		_quick_label.text = "F   ×%d" % GameState.count(id)
+		_quick_label.text = "%s   ×%d" % [InputSetup.action_text("use_item"), GameState.count(id)]
+	_quick_icon2.set_item(other, 32.0)
+	_quick_icon2.visible = other != ""
+	_quick_label2.visible = other != ""
+	if other != "":
+		_quick_label2.text = "×%d" % GameState.count(other)
+	_quick_hint.visible = id != "" or other != ""
+	_quick_hint.text = "%s  swap" % InputSetup.action_text("quick_switch")
 
 ## The Format mark's toolbar appears once the Quill has learned it.
 func show_toolbar(on: bool) -> void:

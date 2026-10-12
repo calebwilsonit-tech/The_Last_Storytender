@@ -476,7 +476,7 @@ func camera_shake(duration: float = 0.4, mag: float = 6.0) -> void:
 
 # --- Items ---------------------------------------------------------------------------------
 func _on_inventory_changed() -> void:
-	_hud.set_quickslot(GameState.quick_slot)
+	_hud.refresh_quick()
 
 func _give_item(id: String, n: int = 1) -> void:
 	GameState.add_item(id, n)
@@ -812,6 +812,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("use_item"):
 		use_item(GameState.quick_slot)
+		return
+	if event.is_action_pressed("quick_switch") and not GameState.in_dialogue:
+		GameState.switch_quick()
 		return
 	if not event.is_action_pressed("interact") or _busy or GameState.in_dialogue:
 		return

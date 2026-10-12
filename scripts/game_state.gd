@@ -80,7 +80,25 @@ func attr_stat(key: String) -> float:
 # --- Inventory -------------------------------------------------------------------------
 var inventory: Dictionary = {}                     # item id -> count
 var equipment: Dictionary = {"binding": "", "amulet": ""}
-var quick_slot := ""                               # consumable bound to the F key
+var quick_slots: Array = ["", ""]                  # two consumables share the use button; one is active
+var quick_active := 0
+## The consumable the use button fires right now (the active slot). Setting it fills the active slot.
+var quick_slot: String:
+	get:
+		return str(quick_slots[quick_active])
+	set(v):
+		quick_slots[quick_active] = v
+		for i in 2:
+			if i != quick_active and v != "" and quick_slots[i] == v:
+				quick_slots[i] = ""
+
+func quick_other() -> String:
+	return str(quick_slots[1 - quick_active])
+
+func switch_quick() -> void:
+	quick_active = 1 - quick_active
+	inventory_changed.emit()
+	save_game()
 var format_style := "underline"                    # selected Quill style: underline | bold | italic
 var difficulty := "normal"                        # "story" (gentle) or "normal"
 
@@ -226,8 +244,11 @@ func count(id: String) -> int:
 
 func add_item(id: String, n: int = 1) -> void:
 	inventory[id] = count(id) + n
-	if ItemDB.info(id)["type"] == "consumable" and quick_slot == "":
-		quick_slot = id
+	if ItemDB.info(id)["type"] == "consumable" and not quick_slots.has(id):
+		if quick_slots[quick_active] == "":
+			quick_slots[quick_active] = id
+		elif quick_slots[1 - quick_active] == "":
+			quick_slots[1 - quick_active] = id
 	inventory_changed.emit()
 	save_game()
 
@@ -237,8 +258,9 @@ func remove_item(id: String, n: int = 1) -> bool:
 	inventory[id] = count(id) - n
 	if inventory[id] <= 0:
 		inventory.erase(id)
-		if quick_slot == id:
-			quick_slot = ""
+		for i in 2:
+			if quick_slots[i] == id:
+				quick_slots[i] = ""
 		# Gear stays equipped even though it leaves the grid; only consumables are consumed.
 	inventory_changed.emit()
 	save_game()
@@ -273,7 +295,7 @@ func save_game() -> void:
 		return
 	var data := {
 		"v": 2, "renown": renown, "mnemosynth": mnemosynth, "ink": ink, "flags": flags.keys(),
-		"inventory": inventory, "equipment": equipment, "quick_slot": quick_slot,
+		"inventory": inventory, "equipment": equipment, "quick_slots": quick_slots, "quick_active": quick_active,
 		"sources": sources.map(func(src): return {"id": src["id"], "x": src["origin"].x, "y": src["origin"].y, "r": src["radius"]}),
 		"town_published": town_published, "difficulty": difficulty,
 		"spawn": [spawn_cell.x, spawn_cell.y], "attrs": attrs, "free_points": free_points,
@@ -300,7 +322,14 @@ func load_game() -> bool:
 		inventory[str(k)] = int(data["inventory"][k])
 	var eq: Dictionary = data.get("equipment", {})
 	equipment = {"binding": str(eq.get("binding", "")), "amulet": str(eq.get("amulet", ""))}
-	quick_slot = str(data.get("quick_slot", ""))
+	quick_slots = ["", ""]
+	if data.has("quick_slots"):
+		var qs: Array = data["quick_slots"]
+		for i in mini(qs.size(), 2):
+			quick_slots[i] = str(qs[i])
+	else:
+		quick_slots[0] = str(data.get("quick_slot", ""))      # older saves had one slot
+	quick_active = clampi(int(data.get("quick_active", 0)), 0, 1)
 	sources.clear()
 	for sd in data.get("sources", []):
 		sources.append({"id": str(sd["id"]), "origin": Vector2(float(sd["x"]), float(sd["y"])), "radius": float(sd["r"])})
@@ -342,7 +371,8 @@ func reset_all() -> void:
 	equipment = {"binding": "", "amulet": ""}
 	attrs = {"ink": 0, "grit": 0, "pen": 0, "wit": 0, "foot": 0, "luck": 0}
 	free_points = 0
-	quick_slot = ""
+	quick_slots = ["", ""]
+	quick_active = 0
 	sources.clear()
 	town_published = false
 	spawn_cell = Vector2i(-1, -1)

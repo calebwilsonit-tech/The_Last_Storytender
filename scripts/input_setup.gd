@@ -43,6 +43,7 @@ func _build_defs() -> void:
 		{"id": "sneak", "label": "Creep (hold)", "kb": K(KEY_CTRL), "kb_alt": [K(KEY_C)], "pad": B(JOY_BUTTON_LEFT_STICK), "pad_alt": []},
 		{"id": "inventory", "label": "Binder", "kb": K(KEY_TAB), "kb_alt": [K(KEY_I)], "pad": B(JOY_BUTTON_BACK), "pad_alt": []},
 		{"id": "use_item", "label": "Use quick item", "kb": K(KEY_F), "kb_alt": [], "pad": B(JOY_BUTTON_Y), "pad_alt": []},
+		{"id": "quick_switch", "label": "Switch quick item", "kb": K(KEY_G), "kb_alt": [], "pad": B(JOY_BUTTON_RIGHT_STICK), "pad_alt": []},
 		{"id": "style_underline", "label": "Underline style", "kb": K(KEY_1), "kb_alt": [], "pad": B(JOY_BUTTON_DPAD_LEFT), "pad_alt": []},
 		{"id": "style_bold", "label": "Bold style", "kb": K(KEY_2), "kb_alt": [], "pad": B(JOY_BUTTON_DPAD_UP), "pad_alt": []},
 		{"id": "style_italic", "label": "Italic style", "kb": K(KEY_3), "kb_alt": [], "pad": B(JOY_BUTTON_DPAD_RIGHT), "pad_alt": []},
