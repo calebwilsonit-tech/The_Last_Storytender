@@ -66,11 +66,11 @@ func restored_for(id: String, pos: Vector2) -> float:
 			return _source_value(src, pos)
 	return 0.0
 
-func start_restoration(id: String, origin: Vector2) -> void:
+func start_restoration(id: String, origin: Vector2, radius: float = SOURCE_RADIUS) -> void:
 	var src := {"id": id, "origin": origin, "radius": 1.0}
 	sources.append(src)
 	set_flag("restored_" + id)
-	var target := SOURCE_RADIUS + WAVE_SOFT_EDGE
+	var target := radius + WAVE_SOFT_EDGE
 	var tw := create_tween()
 	tw.tween_method(func(v: float): src["radius"] = v, 1.0, target, RESTORE_DURATION).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
 	await tw.finished

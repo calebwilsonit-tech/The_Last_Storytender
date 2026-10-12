@@ -45,6 +45,10 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 	var r := _restoration(cell, kind)
 	var line_col := Palette.PENCIL.lerp(Palette.INK_BROWN, r)
 	var checker := (cell.x + cell.y) % 2 == 0
+	if kind == "c":
+		_draw_mat(cell, d, checker)
+		_draw_mark(cell, z)
+		return
 	if kind == "w":
 		_draw_wood(cell, d, checker)
 		_draw_mark(cell, z)
@@ -80,6 +84,20 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 		_draw_grass(cell, c)
 	elif r > 0.4:
 		_draw_flowers(cell, c, r)
+
+# The Cutting Room: a green self-healing cutting mat with white grid lines and ruler ticks.
+func _draw_mat(cell: Vector2i, d: PackedVector2Array, checker: bool) -> void:
+	draw_colored_polygon(d, Color("2f6b50") if checker else Color("2a6049"))
+	var loop := d.duplicate()
+	loop.append(d[0])
+	draw_polyline(loop, Color(1, 1, 1, 0.38), 1.6, true)
+	var m1 := d[0].lerp(d[3], 0.5)
+	var m2 := d[1].lerp(d[2], 0.5)
+	draw_line(m1.lerp(m2, 0.42), m1.lerp(m2, 0.58), Color(1, 1, 1, 0.22), 1.2)
+	for k in 3:
+		var tt := 0.2 + k * 0.3
+		var a := d[0].lerp(d[1], tt)
+		draw_line(a, a.lerp(d[3].lerp(d[2], tt), 0.1), Color(1, 1, 1, 0.3), 1.2)
 
 # Maud's kitchen: warm wooden floorboards with a dusting of flour.
 func _draw_wood(cell: Vector2i, d: PackedVector2Array, checker: bool) -> void:
@@ -127,6 +145,32 @@ func _draw_mark(cell: Vector2i, z: float) -> void:
 		for seg in [[Vector2(-14, -3), Vector2(-2, 2)], [Vector2(-2, 2), Vector2(8, -4)], [Vector2(8, -4), Vector2(15, 3)], [Vector2(-2, 2), Vector2(2, 9)]]:
 			draw_line(c + seg[0], c + seg[1], Color("ff5a3c", a), 2.4)
 		draw_colored_polygon(_quad(cell, z), Color(1.0, 0.35, 0.2, 0.10 + 0.08 * sin(t * 12.0)))
+	elif m["kind"] == "cut":
+		# A telegraphed cut line: red dashes marching across the tile.
+		var a2 := 0.55 + 0.35 * sin(t * 14.0)
+		var q := _quad(cell, z)
+		draw_colored_polygon(q, Color(1.0, 0.2, 0.2, 0.16 * a2))
+		for i in 4:
+			var u := float(i) / 4.0 + fmod(t * 0.9, 0.25)
+			var p0: Vector2 = q[3].lerp(q[0], 0.5).lerp(q[2].lerp(q[1], 0.5), u)
+			draw_line(p0, p0 + (q[2].lerp(q[1], 0.5) - q[3].lerp(q[0], 0.5)) * 0.12, Color("ff5a4a", a2), 3.0)
+	elif m["kind"] == "patch":
+		# A taped paper patch laid over the tile: it will not be cut.
+		var q2 := _quad(cell, z)
+		var ctr := _p(Vector2(cell), z)
+		var inner := PackedVector2Array()
+		for pt in q2:
+			inner.append(ctr + (pt - ctr) * 0.82)
+		var fade := 1.0
+		if m.has("ttl"):
+			fade = clampf(float(m["ttl"]) / 3.0, 0.25, 1.0) if float(m["ttl"]) < 3.0 and int(t * 8.0) % 2 == 0 else 1.0
+		draw_colored_polygon(inner, Color(Palette.PAGE, 0.95 * fade))
+		var il := inner.duplicate()
+		il.append(inner[0])
+		draw_polyline(il, Color(Palette.OUTLINE, 0.8 * fade), 2.0, true)
+		draw_line(inner[0].lerp(inner[2], 0.1), inner[0].lerp(inner[2], 0.9), Color(Palette.CRITIC_RED, 0.55 * fade), 1.6)
+		for tp in [inner[0], inner[2]]:
+			draw_circle(tp, 4.0, Color("e8c860", 0.8 * fade))
 	elif m["kind"] == "wipe":
 		draw_colored_polygon(_quad(cell, z), Color(1, 1, 1, 0.55 + 0.25 * sin(t * 30.0)))
 	elif m["kind"] == "ink":
@@ -193,7 +237,7 @@ func _cliff(a: Vector2, b: Vector2, depth: float, kind: String, side: int, void_
 	var q := PackedVector2Array([a, b, b + Vector2(0, depth), a + Vector2(0, depth)])
 	var base := Color(0.93, 0.86, 0.68)             # stacked pages at the world's edge
 	if not void_edge:
-		base = Color("a98458") if kind == "." else (Color("34415a") if kind == "m" else (Color("e8d9b4") if kind == "p" or kind == "b" else (Color("9a6c3c") if kind == "w" else Color("cbb28a"))))
+		base = Color("a98458") if kind == "." else (Color("34415a") if kind == "m" else (Color("e8d9b4") if kind == "p" or kind == "b" else (Color("9a6c3c") if kind == "w" else (Color("1f4a38") if kind == "c" else Color("cbb28a")))))
 	if side == 1:
 		base = base.darkened(0.18)
 	if kind == "," and not void_edge:

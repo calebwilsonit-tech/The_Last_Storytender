@@ -12,7 +12,7 @@ and meet the placeholder blacksmith. Touch the **frozen flame** in his forge to 
 Blacksmith's Regret**. Hold up three memories to the Lantern to quiet **The Critic** (his own inner voice,
 made of red ink), take the **First Sword**, and bring it back to restore the town.
 
-Controls: **WASD** move · **E / Space / Enter** speak, take, advance dialogue · **Click / J** Quill (after Garrick's lesson) · **Shift** dash · **Hold Q / right mouse** Lantern · **Tab / I** binder · **F** quick-use item · **Ctrl / C** creep · **1 / 2 / 3** Quill styles (Maud's memory) · **Esc** pause / settings · **F10** save the playtest report · **F1** test damage, **F2** heal, **F12** wipe save.
+Controls: **WASD** move · **E / Space / Enter** speak, take, advance dialogue · **Click / J** Quill (after Garrick's lesson) · **Shift** dash · **Hold Q / right mouse** Lantern · **Tab / I** binder · **F** quick-use item · **Ctrl / C** creep · **V** paste (Scissor-Man fight) · **1 / 2 / 3** Quill styles (Maud's memory) · **Esc** pause / settings · **F10** save the playtest report · **F1** test damage, **F2** heal, **F12** wipe save.
 
 What's in:
 - Isometric 2:1 world with **elevation**: height levels, stairs, solid cliff edges, stacked-paper page edges, depth-sorted so tall terraces hide what's behind them. Maps are text (`data/*.gd`).
@@ -23,6 +23,7 @@ What's in:
 - **Inventory:** a binder UI (Tab) with a paper-doll that shows equipped Bindings and amulet, a card catalog of items, quick-use, Eraser Crumbs bombs, Ink Vials, and **autosave**. See GDD section 13.
 - **Pip's memory ("The Last Page")**: a pop-up storybook with a rewriting mechanic (Quill changes the word in a sentence), four rooms, and The Spoiler boss that announces the future and lets you rewrite it. Restoration is per-NPC. See GDD section 14.
 - **Stealth:** enemies have vision cones, hearing and line of sight; creep (Ctrl/C), sneak attacks, search behavior. **Maud's memory ("The Empty Table")** introduces the Format mark: keys 1/2/3 pick Underline / Bold / Italic and typography acts as physics (bridges, pressure plates, sliding blocks, dough that must be waited for), with a boss about seating guests between waves of cold. See GDD section 18.
+- **The Scissor-Man (Thistledown's Editor, "Cut Content")**: once Garrick, Pip and Maud are restored a tear opens in the square. The fight's verb is the Clipboard: he cuts holes in the page, you pick up what he cut and paste it as a patch, and his shears jam on a patch so you can hit him. Rewards the Thimble. See GDD section 19.
 - **Difficulty:** Normal / Story, a real death cost in Normal, a tuned Critic (leads shots, ink pools) and Spoiler, and a **playtest log** (F10). See GDD section 15.
 - Plot holes (fall = lose ink, respawn safely), crumple/smooth-out recovery, typewriter dialogue with clacks, Narrator and Silence text.
 - All story text in `scripts/story.gd`. Design: `docs/GDD.md`. Art direction and your reference sheets: `docs/ART_DIRECTION.md`, `docs/art_reference/`.

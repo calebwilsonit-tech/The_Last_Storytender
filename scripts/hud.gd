@@ -6,6 +6,11 @@ extends CanvasLayer
 var bottle: InkBottle
 var gauge: LanternGauge
 var _toolbar: StyleToolbar
+var _boss_view: Control
+var _boss_name := ""
+var _boss_frac := 0.0
+var _clip_view: Control
+var _clip_shape: Array = []
 var _quick_icon: ItemIcon
 var _quick_label: Label
 var _mnemo: Label
@@ -73,6 +78,12 @@ func _ready() -> void:
 	_narr.add_theme_color_override("font_outline_color", Color(Palette.PAPER_LIGHT, 0.85))
 	_narr.add_theme_constant_override("outline_size", 8)
 	add_child(_narr)
+
+	_boss_view = Control.new()
+	_boss_view.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_boss_view.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_boss_view.draw.connect(_paint_overlays)
+	add_child(_boss_view)
 
 	_toolbar = StyleToolbar.new()
 	_toolbar.position = Vector2(104, 112)
@@ -212,3 +223,33 @@ func show_toolbar(on: bool) -> void:
 
 func set_style(s: String) -> void:
 	_toolbar.set_style(s)
+
+## Boss health bar across the top (hidden when name is empty).
+func set_boss(boss_name: String, fraction: float) -> void:
+	_boss_name = boss_name
+	_boss_frac = clampf(fraction, 0.0, 1.0)
+	_boss_view.queue_redraw()
+
+## The clipboard: the shape you are carrying (empty array = nothing held).
+func set_clipboard(shape: Array) -> void:
+	_clip_shape = shape
+	_boss_view.queue_redraw()
+
+func _paint_overlays() -> void:
+	var font := ThemeDB.get_default_theme().default_font
+	if _boss_name != "":
+		var r := Rect2(340, 66, 600, 16)
+		_boss_view.draw_rect(r.grow(4.0), Color(0, 0, 0, 0.45))
+		_boss_view.draw_rect(Rect2(r.position, Vector2(r.size.x * _boss_frac, r.size.y)), Palette.CRITIC_RED)
+		_boss_view.draw_rect(r, Palette.OUTLINE, false, 2.4)
+		_boss_view.draw_string(font, Vector2(340, 56), _boss_name, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 26, Palette.PAPER_LIGHT)
+	if not _clip_shape.is_empty():
+		var base := Vector2(1130, 560)
+		_boss_view.draw_rect(Rect2(base + Vector2(-20, -34), Vector2(130, 112)), Color(0, 0, 0, 0.4))
+		_boss_view.draw_rect(Rect2(base + Vector2(-20, -34), Vector2(130, 112)), Palette.PAPER_LIGHT, false, 3.0)
+		_boss_view.draw_string(font, base + Vector2(-8, -12), "Clipboard", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 20, Palette.PAPER_LIGHT)
+		for o in _clip_shape:
+			var tl: Vector2 = base + Vector2(10 + o.x * 24, 8 + o.y * 24)
+			_boss_view.draw_rect(Rect2(tl, Vector2(22, 22)), Palette.PAGE)
+			_boss_view.draw_rect(Rect2(tl, Vector2(22, 22)), Palette.OUTLINE, false, 2.0)
+		_boss_view.draw_string(font, base + Vector2(-8, 72), "V: paste", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 20, Palette.GOLD)

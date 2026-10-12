@@ -71,6 +71,12 @@ static func draw_item(ci: CanvasItem, id: String, c: Vector2, sz: float) -> void
 			_o(ci, PackedVector2Array([c + Vector2(-12, -14) * u, c + Vector2(10, -16) * u, c + Vector2(13, -4) * u, c + Vector2(9, 4) * u, c + Vector2(12, 14) * u, c + Vector2(-13, 15) * u]), Color("f4ecd6"))
 			for i in 4:
 				ci.draw_line(c + Vector2(-8, -8 + i * 5) * u, c + Vector2(8 - i * 2, -8 + i * 5) * u, Color(Palette.INK, 0.55), 1.4)
+		"thimble":
+			_o(ci, PackedVector2Array([c + Vector2(-9, -2) * u, c + Vector2(-6, -12) * u, c + Vector2(6, -12) * u, c + Vector2(9, -2) * u, c + Vector2(11, 12) * u, c + Vector2(-11, 12) * u]), Color("c9ced8"))
+			for i in 3:
+				for j in 2:
+					ci.draw_circle(c + Vector2(-5 + i * 5, -6 + j * 7) * u, 1.3 * u, Color("5a6070"))
+			ci.draw_line(c + Vector2(-11, 12) * u, c + Vector2(11, 12) * u, Palette.OUTLINE, 2.4 * u)
 		"bookmark":
 			_o(ci, PackedVector2Array([c + Vector2(-6, -16) * u, c + Vector2(6, -16) * u, c + Vector2(6, 14) * u, c + Vector2(0, 8) * u, c + Vector2(-6, 14) * u]), Palette.CRITIC_RED.lightened(0.15))
 			ci.draw_line(c + Vector2(0, -14) * u, c + Vector2(0, 4) * u, Color(1, 1, 1, 0.3), 1.6)

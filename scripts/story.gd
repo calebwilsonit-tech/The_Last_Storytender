@@ -385,3 +385,49 @@ static func maud_restoration() -> Array:
 		_maud("Here. Take these. A loaf is for carrying to someone who needs it. That's the only rule I've ever had."),
 		line("", "She is already kneading something. The smell of bread spreads out across the square like a held breath let go.", "action", "restore_maud"),
 	]
+
+# ---- The Scissor-Man ("Cut Content"): Thistledown's Editor --------------------------------
+const RIFT_NARRATION := "With the last of them remembered, something in the sky begins to cut. A seam opens in the middle of the square."
+const SCISSOR_OBJECTIVES: Array[String] = [
+	"Pick up a clipping (strike it with the Quill), then press V to paste it onto his cut line",
+	"Strike him while his shears are jammed!",
+	"Hold up the lantern",
+]
+const SCISSOR_FIRST_PASTE := "Patched paper will not be cut. Paste a clipping onto the line before he cuts it, and his shears will jam."
+const SCISSOR_JAM := "The shears are caught in the patch. Now!"
+const SCISSOR_PHASE: Array[String] = [
+	"",
+	"He is cutting wider, and he has begun to cut out little copies of the things that hurt.",
+	"Two cuts at once. He does not enjoy this, but he cannot stop.",
+]
+const PUBLISHED := "Chapter One, published."
+
+static func _scissor(text: String, cue: String = "") -> Dictionary:
+	return line("The Scissor-Man", text, "speech", cue, Color("7a8499"))
+
+static func scissor_rift_enter() -> Array:
+	return [
+		line("", "The seam is not dark. It is white, the white of a page with nothing on it. At its edges the paper has been cut so cleanly it hums.", "action"),
+		line("", "You hold up the lantern and step through.", "action"),
+	]
+
+static func scissor_boss_intro() -> Array:
+	return [
+		line("", "A long green mat runs out under a wall of black. The air smells of cut paper. Something enormous stands in the middle of it, unfinished: half colored, half sketch, with a pair of shears where its hands should be.", "action"),
+		_scissor("Cut for pacing."),
+		_scissor("Cut for length. Cut for 'it doesn't serve the story.'"),
+		_scissor("Everything has a page count. Yours is up."),
+		line("", "Every cut leaves a clipping behind. Strike a clipping to pick it up, and press V to paste it back. Paper that has been patched, scissors will not cut.", "action"),
+	]
+
+static func scissor_finale() -> Array:
+	return [
+		_scissor("...That isn't how it works. You can't just put it back."),
+		line("", "The clippings are all around him now, hundreds of them, small cut-out scenes with their edges still sharp. In one, a young man hammers a blade straight and then does not. In another, a boy tears out a page. In another, a woman sets a table for six, and then for one.", "action"),
+		_scissor("I cut them to keep the story short. Every one of them was somebody's favorite part."),
+		line("", "You hold up the lantern. In its light the clippings turn over, one at a time. Every one has a back side, and on every back side something has been written: kept.", "action"),
+		_scissor("...Kept.", "restore_town"),
+		line("", "The shears fall open and are only shears. Without them his hands are just hands: a tailor's, thimble-dented and tired.", "action"),
+		line("Wick", "My name's Wick. I used to mend things. Somewhere along the way I got confused and started cutting them out instead.", "speech", "", Palette.CYAN_DEEP),
+		line("Wick", "Take this. It's the only thing I ever made that I didn't have to cut anything off to finish.", "speech", "", Palette.CYAN_DEEP),
+	]

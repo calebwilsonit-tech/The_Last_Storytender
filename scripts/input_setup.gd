@@ -16,6 +16,7 @@ func _ready() -> void:
 	_bind("style_underline", [KEY_1])
 	_bind("style_bold", [KEY_2])
 	_bind("style_italic", [KEY_3])
+	_bind("paste", [KEY_V])   # place the clipping you are carrying
 	_bind("sneak", [KEY_CTRL, KEY_C])   # hold to creep: slower, much quieter
 	_bind("inventory", [KEY_TAB, KEY_I])
 	_bind("use_item", [KEY_F])

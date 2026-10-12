@@ -239,3 +239,29 @@ Choose a style with **1 (Underline), 2 (Bold), 3 (Italic)** and strike a word wi
 **Emotional resolution:** the table was only ever "a place where people are invited". Maud never lost the recipe; she lost the reason.
 
 Reward: **Warm Loaf** x3 (restores 60 ink), Maud's restoration, +40 Mnemosynth. The oven doorway needs Pip's memory first (the Quill must learn Rewrite before Format).
+
+
+## 19. The Scissor-Man: "Cut Content" (implemented v2.9)
+Thistledown's Editor. Unlocked when Garrick, Pip and Maud are all restored: a tear (Prop RIFT) opens at the town square and leads to **The Cutting Room**, a green cutting mat.
+
+**Signature verb: the Clipboard (cut / copy / paste).** No other NPC, memory or boss uses it.
+- He telegraphs a cut line (red dashes on the mat, about 3 s, 3.8 s on Story), then snips. Unpatched cells along the line become pits for about 11 s (8 s on Story) and the paper then heals. Each snip leaves clippings (max 4 on the mat).
+- Strike a clipping with the Quill (or press E) to put its shape on the clipboard (HUD). Aim and press **V** to paste it 96 px ahead as a taped patch (valid placement shows green, invalid red). A patch cannot be cut and lasts about 18 s (26 s on Story).
+- A cut line that crosses a patch **jams his shears** for 5.5 s (7 s on Story). Only while jammed can the Quill hurt him (60 hp). Nothing else damages him.
+- Phase 1: one thin line. Phase 2 (below 66%): width-2 lines plus two Mites. Phase 3 (below 33%): two lines at once plus Mites and a Bare.
+- Finale: Wick the tailor remembers; reward is the **Thimble** amulet (armor +0.08, dash cooldown -0.15), flag `scissor_done`, +60 Mnemosynth. The player returns to the square and the whole town is published (restoration wave radius 2600, region reads "Published Chapter").
+
+### The variety rule (design law)
+Every NPC memory, and every boss, gets its **own signature mechanic**. Do not reuse the same 3-4 mechanics across NPCs. A previous mechanic may return only as a callback inside a town finale, never as the main verb of a new memory. Stealth is the one global system.
+
+### Mechanic Registry
+| Owner | Signature mechanic | Notes |
+|---|---|---|
+| Garrick (memory + town tutorial) | Lantern / remembering, proofreading | Combat basics |
+| Pip | Rewrite (Quill changes a word in a sentence) | Spoiler boss |
+| Maud | Format marks (underline / bold / italic as physics), waiting, guest herding, cover | Guest boss |
+| Scissor-Man | Clipboard: cut, copy, paste, jam | Boss only |
+| Stealth | Global, all towns | Cones, hearing, creep, sneak attack |
+
+### Pool of unused mechanics (for future NPCs and towns)
+Fold / reorder pages; strike-through (cross out an obstacle, but it costs a word); footnote portals; unreliable narrator (dialogue hints lie in a pattern); undo / rewind; index sorting (alphabetical order puzzles); Lorem-ipsum cipher; tracing paper overlays; anagram doors; font-size / scale physics; highlighter colors; layered transparency; flipbook / timeline scrub.

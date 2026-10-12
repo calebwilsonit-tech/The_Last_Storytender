@@ -6,6 +6,8 @@ extends LevelBase
 const MEMORY_SCENE := "res://scenes/memory_forge.tscn"
 const PIP_MEMORY_SCENE := "res://scenes/memory_pip.tscn"
 const MAUD_MEMORY_SCENE := "res://scenes/memory_maud.tscn"
+const SCISSOR_SCENE := "res://scenes/editor_scissor.tscn"
+const RIFT_CELL := Vector2i(24, 13)
 const RETURN_CELL := Vector2i(30, 15)       # where you step out of the memory
 
 var _enemy_spawns: Array[Dictionary] = []   # {kind, cell}; enemies appear after Garrick's lesson
@@ -133,6 +135,9 @@ func _notification(what: int) -> void:
 
 func _level_ready() -> void:
 	_player.dashed.connect(_on_dashed)
+	_check_rift()
+	if GameState.has_flag("scissor_done") and not GameState.town_published:
+		_publish_scene()
 	if GameState.has_flag("maud_memory_done") and is_instance_valid(_oven):
 		pass   # the oven stays; Maud is baking in it now
 	if GameState.has_flag("pip_memory_done") and is_instance_valid(_book):
@@ -160,6 +165,32 @@ func _level_process(delta: float) -> void:
 		if _lantern_time >= 1.2:
 			_finish_lesson()
 
+# --- The Editor's tear ---------------------------------------------------------------------
+var _rift: Prop
+
+func _check_rift() -> void:
+	if is_instance_valid(_rift) or GameState.has_flag("scissor_done"):
+		return
+	for id in ["garrick", "pip", "maud"]:
+		if not GameState.is_restored(id):
+			return
+	_rift = _add_prop(Prop.Kind.RIFT, RIFT_CELL)
+	_register(_rift, func(): return "Step into the tear", _enter_rift, 110.0)
+	_hud.narrate(Story.RIFT_NARRATION, false, 6.0)
+
+func _enter_rift() -> void:
+	await _say(Story.scissor_rift_enter())
+	Transition.go(SCISSOR_SCENE, Color("f6f3ea"))
+
+func _publish_scene() -> void:
+	await get_tree().create_timer(1.5).timeout
+	var center := Iso.to_screen(Vector2(RIFT_CELL))
+	_hud.narrate(Story.PUBLISHED, false, 5.0)
+	GameState.start_restoration("town", center, 2600.0)
+	await get_tree().create_timer(GameState.RESTORE_DURATION * 0.8).timeout
+	GameState.publish_town()
+	GameState.save_game()
+
 # --- Frame helpers ---------------------------------------------------------------------
 func _update_region() -> void:
 	var cell := _floor.cell_at(_player.position)
@@ -185,6 +216,7 @@ func _handle_cue(cue: String) -> void:
 			await _restoration_scene("pip", _pip_npc)
 		"restore_maud":
 			await _restoration_scene("maud", _maud_npc)
+			_check_rift()
 
 # --- Story beats -----------------------------------------------------------------------
 func _book_prompt() -> String:

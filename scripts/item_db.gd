@@ -37,6 +37,12 @@ const ITEMS := {
 		"flavor": "A small pause, and all the difference.",
 		"fx": {"invuln": 0.5},
 	},
+	"thimble": {
+		"name": "The Tailor's Thimble", "type": "amulet",
+		"desc": "A small, dented thimble. -8% damage taken and a faster dash.",
+		"flavor": "Made to push the needle through, so the sewing could keep going.",
+		"fx": {"armor": 0.08, "dash_cd": -0.15},
+	},
 	"void_ink": {
 		"name": "Void Ink", "type": "material",
 		"desc": "A crafting material scraped from the Redaction.",

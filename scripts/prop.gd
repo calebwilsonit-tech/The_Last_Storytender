@@ -3,7 +3,7 @@ extends StaticBody2D
 ## Procedurally inked scenery. Objects with `ghost = true` begin as graphite
 ## pencil sketches and fill with color as the restoration wave reaches them.
 
-enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE, PICKUP, BOOK, CHAIR, TABLE, OVEN }
+enum Kind { TREE, HOUSE, FORGE, CRYSTAL, SIGN, SWORD, SHARD, ANVIL, PORTAL, FIGURE, PICKUP, BOOK, CHAIR, TABLE, OVEN, RIFT }
 
 var kind: Kind = Kind.TREE
 var ghost := false
@@ -70,6 +70,7 @@ func _draw() -> void:
 		Kind.CHAIR: _draw_chair()
 		Kind.TABLE: _draw_table()
 		Kind.OVEN: _draw_oven()
+		Kind.RIFT: _draw_rift()
 
 func _shadow(rx: float) -> void:
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2(1, 0.5))
@@ -439,3 +440,28 @@ func _draw_oven() -> void:
 	draw_circle(m, 3.0 + pulse, Color(Palette.CYAN.lightened(0.5), 0.9))
 	# Chimney.
 	DrawKit.shape(self, PackedVector2Array([Vector2(-6, -h - 6), Vector2(6, -h - 6), Vector2(6, -h - 34), Vector2(-6, -h - 34)]), stone.darkened(0.2), Palette.OUTLINE, 2.4, _seed + 4.0)
+
+# --- The tear in the page (the way to the Editor) ---------------------------------------------
+func _draw_rift() -> void:
+	_shadow(20.0)
+	var pulse := 0.5 + 0.5 * sin(_t * 2.2)
+	var top := Vector2(0, -92)
+	var edge_l := PackedVector2Array()
+	var edge_r := PackedVector2Array()
+	for k in 9:
+		var y := lerpf(0.0, -92.0, k / 8.0)
+		var w := 2.5 + sin(k / 8.0 * PI) * (13.0 + pulse * 2.0)
+		var jag := (1.8 if k % 2 == 0 else -1.8) * (0.0 if k == 0 or k == 8 else 1.0)
+		edge_l.append(Vector2(-w + jag, y))
+		edge_r.append(Vector2(w - jag, y))
+	var pts := PackedVector2Array()
+	pts.append_array(edge_l)
+	var rr := edge_r.duplicate()
+	rr.reverse()
+	pts.append_array(rr)
+	draw_circle(Vector2(0, -46), 38.0, Color(1, 1, 1, 0.06 + 0.04 * pulse))
+	DrawKit.shape(self, pts, Color("f6f3ea"), Palette.OUTLINE, 2.4, _seed)
+	for k in 6:
+		var y := -10.0 - k * 14.0
+		draw_line(Vector2(-4, y), Vector2(4, y - 6), Color("c0405a", 0.7), 1.6)
+	draw_polyline(edge_l, Color("c0405a", 0.6 + 0.3 * pulse), 1.4)
