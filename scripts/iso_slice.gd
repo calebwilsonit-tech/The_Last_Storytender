@@ -78,6 +78,7 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 		var cobble := Color("d8ab6c") if checker else Color("cd9f60")
 		draw_colored_polygon(d, bare.lerp(cobble, r))
 	_draw_height_cues(cell, d, z)
+	_draw_kind_borders(cell, d, kind, z)
 	if Settings.gfx_on("outlines"):
 		var loop := d.duplicate()
 		loop.append(d[0])
@@ -91,9 +92,32 @@ func _draw_tile(cell: Vector2i, kind: String, z: float) -> void:
 	elif r > 0.4:
 		_draw_flowers(cell, c, r)
 
+## A thin dark line where grass meets town floor, so you can tell which ground is which (and which
+## side a house or cliff sits on) even when both are the same height.
+func _draw_kind_borders(cell: Vector2i, d: PackedVector2Array, kind: String, _z: float) -> void:
+	# Drawn from the cell that is painted later (its back edges), so its own fill cannot cover it.
+	for side in 2:
+		var bn := cell + (Vector2i(0, -1) if side == 0 else Vector2i(-1, 0))
+		var nk: String = floor_ref.cells.get(bn, "")
+		if nk == "" or nk == kind or not (nk in ".," and kind in ".,"):
+			continue
+		if floor_ref.level(bn) != floor_ref.level(cell) or floor_ref.stairs.has(bn):
+			continue
+		draw_line(d[0], d[1] if side == 0 else d[3], Color("0c0906", 0.95), 2.4, true)
+
 ## Height cues that stay on at every graphics setting: higher ground is a touch lighter, and the
 ## ground at the foot of a cliff is shaded, so levels read at a glance.
 func _draw_height_cues(cell: Vector2i, d: PackedVector2Array, z: float) -> void:
+	# Where this ground is higher than its back neighbours (the far side of a step), the wall
+	# faces away from the camera and cannot be seen. Mark that hidden edge with a thin black line.
+	for side in 2:
+		var bn := cell + (Vector2i(0, -1) if side == 0 else Vector2i(-1, 0))
+		if not floor_ref.cells.has(bn) or floor_ref.stairs.has(bn) or floor_ref.stairs.has(cell):
+			continue
+		if float(floor_ref.level(bn)) < z:
+			var pa: Vector2 = d[0]
+			var pb: Vector2 = d[1] if side == 0 else d[3]
+			draw_line(pa, pb, Color("0c0906"), 1.9, true)
 	if z > 0.0:
 		draw_colored_polygon(d, Color(1, 0.97, 0.78, minf(0.13 * z, 0.38)))
 	for side in 2:

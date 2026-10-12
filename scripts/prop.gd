@@ -120,8 +120,10 @@ func _draw_tree() -> void:
 func _draw_house(r: float, forge: bool, flame_r: float = -1.0) -> void:
 	if flame_r < 0.0:
 		flame_r = r
-	var pen := Palette.PENCIL.lerp(Palette.INK, r)
-	var pw := 2.0
+	# Unrestored houses are drawn in dark graphite (not pale gray) so they stay readable against
+	# the page and against cliffs that overlap them.
+	var pen := Color("3b3e4d").lerp(Palette.INK, r)
+	var pw := 2.5 - 0.4 * r
 	_shadow(54.0)
 	var d := Iso.diamond(Vector2.ZERO, 1.84)  # N, E, S, W
 	var h := 56.0
