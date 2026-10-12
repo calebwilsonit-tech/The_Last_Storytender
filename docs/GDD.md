@@ -440,3 +440,17 @@ The Prologue dungeons are the gentle end: one hub, three wings of two rooms, one
 - **Late game:** the whole dungeon is one big puzzle. Many skills at once, timed and reversible sections, a few backtracking loops, and optional wings with their own rewards.
 - **Rules that never change:** no mini-games required; every room solvable with the skills available at that point; every room has a reachability and solve test; bosses stay separate set pieces.
 - **Tooling note:** `tools/gen_forge.py` and `tools/draw_plans.py` (the schematic plans in `docs/dungeon_plans/`) are the template. For multi-level dungeons, extend the plans to show floors as stacked panels, and add per-floor generators with a shared reachability checker.
+
+### Scope: the Prologue plus ten chapters (design law)
+The finished game is the **Prologue and ten chapters**. Chapter 10 is the final chapter and the final boss. Dungeon complexity is paced across all of them, so the ladder above stretches over a long climb rather than arriving early:
+
+| Chapters | Dungeon shape | Skills in play |
+|---|---|---|
+| Prologue | Hub + three wings of two rooms | 1-2 per puzzle (Echo, Lantern, Rewrite, Format) |
+| 1-2 | Wings of three or four rooms, two-step tokens, a second level | 2-3 per puzzle |
+| 3-5 | First multi-level underground complexes; state carries between floors | 3 per puzzle, order matters |
+| 6-8 | Big underground networks, loops and shortcuts, timed and reversible sections | most skills at once; optional wings |
+| 9 | The hardest complex before the end: everything learned, recombined | all skills |
+| 10 | The final chapter: the whole level is the puzzle, then the final boss | all skills, plus anything new from chapter 10 |
+
+New skills arrive gradually (about one new verb every one or two chapters), and each dungeon should lean on the newest verb while testing the older ones. Do not spend the hardest ideas early: keep a list of the combinations not yet used.
