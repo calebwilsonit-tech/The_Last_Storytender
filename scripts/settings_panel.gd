@@ -9,7 +9,7 @@ var _row := 0
 var _font: Font
 var _ital: Font
 var _bar_rects: Array[Rect2] = []
-var _rows := ["volume", "music", "fullscreen", "graphics", "shake", "dialogue", "tips", "log", "controls", "difficulty", "back"]
+var _rows := ["volume", "music", "fullscreen", "graphics", "skin", "shake", "dialogue", "tips", "log", "controls", "difficulty", "back"]
 var _controls: ControlsPanel
 var _graphics: GraphicsPanel
 
@@ -41,7 +41,7 @@ func close() -> void:
 
 func _row_y(i: int) -> float:
 	var extra := 22.0 if _rows[i] == "back" else 0.0   # a little air before Back
-	return PANEL.position.y + 124.0 + i * 38.0 + extra
+	return PANEL.position.y + 120.0 + i * 36.0 + extra
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible or _controls.visible or _graphics.visible:
@@ -72,6 +72,8 @@ func _adjust(dir: int) -> void:
 			Settings.apply()
 		"fullscreen":
 			Settings.fullscreen = not Settings.fullscreen
+		"skin":
+			Skins.cycle(dir)
 		"shake":
 			Settings.screen_shake = not Settings.screen_shake
 		"dialogue":
@@ -161,6 +163,7 @@ func _draw_row(i: int) -> void:
 		"shake": label = "Screen shake"
 		"dialogue": label = "Dialogue speed"
 		"graphics": label = "Graphics (for slower computers)"
+		"skin": label = "Art style (F9 cycles)"
 		"tips": label = "Tutorial tips"
 		"log": label = "Playtest log (F10 saves a report)"
 		"controls": label = "Controls (keyboard, mouse, controller)"
@@ -184,6 +187,8 @@ func _draw_row(i: int) -> void:
 			_pill(vx, y, _toggle_text(Settings.playtest_log), Settings.playtest_log)
 		"tips":
 			_pill(vx, y, _toggle_text(Settings.tutorial_tips), Settings.tutorial_tips)
+		"skin":
+			draw_string(_font, Vector2(vx - 40.0, y), "◂ %s ▸" % Skins.current_name(), HORIZONTAL_ALIGNMENT_LEFT, -1.0, 20, Palette.INK_BROWN)
 		"graphics":
 			draw_string(_font, Vector2(vx, y), "%s  ▸" % Settings.PRESET_NAMES[clampi(Settings.preset, 0, 3)], HORIZONTAL_ALIGNMENT_LEFT, -1.0, 22, Palette.INK_BROWN)
 		"controls":

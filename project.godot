@@ -19,6 +19,7 @@ Transition="*res://scripts/transition.gd"
 Telemetry="*res://scripts/telemetry.gd"
 Settings="*res://scripts/settings.gd"
 Music="*res://scripts/music.gd"
+Skins="*res://scripts/skins.gd"
 
 [display]
 
