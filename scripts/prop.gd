@@ -89,6 +89,8 @@ func _fill(c: Color, r: float) -> Color:
 func _draw() -> void:
 	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
 	var r := _restoration()
+	if _draw_art(r):
+		return
 	match kind:
 		Kind.TREE: _draw_tree()
 		Kind.HOUSE: _draw_house(r, false)
@@ -109,6 +111,38 @@ func _draw() -> void:
 		Kind.POST: _draw_post()
 		Kind.GATE: _draw_gate()
 		Kind.CHEST: _draw_chest()
+
+const ART_KEYS := {Kind.TREE: "prop_tree", Kind.HOUSE: "prop_house", Kind.FORGE: "prop_forge", Kind.CRYSTAL: "prop_crystal", Kind.SIGN: "prop_sign",
+	Kind.SWORD: "prop_sword", Kind.SHARD: "prop_shard", Kind.ANVIL: "prop_anvil", Kind.PORTAL: "prop_portal", Kind.BOOK: "prop_book",
+	Kind.CHAIR: "prop_chair", Kind.TABLE: "prop_table", Kind.OVEN: "prop_oven", Kind.RIFT: "prop_rift", Kind.POST: "prop_post",
+	Kind.GATE: "prop_gate", Kind.CHEST: "prop_chest"}
+const ART_SHADOW := {Kind.TREE: 20.0, Kind.HOUSE: 54.0, Kind.FORGE: 54.0, Kind.CRYSTAL: 9.0, Kind.SIGN: 10.0, Kind.SHARD: 11.0, Kind.ANVIL: 24.0,
+	Kind.PORTAL: 22.0, Kind.BOOK: 30.0, Kind.CHAIR: 14.0, Kind.OVEN: 34.0, Kind.RIFT: 20.0, Kind.POST: 14.0, Kind.GATE: 30.0, Kind.CHEST: 20.0}
+
+## Lets the active art style draw this prop. Returns false to fall back to the original drawing.
+func _draw_art(r: float) -> bool:
+	var art := Skins.art()
+	if art == null or not ART_KEYS.has(kind):
+		return false
+	var key: String = ART_KEYS[kind]
+	var ctx := {"t": _t, "variant": variant, "seed": bake_seed if baking else _seed, "restored": r, "occupied": occupied, "warmth": warmth,
+		"table_len": table_len, "done": done, "flame": 0.0 if variant == 99 else r, "origin": Vector2(0, -lift), "scale": 1.0}
+	if kind == Kind.TREE:
+		if not baking:
+			_shadow(20.0)
+			var tex := TreeBake.texture(variant % 3, int(absf(_seed) * 10.0) % TreeBake.BUCKETS)
+			if tex != null:
+				var lean := sin(_t * 1.1) * 0.03 if Settings.gfx_on("sway") else 0.0
+				draw_set_transform_matrix(Transform2D(Vector2(1, 0), Vector2(lean, 1), Vector2(0, -lift)))
+				draw_texture_rect(tex, Rect2(-TreeBake.BASE, Vector2(TreeBake.SIZE)), false)
+				return true
+		ctx["origin"] = Vector2.ZERO if baking else Vector2(0, -lift)
+	elif kind != Kind.SWORD:
+		_shadow(float(table_len) * 24.0 if kind == Kind.TABLE else float(ART_SHADOW.get(kind, 14.0)))
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	var ok := art.draw_prop(self, key, ctx)
+	draw_set_transform(Vector2(0, -lift), 0.0, Vector2.ONE)
+	return ok
 
 func _shadow(rx: float) -> void:
 	if not Settings.gfx_on("shadows"):

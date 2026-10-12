@@ -47,6 +47,19 @@ func draw_character(ci: CanvasItem, kind: String, ctx: Dictionary) -> bool:
 			return true
 	return false
 
+func draw_prop(ci: CanvasItem, kind: String, ctx: Dictionary) -> bool:
+	if not CelProps.kinds().has(kind):
+		return false
+	_z = float(ctx.get("scale", 1.0))
+	_origin = ctx.get("origin", Vector2.ZERO)
+	_mirror = 1.0
+	var r := K.Rec.new()
+	r.inner = 1.1
+	r.outer = 2.0
+	CelProps.build(r, kind, ctx)
+	_flush(ci, r)
+	return true
+
 func _boss(ci: CanvasItem, kind: String, ctx: Dictionary) -> void:
 	_z = float(ctx.get("scale", 1.0))
 	_origin = ctx.get("origin", Vector2.ZERO)

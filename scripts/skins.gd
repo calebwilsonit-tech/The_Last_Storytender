@@ -40,6 +40,7 @@ func cycle_art(dir: int = 1) -> void:
 	Settings.art_style = ArtStyles.ORDER[i]
 	Settings.save_settings()
 	changed.emit(Settings.art_style)
+	Settings.quality_changed.emit()    # statics (props, tiles, baked trees) repaint in the new style
 
 func art_name() -> String:
 	return String(ArtStyles.NAMES.get(Settings.art_style, "Original"))

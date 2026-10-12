@@ -3,7 +3,7 @@ extends Node2D
 ## screen (Art Lab) or press F8 in the overworld. A / D change style, W / S change sheet, Q / E zoom,
 ## Space cycles the background, Esc leaves.
 
-const SHEETS := ["storytender", "friends", "errors", "bosses", "memories"]
+const SHEETS := ["storytender", "friends", "errors", "bosses", "memories", "world", "magic"]
 const BGS := [Color("e9dcb7"), Color("7aa35a"), Color("1c2030")]
 
 var style_id := ""
@@ -87,6 +87,29 @@ func _cells() -> Array:
 			for v in 3:
 				out.append(["guest %d seated" % v, "guest", {"variant": v, "restored": 1.0, "dir": Vector2(0.3, 1)}])
 				out.append(["guest %d erased-to-be" % v, "guest", {"variant": v, "restored": 0.0, "dir": Vector2(0.3, 1)}])
+		"world":
+			for v in 3:
+				out.append(["tree %d" % v, "prop_tree", {"variant": v, "seed": 3.0 + v * 5.0}])
+			out.append(["house", "prop_house", {"variant": 0, "restored": 1.0}])
+			out.append(["house (alt)", "prop_house", {"variant": 1, "restored": 1.0}])
+			out.append(["house unrestored", "prop_house", {"variant": 0, "restored": 0.0}])
+			out.append(["forge", "prop_forge", {"restored": 1.0}])
+			out.append(["forge frozen", "prop_forge", {"restored": 1.0, "flame": 0.0}])
+			out.append(["forge unrestored", "prop_forge", {"restored": 0.0, "flame": 0.0}])
+			out.append(["sign", "prop_sign", {}])
+			out.append(["post", "prop_post", {"variant": 0}])
+			out.append(["post lit", "prop_post", {"variant": 1}])
+			out.append(["chest", "prop_chest", {"variant": 0}])
+			out.append(["chest open", "prop_chest", {"variant": 1}])
+			out.append(["chair", "prop_chair", {}])
+			out.append(["chair occupied", "prop_chair", {"occupied": true}])
+		"magic":
+			for k in ["crystal", "sword", "shard", "anvil", "portal", "book", "rift", "oven"]:
+				out.append([k, "prop_" + k, {}])
+			out.append(["gate", "prop_gate", {"variant": 0}])
+			out.append(["gate open", "prop_gate", {"variant": 1}])
+			out.append(["table cold", "prop_table", {"warmth": 0.0, "table_len": 3}])
+			out.append(["table warm", "prop_table", {"warmth": 1.0, "table_len": 3}])
 		"errors":
 			for k in ["bare", "mite", "slug", "dangler", "censor", "ellipsis"]:
 				out.append([k, k, {"face": 1.0, "proof": 0.0, "state": "idle"}])
@@ -139,7 +162,7 @@ func _draw() -> void:
 			draw_set_transform(pos, 0.0, Vector2(zoom, zoom * 0.5))
 			draw_circle(Vector2.ZERO, 15.0, Color(0, 0, 0, 0.22))
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-			ok = style.draw_character(self, c[1], ctx)
+			ok = style.draw_prop(self, c[1], ctx) if String(c[1]).begins_with("prop_") else style.draw_character(self, c[1], ctx)
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 		if not ok:
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
