@@ -80,3 +80,16 @@ Every NPC in need has exactly one memory (a Story Realm dungeon), and each memor
 
 ### Restoration flow (implementation note)
 Phase 2 restores a whole town from one NPC. With this structure, each restored NPC recolors only the area around them (the wave radius is already per-origin), and the full "Published Chapter" restoration plays after the Editor falls.
+
+---
+## 11. Combat & the Lantern (implemented v2.2)
+**Controls:** WASD move · **Click / J** Quill · **Shift** dash · **Hold Q / right mouse** Lantern · E interact. Aim is the cursor (keyboard falls back to facing).
+
+**The Quill** (given by Garrick after the first restoration): a 3-hit ink-slash combo; the third hit is a wider, stronger finisher. It rewrites rather than kills ("Don't think about whether it's pretty.").
+**Dash:** a short invulnerable scribble-step (cooldown 0.75s).
+**The Lantern:** a beam of "narrative importance". It burns fuel while held (slows you slightly) and refills when rested or when you collect Mnemosynth. Light is a tool, not just a weapon:
+- **Redactor bars** block paths; the Quill passes through them, only light "highlights" the Old Script beneath until the bar dissolves.
+- **Bares** (Typo-Ghouls: a bear missing its fur and an "a") can be cut down, or **proofread** with the light until they correct back into peaceful **Bears** (bigger Mnemosynth reward; they follow you). The same remember-don't-delete theme as the memory bosses.
+- **Mites** (scribble swarmers from the enemy sheet) are burned away by light.
+**Errors:** Bare (slow, telegraphed lunge, 12 dmg) and Mite (fast, fragile, 5 dmg). They won't walk into plot holes and lose interest if you leave their level.
+**Training:** Garrick's lesson uses a training dummy and checks strike → dash → lantern before the Redaction sends Errors into the Plains.

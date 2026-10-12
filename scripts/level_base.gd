@@ -24,6 +24,8 @@ var _safe_pos := Vector2.ZERO
 var _interactables: Array[Dictionary] = []   # {node, prompt: Callable, action: Callable, range: float}
 var _fell_once := false
 var _busy := false
+var _crystals: Array[Prop] = []
+var _first_proofread := false
 var _shake := 0.0
 var _shake_mag := 0.0
 
@@ -196,6 +198,8 @@ func _build_player() -> void:
 	_camera.position_smoothing_enabled = true
 	_camera.position_smoothing_speed = 6.0
 	_player.add_child(_camera)
+	_player.floor_ref = _floor
+	_player.hit_landed.connect(func(): camera_shake(0.12, 2.5))
 	_player.fell.connect(_on_player_fell)
 	_player.crumpled.connect(_on_player_crumpled)
 	_player.ink = GameState.ink
@@ -209,6 +213,9 @@ func _build_ui() -> void:
 	add_child(_hud)
 	_player.ink_changed.connect(_hud.set_ink)
 	_hud.set_ink(_player.ink, _player.max_ink)
+	_player.lantern_changed.connect(_hud.set_lantern)
+	_hud.set_lantern(_player.lantern_energy, Player.LANTERN_MAX)
+	_hud.set_controls(_player.can_attack())
 	_dialogue = DialogueBox.new()
 	add_child(_dialogue)
 
@@ -223,6 +230,7 @@ func _process(delta: float) -> void:
 	mat.set_shader_parameter("scroll", _camera.get_screen_center_position() - view * 0.5)
 	_track_cell()
 	_update_prompt()
+	_collect_crystals()
 	_level_process(delta)
 
 func _update_elevation(delta: float) -> void:
@@ -237,6 +245,59 @@ func _update_elevation(delta: float) -> void:
 func camera_shake(duration: float = 0.4, mag: float = 6.0) -> void:
 	_shake = duration
 	_shake_mag = mag
+
+# --- Crystals (Mnemosynth) --------------------------------------------------------------
+func _collect_crystals() -> void:
+	for c in _crystals.duplicate():
+		if not is_instance_valid(c):
+			_crystals.erase(c)
+			continue
+		if _dist(c.position, _player.position) < 30.0 and absf(c.lift - _player.elev) < 20.0:
+			_crystals.erase(c)
+			GameState.add_mnemosynth(5)
+			_player.refuel(18.0)          # the Lantern burns Mnemosynth
+			var tw := create_tween()
+			tw.tween_property(c, "modulate:a", 0.0, 0.25)
+			tw.tween_callback(c.queue_free)
+
+func drop_crystals(pos: Vector2, n: int) -> void:
+	for i in n:
+		var p := Prop.new()
+		p.kind = Prop.Kind.CRYSTAL
+		p.position = pos + Vector2(randf_range(-26.0, 26.0), randf_range(-12.0, 12.0))
+		p.lift = _floor.height_at(p.position) * Iso.LEVEL_H
+		_actors.add_child(p)
+		_crystals.append(p)
+
+# --- Enemies and Redactors ---------------------------------------------------------------
+func _add_enemy(kind: Enemy.Kind, cell: Vector2i) -> Enemy:
+	var e := Enemy.new()
+	e.kind = kind
+	e.floor_ref = _floor
+	e.target = _player
+	e.position = Iso.to_screen(Vector2(cell))
+	e.elev = _lift_at(cell)
+	_actors.add_child(e)
+	e.died.connect(func(en: Enemy): drop_crystals(en.position, 2 if en.kind == Enemy.Kind.BARE else 1))
+	e.proofread.connect(_on_proofread)
+	return e
+
+func _on_proofread(e: Enemy) -> void:
+	drop_crystals(e.position, 6)
+	_hud.toast("Proofread: Bare → Bear")
+	if not _first_proofread:
+		_first_proofread = true
+		_hud.narrate(Story.PROOFREAD, false, 5.0)
+
+func _add_redactor(cell: Vector2i, axis: Vector2, length: float, text: String) -> Redactor:
+	var r := Redactor.new()
+	r.axis = axis
+	r.length = length
+	r.text = text
+	r.position = Iso.to_screen(Vector2(cell))
+	r.elev = _lift_at(cell)
+	_actors.add_child(r)
+	return r
 
 func _dist(a: Vector2, b: Vector2) -> float:
 	var d := a - b

@@ -8,6 +8,7 @@ extends RefCounted
 ##   P player start   T tree   C Mnemosynth crystal   S the First Sword
 ##   W tutorial sign   X town sign   H house (2x2 block)   F forge (2x2 block)
 ##   N Garrick the blacksmith   K Pip the child   B Maud the baker
+##   g Bare (Typo-Ghoul)   x Mite   R Redactor bar (3 cells wide)   D training dummy
 ##
 ## HEIGHTS (elevation of each cell, one level = Iso.LEVEL_H pixels)
 ##   '0'..'9' flat ground at that level.  Cliffs between different levels are solid walls.
@@ -23,19 +24,19 @@ const ROWS: Array[String] = [
 	"   .T...T....T...#...                   ",
 	"  .T.............#.T..  ,,,,,,,,,,,,    ",
 	"  .........T.....#.... ,,,,,,,,,,,,,,   ",
-	"  ....C..........#....,,HH,,,,HH,,,,,,  ",
+	"  ....C......g...#....,,HH,,,,HH,,,,,,  ",
 	"  .T....##....T..#..T.,,HH,,,,HH,,,,,,  ",
-	"  .......#.......#.T..,,,,,,,,,,,,,,,,  ",
+	"  .......#.....x.#.T..,,,,,,,,,,,,,,,,  ",
 	"  .............C.#....,,,,,,,,,,,,,,,,  ",
-	"  ..P.W...............,,,,,,,,,,,,HH,,  ",
+	"  ..P.W..x............,,,,,,,,,,,,HH,,  ",
 	"  ........C..T........,,,,,K,,,,,,HH,,  ",
 	"  .T...............C..,,,,,,,,,,,,,,,,  ",
-	"  .......T....C.......,,,,,,,,,,,,,,,,  ",
+	"  .......T.g..C.......,,,,,,,,,,,,,,,,  ",
 	"  ...C................,X,,,,,N,,,,,,,,  ",
-	"  .....T.........#....,,,,,,,,,FF,,,,,  ",
-	"  .T.......##....#..T.,,HH,,,,,FF,,,,,  ",
-	"  .........##....#....,,HH,B,,,,,,,,,,  ",
-	"  .....#C......T.#.T..,,,,,,,,,,,,,,,,  ",
+	"  .....T.....x...#....,,,,,,,,,FF,,,,,  ",
+	"  .T..R....##....#..T.,,HH,,,,,FF,,,,,  ",
+	"  .........##....#....,,HH,B,D,,,,,,,,  ",
+	"  .....#C.x...gT.#.T..,,,,,,,,,,,,,,,,  ",
 	"  ...C......C....#..T. ,,,,,,,,,,,,,,   ",
 	"   .T.#.T.T...T..#...   ,,,,,,,,,,,,    ",
 	"    .............#..                    ",

@@ -25,6 +25,10 @@ const CRUMPLED := "A crumpled page can be smoothed. That is the whole trick of i
 const SILENCE_WHISPER := "you are so tired.   rest.   it is only white, and white is gentle."
 const RESTORED_NARRATION := "And the ink flowed back."
 const RETURNED := "The sword is heavy the way a promise is heavy. Somebody should hear that it's been kept."
+const PROOFREAD := "A mistake is not a monster. Sometimes it only wants someone to read it again."
+const REDACTOR_HINT := "A black bar hangs across the way. Something is written underneath it. Light makes things matter: hold Q, or the right mouse button."
+const REDACTOR_OPEN := "It was written there all along."
+const REDACTION_NOTICED := "The Redaction has noticed you."
 const SWORD_NARRATION := "It was never a weapon. It was a promise somebody made to the dark."
 
 # ---- Signs -------------------------------------------------------------------
@@ -178,4 +182,31 @@ static func memory_sword() -> Array:
 	return [
 		line("", "The sword is small, and plain, and a little crooked. It is warm, as if someone has only just let go of it.", "action"),
 		line("", "Far above the frozen flame, an old man is holding a hammer and does not know why. You know why now.", "action"),
+	]
+
+# ---- Garrick's lesson ----------------------------------------------------------
+static func garrick_lesson_start() -> Array:
+	return [
+		line("Garrick", "You've got a lantern. Good. A lantern is how you tell the dark what matters.", "speech"),
+		line("Garrick", "But light doesn't swing back. For that...", "speech"),
+		line("", "He sets a feather on the anvil and takes the hammer to its nib. Four clean strikes. No bending.", "action"),
+		line("Garrick", "A Quill. Not a sword. A sword ends things. This one rewrites them.", "speech"),
+		line("Garrick", "Go on. Hit the dummy. Three times. Don't think about whether it's pretty.", "speech"),
+	]
+
+static func garrick_lesson_hint(step: int) -> Array:
+	match step:
+		1:
+			return [line("Garrick", "The dummy, little scribble. Click, or J. It won't hit back. That's the whole appeal.", "speech")]
+		2:
+			return [line("Garrick", "Now run at nothing and run away from it. Shift. A step before the blow lands is worth ten after.", "speech")]
+		_:
+			return [line("Garrick", "Hold your light up. Q, or the right mouse button. Let it say what matters.", "speech")]
+
+static func garrick_lesson_end() -> Array:
+	return [
+		line("Garrick", "Not bad. Crooked, but not bad.", "speech"),
+		line("Garrick", "Out there, the Redaction is sending Errors. Bares, mostly. Poor beasts. Spelling mistakes with teeth.", "speech"),
+		line("Garrick", "You can cut them down. Or you can hold your light on them until they remember what they were.", "speech"),
+		line("Garrick", "The second way takes longer. It's usually worth it.", "speech"),
 	]

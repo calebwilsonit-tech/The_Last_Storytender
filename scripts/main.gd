@@ -6,7 +6,14 @@ extends LevelBase
 const MEMORY_SCENE := "res://scenes/memory_forge.tscn"
 const RETURN_CELL := Vector2i(30, 15)       # where you step out of the memory
 
-var _crystals: Array[Prop] = []
+var _enemy_spawns: Array[Dictionary] = []   # {kind, cell}; enemies appear after Garrick's lesson
+var _dummy: Dummy
+var _redactor: Redactor
+var _tutorial := 0            # 0 none, 1 strike, 2 dash, 3 lantern, 4 done
+var _strikes := 0
+var _lantern_time := 0.0
+var _redactor_hinted := false
+var _enemies_out := false
 var _forge: Prop
 var _garrick: Npc
 var _entered_town := false
@@ -57,6 +64,20 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 		"N", "K", "B":
 			_floor.cells[cell] = ","
 			_add_npc(ch, cell)
+		"g", "x":
+			_floor.cells[cell] = "."
+			_enemy_spawns.append({"kind": Enemy.Kind.BARE if ch == "g" else Enemy.Kind.MITE, "cell": cell})
+		"R":
+			_floor.cells[cell] = "."
+			_redactor = _add_redactor(cell, Vector2(1, 0), 3.0, "the way up")
+			_redactor.revealed.connect(func(): _hud.narrate(Story.REDACTOR_OPEN, false, 4.0))
+		"D":
+			_floor.cells[cell] = ","
+			_dummy = Dummy.new()
+			_dummy.position = Iso.to_screen(Vector2(cell))
+			_dummy.elev = _lift_at(cell)
+			_actors.add_child(_dummy)
+			_dummy.struck.connect(_on_dummy_struck)
 		_:
 			return false
 	return true
@@ -79,6 +100,9 @@ func _add_npc(ch: String, cell: Vector2i) -> void:
 			_register(n, func(): return "Speak", func(): await _say(Story.maud_restored() if GameState.town_restored else Story.maud_ghost()))
 
 func _level_ready() -> void:
+	_player.dashed.connect(_on_dashed)
+	if GameState.has_flag("lesson_done"):
+		_spawn_enemies()
 	if GameState.has_flag("memory_done") and not GameState.town_restored:
 		_hud.narrate(Story.RETURNED, false, 5.0)
 	elif not GameState.has_flag("intro_done"):
@@ -91,20 +115,15 @@ func _start_intro() -> void:
 		_hud.narrate(t, false, 3.2)
 		await get_tree().create_timer(5.6).timeout
 
-func _level_process(_delta: float) -> void:
-	_collect_crystals()
+func _level_process(delta: float) -> void:
 	_update_region()
+	_hint_redactor()
+	if _tutorial == 3 and _player.lantern_on:
+		_lantern_time += delta
+		if _lantern_time >= 1.2:
+			_finish_lesson()
 
 # --- Frame helpers ---------------------------------------------------------------------
-func _collect_crystals() -> void:
-	for c in _crystals.duplicate():
-		if _dist(c.position, _player.position) < 30.0 and absf(c.lift - _player.elev) < 20.0:
-			_crystals.erase(c)
-			GameState.add_mnemosynth(5)
-			var tw := create_tween()
-			tw.tween_property(c, "modulate:a", 0.0, 0.25)
-			tw.tween_callback(c.queue_free)
-
 func _update_region() -> void:
 	var cell := _floor.cell_at(_player.position)
 	if cell.x >= IsoFloor.PLAINS_X_LIMIT:
@@ -140,7 +159,16 @@ func _touch_flame() -> void:
 
 func _talk_garrick() -> void:
 	if GameState.town_restored:
-		await _say(Story.garrick_restored())
+		if not GameState.has_flag("has_quill"):
+			await _say(Story.garrick_lesson_start())
+			GameState.set_flag("has_quill")
+			_hud.toast("Received: Garrick's Quill")
+			_hud.set_controls(true)
+			_set_tutorial(1)
+		elif _tutorial >= 1 and _tutorial <= 3:
+			await _say(Story.garrick_lesson_hint(_tutorial))
+		else:
+			await _say(Story.garrick_restored())
 	elif GameState.has_flag("memory_done"):
 		await _say(Story.garrick_restoration())
 		GameState.add_mnemosynth(25)
@@ -152,6 +180,57 @@ func _talk_garrick() -> void:
 	else:
 		GameState.set_flag("met_garrick")
 		await _say(Story.garrick_ghost())
+
+# --- Combat lesson -------------------------------------------------------------------------
+func _set_tutorial(step: int) -> void:
+	_tutorial = step
+	match step:
+		1:
+			_hud.set_objective("Strike the training dummy: %d / 3   (click or J)" % _strikes)
+		2:
+			_hud.set_objective("Dash with Shift")
+		3:
+			_lantern_time = 0.0
+			_hud.set_objective("Hold Q or right mouse: shine your Lantern")
+		_:
+			_hud.set_objective("")
+
+func _on_dummy_struck() -> void:
+	if _tutorial != 1:
+		return
+	_strikes += 1
+	_hud.set_objective("Strike the training dummy: %d / 3   (click or J)" % mini(_strikes, 3))
+	if _strikes >= 3:
+		_set_tutorial(2)
+
+func _on_dashed() -> void:
+	if _tutorial == 2:
+		_set_tutorial(3)
+
+func _finish_lesson() -> void:
+	_set_tutorial(4)
+	GameState.set_flag("lesson_done")
+	GameState.add_mnemosynth(20)
+	_hud.toast("Lesson complete")
+	_busy = true
+	await _say(Story.garrick_lesson_end())
+	_busy = false
+	_hud.narrate(Story.REDACTION_NOTICED, false, 4.5)
+	_spawn_enemies()
+
+func _spawn_enemies() -> void:
+	if _enemies_out:
+		return
+	_enemies_out = true
+	for sp in _enemy_spawns:
+		_add_enemy(sp["kind"], sp["cell"])
+
+func _hint_redactor() -> void:
+	if _redactor_hinted or _redactor == null or not is_instance_valid(_redactor):
+		return
+	if _dist(_redactor.position, _player.position) < 150.0 and not GameState.in_dialogue:
+		_redactor_hinted = true
+		_hud.narrate(Story.REDACTOR_HINT, false, 6.0)
 
 func _restoration_scene() -> void:
 	_dialogue.hold(true)

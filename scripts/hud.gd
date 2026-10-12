@@ -4,6 +4,7 @@ extends CanvasLayer
 ## and the floating Narrator / Silence text.
 
 var bottle: InkBottle
+var gauge: LanternGauge
 var _mnemo: Label
 var _region: Label
 var _prompt: Label
@@ -32,6 +33,10 @@ func _ready() -> void:
 	bottle = InkBottle.new()
 	bottle.position = Vector2(20, 14)
 	add_child(bottle)
+
+	gauge = LanternGauge.new()
+	gauge.position = Vector2(104, 22)
+	add_child(gauge)
 
 	_mnemo = _label(26, Palette.GOLD.darkened(0.25))
 	_mnemo.position = Vector2(104, 60)
@@ -74,7 +79,7 @@ func _ready() -> void:
 	_debuff.modulate.a = 0.0
 
 	_help = _label(15, Color(Palette.INK_BROWN, 0.7))
-	_help.text = "WASD move  ·  E speak / take  ·  F1 test damage  ·  F2 heal"
+	_help.text = "WASD move  ·  E speak / take  ·  Hold Q or right mouse: Lantern  ·  Shift: dash"
 	_help.position = Vector2(20, 690)
 
 func _label(size: int, col: Color) -> Label:
@@ -90,6 +95,12 @@ func _label(size: int, col: Color) -> Label:
 
 func set_ink(cur: float, mx: float) -> void:
 	bottle.set_ink(cur, mx)
+
+func set_lantern(cur: float, mx: float) -> void:
+	gauge.set_energy(cur, mx)
+
+func set_controls(armed: bool) -> void:
+	_help.text = "WASD move  ·  E speak / take  ·  Hold Q or right mouse: Lantern" + ("  ·  Click / J: Quill  ·  Shift: dash" if armed else "  ·  Shift: dash")
 
 func set_mnemo(v: int) -> void:
 	_mnemo.text = "◆ %d" % v
