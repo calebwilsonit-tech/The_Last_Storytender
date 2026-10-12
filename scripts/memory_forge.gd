@@ -304,7 +304,8 @@ func _handle_cue(cue: String) -> void:
 		_critic.dissolve()
 
 func _take_sword() -> void:
-	await _say(Story.memory_sword())
+	var at := _sword.position if is_instance_valid(_sword) else _player.position
+	await cinematic([{"at": at, "zoom": ZOOM * 1.5, "pan": 1.3, "hold": 1.0, "lines": Story.memory_sword()}])
 	GameState.set_flag("has_sword")
 	GameState.set_flag("memory_done")
 	award_boss_drops("forge")

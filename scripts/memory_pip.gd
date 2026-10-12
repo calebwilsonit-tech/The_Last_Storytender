@@ -467,7 +467,7 @@ func _handle_cue(cue: String) -> void:
 		_spoiler.defeat()
 
 func _turn_the_page() -> void:
-	await _say(Story.pip_resolution())
+	await cinematic([{"at": _pip.position, "zoom": ZOOM * 1.45, "pan": 1.3, "hold": 1.2, "lines": Story.pip_resolution()}])
 	GameState.set_flag("pip_memory_done")
 	award_boss_drops("pip")
 	GameState.add_mnemosynth(40)

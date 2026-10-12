@@ -461,7 +461,7 @@ func _talk_pip() -> void:
 	if GameState.is_restored("pip"):
 		await _say(Story.pip_restored())
 	elif GameState.has_flag("pip_memory_done"):
-		await _say(Story.pip_restoration())
+		await cinematic([{"at": _pip_npc.position, "zoom": ZOOM * 1.45, "pan": 1.4, "hold": 1.4, "lines": Story.pip_restoration()}])
 		GameState.add_mnemosynth(30)
 		_hud.toast("Restored: Pip")
 		GameState.add_renown(35)
@@ -485,7 +485,7 @@ func _talk_maud() -> void:
 	if GameState.is_restored("maud"):
 		await _say(Story.maud_restored())
 	elif GameState.has_flag("maud_memory_done"):
-		await _say(Story.maud_restoration())
+		await cinematic([{"at": _maud_npc.position, "zoom": ZOOM * 1.45, "pan": 1.4, "hold": 1.4, "lines": Story.maud_restoration()}])
 		GameState.add_mnemosynth(30)
 		_give_item("warm_loaf", 3)
 		_hud.toast("Restored: Maud")
@@ -518,7 +518,7 @@ func _talk_garrick() -> void:
 		else:
 			await _say(Story.garrick_restored())
 	elif GameState.has_flag("memory_done"):
-		await _say(Story.garrick_restoration())
+		await cinematic([{"at": _garrick.position, "zoom": ZOOM * 1.45, "pan": 1.4, "hold": 1.4, "lines": Story.garrick_restoration()}])
 		GameState.add_mnemosynth(25)
 		_hud.toast("Restored: Garrick")
 		GameState.add_renown(35)
@@ -672,13 +672,15 @@ func _hint_redactor() -> void:
 func _restoration_scene(id: String, npc: Npc) -> void:
 	_dialogue.hold(true)
 	_hud.set_prompt("")
-	var zoom := create_tween().set_parallel(true)
-	zoom.tween_property(_camera, "zoom", Vector2(ZOOM * 1.18, ZOOM * 1.18), 2.0).set_ease(Tween.EASE_IN_OUT)
+	if not _in_cutscene:           # inside a cinematic the camera is already framing the person
+		var zoom := create_tween().set_parallel(true)
+		zoom.tween_property(_camera, "zoom", Vector2(ZOOM * 1.18, ZOOM * 1.18), 2.0).set_ease(Tween.EASE_IN_OUT)
 	await get_tree().create_timer(0.8).timeout
 	_hud.narrate(Story.RESTORED_NARRATION, false, 3.0)
 	GameState.start_restoration(id, npc.position)
 	await get_tree().create_timer(GameState.RESTORE_DURATION * 0.75).timeout
-	var back := create_tween()
-	back.tween_property(_camera, "zoom", Vector2(ZOOM, ZOOM), 2.5).set_ease(Tween.EASE_IN_OUT)
+	if not _in_cutscene:
+		var back := create_tween()
+		back.tween_property(_camera, "zoom", Vector2(ZOOM, ZOOM), 2.5).set_ease(Tween.EASE_IN_OUT)
 	await get_tree().create_timer(1.2).timeout
 	_dialogue.hold(false)

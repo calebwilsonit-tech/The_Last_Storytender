@@ -412,7 +412,7 @@ func _handle_cue(cue: String) -> void:
 		camera_shake(0.5, 4.0)
 
 func _sit_with_maud() -> void:
-	await _say(Story.maud_resolution())
+	await cinematic([{"at": _maud_fig.position, "zoom": ZOOM * 1.45, "pan": 1.3, "hold": 1.2, "lines": Story.maud_resolution()}])
 	GameState.set_flag("maud_memory_done")
 	award_boss_drops("maud")
 	GameState.add_mnemosynth(40)
