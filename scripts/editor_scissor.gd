@@ -197,7 +197,7 @@ func _tick_cuts(delta: float) -> void:
 func _start_fight() -> void:
 	_started = true
 	_busy = true
-	await _say(Story.scissor_boss_intro())
+	await cinematic([{"at": _scissor.position, "zoom": ZOOM * 1.2, "pan": 1.6, "hold": 0.5, "lines": Story.scissor_boss_intro()}])
 	await _hud.tutorial("paste")
 	_hud.set_boss("The Scissor-Man", 1.0)
 	_hud.set_objective(Story.SCISSOR_OBJECTIVES[0])
@@ -353,7 +353,7 @@ func _finale() -> void:
 	_hud.set_objective("")
 	Telemetry.log_event("boss", {"boss": "scissor_man", "what": "won"})
 	await get_tree().create_timer(1.4).timeout
-	await _say(Story.scissor_finale())
+	await cinematic([{"at": _scissor.position, "zoom": ZOOM * 1.25, "pan": 1.0, "hold": 1.0, "lines": Story.scissor_finale()}])
 	_give_item("thimble")
 	GameState.set_flag("scissor_done")
 	GameState.add_mnemosynth(60)

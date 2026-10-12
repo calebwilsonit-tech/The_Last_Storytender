@@ -228,7 +228,7 @@ func _on_dough_burned(_b: TextBlock) -> void:
 func _start_boss() -> void:
 	_boss_started = true
 	_busy = true
-	await _say(Story.maud_boss_intro())
+	await cinematic([{"at": _table.position, "zoom": ZOOM * 1.15, "pan": 1.8, "hold": 0.5, "lines": Story.maud_boss_intro()}])
 	_hud.set_objective(Story.MAUD_OBJECTIVES[3] % 0)
 	Telemetry.log_event("boss", {"boss": "empty_table", "what": "start"})
 	_wave_cd = 9.0 if not GameState.is_story() else 13.0
@@ -275,7 +275,7 @@ func _begin_reckoning() -> void:
 	for c in _arena_cells:
 		_floor.marks.erase(c)
 	await get_tree().create_timer(1.2).timeout
-	await _say(Story.maud_reckoning())
+	await cinematic([{"at": _table.position + Vector2(0, 40), "zoom": ZOOM * 1.2, "pan": 1.2, "hold": 0.6, "lines": Story.maud_reckoning()}])
 	_cold = ColdShoulder.new()
 	_cold.target = _player
 	_cold.floor_ref = _floor
@@ -403,7 +403,7 @@ func _finale() -> void:
 	Telemetry.log_event("boss", {"boss": "empty_table", "what": "won"})
 	await get_tree().create_timer(1.2).timeout
 	_table.warmth = 1.0
-	await _say(Story.maud_finale())
+	await cinematic([{"at": _table.position, "zoom": ZOOM * 1.25, "pan": 1.4, "hold": 1.2, "lines": Story.maud_finale()}])
 	_hud.set_objective(Story.MAUD_OBJECTIVES[4])
 	_busy = false
 

@@ -252,9 +252,23 @@ func set_clipboard(shape: Array) -> void:
 	_clip_shape = shape
 	_boss_view.queue_redraw()
 
+## Cinematic bars (0 = none, 1 = full).
+var _letterbox := 0.0
+var _boss_bar_hidden := false
+func set_boss_hidden(on: bool) -> void:
+	_boss_bar_hidden = on
+	_boss_view.queue_redraw()
+func set_letterbox(amount: float) -> void:
+	_letterbox = clampf(amount, 0.0, 1.0)
+	_boss_view.queue_redraw()
+
 func _paint_overlays() -> void:
 	var font := ThemeDB.get_default_theme().default_font
-	if _boss_name != "":
+	if _letterbox > 0.0:
+		var bar := 78.0 * _letterbox
+		_boss_view.draw_rect(Rect2(0, 0, 1280, bar), Color(0.02, 0.02, 0.04))
+		_boss_view.draw_rect(Rect2(0, 720.0 - bar, 1280, bar), Color(0.02, 0.02, 0.04))
+	if _boss_name != "" and not _boss_bar_hidden:
 		var r := Rect2(340, 66, 600, 16)
 		_boss_view.draw_rect(r.grow(4.0), Color(0, 0, 0, 0.45))
 		_boss_view.draw_rect(Rect2(r.position, Vector2(r.size.x * _boss_frac, r.size.y)), Palette.CRITIC_RED)

@@ -374,6 +374,9 @@ func _start_intro() -> void:
 		await get_tree().create_timer(5.6).timeout
 
 func _level_process(delta: float) -> void:
+	# The Errors only roam once you can fight them (after Garrick's sword or Quill).
+	if not _enemies_out and _player.can_attack() and not GameState.in_dialogue:
+		_spawn_enemies()
 	_tick_respawns(delta)
 	_update_region()
 	_hint_redactor()
@@ -396,7 +399,7 @@ func _check_rift() -> void:
 	_hud.narrate(Story.RIFT_NARRATION, false, 6.0)
 
 func _enter_rift() -> void:
-	await _say(Story.scissor_rift_enter())
+	await cinematic([{"at": _rift.position, "zoom": ZOOM * 1.3, "pan": 1.2, "hold": 0.4, "lines": Story.scissor_rift_enter()}])
 	Transition.go(SCISSOR_SCENE, Color("f6f3ea"))
 
 func _publish_scene() -> void:

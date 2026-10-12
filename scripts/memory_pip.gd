@@ -240,7 +240,7 @@ func _use_door() -> void:
 func _start_boss() -> void:
 	_boss_started = true
 	_busy = true
-	await _say(Story.pip_boss_intro())
+	await cinematic([{"at": _spoiler.position, "zoom": ZOOM * 1.2, "pan": 1.6, "hold": 0.5, "lines": Story.pip_boss_intro()}])
 	_spoiler.interval = 8.0 if GameState.is_story() else 6.5
 	_spoiler.active = true
 	Telemetry.log_event("boss", {"boss": "spoiler", "what": "start"})
@@ -371,7 +371,7 @@ func _begin_reckoning() -> void:
 		if is_instance_valid(hz["stone"]):
 			hz["stone"].queue_free()
 	_hazards.clear()
-	await _say(Story.spoiler_reckoning())
+	await cinematic([{"at": _spoiler.position, "zoom": ZOOM * 1.3, "pan": 1.0, "hold": 0.6, "lines": Story.spoiler_reckoning()}])
 	_reckoning = true
 	_hud.set_objective(Story.SPOILER_FIGHT_OBJECTIVE)
 	_spoiler.interval = 6.0 if GameState.is_story() else 5.0
@@ -457,7 +457,7 @@ func _finale() -> void:
 	for e in get_tree().get_nodes_in_group("enemies"):
 		if is_instance_valid(e):
 			e.queue_free()
-	await _say(Story.pip_finale())
+	await cinematic([{"at": _spoiler.position, "zoom": ZOOM * 1.3, "pan": 1.0, "hold": 1.2, "lines": Story.pip_finale()}])
 	await get_tree().create_timer(2.0).timeout
 	_hud.set_objective(Story.PIP_OBJECTIVES[4])
 	_busy = false

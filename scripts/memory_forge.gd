@@ -36,6 +36,10 @@ func _dungeon_extras() -> Array:
 		{"kind": "vault", "cell": Vector2i(22, 10), "tier": 2},
 		{"kind": "vault", "cell": Vector2i(33, 10), "tier": 3},
 		{"kind": "post", "cell": Vector2i(38, 12)},
+		{"kind": "mob", "cell": Vector2i(19, 11), "mob": Enemy.Kind.BARE},
+		{"kind": "mob", "cell": Vector2i(25, 13), "mob": Enemy.Kind.BARE},
+		{"kind": "mob", "cell": Vector2i(31, 12), "mob": Enemy.Kind.MITE},
+		{"kind": "mob", "cell": Vector2i(36, 10), "mob": Enemy.Kind.BARE},
 	]
 
 func _map_rows() -> Array[String]:
@@ -198,7 +202,7 @@ func _level_process(delta: float) -> void:
 func _start_boss() -> void:
 	_boss_started = true
 	_busy = true
-	await _say(Story.boss_intro())
+	await cinematic([{"at": _critic.position, "zoom": ZOOM * 1.25, "pan": 1.5, "hold": 0.5, "lines": Story.boss_intro()}])
 	_critic.active = true
 	_busy = false
 
@@ -269,7 +273,7 @@ func _remember(shard: Prop) -> void:
 func _begin_reckoning() -> void:
 	_busy = true
 	await get_tree().create_timer(1.4).timeout
-	await _say(Story.critic_reckoning())
+	await cinematic([{"at": _critic.position, "zoom": ZOOM * 1.35, "pan": 0.9, "hold": 0.6, "lines": Story.critic_reckoning()}])
 	_hud.set_objective(Story.CRITIC_FIGHT_OBJECTIVE)
 	_critic.begin_reckoning()
 	Telemetry.log_event("boss", {"boss": "critic", "what": "reckoning"})
@@ -291,7 +295,7 @@ func _finale() -> void:
 	_finale_started = true
 	_busy = true
 	await get_tree().create_timer(1.8).timeout
-	await _say(Story.critic_finale())
+	await cinematic([{"at": _critic.position, "zoom": ZOOM * 1.3, "pan": 1.0, "hold": 1.2, "lines": Story.critic_finale()}])
 	await get_tree().create_timer(2.6).timeout
 	_critic.queue_free()
 	_hud.set_objective("")

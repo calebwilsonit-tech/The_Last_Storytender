@@ -396,7 +396,54 @@ func _update_elevation(delta: float) -> void:
 	if _shake > 0.0:
 		_shake -= delta
 		off += Vector2(randf_range(-1, 1), randf_range(-1, 1)) * _shake_mag * clampf(_shake / 0.4, 0.0, 1.0)
+	if _cine_w > 0.0:
+		var look := (_cine_at - _player.position) + Vector2(0, -_player.elev)
+		off = off.lerp(look, _cine_w)
 	_camera.offset = off
+
+# --- Cutscenes -------------------------------------------------------------------------------------
+var _cine_at := Vector2.ZERO     # world point the camera looks at during a cutscene
+var _cine_w := 0.0               # 0 = follow the player, 1 = look at _cine_at
+var _in_cutscene := false
+
+## Plays a short cinematic: letterbox bars, the camera glides to each shot, dialogue or narration plays,
+## then the camera returns to the player. A shot: {at: Vector2 (world position), zoom: float,
+## pan: seconds, lines: Array (dialogue), text: String (narration), hold: seconds, call: Callable}.
+## Skippable lines still work like normal dialogue.
+func cinematic(shots: Array) -> void:
+	if _in_cutscene:
+		return
+	_in_cutscene = true
+	GameState.in_dialogue = true
+	_hud.set_boss_hidden(true)
+	var bars := create_tween()
+	bars.tween_method(func(v: float): _hud.set_letterbox(v), 0.0, 1.0, 0.6)
+	for s: Dictionary in shots:
+		var at: Vector2 = s.get("at", _player.position)
+		var zoom: float = float(s.get("zoom", ZOOM))
+		var pan: float = float(s.get("pan", 1.2))
+		_cine_at = _cine_at.lerp(at, 1.0) if _cine_w > 0.0 and false else _cine_at
+		var tw := create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(self, "_cine_at", at, pan)
+		tw.tween_property(self, "_cine_w", 1.0, pan)
+		tw.tween_property(_camera, "zoom", Vector2(zoom, zoom), pan)
+		await tw.finished
+		if s.has("call"):
+			(s["call"] as Callable).call()
+		if s.has("lines"):
+			await _say(s["lines"])
+			GameState.in_dialogue = true
+		elif s.has("text"):
+			_hud.narrate(String(s["text"]), false, float(s.get("hold", 2.0)))
+		await get_tree().create_timer(float(s.get("hold", 0.8))).timeout
+	var back := create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+	back.tween_property(self, "_cine_w", 0.0, 1.0)
+	back.tween_property(_camera, "zoom", Vector2(ZOOM, ZOOM), 1.0)
+	back.tween_method(func(v: float): _hud.set_letterbox(v), 1.0, 0.0, 0.8)
+	await back.finished
+	_hud.set_boss_hidden(false)
+	GameState.in_dialogue = false
+	_in_cutscene = false
 
 func camera_shake(duration: float = 0.4, mag: float = 6.0) -> void:
 	if not Settings.screen_shake:
@@ -627,6 +674,7 @@ func _place_dungeon_extras() -> void:
 		match String(e["kind"]):
 			"post": _dungeon_post(cell)
 			"vault": _dungeon_vault(cell, int(e.get("tier", 2)))
+			"mob": _add_enemy(int(e.get("mob", Enemy.Kind.BARE)), cell)
 
 func _dungeon_post(cell: Vector2i) -> void:
 	var post := _add_prop(Prop.Kind.POST, cell, false, 1)
