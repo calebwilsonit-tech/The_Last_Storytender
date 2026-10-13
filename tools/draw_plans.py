@@ -249,18 +249,36 @@ def scissor():
 
 # ---- WEIGHING ROOM (side) ---------------------------------------------------------------------------------------------
 def weighing():
-    p = Plan("Side dungeon: The Weighing Room (rebuilt)", "Echo only. Optional, reached by the portal in the Smudge")
-    frame(p, {"hub": "1  The Counting House (hub)", "a1": "2  The Sample Room", "a2": "3  The Light Scale", "b1": "4  The Long Beam", "b2": "5  The Heavy Scale",
-              "c1": "6  The Counterweights", "c2": "7  The Plumb Room", "la": "2 plates", "lb": "plate", "lc": "3 plates"}, "The Vault (Hourglass of Drafts)", "WEIGHTS 0/3")
+    p = Plan("Side dungeon: The Weighing Room (redesign: echoes as the puzzle)", "Echo only (up to 3 with the Locket). Optional, reached by the portal in the Smudge")
+    frame(p, {"hub": "1  The Counting House (hub)", "a1": "2  The Tare Room", "a2": "3  The Relay", "b1": "4  Night Shift", "b2": "5  The Pan Room",
+              "c1": "6  The Counterweights", "c2": "7  The Plumb Room", "la": "plate a", "lb": "pan bridge", "lc": "plate P3"}, "The Vault (Hourglass of Drafts)", "WEIGHTS 0/3")
     p.item("hub", "start", "start", 0.12, 0.6); p.item("hub", "tk", "token", 0.9, 0.2, "Weights: 0/3")
-    p.item("a1", "p1", "plate", 0.2, 0.3, "ledge"); p.item("a1", "p2", "plate", 0.8, 0.7, ""); p.item("a1", "st", "stair", 0.35, 0.3)
-    p.item("a2", "tL", "token", 0.85, 0.7, "Weight I"); p.item("a2", "e", "enemy", 0.4, 0.4)
-    p.item("b1", "p3", "plate", 0.5, 0.5, "pressure timed"); p.item("b1", "eg", "enemy", 0.2, 0.5, "guard")
-    p.item("b2", "tH", "token", 0.85, 0.6, "Weight II"); p.item("b2", "pc", "plate", 0.3, 0.5, "")
-    p.item("c1", "q1", "plate", 0.2, 0.3, "A"); p.item("c1", "q2", "plate", 0.5, 0.7, "B"); p.item("c1", "q3", "plate", 0.8, 0.3, "C")
-    p.item("c2", "ps", "plate", 0.3, 0.5, "plumb"); p.item("c2", "tP", "token", 0.85, 0.7, "Weight III")
-    p.note("The idea", "A little treasure house run on Echo alone. Three weights; place them on the scale (the hub door) to open the vault. Replaces the current three-room chain. Optional, so it should be hard-ish.")
-    p.note("Room ideas", "Two plates at once (ledge via stair + floor); a plate that stays down only 6 s (echo-relay: leave one echo, record a second while the first holds); a guard on the beam (lure it); three plates needing two echoes plus you (the hub of the beam is a walkway that sinks while you stand on it).")
+    # Tare Room: one echo
+    p.item("a1", "pa", "plate", 0.2, 0.3, "ledge"); p.item("a1", "st", "stair", 0.35, 0.3); p.item("a1", "ea", "echo", 0.1, 0.3)
+    p.item("a1", "ga", "gate", 0.9, 0.5); p.dep("pa", "ga", BLUE, "holds", 0)
+    # Relay: two echoes in order
+    p.item("a2", "pb", "plate", 0.15, 0.7, "b"); p.item("a2", "x1", "gate", 0.45, 0.45); p.item("a2", "pc", "plate", 0.62, 0.3, "c (inside)"); p.item("a2", "x2", "gate", 0.82, 0.55)
+    p.item("a2", "tW1", "token", 0.92, 0.8, "Weight I"); p.item("a2", "lk", "lamp", 0.7, 0.85, "Locket")
+    p.dep("pb", "x1", BLUE, "1st echo", 0); p.dep("pc", "x2", BLUE, "2nd echo", 0)
+    # Night Shift: decoys
+    p.item("b1", "g1", "enemy", 0.28, 0.4); p.item("b1", "g2", "enemy", 0.72, 0.6); p.item("b1", "pd", "plate", 0.12, 0.7, "d1"); p.item("b1", "pe", "plate", 0.88, 0.3, "d2"); p.item("b1", "gt", "gate", 0.5, 0.0)
+    p.item("b1", "e1", "echo", 0.5, 0.82, "decoys")
+    # Pan Room: bridge held by an echo; a guard across
+    p.item("b2", "pf", "plate", 0.15, 0.55, "pan"); p.item("b2", "hp", "hole", 0.45, 0.55, "pit"); p.item("b2", "g3", "enemy", 0.7, 0.35); p.item("b2", "tW2", "token", 0.9, 0.7, "Weight II")
+    p.dep("pf", "hp", BLUE, "bridge", 0)
+    # Counterweights: chain with shortcuts
+    p.item("c1", "p1", "plate", 0.12, 0.75, "P1"); p.item("c1", "s1", "gate", 0.32, 0.55); p.item("c1", "p2", "plate", 0.5, 0.25, "P2"); p.item("c1", "s2", "gate", 0.68, 0.45)
+    p.item("c1", "p3", "plate", 0.88, 0.75, "P3"); p.item("c1", "g4", "enemy", 0.45, 0.8); p.item("c1", "g5", "enemy", 0.78, 0.2)
+    p.dep("p1", "s1", BLUE, "shortcut", 0); p.dep("p2", "s2", BLUE, "shortcut", 0)
+    p.item("c2", "tW3", "token", 0.85, 0.7, "Weight III"); p.item("c2", "pz", "plate", 0.3, 0.5, "plumb")
+    p.note("The idea", "Echoes are the puzzle, not a number of plates in an open room. Each room asks a different question: hold a door while the next echo is recorded; get a decoy past guards; chain three echoes so each one's plate opens the shortcut to the next. A recording lasts about 9 s, so a long route cannot be walked in one go: earlier echoes open the short ways.")
+    p.note("2  The Tare Room (1 echo)", "Teaches it plainly: a plate on a stair ledge, an Echo holds it, you walk through.")
+    p.note("3  The Relay (2 echoes in order)", "Plate b is outside a cage; it opens the cage gate. Inside is plate c, which opens the exit gate. Echo 1 on b, walk in, Echo 2 on c, walk out. Weight I, and the Locket of Second Thoughts (the third Echo) sits in the alcove.")
+    p.note("4  Night Shift (decoys)", "Two guards sweep the room; the plates sit in their view, so you cannot hold them yourself. Record Echoes along the safe path (they draw the guards' attention, and the room clears for you), one to each plate. Needs two.")
+    p.note("5  The Pan Room (hold + lure)", "A pit crossed by a bridge that exists only while the pan plate is held: Echo 1 holds it. A guard on the far side blocks the Weight: Echo 2, recorded on the bridge, draws him off.")
+    p.note("6  The Counterweights (3 echoes)", "Three plates in a long loop patrolled by two guards, too far to reach in one recording. P1 is close and its echo opens shortcut 1, P2 sits just past it and opens shortcut 2, P3 lies beyond. Record in that order and the last gate opens. Needs all three.")
+    p.note("7  The Plumb Room", "Weight III behind a plate, a short coda: use any echo.")
+    p.note("The door", "Three weights on the hub's scale open the Vault: the Hourglass of Drafts.")
     p.finish("docs/dungeon_plans/side_weighing_room.png")
 
 # ---- PROOF ROOM (side) ------------------------------------------------------------------------------------------------
