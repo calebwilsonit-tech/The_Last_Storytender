@@ -492,8 +492,22 @@ class Ladder extends Base:
 				start = s
 				goal = cands[rng.randi() % cands.size()]
 				break
+		if start == "" or goal == "":
+			# Never leave the game without a puzzle: take the first word that has anything at all to climb to.
+			for s2: String in dict.keys():
+				var d2 := _bfs(s2)
+				for w2: String in d2.keys():
+					if d2[w2] >= 2:
+						start = s2
+						goal = w2
+						par = d2[w2]
+						max_steps = par + 3
+						break
+				if start != "":
+					break
 		cur = start
 		history = [start]
+		typed.clear()
 		for c in cur:
 			typed.append(c)
 		tries = 99

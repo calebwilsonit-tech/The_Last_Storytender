@@ -64,8 +64,8 @@ func _dungeon_extras() -> Array:
 	return [
 		{"kind": "post", "cell": Vector2i(16, 12)},
 		{"kind": "post", "cell": Vector2i(38, 12)},
-		{"kind": "vault", "cell": Vector2i(8, 14), "tier": 1},
-		{"kind": "vault", "cell": Vector2i(26, 22), "tier": 2},
+		{"kind": "vault", "cell": Vector2i(7, 18), "tier": 1},
+		{"kind": "vault", "cell": Vector2i(14, 26), "tier": 2},
 		{"kind": "vault", "cell": Vector2i(56, 17), "tier": 3},
 	]
 
