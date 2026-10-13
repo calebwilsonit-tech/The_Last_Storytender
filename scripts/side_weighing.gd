@@ -11,6 +11,9 @@ extends SideDungeon
 
 ## Echo gates: gate char -> the plates that hold it open.
 const ECHO_GATES := [["A", ["a"]], ["x", ["b"]], ["y", ["c"]], ["B", ["d", "e"]], ["s", ["p"]], ["t", ["q"]], ["W", ["p", "q", "r"]]]
+## Gates that stay open once opened: the Tare Room's gate is behind you for good, so the first Echo is free to be reused
+## (before the Locket you can only keep two Echoes, and the Relay needs both).
+const LATCHED := ["A"]
 const GATE_AXIS := {"A": Vector2(1, 0), "x": Vector2(1, 0), "y": Vector2(0, 1), "B": Vector2(1, 0), "s": Vector2(0, 1),
 	"t": Vector2(0, 1), "W": Vector2(1, 0), "D": Vector2(1, 0)}
 const WEIGHTS := {"T": "weight_one", "U": "weight_two", "V": "weight_three"}
@@ -169,7 +172,7 @@ func _level_process(delta: float) -> void:
 				_gate_seen[gk] = true
 				_hud.toast("The scales balance. The way opens.")
 				Telemetry.log_event("puzzle", {"p": "weighing_gate_" + gk})
-		elif not want and gate.is_open and _dist(_player.position, gate.position) > 90.0:
+		elif not want and gate.is_open and not LATCHED.has(gk) and _dist(_player.position, gate.position) > 90.0:
 			gate.close()
 	_tick_pan()
 

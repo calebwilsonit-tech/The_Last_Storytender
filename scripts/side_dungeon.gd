@@ -10,6 +10,7 @@ var _leaving := false
 var _looked_at := {}
 var _reward_taken := false
 var _reward: Prop
+var _reward_spawned := false
 
 ## Which doorway this is (a key of PrologueMap.PORTALS).
 func dungeon_id() -> String:
@@ -60,12 +61,13 @@ func _spawn_char(ch: String, cell: Vector2i, _consumed: Dictionary) -> bool:
 		"k":
 			_floor.cells[cell] = "m"
 			_reward = _add_pickup(cell, _reward_item())
+			_reward_spawned = true
 		_:
 			return false
 	return true
 
 func _level_process(_delta: float) -> void:
-	if not _reward_taken and _reward != null and not is_instance_valid(_reward):
+	if not _reward_taken and _reward_spawned and not is_instance_valid(_reward):
 		_reward_taken = true
 		GameState.set_flag("side_" + dungeon_id() + "_done")
 		GameState.add_renown(15)
