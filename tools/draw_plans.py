@@ -284,30 +284,25 @@ def weighing():
 
 # ---- WEIGHING ROOM v3: easy to intermediate -----------------------------------------------------------------------------
 def weighing_easy():
-    p = Plan("Weighing Room, easier: puzzles from easy to intermediate", "Echo only (3 with the Locket). No fighting needed; one optional bonus guard")
-    frame(p, {"hub": "1  The Counting House (hub)", "a1": "2  The Tare Room  [easy]", "a2": "3  The Relay  [easy+]", "b1": "4  The Two-Way Scale  [easy+]", "b2": "5  The Pan Bridge  [intermediate]",
-              "c1": "6  The Long Walk  [intermediate]", "c2": "7  The Dominoes  [intermediate]", "la": "plate a", "lb": "both pans", "lc": "plate 1"}, "The Vault (Hourglass of Drafts)", "WEIGHTS 0/3")
+    p = Plan("Weighing Room v5: real intermediate puzzles", "Echo only (3 with the Locket). No fighting. Each room has an idea you have to notice, and a way to waste an echo")
+    frame(p, {"hub": "1  The Counting House (hub)", "a1": "2  Tare Room  [1]", "a2": "3  The Relay  [2]", "b1": "4  The Heavy Scale  [3]", "b2": "5  The Fourth Echo  [3.5]",
+              "c1": "6  The Combination  [4]", "c2": "7  The Counting Gallery  [4.5]", "la": "plate a", "lb": "heavy + light", "lc": "gate 4"}, "The Vault (Hourglass of Drafts)", "WEIGHTS 0/3")
     p.item("hub", "start", "start", 0.12, 0.6); p.item("hub", "tk", "token", 0.9, 0.2, "Weights: 0/3")
     p.item("a1", "pa", "plate", 0.2, 0.3, "ledge"); p.item("a1", "st", "stair", 0.35, 0.3); p.item("a1", "ea", "echo", 0.1, 0.3); p.item("a1", "ga", "gate", 0.9, 0.5)
-    p.dep("pa", "ga", BLUE, "holds", 0)
-    p.item("a2", "pb", "plate", 0.15, 0.7, "b"); p.item("a2", "x1", "gate", 0.45, 0.45); p.item("a2", "pc", "plate", 0.62, 0.3, "c (inside)"); p.item("a2", "x2", "gate", 0.82, 0.55)
+    p.item("a2", "pb", "plate", 0.15, 0.7, "b"); p.item("a2", "x1", "gate", 0.45, 0.45); p.item("a2", "pc", "plate", 0.62, 0.3, "c"); p.item("a2", "x2", "gate", 0.82, 0.55)
     p.item("a2", "tW1", "token", 0.92, 0.8, "Weight I"); p.item("a2", "lk", "lamp", 0.7, 0.85, "Locket")
-    p.dep("pb", "x1", BLUE, "echo 1", 0); p.dep("pc", "x2", BLUE, "echo 2", 0)
-    p.item("b1", "pl", "plate", 0.12, 0.5, "left pan"); p.item("b1", "pr", "plate", 0.88, 0.5, "right pan"); p.item("b1", "gt", "gate", 0.5, 0.0); p.item("b1", "e1", "echo", 0.5, 0.75, "walk the loop")
-    p.dep("pl", "gt", BLUE, "", -25); p.dep("pr", "gt", BLUE, "both", 25)
-    p.item("b2", "pf", "plate", 0.15, 0.55, "pan"); p.item("b2", "hp", "hole", 0.45, 0.55, "pit"); p.item("b2", "tW2", "token", 0.9, 0.7, "Weight II"); p.item("b2", "sl", "sleep", 0.7, 0.3, "sleeping guard")
-    p.dep("pf", "hp", BLUE, "bridge", 0)
-    p.item("c1", "p0", "plate", 0.9, 0.2, "far plate"); p.item("c1", "ec", "echo", 0.1, 0.8, "9 s walk"); p.item("c1", "hh", "hole", 0.5, 0.5, "winding wall")
-    p.item("c2", "d1", "plate", 0.15, 0.7, "1"); p.item("c2", "d2", "plate", 0.45, 0.3, "2"); p.item("c2", "d3", "plate", 0.75, 0.7, "3"); p.item("c2", "tW3", "token", 0.92, 0.2, "Weight III")
-    p.dep("d1", "d2", BLUE, "opens", 0); p.dep("d2", "d3", BLUE, "opens", 0)
-    p.note("The idea", "Easy to intermediate: every room is one clear idea, nothing needs fighting, and a mistake costs you a minute, not a life. Echoes teach one new trick per room. The harder guard-and-decoy rooms are gone from the main path; one optional sleeping guard is left in the Pan Bridge so you can try a decoy if you want.")
-    p.note("2  The Tare Room  (easy)", "One plate on a stair ledge. An echo holds the door while you walk through. Teaches: the echo stays.")
-    p.note("3  The Relay  (easy+)", "Echo 1 on plate b opens a cage; walk in; echo 2 on plate c opens the exit. Weight I and the Locket. Teaches: an echo can hold a door while you record the next.")
-    p.note("4  The Two-Way Scale  (easy+)", "Two pans, one on each side of a loop-shaped hall; a gate in the middle opens only while both are held. Record one echo for each pan, then walk through. Teaches: two echoes at once.")
-    p.note("5  The Pan Bridge  (intermediate)", "A pit with a bridge that exists only while the pan plate is held. Echo on the pan, cross, take Weight II. A guard sleeps on the far bank: walk around him or, if you like, lure him with a second echo.")
-    p.note("6  The Long Walk  (intermediate)", "The plate is at the far end of a winding hall, about a full nine-second recording away. Plan the route and record it without stopping. Teaches: a recording has a limit, so walk the shortest way.")
-    p.note("7  The Dominoes  (intermediate)", "Three plates in three rooms in a row. Plate 1 opens the door to plate 2, plate 2 opens the door to plate 3, and plate 3 opens the way to Weight III. Needs all three echoes (the Locket). The first puzzle that is not obvious from the first room: do it in order.")
-    p.note("Possible extras", "A 'sorting' room where plates are labelled 1, 2, 3 and must be pressed in order (an echo each); an echo that is only needed for a moment (a plate that opens a door for 6 s, run through before it closes); a mirrored hall where your echo walks the other side.")
+    p.item("b1", "hv", "plate", 0.12, 0.45, "heavy (2)"); p.item("b1", "cg", "gate", 0.3, 0.45); p.item("b1", "lt", "plate", 0.88, 0.45, "light"); p.item("b1", "gt", "gate", 0.5, 0.0)
+    p.dep("lt", "cg", BLUE, "1st", -20)
+    p.item("b2", "f1", "plate", 0.08, 0.5, "1"); p.item("b2", "f2", "plate", 0.34, 0.5, "2"); p.item("b2", "f3", "plate", 0.6, 0.5, "3"); p.item("b2", "f4", "plate", 0.84, 0.5, "4"); p.item("b2", "tW2", "token", 0.93, 0.8, "Weight II")
+    p.item("c1", "r1", "plate", 0.1, 0.3, "1"); p.item("c1", "rx", "plate", 0.5, 0.3, "reset"); p.item("c1", "r2", "plate", 0.9, 0.3, "2"); p.item("c1", "r3", "plate", 0.9, 0.7, "3")
+    p.dep("r1", "r2", BLUE, "detour", 28)
+    p.item("c2", "g1", "gate", 0.2, 0.5); p.item("c2", "g2", "gate", 0.5, 0.5); p.item("c2", "g3", "gate", 0.8, 0.5); p.item("c2", "tW3", "token", 0.93, 0.8, "Weight III")
+    p.note("What changed", "The earlier rooms were solved by doing the obvious thing. These each hide a rule or a trap. You will have to stop and think. The rooms get harder: 1, 2, 3, 3.5, 4, 4.5. Tare and Relay stay as the tutorial.")
+    p.note("4  The Heavy Scale [3]", "A heavy plate (needs two echoes on it) sits inside a cage. The cage door is held open by a light plate. Order: echo 1 to the light plate; echoes 2 and 3 both onto the heavy plate; walk out. Mistakes: putting two echoes on the light plate wastes them.")
+    p.note("5  The Fourth Echo [3.5]", "Four gates in a row and four plates, but you have three echoes. The last plate is right next to the last gate. A gate stays open while you stand in it: step on plate 4, then into gate 4. You are the fourth holder.")
+    p.note("6  The Combination [4]", "Three plates that must be pressed in order to unlock for good, and a red reset plate right on the straight route from 1 to 2. One echo has to walk a 24-step detour, in one recording, under 9 seconds.")
+    p.note("7  The Counting Gallery [4.5]", "The finale joins the ideas: a long chain where plate 3 sits at the end of a winding hall (9 second walk), the heavy plate needs both echoes, and the last gate is beside its plate so you have to be the third holder. Needs a plan before you move.")
+    p.note("The tutorial pair", "Tare Room and Relay stay easy on purpose: they teach the rule. Everything after them is a puzzle.")
     p.finish("docs/dungeon_plans/side_weighing_room_easy.png")
 
 # ---- PROOF ROOM (side) ------------------------------------------------------------------------------------------------
@@ -334,7 +329,7 @@ if __name__ == "__main__":
 # Legend for the sketches: # void  . floor  ^ raised ledge  S stair  ~ pit  a..z plate  = gate  | cage wall gate
 # E entry  W weight  L locket  g sleeping guard  X exit
 EASY_ROOMS = [
-    ("2  The Tare Room  (easy, 1 echo)", [
+    ("2  The Tare Room  [1: tutorial, 1 echo]", [
         "################",
         "#^^^^^#........#",
         "#^^a^^S........#",
@@ -342,44 +337,43 @@ EASY_ROOMS = [
         "#######........#",
         "#E.............#",
         "################"],
-     [[(1, 5), (8, 5), (8, 2), (6, 2), (3, 2)]], ["Record from the entry: round, up the stair onto the ledge plate (a).", "The echo stays on the plate. Walk out through the gate."]),
-    ("3  The Relay  (easy+, 2 echoes)", [
+     [[(1, 5), (8, 5), (8, 2), (6, 2), (3, 2)]], ["Round and up the stair onto the ledge plate. The echo stays. That is the whole rule."]),
+    ("3  The Relay  [2: 2 echoes in order]", [
         "#####################",
         "#........#......#WL.#",
         "#........=..c...|...#",
         "#E....b..#......#####",
         "#####################"],
-     [[(1, 3), (6, 3)], [(8, 2), (13, 2)]], ["Echo 1 on plate b opens the cage gate (=).", "Walk in, record Echo 2 onto plate c: it opens the exit gate (|). Weight and Locket."]),
-    ("4  The Two-Way Scale  (easy+, 2 echoes)", [
-        "#########=#########",
-        "#.................#",
-        "#.###############.#",
-        "#a###############b#",
-        "#.###############.#",
-        "#........E........#",
-        "###################"],
-     [[(9, 5), (1, 5), (1, 3)], [(9, 5), (17, 5), (17, 3)]], ["Both pans (a and b) must be held at once to open the gate (=).", "Record one echo around each side, then walk up to the gate."]),
-    ("5  The Pan Bridge  (intermediate, 1 echo)", [
-        "#####################",
-        "#..a.....~~~~.......#",
-        "#E.......~~~~....g.W#",
-        "#........~~~~.......#",
+     [[(1, 3), (6, 3)], [(8, 2), (13, 2)]], ["Echo 1 on b opens the cage. Walk in, record echo 2 onto c: it opens the exit. Weight I and the Locket."]),
+    ("4  The Heavy Scale  [3: 3 echoes, order matters]", [
+        "##########=##########",
+        "#....#.............##",
+        "#.2..=.............l#",
+        "#....#.............##",
+        "#####...............#",
+        "#####.......E.......#",
         "#####################"],
-     [[(1, 2), (3, 1)]], ["Echo on the pan (a) draws out a bridge over the pit (~) while it is held.", "A guard (z) sleeps on the far bank: walk around him, or lure him with a second echo."]),
-    ("6  The Long Walk  (intermediate, 1 echo)", [
-        "############",
-        "#E.........#",
-        "##########.#",
-        "#..........#",
-        "#.##########",
-        "#.........p#",
-        "############"],
-     [[(1, 1), (10, 1), (10, 3), (1, 3), (1, 5), (10, 5)]], ["Plate p is at the end of a winding hall: about 30 steps, nearly the full nine seconds.", "Walk the shortest way, without stopping, and record it in one go."]),
-    ("7  The Dominoes  (intermediate, 3 echoes)", [
-        "############################",
-        "#E..1..=..2..=..3..........W#",
-        "############################"],
-     [[(1, 1), (4, 1)], [(7, 1), (10, 1)], [(13, 1), (16, 1)]], ["Plate 1 holds gate 1, plate 2 holds gate 2, plate 3 holds the way to the weight.", "All three echoes stay: you walk through while all three hold their plates."]),
+     [[(12, 5), (19, 2)], [(12, 5), (5, 2), (2, 2)], [(12, 5), (5, 2), (2, 2)]],
+     ["The heavy plate (2) sits in a cage and only counts when TWO echoes stand on it. The cage door is held by the light plate (l).",
+      "So: echo 1 to l first, then echoes 2 AND 3 onto the heavy plate. All three echoes, in that order, and you walk out the top gate."]),
+    ("5  The Fourth Echo  [3.5: you are the fourth]", [
+        "####################",
+        "#E.1.=.2.=.3.=.4=.W#",
+        "####################"],
+     [[(1, 1), (3, 1)], [(6, 1), (7, 1)], [(10, 1), (11, 1)], [(14, 1), (15, 1), (16, 1)]],
+     ["Four plates, four gates in a row, but you can keep only three echoes. The way: gate 4 stands right next to plate 4.",
+      "A gate stays open while you stand in it. So step on plate 4, then step into gate 4, and walk on. You are the fourth holder."]),
+    ("6  The Combination  [4: order, a trap, a route]", [
+        "#####################",
+        "#E.1.......x.......2#",
+        "###.#########.#####.#",
+        "###...........#####3#",
+        "###################=#",
+        "###################W#",
+        "#####################"],
+     [[(1, 1), (3, 1), (3, 3), (13, 3), (13, 1), (19, 1), (19, 3)]],
+     ["Plates 1, 2, 3 must be pressed in that order to unlock the gate for good. The red plate (x) resets the lock.",
+      "The straight way from 1 to 2 crosses x. One echo has to walk the detour: down, along, up, then on to 2 and 3. About 24 steps, under the 9 second limit."]),
 ]
 
 def sketch(d, ox, oy, rows, paths, cell=26):
@@ -402,6 +396,8 @@ def sketch(d, ox, oy, rows, paths, cell=26):
                 d.ellipse((cx - 9, cy - 9, cx + 9, cy + 9), fill="#fff3a8", outline=INK, width=2)
             elif ch == 'g':
                 d.ellipse((cx - 9, cy - 9, cx + 9, cy + 9), fill="#c9908a", outline=INK, width=2); d.text((cx, cy), "z", font=font(12, True), fill="white", anchor="mm")
+            elif ch == 'x':
+                d.ellipse((cx - 11, cy - 7, cx + 11, cy + 7), outline=RED, width=3, fill="#f0c8c0"); d.text((cx, cy + 16), 'reset', font=font(11, True), fill=RED, anchor='mm')
             elif ch.isalnum() and ch not in "SEWLg" and ch.lower() == ch or ch.isdigit():
                 d.ellipse((cx - 11, cy - 7, cx + 11, cy + 7), outline=BLUE, width=3, fill="#cfe3ef")
                 d.text((cx, cy + 16), ch, font=font(11, True), fill=BLUE, anchor="mm")
@@ -444,8 +440,8 @@ def weighing_progression():
     d = ImageDraw.Draw(im)
     d.text((30, 20), "Weighing Room: the progression", font=ImageFont.truetype(FS, 34), fill=INK)
     d.text((32, 68), "Difficulty rises one idea at a time. Echoes needed in brackets. The wings can be done in any order, except Dominoes needs the Locket from the Relay.", font=font(16), fill="#6a5a3c")
-    steps = [("Tare Room", 1, 1, "an echo stays", "A"), ("Relay", 2, 2, "echo holds a door,\\nthe next is recorded\\ninside. LOCKET", "A"), ("Two-Way Scale", 2, 2, "two echoes at once", "B"),
-             ("Pan Bridge", 3, 1, "echo holds a bridge,\\noptional decoy", "B"), ("Long Walk", 3, 1, "the 9-second limit", "C"), ("Dominoes", 4, 3, "three echoes,\\nin order", "C")]
+    steps = [("Tare Room", 1, 1, "an echo stays", "A"), ("Relay", 2, 2, "echo holds a door,\\nthe next is recorded\\ninside. LOCKET", "A"), ("Heavy Scale", 3, 3, "heavy plate = 2 echoes,\\ncage door first", "B"),
+             ("Fourth Echo", 3.5, 3, "you are the\\nfourth holder", "B"), ("Combination", 4, 1, "ordered plates, a reset\\ntrap, a 24-step detour", "C"), ("Counting Gallery", 4.5, 3, "everything together,\\nplan before moving", "C")]
     wing = {"A": "#dbe8d0", "B": "#d3e0ee", "C": "#eed6d0"}
     x0, x1, y0, y1 = 120, 1600, 760, 150
     d.line((x0, y0, x1, y0), fill=INK, width=3); d.line((x0, y0, x0, y1), fill=INK, width=3)
@@ -474,8 +470,8 @@ def weighing_progression():
         d.rectangle((x0 + i * 200, 100, x0 + i * 200 + 24, 124), fill=wing[w], outline=INK)
         d.text((x0 + i * 200 + 34, 112), label, font=font(14), fill=INK, anchor="lm")
     # echo capacity markers
-    d.text((30, H - 70), "Echo slots: 2 until the Locket (end of the Relay), then 3.   Weights: 1 from Relay, 1 from Pan Bridge, 1 from Dominoes -> the scale opens the Vault.", font=font(15), fill=INK)
-    d.text((30, H - 44), "Suggested order: Tare -> Relay -> Two-Way Scale -> Pan Bridge -> Long Walk -> Dominoes. Guards: only one sleeping, optional.", font=font(15), fill=INK)
+    d.text((30, H - 70), "Echo slots: 2 until the Locket (end of the Relay), then 3.   Weights: Relay, Fourth Echo, Counting Gallery -> the scale opens the Vault.", font=font(15), fill=INK)
+    d.text((30, H - 44), "Suggested order: Tare -> Relay -> Heavy Scale -> Fourth Echo -> Combination -> Counting Gallery. No guards at all.", font=font(15), fill=INK)
     im.save("docs/dungeon_plans/side_weighing_room_progression.png")
 
 if __name__ == "__main__":
