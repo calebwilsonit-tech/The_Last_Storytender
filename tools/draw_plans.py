@@ -281,6 +281,35 @@ def weighing():
     p.note("The door", "Three weights on the hub's scale open the Vault: the Hourglass of Drafts.")
     p.finish("docs/dungeon_plans/side_weighing_room.png")
 
+
+# ---- WEIGHING ROOM v3: easy to intermediate -----------------------------------------------------------------------------
+def weighing_easy():
+    p = Plan("Weighing Room, easier: puzzles from easy to intermediate", "Echo only (3 with the Locket). No fighting needed; one optional bonus guard")
+    frame(p, {"hub": "1  The Counting House (hub)", "a1": "2  The Tare Room  [easy]", "a2": "3  The Relay  [easy+]", "b1": "4  The Two-Way Scale  [easy+]", "b2": "5  The Pan Bridge  [intermediate]",
+              "c1": "6  The Long Walk  [intermediate]", "c2": "7  The Dominoes  [intermediate]", "la": "plate a", "lb": "both pans", "lc": "plate 1"}, "The Vault (Hourglass of Drafts)", "WEIGHTS 0/3")
+    p.item("hub", "start", "start", 0.12, 0.6); p.item("hub", "tk", "token", 0.9, 0.2, "Weights: 0/3")
+    p.item("a1", "pa", "plate", 0.2, 0.3, "ledge"); p.item("a1", "st", "stair", 0.35, 0.3); p.item("a1", "ea", "echo", 0.1, 0.3); p.item("a1", "ga", "gate", 0.9, 0.5)
+    p.dep("pa", "ga", BLUE, "holds", 0)
+    p.item("a2", "pb", "plate", 0.15, 0.7, "b"); p.item("a2", "x1", "gate", 0.45, 0.45); p.item("a2", "pc", "plate", 0.62, 0.3, "c (inside)"); p.item("a2", "x2", "gate", 0.82, 0.55)
+    p.item("a2", "tW1", "token", 0.92, 0.8, "Weight I"); p.item("a2", "lk", "lamp", 0.7, 0.85, "Locket")
+    p.dep("pb", "x1", BLUE, "echo 1", 0); p.dep("pc", "x2", BLUE, "echo 2", 0)
+    p.item("b1", "pl", "plate", 0.12, 0.5, "left pan"); p.item("b1", "pr", "plate", 0.88, 0.5, "right pan"); p.item("b1", "gt", "gate", 0.5, 0.0); p.item("b1", "e1", "echo", 0.5, 0.75, "walk the loop")
+    p.dep("pl", "gt", BLUE, "", -25); p.dep("pr", "gt", BLUE, "both", 25)
+    p.item("b2", "pf", "plate", 0.15, 0.55, "pan"); p.item("b2", "hp", "hole", 0.45, 0.55, "pit"); p.item("b2", "tW2", "token", 0.9, 0.7, "Weight II"); p.item("b2", "sl", "sleep", 0.7, 0.3, "sleeping guard")
+    p.dep("pf", "hp", BLUE, "bridge", 0)
+    p.item("c1", "p0", "plate", 0.9, 0.2, "far plate"); p.item("c1", "ec", "echo", 0.1, 0.8, "9 s walk"); p.item("c1", "hh", "hole", 0.5, 0.5, "winding wall")
+    p.item("c2", "d1", "plate", 0.15, 0.7, "1"); p.item("c2", "d2", "plate", 0.45, 0.3, "2"); p.item("c2", "d3", "plate", 0.75, 0.7, "3"); p.item("c2", "tW3", "token", 0.92, 0.2, "Weight III")
+    p.dep("d1", "d2", BLUE, "opens", 0); p.dep("d2", "d3", BLUE, "opens", 0)
+    p.note("The idea", "Easy to intermediate: every room is one clear idea, nothing needs fighting, and a mistake costs you a minute, not a life. Echoes teach one new trick per room. The harder guard-and-decoy rooms are gone from the main path; one optional sleeping guard is left in the Pan Bridge so you can try a decoy if you want.")
+    p.note("2  The Tare Room  (easy)", "One plate on a stair ledge. An echo holds the door while you walk through. Teaches: the echo stays.")
+    p.note("3  The Relay  (easy+)", "Echo 1 on plate b opens a cage; walk in; echo 2 on plate c opens the exit. Weight I and the Locket. Teaches: an echo can hold a door while you record the next.")
+    p.note("4  The Two-Way Scale  (easy+)", "Two pans, one on each side of a loop-shaped hall; a gate in the middle opens only while both are held. Record one echo for each pan, then walk through. Teaches: two echoes at once.")
+    p.note("5  The Pan Bridge  (intermediate)", "A pit with a bridge that exists only while the pan plate is held. Echo on the pan, cross, take Weight II. A guard sleeps on the far bank: walk around him or, if you like, lure him with a second echo.")
+    p.note("6  The Long Walk  (intermediate)", "The plate is at the far end of a winding hall, about a full nine-second recording away. Plan the route and record it without stopping. Teaches: a recording has a limit, so walk the shortest way.")
+    p.note("7  The Dominoes  (intermediate)", "Three plates in three rooms in a row. Plate 1 opens the door to plate 2, plate 2 opens the door to plate 3, and plate 3 opens the way to Weight III. Needs all three echoes (the Locket). The first puzzle that is not obvious from the first room: do it in order.")
+    p.note("Possible extras", "A 'sorting' room where plates are labelled 1, 2, 3 and must be pressed in order (an echo each); an echo that is only needed for a moment (a plate that opens a door for 6 s, run through before it closes); a mirrored hall where your echo walks the other side.")
+    p.finish("docs/dungeon_plans/side_weighing_room_easy.png")
+
 # ---- PROOF ROOM (side) ------------------------------------------------------------------------------------------------
 def proof():
     p = Plan("Side dungeon: The Proof Room (rebuilt)", "Lantern + Rewrite. Optional, reached by the portal in the Lost Margin")
@@ -298,5 +327,5 @@ def proof():
     p.finish("docs/dungeon_plans/side_proof_room.png")
 
 if __name__ == "__main__":
-    for fn in (pip, maud, scissor, weighing, proof): fn()
+    for fn in (pip, maud, scissor, weighing, weighing_easy, proof): fn()
     print("drawn")
