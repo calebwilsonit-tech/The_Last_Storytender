@@ -329,3 +329,154 @@ def proof():
 if __name__ == "__main__":
     for fn in (pip, maud, scissor, weighing, weighing_easy, proof): fn()
     print("drawn")
+
+# ---- Weighing Room (easy set): room sketches and progression --------------------------------------------------------
+# Legend for the sketches: # void  . floor  ^ raised ledge  S stair  ~ pit  a..z plate  = gate  | cage wall gate
+# E entry  W weight  L locket  g sleeping guard  X exit
+EASY_ROOMS = [
+    ("2  The Tare Room  (easy, 1 echo)", [
+        "################",
+        "#^^^^^#........#",
+        "#^^a^^S........#",
+        "#^^^^^#........=",
+        "#######........#",
+        "#E.............#",
+        "################"],
+     [[(1, 5), (8, 5), (8, 2), (6, 2), (3, 2)]], ["Record from the entry: round, up the stair onto the ledge plate (a).", "The echo stays on the plate. Walk out through the gate."]),
+    ("3  The Relay  (easy+, 2 echoes)", [
+        "#####################",
+        "#........#......#WL.#",
+        "#........=..c...|...#",
+        "#E....b..#......#####",
+        "#####################"],
+     [[(1, 3), (6, 3)], [(8, 2), (13, 2)]], ["Echo 1 on plate b opens the cage gate (=).", "Walk in, record Echo 2 onto plate c: it opens the exit gate (|). Weight and Locket."]),
+    ("4  The Two-Way Scale  (easy+, 2 echoes)", [
+        "#########=#########",
+        "#.................#",
+        "#.###############.#",
+        "#a###############b#",
+        "#.###############.#",
+        "#........E........#",
+        "###################"],
+     [[(9, 5), (1, 5), (1, 3)], [(9, 5), (17, 5), (17, 3)]], ["Both pans (a and b) must be held at once to open the gate (=).", "Record one echo around each side, then walk up to the gate."]),
+    ("5  The Pan Bridge  (intermediate, 1 echo)", [
+        "#####################",
+        "#..a.....~~~~.......#",
+        "#E.......~~~~....g.W#",
+        "#........~~~~.......#",
+        "#####################"],
+     [[(1, 2), (3, 1)]], ["Echo on the pan (a) draws out a bridge over the pit (~) while it is held.", "A guard (z) sleeps on the far bank: walk around him, or lure him with a second echo."]),
+    ("6  The Long Walk  (intermediate, 1 echo)", [
+        "############",
+        "#E.........#",
+        "##########.#",
+        "#..........#",
+        "#.##########",
+        "#.........p#",
+        "############"],
+     [[(1, 1), (10, 1), (10, 3), (1, 3), (1, 5), (10, 5)]], ["Plate p is at the end of a winding hall: about 30 steps, nearly the full nine seconds.", "Walk the shortest way, without stopping, and record it in one go."]),
+    ("7  The Dominoes  (intermediate, 3 echoes)", [
+        "############################",
+        "#E..1..=..2..=..3..........W#",
+        "############################"],
+     [[(1, 1), (4, 1)], [(7, 1), (10, 1)], [(13, 1), (16, 1)]], ["Plate 1 holds gate 1, plate 2 holds gate 2, plate 3 holds the way to the weight.", "All three echoes stay: you walk through while all three hold their plates."]),
+]
+
+def sketch(d, ox, oy, rows, paths, cell=26):
+    colors = {'#': "#2b2a38", '.': "#e8dfc2", '^': "#f1dca0", 'S': "#cdb980", '~': "#2d2147"}
+    for y, row in enumerate(rows):
+        for x, ch in enumerate(row):
+            r = (ox + x * cell, oy + y * cell, ox + (x + 1) * cell, oy + (y + 1) * cell)
+            base = colors.get(ch, "#e8dfc2")
+            d.rectangle(r, fill=base, outline="#c9bd98" if base != "#2b2a38" else "#2b2a38")
+            cx, cy = (r[0] + r[2]) // 2, (r[1] + r[3]) // 2
+            if ch == 'S':
+                for i in range(4): d.line((r[0] + 3, r[1] + 5 + i * 5, r[2] - 3, r[1] + 5 + i * 5), fill=INK, width=2)
+            elif ch == '=' or ch == '|':
+                d.rectangle((cx - 5, r[1] + 1, cx + 5, r[3] - 1), fill=RED, outline=INK, width=2)
+            elif ch == 'E':
+                d.polygon([(cx, cy - 10), (cx + 9, cy + 8), (cx - 9, cy + 8)], fill=GREEN, outline=INK)
+            elif ch == 'W':
+                d.ellipse((cx - 10, cy - 10, cx + 10, cy + 10), fill=GOLD, outline=INK, width=2); d.text((cx, cy), "★", font=font(13, True), fill=INK, anchor="mm")
+            elif ch == 'L':
+                d.ellipse((cx - 9, cy - 9, cx + 9, cy + 9), fill="#fff3a8", outline=INK, width=2)
+            elif ch == 'g':
+                d.ellipse((cx - 9, cy - 9, cx + 9, cy + 9), fill="#c9908a", outline=INK, width=2); d.text((cx, cy), "z", font=font(12, True), fill="white", anchor="mm")
+            elif ch.isalnum() and ch not in "SEWLg" and ch.lower() == ch or ch.isdigit():
+                d.ellipse((cx - 11, cy - 7, cx + 11, cy + 7), outline=BLUE, width=3, fill="#cfe3ef")
+                d.text((cx, cy + 16), ch, font=font(11, True), fill=BLUE, anchor="mm")
+    cols = [BLUE, "#6a4aa0"]
+    for k, path in enumerate(paths):
+        pts = [(ox + (px + 0.5) * cell, oy + (py + 0.5) * cell) for px, py in path]
+        for i in range(len(pts) - 1):
+            x1, y1 = pts[i]; x2, y2 = pts[i + 1]
+            n = max(int(math.hypot(x2 - x1, y2 - y1) // 10), 1)
+            for j in range(0, n, 2):
+                a = j / n; b = min((j + 1) / n, 1.0)
+                d.line((x1 + (x2 - x1) * a, y1 + (y2 - y1) * a, x1 + (x2 - x1) * b, y1 + (y2 - y1) * b), fill=cols[k % 2], width=4)
+        ex, ey = pts[-1]
+        d.ellipse((ex - 6, ey - 6, ex + 6, ey + 6), fill=cols[k % 2])
+
+def weighing_rooms():
+    W, H = 1760, 1500
+    im = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(im)
+    d.text((30, 20), "Weighing Room: the rooms, drawn out", font=ImageFont.truetype(FS, 34), fill=INK)
+    d.text((32, 68), "Dotted lines are the walk you record for each echo. Cells are 1 tile.", font=font(17), fill="#6a5a3c")
+    col_w = 860
+    y = 110
+    pos = [(30, 110), (910, 110), (30, 110 + 440), (910, 110 + 440), (30, 110 + 880), (910, 110 + 880)]
+    for (title, rows, paths, notes), (ox, oy) in zip(EASY_ROOMS, pos):
+        d.rounded_rectangle((ox - 8, oy - 8, ox + col_w - 20, oy + 424), 12, fill="#f9f3e2", outline=INK, width=2)
+        d.text((ox + 6, oy + 2), title, font=font(18, True), fill=INK)
+        wmax = max(len(r) for r in rows)
+        rows = [r.ljust(wmax, '#') for r in rows]
+        cell = min(40, int((col_w - 60) / wmax))
+        sketch(d, ox + 10, oy + 40, rows, paths, cell)
+        ny = oy + 40 + len(rows) * cell + 12
+        for line in notes:
+            d.text((ox + 10, ny), "• " + line, font=font(13), fill=INK); ny += 20
+    im.save("docs/dungeon_plans/side_weighing_room_rooms.png")
+
+def weighing_progression():
+    W, H = 1760, 1010
+    im = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(im)
+    d.text((30, 20), "Weighing Room: the progression", font=ImageFont.truetype(FS, 34), fill=INK)
+    d.text((32, 68), "Difficulty rises one idea at a time. Echoes needed in brackets. The wings can be done in any order, except Dominoes needs the Locket from the Relay.", font=font(16), fill="#6a5a3c")
+    steps = [("Tare Room", 1, 1, "an echo stays", "A"), ("Relay", 2, 2, "echo holds a door,\\nthe next is recorded\\ninside. LOCKET", "A"), ("Two-Way Scale", 2, 2, "two echoes at once", "B"),
+             ("Pan Bridge", 3, 1, "echo holds a bridge,\\noptional decoy", "B"), ("Long Walk", 3, 1, "the 9-second limit", "C"), ("Dominoes", 4, 3, "three echoes,\\nin order", "C")]
+    wing = {"A": "#dbe8d0", "B": "#d3e0ee", "C": "#eed6d0"}
+    x0, x1, y0, y1 = 120, 1600, 760, 150
+    d.line((x0, y0, x1, y0), fill=INK, width=3); d.line((x0, y0, x0, y1), fill=INK, width=3)
+    for lv in range(1, 6):
+        yy = y0 - (lv - 0.5) * (y0 - y1) / 5
+        d.line((x0, yy, x1, yy), fill="#d8cdaa", width=1)
+        d.text((x0 - 12, yy), str(lv), font=font(14), fill=INK, anchor="rm")
+    d.text((x0 - 12, y1 - 20), "difficulty", font=font(13, True), fill=INK, anchor="rm")
+    pts = []
+    for i, (name, diff, ech, idea, w) in enumerate(steps):
+        x = x0 + 80 + i * (x1 - x0 - 160) / (len(steps) - 1)
+        y = y0 - (diff - 0.5) * (y0 - y1) / 5
+        pts.append((x, y))
+    for i in range(len(pts) - 1):
+        d.line((pts[i], pts[i + 1]), fill=RED, width=5)
+    for (x, y), (name, diff, ech, idea, w) in zip(pts, steps):
+        d.rounded_rectangle((x - 108, y0 + 10, x + 108, y0 + 110), 12, fill=wing[w], outline=INK, width=2)
+        d.text((x, y0 + 28), name, font=font(16, True), fill=INK, anchor="mm")
+        d.text((x, y0 + 52), "[%d echo%s]" % (ech, "" if ech == 1 else "es"), font=font(14, True), fill=BLUE, anchor="mm")
+        for k, line in enumerate(idea.split("\\n")):
+            d.text((x, y0 + 74 + k * 16), line, font=font(12), fill=INK, anchor="mm")
+        d.ellipse((x - 11, y - 11, x + 11, y + 11), fill=GOLD, outline=INK, width=3)
+        d.line((x, y + 12, x, y0), fill="#c9bd98", width=2)
+    # wing key
+    for i, (w, label) in enumerate([("A", "West wing"), ("B", "North wing"), ("C", "East wing")]):
+        d.rectangle((x0 + i * 200, 100, x0 + i * 200 + 24, 124), fill=wing[w], outline=INK)
+        d.text((x0 + i * 200 + 34, 112), label, font=font(14), fill=INK, anchor="lm")
+    # echo capacity markers
+    d.text((30, H - 70), "Echo slots: 2 until the Locket (end of the Relay), then 3.   Weights: 1 from Relay, 1 from Pan Bridge, 1 from Dominoes -> the scale opens the Vault.", font=font(15), fill=INK)
+    d.text((30, H - 44), "Suggested order: Tare -> Relay -> Two-Way Scale -> Pan Bridge -> Long Walk -> Dominoes. Guards: only one sleeping, optional.", font=font(15), fill=INK)
+    im.save("docs/dungeon_plans/side_weighing_room_progression.png")
+
+if __name__ == "__main__":
+    weighing_rooms(); weighing_progression()
