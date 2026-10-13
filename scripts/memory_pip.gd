@@ -279,13 +279,13 @@ func _on_sleepers(group: String, idx: int) -> void:
 	var g: Dictionary = _sleepers[group]
 	if idx == 1:
 		g["t"] = WOLF_SLEEP
-		for e: Enemy in g["enemies"]:
+		for e in g["enemies"]:
 			if is_instance_valid(e) and not e.friendly:
 				e.sleep_for(WOLF_SLEEP)
 		_hud.narrate(Story.PIP_WOLVES_ASLEEP if group == "wood" else Story.PIP_GUARDS_ASLEEP, false, 4.0)
 	else:
 		g["t"] = 0.0
-		for e: Enemy in g["enemies"]:
+		for e in g["enemies"]:
 			if is_instance_valid(e):
 				e.asleep_t = 0.0
 
