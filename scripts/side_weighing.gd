@@ -3,13 +3,14 @@ extends SideDungeon
 ## The Weighing Room: a counting-house that weighs everything and finds it wanting. Three rooms of weighing
 ## plates. You can only stand on one plate, but you can remember yourself standing on another: press {echo}
 ## to record a ghost of your walk, press it again to stop, and the ghost plays it back and STANDS where it
-## ended. Two ghosts at a time, so room 2 asks for you and both of them.
+## ended. Two ghosts at a time, so room 1 asks for both of them. Room 2 has three plates: the Locket of Second
+## Thoughts, lying just inside it, lets you keep a third.
 
 const ROOM_GATES := [["g", ["a", "b"]], ["h", ["c", "d", "e"]], ["i", ["f", "j"]]]
 const INTRO := "A counting-house that has weighed every word ever spoken in it and found each one a little short. The scales are still swinging."
 const ROOM_HINTS := [
 	"Two plates. One gate. Weigh in as two.",
-	"Three plates, in three places: you and both of your Echoes.",
+	"Three plates, in three places. A locket lies in the room: it lets you remember three times.",
 	"A bridge, a pit, and guards who weigh everything. Your Echo may lure them while you hold the far plate.",
 ]
 const FINALE := "The scales settle at last. Whatever you weighed, it was worth the weight."
@@ -74,6 +75,15 @@ func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 			gate.position = Iso.to_screen(Vector2(cell))
 			_actors.add_child(gate)
 			_gate_nodes[ch] = gate
+		"L":
+			_floor.cells[cell] = "m"
+			if not GameState.has_flag("echo_third"):
+				var key := DungeonKey.new()
+				key.kind = "locket"
+				key.position = Iso.to_screen(Vector2(cell))
+				key.elev = _lift_at(cell)
+				_actors.add_child(key)
+				_register(key, func(): return "Take the Locket of Second Thoughts", func(): _take_locket(key), 80.0)
 		_:
 			return super._spawn_char(ch, cell, consumed)
 	return true
@@ -118,6 +128,14 @@ func _level_process(delta: float) -> void:
 				Telemetry.log_event("puzzle", {"p": "weighing_gate_" + gk})
 		elif not want and gate.is_open and _dist(_player.position, gate.position) > 90.0:
 			gate.close()
+
+func _take_locket(key: DungeonKey) -> void:
+	GameState.set_flag("echo_third")
+	Telemetry.log_event("puzzle", {"p": "echo_locket"})
+	create_tween().tween_property(key, "modulate:a", 0.0, 0.4)
+	get_tree().create_timer(0.45).timeout.connect(key.queue_free)
+	_hud.toast("Found: the Locket of Second Thoughts. You can keep three Echoes.")
+	_hud.narrate("A locket on a thin chain. Inside, three tiny portraits of the same person, none of them quite agreeing.", false, 6.0)
 
 func _on_reward_taken() -> void:
 	_hud.narrate(FINALE, false, 5.0)

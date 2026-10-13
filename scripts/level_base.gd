@@ -820,7 +820,7 @@ func _toggle_echo() -> void:
 	if is_instance_valid(_recording):
 		_recording.stop_record()
 		return
-	if _echoes.size() >= 2:
+	while _echoes.size() >= GameState.echo_capacity():
 		var old: Echo = _echoes.pop_front()
 		if is_instance_valid(old):
 			old.queue_free()

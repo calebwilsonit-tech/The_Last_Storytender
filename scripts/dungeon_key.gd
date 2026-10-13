@@ -36,6 +36,12 @@ func _draw() -> void:
 			draw_colored_polygon(PackedVector2Array([c + Vector2(-9, -8), c + Vector2(5, -8), c + Vector2(8, 4), c + Vector2(-9, 4)]), ink)
 			draw_line(c + Vector2(8, -2), c + Vector2(13, -2), ink, 3.0)
 			draw_line(c + Vector2(-9, 8), c + Vector2(-2, 4), ink, 2.6)
+		"locket":
+			draw_circle(c + Vector2(0, 2), 9.0, Color("c9a24e"))
+			draw_arc(c + Vector2(0, 2), 9.0, 0.0, TAU, 18, ink, 2.0)
+			draw_arc(c + Vector2(0, -9), 8.0, PI * 1.1, PI * 1.9, 10, ink, 2.0)
+			for k in 3:
+				draw_circle(c + Vector2(-4 + k * 4, 2), 1.8, ink)
 		"page":
 			draw_colored_polygon(PackedVector2Array([c + Vector2(-8, -11), c + Vector2(5, -11), c + Vector2(9, -7), c + Vector2(9, 11), c + Vector2(-8, 11)]), Color("fbf3dc"))
 			draw_polyline(PackedVector2Array([c + Vector2(-8, -11), c + Vector2(5, -11), c + Vector2(9, -7), c + Vector2(9, 11), c + Vector2(-8, 11), c + Vector2(-8, -11)]), ink, 1.8)

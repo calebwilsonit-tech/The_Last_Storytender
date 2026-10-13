@@ -47,7 +47,7 @@ const CARDS := {
 	},
 	"echo": {
 		"title": "Echoes",
-		"body": "Start remembering, walk, and stop. A ghost of you replays it and stays where it ended. You can keep two, and they have weight.",
+		"body": "Start remembering, walk, and stop. A ghost of you replays it and stays where it ended. You can keep two (three once you find the Locket of Second Thoughts), and they have weight.",
 		"items": [{"a": "echo", "t": "Start / stop remembering"}, {"a": "move", "t": "Walk the memory"}],
 	},
 	"paste": {

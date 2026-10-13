@@ -46,7 +46,7 @@ g.put(5, 10, 'P'); g.put(4, 7, 'E')
 g.put(12, 7, 'a'); g.put(6, 12, 'b'); g.put(16, 10, 'g')
 g.put(28, 5, 'c'); g.put(22, 15, 'd'); g.put(25, 10, 'e'); g.put(33, 10, 'h')
 g.put(38, 10, 'f'); g.put(45, 10, 'j'); g.put(50, 10, 'i')
-g.put(58, 10, 'k')
+g.put(58, 10, 'k'); g.put(20, 9, 'L')
 g.write('data/side_weighing_map.gd', 'SideWeighingMap',
         "## The Weighing Room. 'm' floor  '#' plot hole  P start  E way out  a..e f j  weighing plates  g h i  gates  k reward.")
 

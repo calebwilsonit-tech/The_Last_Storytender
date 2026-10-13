@@ -144,6 +144,10 @@ func rank_next() -> int:
 	return RANK_STEPS[r] if r < RANK_STEPS.size() else RANK_STEPS[RANK_STEPS.size() - 1]
 
 ## Each rank widens the ink bottle a little.
+## How many Echoes you can keep at once: two, or three once you have found the Locket of Second Thoughts.
+func echo_capacity() -> int:
+	return 3 if has_flag("echo_third") else 2
+
 func max_ink_bonus() -> float:
 	return 10.0 * (rank() - 1) + 2.0 * attr("ink")
 
