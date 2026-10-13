@@ -116,6 +116,8 @@ full = reach(set(), set(BRIDGE) | set(RIVER) | set(FLOOR))
 for ch in 'bcdefhijklmnuvwyfFNEP':
     assert find(ch) in full, ch + ' unreachable when open'
 assert (35, 3) in full
+for _k, _v in GATES.items():
+    assert len(full - reach(set(_v), set(BRIDGE) | set(RIVER) | set(FLOOR))) >= 8, "gate %s can be walked around" % _k
 print("pip map ok:", len(full), "cells reachable")
 
 def consts():

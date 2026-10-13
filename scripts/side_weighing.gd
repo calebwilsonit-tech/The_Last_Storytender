@@ -6,7 +6,7 @@ extends SideDungeon
 ##  The Relay         - an Echo holds the cage while the next is recorded inside it. The Locket (a third Echo) lies here.
 ##  Night Shift       - two guards watch the plates; Echoes get there for you.
 ##  The Pan Room      - an Echo holds a bridge up; a second draws the far guard off.
-##  The Counterweights - three plates in a long guarded loop; each Echo's plate opens the shortcut to the next.
+##  The Counterweights - three guarded rooms in a row; each Echo's plate holds open the door to the next room.
 ## Three weights on the hub's scale open the Vault.
 
 ## Echo gates: gate char -> the plates that hold it open.
@@ -32,7 +32,7 @@ const ROOM_HINTS := [
 	"One plate opens the cage. Another is inside it. Remember twice, in order.",
 	"The guards watch the plates. Send something that they will not shoot at.",
 	"The bridge is only there while the pan is weighed down. Something has to stay.",
-	"Three plates, and the way between them is long and watched. Each memory opens the short way to the next.",
+	"Three plates, each in a room behind a door that the plate before it holds open. Guards watch every room.",
 	"The last weight, and no one to guard it.",
 	"What the scales were guarding.",
 ]

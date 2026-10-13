@@ -106,6 +106,8 @@ for name, c in [('token T', find('T')[0]), ('token U', find('U')[0]), ('token V'
 full = reach(set())
 for name, c in [('T', find('T')[0]), ('U', find('U')[0]), ('V', find('V')[0]), ('j', find('j')[0]), ('forge', (45, 11)), ('anvil', find('A')[0])]:
     assert c in full, name + ' unreachable when open'
+for _k, _v in GATE_CELLS.items():
+    assert len(full - reach(set(_v))) >= 8, "gate %s can be walked around" % _k
 print("forge map ok:", len(full), "cells reachable")
 
 doc = """## Garrick's memory, as a hub of rooms. 'm' floor  '#' plot hole  P start  E way out  B crates  k Oxford Comma

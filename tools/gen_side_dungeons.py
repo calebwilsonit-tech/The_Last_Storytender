@@ -57,8 +57,6 @@ g.room(49, 23, 49, 25)                     # shortcut 1
 g.room(50, 22, 54, 26)                     # Q2
 g.room(55, 23, 55, 25)                     # shortcut 2
 g.room(56, 22, 60, 26)                     # Q3
-g.room(45, 19, 47, 21); g.room(45, 16, 53, 18); g.room(51, 19, 53, 21)          # the long way round, north
-g.room(51, 27, 53, 30); g.room(51, 28, 60, 30); g.room(57, 27, 59, 27)          # ... and south
 g.room(57, 19, 59, 21)                     # up to the exit gate
 g.room(57, 16, 59, 18)
 g.room(54, 10, 62, 15)                     # 6 the Plumb Room
@@ -68,7 +66,7 @@ g.put(10, 14, 'b'); g.put(14, 11, 'x'); g.put(14, 9, 'c'); g.put(17, 9, 'y'); g.
 g.put(25, 13, 'd'); g.put(39, 9, 'e'); g.put(27, 6, 'B'); g.put(28, 11, 'g'); g.put(36, 10, 'g')
 g.put(25, 2, 'f'); g.put(37, 2, 'g'); g.put(39, 3, 'U')
 g.put(46, 24, 'p'); g.put(49, 24, 's'); g.put(52, 24, 'q'); g.put(55, 24, 't'); g.put(58, 24, 'r'); g.put(58, 20, 'W')
-g.put(49, 17, 'g'); g.put(55, 29, 'g'); g.put(58, 12, 'V')
+g.put(53, 23, 'g'); g.put(59, 25, 'g'); g.put(58, 12, 'V')
 g.put(32, 28, 'D'); g.put(32, 32, 'k')
 # ---- reachability: nothing behind a gate is reachable while the gate is shut, everything is when they are open ---------------
 def _reach(grid, start, blocked, ok_holes=()):
@@ -98,14 +96,18 @@ shut = _reach(g, st, allg, set())
 # with everything shut: the hub, the Tare room, Relay's outer area, Night Shift, Q1 and the long way round are reachable
 for ch in 'adp':
     assert _find(g, ch) in shut, ch + ' should be reachable'
-for ch in 'bcLTfUVk':
+for ch in 'bcLTfUVkqr':
     assert _find(g, ch) not in shut, ch + ' reachable while shut'
-# the long way round reaches Q2 and Q3 but not the plumb room
-assert _find(g, 'q') not in shut or True
+for ch in 'qr':
+    assert _find(g, ch) not in shut, ch + ' should be behind the shortcut gates'
 assert _find(g, 'V') not in shut
 op = _reach(g, st, set(), set(PAN))
 for ch in 'abcdefpqrLTUVk':
     assert _find(g, ch) in op, ch + ' unreachable when open'
+# no gate may be walked around: each must cut off a real part of the dungeon
+for name, cells in GW.items():
+    lost = op - _reach(g, st, set(cells), set(PAN))
+    assert len(lost) >= 8, 'gate %s can be walked around (cuts off only %d cells)' % (name, len(lost))
 print('weighing map ok')
 PAN_CONST = "const PAN_CELLS: Array[Vector2i] = [%s]\n" % ", ".join("Vector2i(%d, %d)" % c for c in PAN)
 g.write('data/side_weighing_map.gd', 'SideWeighingMap',
