@@ -36,6 +36,9 @@ func _draw() -> void:
 			draw_colored_polygon(PackedVector2Array([c + Vector2(-9, -8), c + Vector2(5, -8), c + Vector2(8, 4), c + Vector2(-9, 4)]), ink)
 			draw_line(c + Vector2(8, -2), c + Vector2(13, -2), ink, 3.0)
 			draw_line(c + Vector2(-9, 8), c + Vector2(-2, 4), ink, 2.6)
+		"weight":
+			draw_colored_polygon(PackedVector2Array([c + Vector2(-9, 10), c + Vector2(9, 10), c + Vector2(6, -4), c + Vector2(-6, -4)]), ink)
+			draw_arc(c + Vector2(0, -6), 5.0, PI, TAU, 10, ink, 2.4)
 		"locket":
 			draw_circle(c + Vector2(0, 2), 9.0, Color("c9a24e"))
 			draw_arc(c + Vector2(0, 2), 9.0, 0.0, TAU, 18, ink, 2.0)

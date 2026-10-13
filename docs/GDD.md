@@ -468,3 +468,6 @@ Playtest bug: the Weighing Room's second gate asked for three plates held at onc
 
 ### Echo puzzle design rule (v2.19)
 An Echo room should ask a question, not count plates in an open room. Good questions: hold a door while the next Echo is recorded (chains); get Echoes past guards that you could not pass yourself (decoys); route a long path in 9-second pieces, each Echo opening the shortcut for the next; or use an Echo as a timing trick. Redesign plan for the Weighing Room: `docs/dungeon_plans/side_weighing_room.png`.
+
+### The Weighing Room, rebuilt (implemented v2.20)
+Built to `docs/dungeon_plans/side_weighing_room.png`: a hub (the Counting House) with a scale door (WEIGHED 0/3) to the Vault, and three wings. The Tare Room (one Echo holds a door), the Relay (an Echo holds the cage while the next is recorded inside it; the Locket of Second Thoughts and Weight I are in the alcove), Night Shift (two guards watch the plates; Echoes go for you; opens the Pan Room), the Pan Room (an Echo holds the bridge up; a guard waits on the far bank; Weight II), and the Counterweights (three plates, each Echo's plate opens the shortcut to the next; the exit needs all three held; Weight III). The generator `tools/gen_side_dungeons.py` checks reachability, and a scripted run solved every gate.
