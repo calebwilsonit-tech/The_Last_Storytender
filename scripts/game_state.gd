@@ -15,6 +15,7 @@ var mnemosynth := 0
 var ink := 100.0                  # carried between scenes
 var spawn_cell := Vector2i(-1, -1)  # where the overworld should place the player (-1 = map start)
 var last_post := ""                 # the lantern post you last rested at or arrived by: where dying sends you
+var dungeon_last_post := {}         # dungeon scene name -> [x, y] of the post you last lit or rested at in it
 var before_exit: Callable           # the overworld sets this so closing the game records the nearest post
 
 func prepare_exit() -> void:
@@ -308,7 +309,7 @@ func save_game() -> void:
 		"inventory": inventory, "equipment": equipment, "quick_slots": quick_slots, "quick_active": quick_active,
 		"sources": sources.map(func(src): return {"id": src["id"], "x": src["origin"].x, "y": src["origin"].y, "r": src["radius"]}),
 		"town_published": town_published, "difficulty": difficulty,
-		"spawn": [spawn_cell.x, spawn_cell.y], "last_post": last_post, "attrs": attrs, "free_points": free_points,
+		"spawn": [spawn_cell.x, spawn_cell.y], "last_post": last_post, "dungeon_last_post": dungeon_last_post, "attrs": attrs, "free_points": free_points,
 	}
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
@@ -352,6 +353,7 @@ func load_game() -> bool:
 	var sp: Array = data.get("spawn", [-1, -1])
 	spawn_cell = Vector2i(int(sp[0]), int(sp[1]))
 	last_post = str(data.get("last_post", ""))
+	dungeon_last_post = data.get("dungeon_last_post", {})
 	if int(data.get("v", 1)) < 2:
 		# The overworld grew: the old 40x26 map now sits at an offset inside the larger one.
 		if spawn_cell.x >= 0:
@@ -388,4 +390,5 @@ func reset_all() -> void:
 	town_published = false
 	spawn_cell = Vector2i(-1, -1)
 	last_post = ""
+	dungeon_last_post = {}
 	in_dialogue = false

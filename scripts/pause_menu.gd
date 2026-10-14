@@ -72,8 +72,12 @@ func _show_travel() -> void:
 	if blocked != "":
 		_note = blocked
 	else:
-		_note = "Lanterns you have rested at in here, and the way you came in."
-		for p: Dictionary in level.travel_points():
+		var pts: Array[Dictionary] = level.travel_points()
+		if pts.is_empty():
+			_note = "No lantern lit in here yet. Find one and light it. To start from the entrance, use Restart."
+		else:
+			_note = "Lanterns you have lit in here."
+		for p: Dictionary in pts:
 			list.append({"id": "go:" + String(p["id"]), "label": String(p["label"])})
 	list.append({"id": "back", "label": "Back"})
 	_menu.position.y = 276
@@ -82,7 +86,7 @@ func _show_travel() -> void:
 
 func _show_restart() -> void:
 	_mode = "restart"
-	_note = "You go back to the entrance and every puzzle in here resets: gates, plates, echoes and anything you were carrying for the doors. Rewards you already took are still yours."
+	_note = "You go back to the entrance and every puzzle in here resets: gates, plates, echoes and anything you were carrying for the doors. Rewards you already took, and lanterns you lit, are still yours."
 	var list: Array[Dictionary] = [{"id": "restart_yes", "label": "Yes, start again"}, {"id": "back", "label": "No, keep going"}]
 	_menu.position.y = 300
 	_menu.set_items(list)

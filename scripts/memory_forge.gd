@@ -24,6 +24,7 @@ var _anvil: Prop
 var _sword: Prop
 var _remembered := 0
 var _boss_started := false
+var _boss_away := false
 var _finale_started := false
 var _leaving := false
 var _pools: Array[Dictionary] = []   # {cells, t, phase}
@@ -213,6 +214,7 @@ func _level_process(delta: float) -> void:
 	# Stepping into the forge hall wakes The Critic.
 	if not _boss_started and _floor.cell_at(_player.position).x >= ARENA_X and not GameState.in_dialogue:
 		_start_boss()
+	_tick_boss_presence()
 	_check_bolts()
 	_tick_pools(delta)
 	if _slow_t > 0.0:
@@ -224,6 +226,20 @@ func _level_process(delta: float) -> void:
 		_hud.set_dim(clampf(_dim_t / 0.6, 0.0, 1.0) * 0.55)
 	else:
 		_hud.set_dim(0.0)
+
+## The Critic waits while you are out of the forge (after crumpling you wake at the lantern by the door).
+func _tick_boss_presence() -> void:
+	if not _boss_started or _finale_started or _busy:
+		return
+	var inside := _floor.cell_at(_player.position).x >= ARENA_X
+	if not inside and _critic.active:
+		_critic.active = false
+		_boss_away = true
+		_clear_bolts()
+		_clear_pools()
+	elif inside and _boss_away:
+		_boss_away = false
+		_critic.active = true
 
 func travel_blocked() -> String:
 	return "Not while the Critic is watching. Finish this first." if (_boss_started and not _finale_started) else ""

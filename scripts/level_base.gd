@@ -729,6 +729,7 @@ func _dungeon_post(cell: Vector2i) -> void:
 	_floor.blockers[cell] = true
 	_dpost_list.append({"cell": cell, "name": _room_name(cell)})
 	_register(post, func(): return "Rest at the post" if GameState.has_flag(_post_flag(cell)) else "Light the post", func():
+		GameState.dungeon_last_post[_scene_key()] = [cell.x, cell.y]
 		if not GameState.has_flag(_post_flag(cell)):
 			GameState.set_flag(_post_flag(cell))
 			post.variant = 1
@@ -741,12 +742,29 @@ func _dungeon_post(cell: Vector2i) -> void:
 		_index.open_hub(true), 100.0)
 
 func _post_flag(cell: Vector2i) -> String:
-	return "dpost_%s_%d_%d" % [scene_file_path.get_file().get_basename(), cell.x, cell.y]
+	return "dpost_%s_%d_%d" % [_scene_key(), cell.x, cell.y]
+
+func _scene_key() -> String:
+	return scene_file_path.get_file().get_basename()
+
+## Where you wake after crumpling. Outside: the overworld's own rule (_checkpoint_for). In a dungeon: the post
+## you last lit or rested at in it, or else the beginning of the dungeon.
+func _death_spawn(cell: Vector2i) -> Vector2:
+	if not dungeon_menu:
+		return _checkpoint_for(cell)
+	var lp = GameState.dungeon_last_post.get(_scene_key())
+	if lp is Array and lp.size() == 2:
+		var pc := Vector2i(int(lp[0]), int(lp[1]))
+		for p: Dictionary in _dpost_list:
+			if p["cell"] == pc and GameState.has_flag(_post_flag(pc)):
+				return Iso.to_screen(Vector2(_beside(pc)))
+	return _map_start if _map_start != Vector2.ZERO else _start
 
 # --- Inside a dungeon: travel between lanterns, or start again -------------------------------------------
-## Where "Travel to a lantern" can take you: the way in, and every post here that you have lit.
+## Where "Travel to a lantern" can take you: every post here that you have lit. (The way back to the entrance is
+## Restart, or crumpling before you have lit a post.)
 func travel_points() -> Array[Dictionary]:
-	var out: Array[Dictionary] = [{"id": "entrance", "label": "The entrance"}]
+	var out: Array[Dictionary] = []
 	for i in _dpost_list.size():
 		var p: Dictionary = _dpost_list[i]
 		if GameState.has_flag(_post_flag(p["cell"])):
@@ -760,11 +778,13 @@ func travel_blocked() -> String:
 func dungeon_travel(id: String) -> void:
 	if _busy or _player.is_falling or _player.is_crumpled or travel_blocked() != "":
 		return
-	var dest := _map_start if _map_start != Vector2.ZERO else _start
-	if id.begins_with("post"):
-		var i := int(id.substr(4))
-		if i >= 0 and i < _dpost_list.size():
-			dest = Iso.to_screen(Vector2(_beside(_dpost_list[i]["cell"])))
+	if not id.begins_with("post"):
+		return
+	var i := int(id.substr(4))
+	if i < 0 or i >= _dpost_list.size() or not GameState.has_flag(_post_flag(_dpost_list[i]["cell"])):
+		return
+	var dest := Iso.to_screen(Vector2(_beside(_dpost_list[i]["cell"])))
+	GameState.dungeon_last_post[_scene_key()] = [_dpost_list[i]["cell"].x, _dpost_list[i]["cell"].y]
 	_player.respawn_at(dest)
 	_safe_pos = dest
 	_camera.reset_smoothing()
@@ -1012,7 +1032,7 @@ func _on_player_crumpled() -> void:
 		drop_crystals(where, lost / 5)
 		_hud.toast("You lost %d Mnemosynth. It lies where you fell." % lost)
 	_player.restore_ink(GameState.crumple_ink())
-	var cp := _checkpoint_for(cell)
+	var cp := _death_spawn(cell)
 	_player.respawn_at(cp)
 	_safe_pos = cp
 	_on_death_reset()

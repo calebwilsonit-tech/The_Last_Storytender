@@ -184,7 +184,8 @@ func _level_process(delta: float) -> void:
 		_on_room(room)
 	if room == 3 and not _boss_started and not GameState.in_dialogue:
 		_start_boss()
-	if _boss_started and not _finale_done:
+	# The fight waits for you while you are out of the hall (after crumpling you wake at the lantern).
+	if _boss_started and not _finale_done and room == 3:
 		_tick_boss(delta)
 	_tick_wipes(delta)
 

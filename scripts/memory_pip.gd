@@ -51,6 +51,7 @@ var _hazards: Array[Dictionary] = []
 var _wolves_t := 0.0
 var _rewrites := 0
 var _boss_started := false
+var _boss_away := false
 var _finale_done := false
 var _leaving := false
 var _room_seen := {}
@@ -235,6 +236,14 @@ func _level_process(delta: float) -> void:
 		_on_room(room)
 	if room == R_LAST and not _boss_started and _door.is_open and not GameState.in_dialogue:
 		_start_boss()
+	# The Spoiler waits while you are out of the Last Page (after crumpling you wake at the lantern).
+	if _boss_started and not _finale_done and not _busy and is_instance_valid(_spoiler):
+		if room != R_LAST and _spoiler.active:
+			_spoiler.active = false
+			_boss_away = true
+		elif room == R_LAST and _boss_away:
+			_boss_away = false
+			_spoiler.active = true
 	_tick_sleepers(delta)
 	_tick_temps(delta)
 	_tick_echo_gates()
