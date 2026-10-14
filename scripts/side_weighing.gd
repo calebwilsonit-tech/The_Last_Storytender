@@ -82,10 +82,7 @@ func _paper_params() -> Dictionary:
 		"script_strength": 0.08, "vignette": 0.6}
 
 func _dungeon_extras() -> Array:
-	return [
-		{"kind": "post", "cell": Vector2i(26, 20)},
-		{"kind": "post", "cell": Vector2i(32, 31)},
-	]
+	return []
 
 func _spawn_char(ch: String, cell: Vector2i, consumed: Dictionary) -> bool:
 	match ch:

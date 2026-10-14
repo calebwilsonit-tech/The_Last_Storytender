@@ -471,3 +471,8 @@ An Echo room should ask a question, not count plates in an open room. Good quest
 
 ### The Weighing Room, rebuilt (implemented v2.20)
 Built to `docs/dungeon_plans/side_weighing_room.png`: a hub (the Counting House) with a scale door (WEIGHED 0/3) to the Vault, and three wings. The Tare Room (one Echo holds a door), the Relay (an Echo holds the cage while the next is recorded inside it; the Locket of Second Thoughts and Weight I are in the alcove), Night Shift (two guards watch the plates; Echoes go for you; opens the Pan Room), the Pan Room (an Echo holds the bridge up; a guard waits on the far bank; Weight II), and the Counterweights (three plates, each Echo's plate opens the shortcut to the next; the exit needs all three held; Weight III). The generator `tools/gen_side_dungeons.py` checks reachability, and a scripted run solved every gate.
+
+### Getting unstuck in dungeons (v2.21)
+- **Restart this dungeon** (pause menu, any dungeon): asks first, then reloads the dungeon from its entrance. Every puzzle resets (gates, plates, echoes, carried keys); rewards already taken stay taken.
+- **Travel to a lantern** (pause menu, any dungeon): the entrance, plus any lantern post in that dungeon you have lit. Posts start unlit; "Light the post" once and it stays lit (saved). Not allowed in the middle of a boss fight.
+- **Lantern rule (design law):** at most ONE post per dungeon, and only where reaching that spot is hard, so you only have to earn it once. Forge: at the Forge Door. Pip: at the stair to the Last Page. Maud: before the Hall. Proof Room: in the last room. The Weighing Room and the Cutting Room have none (the entrance is close enough).

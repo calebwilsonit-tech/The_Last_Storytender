@@ -47,7 +47,6 @@ func _music_slot() -> String:
 
 func _dungeon_extras() -> Array:
 	return [
-		{"kind": "post", "cell": Vector2i(6, 17)},
 		{"kind": "vault", "cell": Vector2i(8, 16), "tier": 1},
 		{"kind": "vault", "cell": Vector2i(22, 15), "tier": 2},
 		{"kind": "vault", "cell": Vector2i(39, 16), "tier": 3},
@@ -200,6 +199,9 @@ func _on_room(room: int) -> void:
 				_hud.narrate(Story.MAUD_DOUGH_HINT, false, 5.0)
 		3:
 			pass
+
+func travel_blocked() -> String:
+	return "Not while the guests are arriving. Finish this first." if (_boss_started and not _finale_done) else ""
 
 func _room_name(cell: Vector2i) -> String:
 	return ["The Pantry", "The Kitchen", "The Cellar", "The Hall"][_room_for(cell)]

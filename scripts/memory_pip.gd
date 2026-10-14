@@ -62,7 +62,6 @@ func _music_slot() -> String:
 
 func _dungeon_extras() -> Array:
 	return [
-		{"kind": "post", "cell": Vector2i(16, 12)},
 		{"kind": "post", "cell": Vector2i(38, 12)},
 		{"kind": "vault", "cell": Vector2i(7, 18), "tier": 1},
 		{"kind": "vault", "cell": Vector2i(14, 26), "tier": 2},
@@ -694,6 +693,9 @@ func _turn_the_page() -> void:
 	_hud.set_objective("")
 	await get_tree().create_timer(3.0).timeout
 	_leave()
+
+func travel_blocked() -> String:
+	return "Not while the Spoiler is reading. Finish this first." if (_boss_started and not _finale_done) else ""
 
 # --- Rooms, checkpoints and dying -------------------------------------------------------------------
 func _room_name(cell: Vector2i) -> String:

@@ -36,6 +36,10 @@ var _sweep: Dictionary = {}
 var _minions_spawned := {}
 
 # --- LevelBase hooks ---------------------------------------------------------------------------------
+
+func travel_blocked() -> String:
+	return "Not while his scissors are open. Finish this first." if (_started and not _finale_done) else ""
+
 func _map_rows() -> Array[String]:
 	return EditorScissorMap.ROWS
 

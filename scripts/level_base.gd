@@ -30,6 +30,9 @@ var _world_map: WorldMap
 var _chunks: GroundChunks
 
 var _start := Vector2.ZERO
+## Dungeons offer "Travel to a lantern" and "Restart this dungeon" in the pause menu. The overworld turns it off.
+var dungeon_menu := true
+var _dpost_list: Array[Dictionary] = []   # this dungeon's lantern posts: {cell: Vector2i, name: String}
 var _map_start := Vector2.ZERO     # the map's own start cell, ignoring return-spawn overrides
 var _safe_pos := Vector2.ZERO
 var _interactables: Array[Dictionary] = []   # {node, prompt: Callable, action: Callable, range: float}
@@ -306,7 +309,10 @@ func _build_ui() -> void:
 	_inventory = InventoryScreen.new()
 	add_child(_inventory)
 	_pause = PauseMenu.new()
+	_pause.level = self
 	add_child(_pause)
+	_pause.restart_requested.connect(restart_dungeon)
+	_pause.travel_requested.connect(dungeon_travel)
 	_index = IndexHub.new()
 	add_child(_index)
 	_index.map_requested.connect(_open_map)
@@ -718,14 +724,68 @@ func _place_dungeon_extras() -> void:
 			"mob": _add_enemy(int(e.get("mob", Enemy.Kind.BARE)), cell)
 
 func _dungeon_post(cell: Vector2i) -> void:
-	var post := _add_prop(Prop.Kind.POST, cell, false, 1)
+	var lit := GameState.has_flag(_post_flag(cell))
+	var post := _add_prop(Prop.Kind.POST, cell, false, 1 if lit else 0)
 	_floor.blockers[cell] = true
-	_register(post, func(): return "Rest at the post", func():
+	_dpost_list.append({"cell": cell, "name": _room_name(cell)})
+	_register(post, func(): return "Rest at the post" if GameState.has_flag(_post_flag(cell)) else "Light the post", func():
+		if not GameState.has_flag(_post_flag(cell)):
+			GameState.set_flag(_post_flag(cell))
+			post.variant = 1
+			post.queue_redraw()
+			_hud.toast("The post is lit. You can travel back to it from the pause menu.")
 		_player.restore_ink(100.0)
 		_player.refuel(100.0)
 		GameState.save_game()
 		_hud.toast("You rest by the lantern.")
 		_index.open_hub(true), 100.0)
+
+func _post_flag(cell: Vector2i) -> String:
+	return "dpost_%s_%d_%d" % [scene_file_path.get_file().get_basename(), cell.x, cell.y]
+
+# --- Inside a dungeon: travel between lanterns, or start again -------------------------------------------
+## Where "Travel to a lantern" can take you: the way in, and every post here that you have lit.
+func travel_points() -> Array[Dictionary]:
+	var out: Array[Dictionary] = [{"id": "entrance", "label": "The entrance"}]
+	for i in _dpost_list.size():
+		var p: Dictionary = _dpost_list[i]
+		if GameState.has_flag(_post_flag(p["cell"])):
+			out.append({"id": "post%d" % i, "label": "Lantern: %s" % String(p["name"])})
+	return out
+
+## Non-empty when travel is not allowed right now (for example in the middle of a boss fight).
+func travel_blocked() -> String:
+	return ""
+
+func dungeon_travel(id: String) -> void:
+	if _busy or _player.is_falling or _player.is_crumpled or travel_blocked() != "":
+		return
+	var dest := _map_start if _map_start != Vector2.ZERO else _start
+	if id.begins_with("post"):
+		var i := int(id.substr(4))
+		if i >= 0 and i < _dpost_list.size():
+			dest = Iso.to_screen(Vector2(_beside(_dpost_list[i]["cell"])))
+	_player.respawn_at(dest)
+	_safe_pos = dest
+	_camera.reset_smoothing()
+	Telemetry.log_event("travel", {"to": id})
+	_hud.toast("You follow the lantern light.")
+
+## A walkable cell next to `cell` (posts block their own cell).
+func _beside(cell: Vector2i) -> Vector2i:
+	for d in [Vector2i(0, 1), Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, -1), Vector2i(1, 1), Vector2i(-1, 1)]:
+		var c: Vector2i = cell + d
+		if _floor.cells.has(c) and not _floor.blockers.has(c) and not _floor.is_pit(c) and _floor.level(c) == _floor.level(cell):
+			return c
+	return cell
+
+## Starts this dungeon over from the entrance: the scene is loaded fresh, so every puzzle resets.
+func restart_dungeon() -> void:
+	if not dungeon_menu or scene_file_path == "":
+		return
+	Telemetry.log_event("restart", {"scene": scene_file_path.get_file()})
+	_clear_echoes()
+	Transition.go(scene_file_path)
 
 func _dungeon_vault(cell: Vector2i, tier: int) -> void:
 	var key := "vault_%s_%d_%d" % [String(name), cell.x, cell.y]

@@ -45,7 +45,6 @@ func _music_slot() -> String:
 
 func _dungeon_extras() -> Array:
 	return [
-		{"kind": "post", "cell": Vector2i(18, 9)},
 		{"kind": "post", "cell": Vector2i(36, 11)},
 		{"kind": "vault", "cell": Vector2i(4, 9), "tier": 1},
 		{"kind": "vault", "cell": Vector2i(21, 1), "tier": 2},
@@ -225,6 +224,9 @@ func _level_process(delta: float) -> void:
 		_hud.set_dim(clampf(_dim_t / 0.6, 0.0, 1.0) * 0.55)
 	else:
 		_hud.set_dim(0.0)
+
+func travel_blocked() -> String:
+	return "Not while the Critic is watching. Finish this first." if (_boss_started and not _finale_started) else ""
 
 # --- Boss flow ------------------------------------------------------------------------
 func _start_boss() -> void:

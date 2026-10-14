@@ -5,6 +5,7 @@ extends LevelBase
 
 func _init() -> void:
 	ambient_leaves = true
+	dungeon_menu = false
 
 const MEMORY_SCENE := "res://scenes/memory_forge.tscn"
 const PIP_MEMORY_SCENE := "res://scenes/memory_pip.tscn"
