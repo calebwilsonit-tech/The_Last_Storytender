@@ -153,6 +153,40 @@ Commit the audit, then do the work in Step 2.
     and step-through on nodes, and the problems panel flags broken wires
     (target deleted, action missing) with a one-click fix.
 
+16. **Tile studio** (a mode of the sprite maker; the original prompt only
+    had an iso grid and an "iso box" helper):
+    - **Tile canvas presets:** flat diamond (project tile size, default
+      64x32), half-height and full-height blocks, wall faces (left/right),
+      cliff faces per height level, stairs/ramps in all 4 facings, and
+      custom sizes; the diamond outline and top/left/right faces are shown
+      as guides, and drawing can be clipped to them.
+    - **Live tiling preview** beside the canvas: the tile repeated across a
+      patch of ground (and stacked for walls/cliffs) as you draw, with seam
+      highlighting and a wrap-around mode so edges line up.
+    - **Autotile sets with guided slots:** pick a set type (ground edges,
+      cliffs, walls, water shores, paths, fences) and get a sheet of
+      labelled empty slots (every edge, inner/outer corner, end piece). Fill
+      them in any order; a preview map shows the result painted, and
+      missing slots are listed. Option to generate a starter set from one
+      base tile plus an edge brush, then hand-touch it.
+    - **Variants and decoration:** several versions of a tile with weights
+      for random painting; overlay decals (cracks, moss, flowers) that the
+      world painter can scatter.
+    - **Animated tiles:** frames and timing for water, lava, torches, grass
+      sway, synced across the map.
+    - **Palette tools:** recolour a whole tileset at once (e.g. turn a
+      forest set into a snow set), palette swaps saved as variants, and a
+      light/shadow shading helper for the three iso faces.
+    - **Tile properties set in one place:** collision shape, walkable,
+      height, is-stair/is-pit/is-water, footstep sound, light blocking,
+      sort offset, tags, any custom fields. Saving sends the tile straight
+      into the world painter's palette with these properties, and editing
+      it later updates every placed copy.
+    - **Import/export:** slice imported tilesheets into tiles with a grid
+      tool, and export tilesets as sheets.
+    - Must also work for **props and multi-cell objects** (a 2x3 house with
+      its footprint and collision drawn on the grid).
+
 Record each choice in `DECISIONS.md`.
 
 ## Step 3: Prove it with genre samples
@@ -184,6 +218,12 @@ playbot able to play each one:
    menus with it. Everything must work with mouse, keyboard and gamepad and
    at 16:9, 16:10, 21:9 and 4:3.
 
+8. **Tile showcase:** in the tile studio only, draw a grass ground set
+   with a full autotile edge set, a cliff set for two height levels with
+   stairs, an animated water shore, and a recoloured snow version; paint a
+   small map with them in the world painter and walk it with the playbot
+   (collision and heights must come from the tile properties alone).
+
 If a sample needs something the engine lacks, add it **to the engine in a
 general way**, never as a one-off hack for that sample.
 
@@ -194,11 +234,11 @@ general way**, never as a one-off hack for that sample.
 2. A new empty project contains no gameplay assumptions.
 3. The Storytender slice works through the behaviour pack and still passes
    all its tests, playbot run included.
-4. All seven samples (six genres plus the UI showcase) are built in the UI, play correctly, are finished
+4. All eight samples (six genres plus the UI and tile showcases) are built in the UI, play correctly, are finished
    by the playbot, and needed no genre-specific code in the core.
 5. Data tables, custom components, custom behaviours, behaviour packs, turn
    mode, the speed-up clock, all control schemes, procedural maps and the
-   plugin API, the UI designer, data binding, Quick Actions, wires and the
+   plugin API, the tile studio, the UI designer, data binding, Quick Actions, wires and the
    logic graph are documented in `docs/` with a recipe each.
 6. The Claude assistant can build a small room in at least three different
    genres from a one-sentence request (tests with a mocked API, plus one
