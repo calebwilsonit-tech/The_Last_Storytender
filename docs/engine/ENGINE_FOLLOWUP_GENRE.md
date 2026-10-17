@@ -236,6 +236,39 @@ Commit the audit, then do the work in Step 2.
       backups, or share with others; importing shows what it contains and
       flags name clashes.
     - Version history per asset, so an old version can be restored.
+20. **Community asset hub (people make art and upload it for others):**
+    - An **Asset Hub** panel inside the editor: browse, search and filter
+      (tiles, tall props, attachments, characters, UI, sounds, behaviours,
+      structures, full templates) by tag, style, tile size, licence and
+      rating; preview animated thumbnails and a **try-in-scene** preview
+      before downloading; one click adds it to the personal library.
+    - **Upload** straight from the personal library: title, description,
+      tags, screenshots, licence, version notes. The engine checks the pack
+      first (tile size, missing files, broken references) and shows what
+      will be published.
+    - **Licences** chosen from a list (CC0, CC-BY, CC-BY-NC, "free for any
+      game", custom text), shown on every asset, and an auto-generated
+      **credits file** for exported games listing every hub asset used and
+      its author.
+    - **Safety:** art, audio and data-only packs are safe by design. Packs
+      containing **code or plugins** are clearly marked, need the user's
+      explicit approval to install, and run with limited permissions; the
+      hub scans uploads and has report buttons and a moderation queue.
+    - Accounts, profiles, likes/ratings, comments, follow creators,
+      collections, update notifications for downloaded assets, and
+      versioning (projects keep the version they used until the user
+      updates).
+    - **Backend:** this needs a server. Build it as a separate package
+      (`packages/hub-server`) the owner can self-host, with storage, auth,
+      search and moderation tools, plus a documented low-cost hosting setup
+      in `docs/HUB_HOSTING.md` (what it costs, how to deploy, how to back
+      up). Until a server is deployed, the panel must work against a local
+      test server, and the rest of the engine must work with no hub at all.
+      Do not deploy anything publicly or create paid accounts yourself;
+      write the steps for the owner.
+    - Optional later: paid assets (requires a payment provider, tax and
+      legal setup; design for it but do not build payments unless the
+      owner asks).
 
 Record each choice in `DECISIONS.md`.
 
@@ -279,7 +312,9 @@ playbot able to play each one:
    build a small house whose wall stack uses different blocks at each
    height (stone base, window block, wood top), with an archway gap, the
    window and guitar on its walls, and trees scattered around it. Walk
-   through the archway and behind the trees with the playbot.
+   through the archway and behind the trees with the playbot. Finally,
+   upload the tree to a local hub test server and download it into a
+   third project, with the licence and credits file correct.
 
 If a sample needs something the engine lacks, add it **to the engine in a
 general way**, never as a one-off hack for that sample.
@@ -296,7 +331,8 @@ general way**, never as a one-off hack for that sample.
 5. Data tables, custom components, custom behaviours, behaviour packs, turn
    mode, the speed-up clock, all control schemes, procedural maps and the
    plugin API, the tile studio, tall props and attachments, block-level
-   editing, the personal asset library, the UI designer, data binding, Quick Actions, wires and the
+   editing, the personal asset library, the community asset hub (with
+   `docs/HUB_HOSTING.md`), the UI designer, data binding, Quick Actions, wires and the
    logic graph are documented in `docs/` with a recipe each.
 6. The Claude assistant can build a small room in at least three different
    genres from a one-sentence request (tests with a mocked API, plus one
