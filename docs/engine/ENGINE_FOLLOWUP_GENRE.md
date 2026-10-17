@@ -236,7 +236,9 @@ Commit the audit, then do the work in Step 2.
       backups, or share with others; importing shows what it contains and
       flags name clashes.
     - Version history per asset, so an old version can be restored.
-20. **Community asset hub (people make art and upload it for others):**
+20. **Community asset hub (people make art and upload it for others).**
+    **Do this item last**, after everything else in this phase passes; it
+    must never delay or block the rest of the engine.
     - An **Asset Hub** panel inside the editor: browse, search and filter
       (tiles, tall props, attachments, characters, UI, sounds, behaviours,
       structures, full templates) by tag, style, tile size, licence and
