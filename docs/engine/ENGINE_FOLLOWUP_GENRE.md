@@ -187,6 +187,56 @@ Commit the audit, then do the work in Step 2.
     - Must also work for **props and multi-cell objects** (a 2x3 house with
       its footprint and collision drawn on the grid).
 
+17. **Trees, tall props and wall attachments** (in the tile studio /
+    sprite maker):
+    - **Tall props** (trees, lamp posts, statues, towers): draw the full
+      image, then mark the **footprint** (the cell(s) the base stands on),
+      the **collision** (e.g. trunk only), the **sort point**, and which
+      part **fades when the player is behind it** (e.g. canopy only).
+      Optional sway/idle animation, seasonal variants, random variants with
+      weights, and a scatter brush in the world painter (density, spacing,
+      no-overlap, avoid paths).
+    - **Wall attachments** (windows, doors, shelves, guitars, posters,
+      torches, signs, vines, cracks): drawn on a wall-face template so they
+      come out at the correct iso angle, with a version for the left-facing
+      and right-facing wall (auto-mirrored, editable). In the world painter
+      they **snap onto any wall face at any height**, can be moved along the
+      wall, and keep their place if the wall is edited. Attachments can
+      carry properties and behaviours (a window that lets light through, a
+      torch that is a light source, a guitar the player can interact with,
+      a door that is a scene portal).
+    - **Floor/surface attachments** (rugs, puddles, tables on floors,
+      things on top of blocks) work the same way on top faces.
+18. **Block-level world editing** (the original prompt only had height
+    raise/lower per cell, which edits a whole column at once):
+    - Every cell is a **stack of individual blocks**. Click any single block
+      at any height to select it and change its tile, delete it, or set its
+      properties, without touching the blocks above or below (e.g. brick
+      at the bottom, a window block in the middle, wood on top).
+    - **Gaps in a stack** are allowed: arches, tunnels, overhangs, bridges
+      and balconies (a block at height 3 with nothing under it). Collision
+      and walking work under and on top of them.
+    - **Per-face painting:** give one face of one block (top, left or right)
+      a different tile or decal.
+    - **Layer slicing view:** show only blocks up to height N, or cut away
+      everything in front of the cursor, so inner blocks can be reached; an
+      x-ray toggle.
+    - Box-select a 3D region of blocks to copy, paste, fill, hollow out or
+      replace; save a selection as a reusable **structure** (a house, a
+      ruin) with its attachments.
+19. **Personal asset library (make once, use in any project):**
+    - Everything the user makes (tiles, tilesets, tall props, attachments,
+      characters, animations, UI widgets, structures, behaviours, sounds)
+      can be saved to a **library that lives outside any one project**,
+      with folders, tags, thumbnails and search.
+    - Drag from the library into any project; choose **link** (updates
+      when the library version changes) or **copy** (independent).
+    - Export/import **asset packs** (one file containing art, properties,
+      behaviours and dependencies) to move assets between computers, keep
+      backups, or share with others; importing shows what it contains and
+      flags name clashes.
+    - Version history per asset, so an old version can be restored.
+
 Record each choice in `DECISIONS.md`.
 
 ## Step 3: Prove it with genre samples
@@ -223,6 +273,13 @@ playbot able to play each one:
    stairs, an animated water shore, and a recoloured snow version; paint a
    small map with them in the world painter and walk it with the playbot
    (collision and heights must come from the tile properties alone).
+   Then, in a **new project**, draw a tree (canopy fades, trunk collides),
+   a window and a guitar as wall attachments, and save all of them to the
+   personal library. In a **second project**, pull them from the library,
+   build a small house whose wall stack uses different blocks at each
+   height (stone base, window block, wood top), with an archway gap, the
+   window and guitar on its walls, and trees scattered around it. Walk
+   through the archway and behind the trees with the playbot.
 
 If a sample needs something the engine lacks, add it **to the engine in a
 general way**, never as a one-off hack for that sample.
@@ -238,7 +295,8 @@ general way**, never as a one-off hack for that sample.
    by the playbot, and needed no genre-specific code in the core.
 5. Data tables, custom components, custom behaviours, behaviour packs, turn
    mode, the speed-up clock, all control schemes, procedural maps and the
-   plugin API, the tile studio, the UI designer, data binding, Quick Actions, wires and the
+   plugin API, the tile studio, tall props and attachments, block-level
+   editing, the personal asset library, the UI designer, data binding, Quick Actions, wires and the
    logic graph are documented in `docs/` with a recipe each.
 6. The Claude assistant can build a small room in at least three different
    genres from a one-sentence request (tests with a mocked API, plus one
