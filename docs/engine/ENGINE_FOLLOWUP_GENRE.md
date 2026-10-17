@@ -96,6 +96,63 @@ Commit the audit, then do the work in Step 2.
     knows about packs, data tables, turn mode, control schemes and templates,
     and can build in any genre on request.
 
+14. **UI designer** (a full one; the original prompt only asked for a basic
+    layout editor). It must be as easy as a slide editor:
+    - **Drag-and-drop canvas** with a widget palette: panel, image, text,
+      button, toggle, slider, dropdown, text input, progress/health bar,
+      scroll list, grid (inventories), tabs, tooltip, minimap, portrait,
+      dialogue box, and any custom widget the user saves.
+    - **Layout without maths:** snap guides, alignment/distribute buttons,
+      anchor presets (the 9-point "pin to corner/centre" picker), auto-layout
+      rows/columns/grids with padding and spacing, safe-area margins, and a
+      **preview bar** to switch resolution, aspect ratio, language and
+      keyboard vs gamepad.
+    - **Styles and states:** themes/style sheets (fonts, colours, nine-slice
+      frames), per-widget states (normal, hover, pressed, selected,
+      disabled) with a preview toggle, and simple UI animations (fade,
+      slide, pop, pulse) on show/hide/hover/click, picked from a list.
+    - **Reusable pieces:** UI prefabs (make one inventory slot, reuse it 30
+      times; edit once, all update) and **list templates** that repeat a
+      prefab for every row in a data table or list variable.
+    - **Data binding with a picker, no typing:** click any property (text,
+      bar fill, image, visible, enabled, colour) -> "Bind to..." -> pick a
+      variable, entity field or data table cell from a tree. Formats like
+      "{gold} coins" and simple conditions ("visible when health < 25%").
+    - **Screens and flow:** a **screen-flow map** (title -> settings ->
+      back, pause -> inventory) drawn as boxes and arrows, with transitions,
+      plus a visual **focus-order** tool for gamepad navigation (draw the
+      arrows between buttons, or auto-generate them).
+    - **In-world UI:** the same widgets attached to entities (health bars
+      over heads, speech bubbles, build-cost labels, interaction prompts).
+15. **Buttons and logic wiring (one logic system everywhere).** Every
+    interactive thing (UI buttons, entities, triggers, plates, timers,
+    state machines) exposes **events** (On Click, On Hover, On Enter, On
+    Pressed, On Value Changed, On Turn Start...) and **actions**, and the
+    user connects them at three levels of difficulty, all editing the same
+    underlying logic so they can switch between them:
+    1. **Quick Actions (easiest):** in the inspector, under "On Click", a
+       dropdown of common actions: go to scene, open/close screen, back,
+       start/continue/save/load game, set/add variable, play sound, show
+       dialogue, quit game. Chain several with "+". This covers most menus
+       with zero graphs.
+    2. **Wires / logic strings:** drag a string from a button's "On Click"
+       pin (or a plate's "On Pressed") to any target in the scene, the
+       outliner or the UI canvas, then pick an action on that target ("Gate
+       -> Open", "Panel -> Show"). Wires are visible as coloured lines in the
+       viewport and canvas, can pass through logic nodes (AND, OR, NOT,
+       latch, delay, counter, random, compare) and light up live while the
+       game runs, so you can see the signal travel.
+    3. **Logic graph (Blueprint-style node editor)** for anything bigger:
+       event nodes, action nodes, branches, loops, variables, math,
+       "for each in table", custom functions, with the same nodes available
+       in state machines, behaviours, UI and scenes. Double-click a wire to
+       open it as a graph; collapse a graph into a reusable node.
+    Event sheets and code stay available and convert to/from graphs where
+    possible. Everywhere: search-as-you-type node picker that only shows
+    actions valid for the chosen target, plain-English tooltips, breakpoints
+    and step-through on nodes, and the problems panel flags broken wires
+    (target deleted, action missing) with a one-click fix.
+
 Record each choice in `DECISIONS.md`.
 
 ## Step 3: Prove it with genre samples
@@ -119,6 +176,14 @@ playbot able to play each one:
 6. **Your choice:** one more genre that tests something none of the above
    do (e.g. RTS with box-select, a farming/life sim, an isometric racer).
 
+7. **UI showcase:** using only the UI designer and Quick Actions/wires
+   (no graphs, no code), build a title screen (New Game, Continue,
+   Settings, Quit), a settings screen with working sliders and key
+   remapping, a pause menu, a HUD bound to live variables, and a grid
+   inventory driven by a data table. Then rebuild the Storytender slice's
+   menus with it. Everything must work with mouse, keyboard and gamepad and
+   at 16:9, 16:10, 21:9 and 4:3.
+
 If a sample needs something the engine lacks, add it **to the engine in a
 general way**, never as a one-off hack for that sample.
 
@@ -129,11 +194,12 @@ general way**, never as a one-off hack for that sample.
 2. A new empty project contains no gameplay assumptions.
 3. The Storytender slice works through the behaviour pack and still passes
    all its tests, playbot run included.
-4. All six genre samples are built in the UI, play correctly, are finished
+4. All seven samples (six genres plus the UI showcase) are built in the UI, play correctly, are finished
    by the playbot, and needed no genre-specific code in the core.
 5. Data tables, custom components, custom behaviours, behaviour packs, turn
    mode, the speed-up clock, all control schemes, procedural maps and the
-   plugin API are documented in `docs/` with a recipe each.
+   plugin API, the UI designer, data binding, Quick Actions, wires and the
+   logic graph are documented in `docs/` with a recipe each.
 6. The Claude assistant can build a small room in at least three different
    genres from a one-sentence request (tests with a mocked API, plus one
    optional live test).
