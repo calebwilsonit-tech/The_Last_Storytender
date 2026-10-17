@@ -66,6 +66,63 @@ clear plain-English errors when something breaks (with an "Ask Claude" button
 that explains and fixes it), and finally clicks **Export -> Windows** to get a
 `.exe` they can give to friends.
 
+## 1.5 This is NOT RPG Maker (the most important rule)
+
+Tilewright must be a **general-purpose** 2D isometric engine, not a kit for
+one kind of game with the story swapped out. A designer should be able to
+make just about any isometric game: action adventure, turn-based tactics,
+city builder, colony/management sim, farming/life sim, roguelike, puzzle,
+stealth, survival, tower defence, RTS, racing, sports, visual-novel hybrids,
+or something nobody has invented yet.
+
+Rules that follow from this:
+
+1. **Nothing about the game is built in.** There is no fixed "player", party,
+   stats, HP, inventory, turn system or battle screen in the core. Those are
+   optional behaviours and modules a project adds, and every one of them can
+   be removed, replaced or edited.
+2. **Composition over presets.** Behaviours are small and combine freely
+   ("Grid Mover" + "Turn Taker" + "Selectable" makes a tactics unit; "Grid
+   Mover" + "Player Controller" makes an action hero). Prefer many small
+   blocks over a few big ones.
+3. **Users can make their own building blocks without code:** custom
+   components (named data fields), custom behaviours built from event sheets
+   and state machines, custom events/signals, custom data tables (items,
+   units, buildings, recipes, waves, card decks: any table the game needs,
+   edited in a spreadsheet-like editor), and reusable "behaviour packs" they
+   can share between projects.
+4. **Real-time and turn-based are equal citizens.** Support a game clock that
+   can run in real time, pause, speed up (sim games), or advance in turns
+   with an initiative/turn queue (tactics), selectable per scene.
+5. **Many control schemes:** direct character control, point-and-click,
+   click-to-move with pathfinding, RTS box-select and commands, cursor on a
+   grid (tactics), free camera pan/zoom/rotate between the 4 iso views
+   (builders), drag-and-drop placement with build ghosts and valid/invalid
+   tinting.
+6. **Grid and free movement both work:** cell-locked movement, free
+   pixel movement, or a mix, per entity.
+7. **World scale:** from one-screen puzzles to large streamed maps with
+   chunks, and procedurally generated maps (rooms, caves, islands, cities)
+   driven by rules the user edits visually and seeds they can lock.
+8. **Simulation helpers** usable by any genre: resource counters and
+   economies, timers and schedules (day/night, seasons), spawn waves, crowd
+   pathfinding/flow fields for many units, needs/utility AI, cellular
+   automata (fire spread, water, growth).
+9. **Extensibility for experts:** a plugin API so anyone can add new
+   behaviours, editor panels, tools and importers in TypeScript, and have
+   them appear in the no-code UI like the built-in ones.
+10. **The reference game is one test, not the shape of the engine.** Never
+    hard-code anything from The Last Storytender into the core. If a feature
+    exists only for it, it belongs in a sample behaviour pack.
+
+**Genre proof:** in addition to the reference game, build these small
+samples using only the editor UI, and keep them as tests: (a) a turn-based
+tactics battle on a height map, (b) a tiny city/colony builder with
+placement, resources and a speed-up clock, (c) a procedurally generated
+roguelike dungeon run, (d) a tower defence level with waves, (e) a
+point-and-click adventure room. If any of these needs a feature the engine
+lacks, add the feature to the engine in a general way.
+
 ## 2. The reference game (what the engine must be able to make)
 
 The engine must be able to rebuild **The Last Storytender**, a Godot game this
@@ -392,6 +449,9 @@ reference generated from the code.
   `docs/BUILDING.md`, Windows CI job.
 - **M13 The acceptance game:** rebuild a vertical slice of The Last
   Storytender using only the editor UI (section 12).
+- **M13b Genre proof:** the five samples from section 1.5, with the general
+  features they need (turn queue, game clock, build placement, data tables,
+  procedural maps, waves, flow fields, point-and-click, plugin API).
 - **M14 Polish:** onboarding tutorial, docs, templates, performance pass,
   accessibility (font scaling, colour-blind-safe overlays, remappable
   everything).
@@ -408,6 +468,10 @@ reference generated from the code.
    Restart/Travel, a stealth enemy with a vision cone, a small boss with two
    phases, an NPC conversation with a choice that sets a flag, save/load,
    and a settings menu with input remapping.
+2b. The five genre samples from section 1.5 (tactics, builder, roguelike,
+   tower defence, point-and-click) are each built only in the editor UI,
+   play correctly, and none of them needed a genre-specific hack in the
+   core.
 3. The playbot finishes that slice from start to end, and the validators
    report no bypassable puzzles and no soft-locks.
 4. The slice exports to a Windows `.exe` that runs with no editor installed
@@ -422,5 +486,5 @@ reference generated from the code.
 7. `docs/` explains every panel, behaviour and recipe; `docs/BUILDING.md`
    explains how to compile the editor `.exe` on Windows.
 
-When all seven are true, write a final summary in `PROGRESS.md`: what was
+When all of these are true, write a final summary in `PROGRESS.md`: what was
 built, what is known to be weak, and what you would do next.
