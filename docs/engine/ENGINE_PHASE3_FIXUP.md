@@ -73,6 +73,9 @@ New designer screens are created with `modal: false, back: 'auto'`
 does not block input into `pass`. So Esc on a newly made non-modal screen
 (an inventory, say) still falls through and opens Pause. That is exactly
 what the owner reported.
+D041 chose this on purpose ("a heads-up display lets it pass"). But it
+treats every screen that does not take the buttons as a HUD, and a
+non-modal menu is the owner's case.
 Fix: `auto` should mean "go back / close this screen" for any screen the
 user opened as a menu. `pass` should only apply to screens with the HUD
 role, or ones explicitly set to "let Back through". Keep old behaviour
@@ -89,23 +92,26 @@ setting and role.
    back. Before the first save of a project that was migrated, copy the
    old files to `.tilewright/backup-format-<n>/` and tell the user. Test
    it.
-2. **Prove the rebuilt screens match the old ones.** The corpus never
-   recorded the old built-in `GameUi` menus (`compat/harness/trace.ts`
-   records only `ui.stack`). a9a301a deleted the old code and re-took
-   baselines in the same commit, and some traces changed behaviour
-   (`sample/tiles-house.json`, `sample/colony.json`: ticks 540-660 went
-   from moving to frozen in `Inventory (modal)`).
-   - Check out `4cd481c` in a worktree, record the old menus' behaviour
-     for the corpus with a harness that also records `runtime.menuOpen`
-     and the built-in screen.
-   - Compare with HEAD, and explain or fix every difference.
+2. **Prove the rebuilt screens match the old ones.** D045 explains the
+   trace changes in a9a301a: the headless harness now has the pause and
+   inventory screens that real Play always had. That is a fair reason, but
+   it means the corpus never recorded the old built-in `GameUi` menus
+   (`compat/harness/trace.ts` records only `ui.stack`). So nothing compared
+   the old menus with the rebuilt ones: rows, focus order, what each row
+   does, Back chains, and settings changing values.
+   - Check out `4cd481c` in a worktree and record the old menus' behaviour
+     with a harness that also records `runtime.menuOpen`, the built-in
+     screen, its rows and the focused row.
+   - Run the same presses at HEAD, compare, and explain or fix every
+     difference.
    - Write the result in `DECISIONS.md`.
-3. **Keep the old code paths covered.** Commit 7690c1a switched every
-   sample to `blockPhysics` and `fadeBySight`, so the old physics and fade
-   are now only covered by the Storytender sample and the owner's project,
-   which is not in the repo. Add corpus copies of a few samples *without*
-   the flags (the state they were in at `4cd481c`), so that old projects'
-   behaviour stays tested in CI.
+3. **Keep the old code paths covered.** D042 says the older samples were
+   re-saved with `blockPhysics` and `fadeBySight` and their traces did not
+   change. That is good evidence the two physics agree on those samples.
+   But it also means CI now runs the old physics and fade only through the
+   Storytender sample. Add corpus copies of a few samples *without* the
+   flags (as they were at `4cd481c`), so the code path every old project
+   uses stays tested in CI.
 4. **The legacy plugin fallback is never exercised.** Add a corpus
    project with no `packs`/`plugins` field at all.
 5. **Golden screenshots on Linux.** `e2e/compat-screens.spec.ts-snapshots/`
@@ -126,10 +132,16 @@ setting and role.
 8. **"Export build" in the corpus** is only a file list and manifest.
    Make it a real export of at least the samples, and a headless start of
    the exported game.
-9. **Working files:** `PROGRESS.md`, `DECISIONS.md` and `KNOWN_ISSUES.md`
-   are kept outside the repo by the owner. Ask the owner for them, update
-   them with this phase (including every re-baseline and why), and hand
-   them back.
+9. **Working files:** the owner keeps `PROGRESS.md`, `DECISIONS.md` and
+   `KNOWN_ISSUES.md` outside the repo and will give them to you. Update
+   them with this round, and correct two over-claims in the phase 3
+   "done when" table:
+   - "A true 3D block world" is marked *holds*, but the world is still a
+     height map read as blocks (item 6.8).
+   - The Parchment UI kit is marked *holds*, but it only recolours the
+     prebuilt screens (section 9).
+   A row reads *holds* only when the spec's wording holds. Otherwise
+   write *partly* and say what is missing.
 
 ## 4. Rule B leaks still in core
 
@@ -258,13 +270,18 @@ setting and role.
 
 ## 8. Cleanup (Step 5)
 
-1. **One logic runtime.** `docs/cleanup_audit.md` keeps three schedulers
-   on purpose, and state machines/behaviour trees still have their own
-   executors (`packages/plugins/ai/src/brain.ts`, `tree.ts`). Done-when 9
-   asked for one shared representation, one interpreter and one debugger.
-   Do it, with the compat corpus proving nothing changed. If you believe it
-   is wrong, write the full case in `DECISIONS.md` and tell the owner
-   plainly that this item was not done and why.
+1. **One logic runtime.** D046 keeps three schedulers on purpose (merging
+   them could change timing in projects the corpus has never seen). The
+   owner accepts that reasoning for rows, graphs and wires. Two things are
+   still owed:
+   - D046 does not cover state machines and behaviour trees, which still
+     have their own executors (`packages/plugins/ai/src/brain.ts`,
+     `tree.ts`) and cannot run event-sheet actions (KNOWN_ISSUES). Make
+     them use the shared condition/action registry and the shared
+     debugger (breakpoints, live highlighting), or write the case for not
+     doing so in `DECISIONS.md`.
+   - Give all schedulers one debugger view: one place to see what fired
+     this tick, whatever kind of logic it came from.
 2. `editorExtensions()` / `onPacksChanged` still have no consumers: keep
    them only as documented deprecated aliases of the real extension
    tables, and say so in the SDK docs.
@@ -292,7 +309,7 @@ Make it a real plugin with a `plugin.json` (not only an entry in
 
 ## Done when
 
-Every numbered item above is fixed (or, for 6.8 and 8.1, decided and
+Every numbered item above is fixed (or, for 6.8, decided and
 written down with the owner told). There are tests for each fix. CI is
 green on Ubuntu and Windows. The owner has been asked to run
 `npm run compat` with their projects in `compat/projects/` and it
