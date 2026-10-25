@@ -1,0 +1,46 @@
+Add-on prompt: a real map widget, controller-friendly scrolling, and custom sliders and drop-downs
+
+Same rules as before: nothing the owner made may break (compat corpus, flags for behaviour changes, old screens keep working), the core stays neutral, failing test first, use it through the real editor and look at screenshots, update PROGRESS / DECISIONS / KNOWN_ISSUES. Confirm every file reference below before relying on it (taken from origin/main at 1fd4f39).
+
+Finish the open items of the phase 3 fix-up first (the neutral test fails on packages/assistant/src/pdf.test.ts lines 42 and 46; the Parchment UI kit's plugin.json describes a binder inventory, chapter map, Travel/Restart pages, a difficulty title and a full HUD that packages/plugins/parchment/src/index.ts does not build: build them, or make the description say what it really is).
+
+1. A map that shows the real world, with markers
+
+Today there are two map widgets and neither can look like The Last Storytender's map:
+- The "world-map" widget (packages/plugins/prebuilt-screens/src/world-map.ts) draws places as circles joined by dashed lines on a dark box: a graph, not the land. No background picture (KNOWN_ISSUES), no terrain.
+- The "minimap" widget (packages/behaviors/src/ui/screens-dom.ts, drawMinimaps) draws the current scene's tiles as green shades with tiny squares for tagged objects. No styling, no fog, no labels, cannot be navigated or clicked, one scene only.
+
+The reference: an unfolded parchment showing the world as discovered, only the regions visited, lit checkpoints as markers you can pick, a "you are here" marker, a list beside it, travel from a picked marker, posts too close to be worth travelling to left out.
+
+Build one general "Map" widget (core or a plugin, your call, documented in DECISIONS) that a designer sets up with no code:
+- Source: the current scene, a chosen scene, or several scenes laid out together (world layout set in the world-map editor), drawn from the real tiles and heights.
+- Look: a colour per tile, tile tag or height band (or "use the tile's own colour"), a background picture or texture (parchment), a border/frame, an optional edge style (torn paper, soft fade), zoom and pan limits.
+- Discovery (fog): hidden / revealed by visiting (a radius around the player, or whole regions when entered), remembered in saves; a variable can reveal areas (a bought map).
+- Markers: from tags, prefabs, regions or a list source, each with an icon (a sprite or a glyph), a colour, a label, a "shown when" condition, and a state look (locked, here, visited). A "you are here" marker that follows the player.
+- Controller and keyboard: the arrows/stick move a highlight between markers by direction on screen, Interact runs the marker's Quick Actions (travel, set waypoint, show info), zoom and pan with buttons; the mouse can click and drag.
+- Bindings: the picked marker is a value other widgets can show (name, hint, distance), so a list beside the map stays in step with the highlight.
+- A "hide markers closer than N cells to the player" setting.
+- The prebuilt map screen and the Parchment kit's chapter map use it. A recipe in docs/recipes: "A discovered-areas map with fast travel, like The Last Storytender's".
+
+2. Scrolling that works with a controller, and a scrollbar you design
+
+Today a panel with "scroll" just gets CSS overflow:auto (screens-dom.ts, about line 92): the browser's own scrollbar, mouse wheel only. Moving the focus with the keyboard or pad never scrolls (there is no scrollIntoView or scrollTop anywhere in packages/behaviors/src/ui), so a focused row can sit off screen.
+
+- Focus follows: when the focus moves to a widget inside a scrolling panel (nested ones too), the panel scrolls so the widget is fully visible, with a setting for how (just enough / keep it centred / page by page) and smooth or instant (instant when Reduce motion is on).
+- The right stick (and a chosen pair of actions, e.g. page up/down, shoulder buttons) scrolls the panel under the focus; holding repeats; this works for panels with nothing focusable in them too (a long help text).
+- A "Scrollbar" look on every scrolling panel, with no browser scrollbar ever shown in a game: hidden, thin, or custom. Custom = a track and a thumb, each a style (fill, border, radius, picture, nine-slice), with states (hover, dragging, focused), width, side, and optional up/down arrows. The thumb can be dragged with the mouse and its size shows how much is visible.
+- Optional fade or "more below" arrows at the edges when there is more to scroll.
+- Lists and grids made from list sources scroll the same way, and keep the focused row in view when rows are added or removed.
+
+3. Sliders and drop-downs drawn by the engine, not the browser
+
+Today a slider is a browser <input type="range"> and a drop-down is a browser <select> (screens-dom.ts, about lines 414 and 699): Chrome's look, and Interact on a drop-down does nothing (it is left out of what Interact fires, about line 497), so a pad can only step through options with left/right.
+
+- Slider: track, filled part, thumb and optional ticks, each styled like any widget (colours, pictures, nine-slice), horizontal or vertical, with the value shown as text or not, states (hover, focused, dragging, disabled). Left/right (or up/down for vertical) step it, holding repeats and speeds up, a modifier or shoulder buttons make big steps; the mouse can drag or click the track.
+- Drop-down: a closed box (styled) that opens a list drawn by the engine (styled rows, the chosen one marked, scrolling as in 2). Interact or Confirm opens it, up/down moves, Interact picks, Back closes without changing; left/right on the closed box still steps through options without opening (as today). The open list stays inside the screen and opens upward if there is no room below. Mouse and touch work too.
+- Same for any other browser control the screens use (text input focus outline, tick boxes): nothing in a game should look like a browser form.
+- Old screens keep their look and behaviour until the project turns the new controls on (a compat flag); new projects get the new ones. The designer shows the new parts in the inspector with previews of each state.
+
+Tests: unit tests for focus-follows-scroll (nested panels, dynamic lists), the slider and drop-down by keys, pad and mouse; an e2e spec that builds a settings screen longer than the window in the UI designer, then plays it with the keyboard and a simulated pad, checking every row is reachable and visible when focused (screenshots), and that no browser scrollbar, range slider or select box appears; an e2e spec that builds the reference-style map in the designer and fast-travels with the pad.
+
+Done when all of the above work with mouse, keyboard and a pad at 16:9, 16:10, 21:9 and 4:3, the compat corpus passes, and there are recipes for the map, a scrolling menu with a custom scrollbar, and styled sliders and drop-downs.
