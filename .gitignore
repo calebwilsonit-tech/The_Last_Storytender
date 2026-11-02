@@ -7,3 +7,8 @@ export_presets.cfg
 *.uid
 *.import
 .port_work/
+
+# Tilewright port: the editor's own autosaves, test saves and logs (not part of the game)
+tilewright/.tilewright/
+tilewright/saves/
+tilewright/logs/
