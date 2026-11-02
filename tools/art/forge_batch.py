@@ -186,7 +186,8 @@ def main():
     if 'people' in groups:
         for who, desc in PEOPLE.items():
             for d in ('1_toward', '2_down_right', '4_up_right', '5_away'):
-                for look, extra, neg in (('restored', '', NEG_PEOPLE), ('placeholder', ', grey graphite pencil sketch, unfinished drawing, rough hatching, no colour, monochrome', NEG_PEOPLE + ', colour, colorful')):
+                # the grey placeholder versions are made from these by the game's tools (same silhouette, no face)
+                for look, extra, neg in (('restored', '', NEG_PEOPLE),):
                     make(f'people/{who}_{look}_{d}', f'{desc}, {PEOPLE_DIRS[d]}, standing{extra}, {PEOPLE_STYLE}, {STYLE}', neg + NEG_PEOPLE_EXTRA,
                          2000 + len(who), ref_style, 0.4, os.path.join(POSES, f'{d}_a_stand.png'), models=models)
     if 'errors' in groups:
