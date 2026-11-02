@@ -13,3 +13,4 @@ tilewright/.tilewright/
 tilewright/saves/
 tilewright/logs/
 __pycache__/
+tools/art/python_path.txt
