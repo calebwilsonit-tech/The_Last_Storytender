@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "name": "shard_memory_5",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Dawn, nearly. The forge is loud and warm. A boy who has not slept brings the hammer down one last time.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Young Garrick",
+      "text": "Come on. Third time.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The blade rings. It is not perfect. There is a slight, stubborn bend near the tip.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Young Garrick",
+      "text": "...There.",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "Wren",
+      "text": "...is it straight?",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "Young Garrick",
+      "text": "No. It's yours.",
+      "next": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]In the dark above the forge, the red voice says very quietly, It was never good enough. And it does not sound like a critic. It sounds like a boy who was tired.[/i]"
+    }
+  ]
+}

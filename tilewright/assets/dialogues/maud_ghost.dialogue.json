@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "maud_ghost",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Lorem Ipsum",
+      "text": "Consectetur... adipiscing...",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]She is standing next to a cold oven, hands curled around nothing, as if holding a loaf that was never there.[/i]"
+    }
+  ]
+}

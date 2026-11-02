@@ -17,6 +17,8 @@ const SNAP = process.env.SNAP!;
 const ART = process.env.ART!;
 const TILES = process.env.TILES!;
 const POSES = process.env.POSES ?? '';
+const DATA = process.env.DATA ?? '';
+const ICONS = process.env.ICONS ?? '';
 const HERE = process.env.HERE!;
 const OUT = process.env.OUT!;
 
@@ -285,12 +287,104 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
   } as SceneData;
 }
 
+// ---------------------------------------------------------------- data: items, conversations
+
+/** What the game's own key names stand for in its text ("{interact} to speak"): the default keys, as the game writes them. */
+const KEYS: Record<string, string> = {
+  move: 'WASD', interact: 'E', attack: 'J', lantern: 'Q', dash: 'Shift', sneak: 'Ctrl', inventory: 'Tab', use_item: 'F',
+  quick_switch: 'G', style_underline: '1', style_bold: '2', style_italic: '3', paste: 'V', map: 'M', echo: 'R', aim: 'the mouse',
+};
+const keyed = (t: string): string => t.replace(/\{([a-z_]+)\}/g, (m, k: string) => (KEYS[k] ? `[${KEYS[k]}]` : m));
+
+type Line = { who: string; text: string; style: string; cue?: string };
+
+function dialogueOf(name: string, lines: Line[]): object {
+  const nodes = lines.map((l, i) => ({
+    id: `n${i + 1}`,
+    type: 'line',
+    speaker: l.who,
+    // the game draws action lines in italics and signs as plain text with no name tab
+    text: keyed(l.style === 'action' ? `[i]${l.text}[/i]` : l.text),
+    ...(i + 1 < lines.length ? { next: `n${i + 2}` } : {}),
+  }));
+  return { schemaVersion: CURRENT_SCHEMA_VERSION, name, start: 'n1', nodes: nodes.length ? nodes : [{ id: 'n1', type: 'end' }] };
+}
+
+/** The game's controls (input_setup.gd), on the engine's actions where they mean the same thing, and as the game's own actions where not. */
+function writeInput(): void {
+  const input = {
+    schemaVersion: CURRENT_SCHEMA_VERSION,
+    overrides: {
+      interact: ['key:KeyE', 'key:Space', 'key:Enter', 'pad:button0'],
+      jump: [], // the Storytender does not jump
+      run: [], // Shift is the dash
+      dodge: ['key:ShiftLeft', 'key:ShiftRight', 'pad:button1'],
+      attack: ['key:KeyJ', 'mouse:0', 'pad:button2', 'pad:axis5+'],
+      echo: ['key:KeyR', 'pad:button4'],
+      inventory: ['key:Tab', 'key:KeyI', 'pad:button8'],
+      map: ['key:KeyM'],
+      quick_1: [], quick_2: [], quick_3: [], quick_4: [], // the game has two quick slots, on F and G (1 2 3 are the styles)
+    },
+    actions: [
+      { id: 'lantern', label: 'Lantern (hold)', bindings: ['key:KeyQ', 'mouse:2', 'pad:axis4+'] },
+      { id: 'sneak', label: 'Creep (hold)', bindings: ['key:ControlLeft', 'key:KeyC', 'pad:button10'] },
+      { id: 'use_item', label: 'Use quick item', bindings: ['key:KeyF', 'pad:button3'] },
+      { id: 'quick_switch', label: 'Switch quick item', bindings: ['key:KeyG', 'pad:button11'] },
+      { id: 'style_underline', label: 'Underline style', bindings: ['key:Digit1', 'pad:button14'] },
+      { id: 'style_bold', label: 'Bold style', bindings: ['key:Digit2', 'pad:button12'] },
+      { id: 'style_italic', label: 'Italic style', bindings: ['key:Digit3', 'pad:button15'] },
+      { id: 'paste', label: 'Paste clipping', bindings: ['key:KeyV', 'pad:button5'] },
+    ],
+  };
+  writeFileSync(join(OUT, 'assets/input.json'), JSON.stringify(input, null, 2) + '\n');
+}
+
+function writeData(): { items: number; dialogues: number } {
+  if (!DATA) return { items: 0, dialogues: 0 };
+  const read = (k: string) => JSON.parse(readFileSync(join(DATA, `${k}.json`), 'utf8'));
+  // ---- items: the game's item table and its catalog, in the engine's item format
+  const db = read('items').constants.ITEMS as Record<string, Record<string, unknown>>;
+  const cat = read('catalog').constants as { ITEMS: Record<string, Record<string, unknown>>; RARITY_COLORS: Record<string, string> };
+  const all = { ...cat.ITEMS, ...db };
+  const HEAL: Record<string, number> = { ink_vial: 45, warm_loaf: 60, ink_flask: 100 }; // level_base.gd use_item
+  const items = Object.entries(all).map(([id, d]) => {
+    const rar = String(d.rarity ?? 'common');
+    const col = (cat.RARITY_COLORS[rar] ?? '#ccccccff').slice(1, 7);
+    const desc = [d.desc, d.flavor].filter((x) => typeof x === 'string' && x).join('\n');
+    const use = d.type === 'consumable' || d.use
+      ? HEAL[id] ? { heal: HEAL[id], consume: true, message: '' }
+      : id === 'lantern_oil' ? { setVariable: 'light', setValue: 100, consume: true, message: 'The Lantern burns bright' }
+      : { setVariable: `used_${id}`, setValue: 1, consume: true, message: '' }
+      : undefined;
+    return { id, name: String(d.name ?? id), description: desc, color: parseInt(col, 16), max: 0, ...(use ? { use } : {}) };
+  });
+  writeFileSync(join(OUT, 'assets/items.json'), JSON.stringify({ schemaVersion: CURRENT_SCHEMA_VERSION, items }, null, 2) + '\n');
+  // item pictures, named icon_<id>, for the binder and the quick slots
+  if (ICONS) for (const id of Object.keys(all)) {
+    const f = join(ICONS, `icon_${id}.png`);
+    if (existsSync(f)) spriteFor(f, safe(`icon_${id}`));
+  }
+  // ---- conversations: every scripted conversation of Story (story.gd), one dialogue each
+  const story = read('story') as { functions: Record<string, Line[] | Record<string, Line[]>> };
+  mkdirSync(join(OUT, 'assets/dialogues'), { recursive: true });
+  let n = 0;
+  for (const [fn, v] of Object.entries(story.functions)) {
+    const sets: [string, Line[]][] = Array.isArray(v) ? [[fn, v]] : Object.entries(v).filter(([, l]) => Array.isArray(l) && l.length > 0).map(([i, l]) => [`${fn}_${i}`, l as Line[]]);
+    for (const [name, lines] of sets) {
+      writeFileSync(join(OUT, `assets/dialogues/${name}.dialogue.json`), JSON.stringify(dialogueOf(name, lines), null, 2) + '\n');
+      n++;
+    }
+  }
+  return { items: items.length, dialogues: n };
+}
+
 // ---------------------------------------------------------------- main
 
 function main(): void {
   if (existsSync(join(OUT, 'assets/sprites'))) rmSync(join(OUT, 'assets/sprites'), { recursive: true });
   mkdirSync(spriteDir, { recursive: true });
   mkdirSync(join(OUT, 'scenes'), { recursive: true });
+  mkdirSync(join(OUT, 'assets'), { recursive: true });
   const snaps: Record<string, Snap> = {};
   for (const k of Object.keys(SCENES)) snaps[k] = JSON.parse(readFileSync(join(SNAP, `${k}.json`), 'utf8'));
   const art: ArtEntry[] = JSON.parse(readFileSync(join(ART, 'index.json'), 'utf8'));
@@ -304,6 +398,9 @@ function main(): void {
     scenes.push(SCENES[k]!.file);
     console.log(`scene ${k}: ${scene.entities.length} objects, map ${scene.map.width} x ${scene.map.height}`);
   }
+  writeInput();
+  const data = writeData();
+  console.log(`items ${data.items}, dialogues ${data.dialogues}`);
   const project = baseProject('The Last Storytender', PLUGINS);
   project.iso = { tileW: 64, tileH: 32, heightPx: LEVEL_PX };
   project.tileset = tileset;

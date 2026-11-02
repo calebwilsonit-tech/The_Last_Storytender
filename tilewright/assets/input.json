@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "overrides": {
+    "interact": [
+      "key:KeyE",
+      "key:Space",
+      "key:Enter",
+      "pad:button0"
+    ],
+    "jump": [],
+    "run": [],
+    "dodge": [
+      "key:ShiftLeft",
+      "key:ShiftRight",
+      "pad:button1"
+    ],
+    "attack": [
+      "key:KeyJ",
+      "mouse:0",
+      "pad:button2",
+      "pad:axis5+"
+    ],
+    "echo": [
+      "key:KeyR",
+      "pad:button4"
+    ],
+    "inventory": [
+      "key:Tab",
+      "key:KeyI",
+      "pad:button8"
+    ],
+    "map": [
+      "key:KeyM"
+    ],
+    "quick_1": [],
+    "quick_2": [],
+    "quick_3": [],
+    "quick_4": []
+  },
+  "actions": [
+    {
+      "id": "lantern",
+      "label": "Lantern (hold)",
+      "bindings": [
+        "key:KeyQ",
+        "mouse:2",
+        "pad:axis4+"
+      ]
+    },
+    {
+      "id": "sneak",
+      "label": "Creep (hold)",
+      "bindings": [
+        "key:ControlLeft",
+        "key:KeyC",
+        "pad:button10"
+      ]
+    },
+    {
+      "id": "use_item",
+      "label": "Use quick item",
+      "bindings": [
+        "key:KeyF",
+        "pad:button3"
+      ]
+    },
+    {
+      "id": "quick_switch",
+      "label": "Switch quick item",
+      "bindings": [
+        "key:KeyG",
+        "pad:button11"
+      ]
+    },
+    {
+      "id": "style_underline",
+      "label": "Underline style",
+      "bindings": [
+        "key:Digit1",
+        "pad:button14"
+      ]
+    },
+    {
+      "id": "style_bold",
+      "label": "Bold style",
+      "bindings": [
+        "key:Digit2",
+        "pad:button12"
+      ]
+    },
+    {
+      "id": "style_italic",
+      "label": "Italic style",
+      "bindings": [
+        "key:Digit3",
+        "pad:button15"
+      ]
+    },
+    {
+      "id": "paste",
+      "label": "Paste clipping",
+      "bindings": [
+        "key:KeyV",
+        "pad:button5"
+      ]
+    }
+  ]
+}

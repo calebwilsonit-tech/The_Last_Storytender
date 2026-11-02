@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "pip_restored",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Pip",
+      "text": "I found a word in the sky. It said 'Once'. Do you think it's a good one?",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Pip",
+      "text": "I'm not going to read ahead. Not this time. I'm going to find out the slow way."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "maud_restored",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "Don't tell the Narrator I gave you the heel. It's the best part.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "Come by at dinner. There's always a chair now."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "maud_format_grant",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The Quill hums. It has learned a new edge: it can format.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Press [1], [2] or [3] to choose Underline, Bold or Italic, then strike a word. Words in this kitchen have weight.[/i]"
+    }
+  ]
+}

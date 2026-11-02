@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "garrick_restored",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Go on. The dark has nothing on you."
+    }
+  ]
+}

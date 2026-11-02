@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "name": "garrick_restoration",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You hold out the sword.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Lorem Ipsum",
+      "text": "Lorem. Ip-- ...",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "That's not a horseshoe.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "I made this when I was sixteen. Bent the blade twice. The Author was kind enough to write that I got it right on the third try.",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "I didn't forge it for a war. I forged it for Wren. My little sister. She was afraid of the dark.",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "I told her a hero's sword makes the dark afraid of her.",
+      "next": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Then the chapter ended. I got old. Nobody needed a hero anymore, so I told myself horseshoes were enough.",
+      "next": "n8"
+    },
+    {
+      "id": "n8",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Funny. I forgot I ever loved it. Not the sword. The making.",
+      "next": "n9"
+    },
+    {
+      "id": "n9",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Thank you, little scribble. You didn't have to find it. You aren't even in the story.",
+      "next": "n10"
+    },
+    {
+      "id": "n10",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You are in the story now.[/i]",
+      "next": "n11"
+    },
+    {
+      "id": "n11",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Hm. Colors. I'd forgotten about those, too.",
+      "next": "n12"
+    },
+    {
+      "id": "n12",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Come find me when you're ready to learn. Swinging a sword is mostly knowing what you're swinging it for."
+    }
+  ]
+}

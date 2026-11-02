@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "name": "garrick_ghost",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Lorem Ipsum",
+      "text": "Lorem ipsum dolor sit amet...",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Lorem Ipsum",
+      "text": "...consectetur. Horseshoe? Horseshoe.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]He is not a person right now. He is a placeholder holding a hammer.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]But the forge behind him is holding something, too. Its fire is frozen in a single moment. He cannot let go of it, and he cannot remember it.[/i]"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "tutorial_sign",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[WASD] to walk.   [E] to speak, or to pick up what was forgotten.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "Mind the plot holes."
+    }
+  ]
+}

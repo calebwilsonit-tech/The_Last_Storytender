@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "name": "maud_resolution",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "I stopped baking the day the last chair stayed empty.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "Funny thing. I never lost the recipe. I lost the reason.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]She puts her hands into the flour. It is warm. It has been warm the whole time.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "Flour, water, salt, patience... and someone to feed.",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]She looks across the table at you.[/i]",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "Sit. You look like you could use a loaf."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "pip_ghost",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Lorem Ipsum",
+      "text": "Dolor sit... amet? Amet.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A storybook lies open at his feet. Whatever he was reading, he has been standing here since.[/i]"
+    }
+  ]
+}

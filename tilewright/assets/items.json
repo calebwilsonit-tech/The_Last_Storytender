@@ -1,0 +1,569 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "authors_pen",
+      "name": "The Author's Pen",
+      "description": "It still remembers how it all began.",
+      "color": 14721056,
+      "max": 0
+    },
+    {
+      "id": "blank_page",
+      "name": "Perfect Blank Page",
+      "description": "Untouched, unfolded and unafraid. The rarest thing a Storytender can find.\nNothing has ever gone wrong on this page.",
+      "color": 10115784,
+      "max": 0
+    },
+    {
+      "id": "bookworm_charm",
+      "name": "Bookworm Charm",
+      "description": "He eats the boring parts for you.",
+      "color": 4889178,
+      "max": 0
+    },
+    {
+      "id": "cartographer_compass",
+      "name": "Cartographer's Compass",
+      "description": "Always points to the next interesting thing.",
+      "color": 4881096,
+      "max": 0
+    },
+    {
+      "id": "censors_monocle",
+      "name": "Censor's Monocle",
+      "description": "Confiscated, then polished.",
+      "color": 10115784,
+      "max": 0
+    },
+    {
+      "id": "clarity_tonic",
+      "name": "Clarity Tonic",
+      "description": "Refills the Lantern and restores some ink.\nTastes like clean punctuation.",
+      "color": 4889178,
+      "max": 0,
+      "use": {
+        "setVariable": "used_clarity_tonic",
+        "setValue": 1,
+        "consume": true,
+        "message": ""
+      }
+    },
+    {
+      "id": "cloth_binding",
+      "name": "Cloth Binding",
+      "description": "Plain, sturdy, quietly hopeful.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "clover_press",
+      "name": "Pressed Clover",
+      "description": "A flat four-leaf clover from between two pages.\nFound at page 212. Kept for luck.",
+      "color": 4889178,
+      "max": 0
+    },
+    {
+      "id": "dust_jacket",
+      "name": "Dust Jacket",
+      "description": "Slides off easily. So do you.",
+      "color": 4889178,
+      "max": 0
+    },
+    {
+      "id": "eternal_bookmark",
+      "name": "The Eternal Bookmark",
+      "description": "Marks the place where you decided to keep going.",
+      "color": 14721056,
+      "max": 0
+    },
+    {
+      "id": "ghost_pepper_ink",
+      "name": "Ghost Pepper Ink",
+      "description": "Scares nearby Errors into freezing for a few seconds.\nDo not taste it. We mean it.",
+      "color": 4889178,
+      "max": 0,
+      "use": {
+        "setVariable": "used_ghost_pepper_ink",
+        "setValue": 1,
+        "consume": true,
+        "message": ""
+      }
+    },
+    {
+      "id": "ghostwriter_glove",
+      "name": "Ghostwriter's Glove",
+      "description": "It wrote this item description.",
+      "color": 4881096,
+      "max": 0
+    },
+    {
+      "id": "glue_stub",
+      "name": "Glue Stub",
+      "description": "The dried end of a paste stick. Holds things together, mostly.\nThe sticky truth.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "gold_leaf",
+      "name": "Gold Leaf",
+      "description": "A whisper-thin sheet of gold for illuminating things.\nDo not sneeze.",
+      "color": 4889178,
+      "max": 0
+    },
+    {
+      "id": "golden_ratio",
+      "name": "The Golden Ratio",
+      "description": "Perfectly proportioned. Perfectly smug.",
+      "color": 14721056,
+      "max": 0
+    },
+    {
+      "id": "herbal_tea",
+      "name": "Herbal Tea",
+      "description": "Restores a little ink and a little Lantern.\nSteeped in the margins of a quiet chapter.",
+      "color": 9076848,
+      "max": 0,
+      "use": {
+        "setVariable": "used_herbal_tea",
+        "setValue": 1,
+        "consume": true,
+        "message": ""
+      }
+    },
+    {
+      "id": "honey_biscuit",
+      "name": "Honey Biscuit",
+      "description": "Restores some ink.\nPip hid these in every pocket.",
+      "color": 9076848,
+      "max": 0,
+      "use": {
+        "setVariable": "used_honey_biscuit",
+        "setValue": 1,
+        "consume": true,
+        "message": ""
+      }
+    },
+    {
+      "id": "hourglass_of_drafts",
+      "name": "Hourglass of Drafts",
+      "description": "Every grain is a version you did not publish.",
+      "color": 10115784,
+      "max": 0
+    },
+    {
+      "id": "illuminated_binding",
+      "name": "Illuminated Binding",
+      "description": "Every margin glows with someone's patience.",
+      "color": 14721056,
+      "max": 0
+    },
+    {
+      "id": "ink_blot",
+      "name": "Ink Blot",
+      "description": "A droplet of ink that never dried.\nIt looks a little like a face. Do not look too long.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "lamplighter_match",
+      "name": "Lamplighter's Match",
+      "description": "Never goes out. Never asks for credit.",
+      "color": 4881096,
+      "max": 0
+    },
+    {
+      "id": "library_binding",
+      "name": "Library Binding",
+      "description": "Reinforced to survive a thousand borrowers.",
+      "color": 4881096,
+      "max": 0
+    },
+    {
+      "id": "loose_thread",
+      "name": "Loose Thread",
+      "description": "Pull it and a whole sentence unravels. Useful for binding.\nDo not pull it. Everyone pulls it.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "lucky_clover",
+      "name": "Lucky Clover",
+      "description": "Four leaves. Someone got to the fifth and stopped.",
+      "color": 4881096,
+      "max": 0
+    },
+    {
+      "id": "margin_doodle",
+      "name": "Margin Doodle",
+      "description": "A small sword, drawn with enthusiasm.",
+      "color": 4889178,
+      "max": 0
+    },
+    {
+      "id": "marginalia_dust",
+      "name": "Marginalia Dust",
+      "description": "Glittering dust brushed from forgotten notes.\nSomeone wrote 'yes!!' here and no one remembers why.",
+      "color": 4881096,
+      "max": 0
+    },
+    {
+      "id": "memory_jar",
+      "name": "Memory Jar",
+      "description": "Break it open for 60 Mnemosynth.\nSomeone kept these on a shelf for a rainy day.",
+      "color": 4881096,
+      "max": 0,
+      "use": {
+        "setVariable": "used_memory_jar",
+        "setValue": 1,
+        "consume": true,
+        "message": ""
+      }
+    },
+    {
+      "id": "midnight_inkwell",
+      "name": "Midnight Inkwell",
+      "description": "Never empties while you are still writing.",
+      "color": 10115784,
+      "max": 0
+    },
+    {
+      "id": "paper_clip",
+      "name": "Paper Clip",
+      "description": "Holds it all together, barely.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "paper_scrap",
+      "name": "Paper Scrap",
+      "description": "A torn corner of something that used to matter.\nEvery book is made of these, eventually.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "pencil_shaving",
+      "name": "Pencil Shaving",
+      "description": "A curl of cedar that still smells like a first draft.\nSharpened, then forgotten.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "phoenix_draught",
+      "name": "Phoenix Draught",
+      "description": "Restores all ink and fully refuels the Lantern.\nBurns going down. Starts you over.",
+      "color": 10115784,
+      "max": 0,
+      "use": {
+        "setVariable": "used_phoenix_draught",
+        "setValue": 1,
+        "consume": true,
+        "message": ""
+      }
+    },
+    {
+      "id": "phoenix_ember",
+      "name": "Phoenix Ember",
+      "description": "A coal from a story that kept getting rewritten.\nIt always starts again.",
+      "color": 10115784,
+      "max": 0
+    },
+    {
+      "id": "pocket_workbench",
+      "name": "Pocket Workbench",
+      "description": "A folding bench, a tiny vice and a surprising number of pliers. Use it from the Binder to craft anywhere.\nEvery lantern post has a bench. This one has legs.",
+      "color": 4889178,
+      "max": 0
+    },
+    {
+      "id": "quill_feather",
+      "name": "Quill Feather",
+      "description": "A long primary feather, cut for writing.\nFrom a bird that had a lot to say.",
+      "color": 4889178,
+      "max": 0
+    },
+    {
+      "id": "reader_digest",
+      "name": "Reader's Digest",
+      "description": "A pocket summary of your deeds. Grants 12 Renown.\nCondensed, with notes.",
+      "color": 4889178,
+      "max": 0,
+      "use": {
+        "setVariable": "used_reader_digest",
+        "setValue": 1,
+        "consume": true,
+        "message": ""
+      }
+    },
+    {
+      "id": "reading_glasses",
+      "name": "Reading Glasses",
+      "description": "Now you can see the small print. And the big threats.",
+      "color": 4889178,
+      "max": 0
+    },
+    {
+      "id": "rubber_band",
+      "name": "Rubber Band",
+      "description": "Snaps back. Mostly.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "silver_ribbon",
+      "name": "Silver Ribbon",
+      "description": "Tied around the last page of a love letter.",
+      "color": 4881096,
+      "max": 0
+    },
+    {
+      "id": "silver_thread",
+      "name": "Silver Thread",
+      "description": "Thread spun from moonlit margins. Strong and bright.\nIt hums when you hold it.",
+      "color": 4881096,
+      "max": 0
+    },
+    {
+      "id": "time_in_a_bottle",
+      "name": "Time in a Bottle",
+      "description": "Freezes every nearby Error for a long breath.\nStopped at 4:17, a Tuesday.",
+      "color": 10115784,
+      "max": 0,
+      "use": {
+        "setVariable": "used_time_in_a_bottle",
+        "setValue": 1,
+        "consume": true,
+        "message": ""
+      }
+    },
+    {
+      "id": "tin_bell",
+      "name": "Tin Bell",
+      "description": "Rings when trouble is polite enough to knock.",
+      "color": 4889178,
+      "max": 0
+    },
+    {
+      "id": "unwritten_word",
+      "name": "The Unwritten Word",
+      "description": "A single word nobody has used yet. Heavier than it looks.\nIt is on the tip of the world's tongue.",
+      "color": 14721056,
+      "max": 0
+    },
+    {
+      "id": "vellum_binding",
+      "name": "Vellum Binding",
+      "description": "Older than the story it holds.",
+      "color": 10115784,
+      "max": 0
+    },
+    {
+      "id": "void_pearl",
+      "name": "Void Pearl",
+      "description": "A pearl of pure redaction. Cold and perfectly round.\nIt swallows light, and a little bit of you.",
+      "color": 4881096,
+      "max": 0
+    },
+    {
+      "id": "wax_seal",
+      "name": "Wax Seal",
+      "description": "A red seal that once closed an important letter.\nIt was not that important.",
+      "color": 4889178,
+      "max": 0
+    },
+    {
+      "id": "bookmark",
+      "name": "The Bookmark",
+      "description": "Lets you return to a place you have restored.\nA promise to return to this moment.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "bookmark_charm",
+      "name": "Bookmark Charm",
+      "description": "Your ink slowly refills on its own (0.8 per second).\nWherever you stopped, it keeps your place.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "eraser_crumbs",
+      "name": "Eraser Crumbs",
+      "description": "Throw it. Rubs out Errors in a small radius (5 damage).\nEverything starts as a mistake someone rubbed out.",
+      "color": 9076848,
+      "max": 0,
+      "use": {
+        "setVariable": "used_eraser_crumbs",
+        "setValue": 1,
+        "consume": true,
+        "message": ""
+      }
+    },
+    {
+      "id": "first_edition",
+      "name": "The First Edition",
+      "description": "-10% damage taken, +10% Quill damage, a little ink regeneration and extra grace after a hit.\nEvery story starts as someone's first try. This one got it nearly right.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "footnote",
+      "name": "The Footnote",
+      "description": "Your Quill reaches 20% further.\nSmall, numbered, and surprisingly far-reaching.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "gilded_binding",
+      "name": "Gilded Binding",
+      "description": "A collector's binding. -15% damage taken, +10% speed, faster dash, +15% Quill damage.\nToo nice to read. You read it anyway.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "hardcover_binding",
+      "name": "Hardcover Binding",
+      "description": "Heavy plates cut from book covers. -30% damage taken, but slower.\nYou can judge it by its cover. Everyone does.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "highlighter",
+      "name": "The Highlighter",
+      "description": "The Lantern burns 35% slower.\nIt makes the important parts glow, and the rest less important.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "index_tab",
+      "name": "Index Tab",
+      "description": "Your dash recovers 20% faster.\nAlways one flick from the page you need.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "ink_flask",
+      "name": "Ink Flask",
+      "description": "Restores all of your ink.\nBottled by someone who knew you would need it.",
+      "color": 9076848,
+      "max": 0,
+      "use": {
+        "heal": 100,
+        "consume": true,
+        "message": ""
+      }
+    },
+    {
+      "id": "ink_vial",
+      "name": "Ink Vial",
+      "description": "Restores a good measure of ink.\nStill wet.",
+      "color": 9076848,
+      "max": 0,
+      "use": {
+        "heal": 45,
+        "consume": true,
+        "message": ""
+      }
+    },
+    {
+      "id": "lantern_oil",
+      "name": "Lantern Oil",
+      "description": "Refills the Lantern completely.\nSmells like warm paper and good intentions.",
+      "color": 9076848,
+      "max": 0,
+      "use": {
+        "setVariable": "light",
+        "setValue": 100,
+        "consume": true,
+        "message": "The Lantern burns bright"
+      }
+    },
+    {
+      "id": "leatherbound_binding",
+      "name": "Leatherbound Binding",
+      "description": "Fine leather, gold edges. -20% damage taken and +10% Quill damage.\nIt smells like an old library and a good decision.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "margin_note",
+      "name": "Margin Note",
+      "description": "-10% damage taken.\n'Be careful here.'  (Underlined twice.)",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "oxford_comma",
+      "name": "The Oxford Comma",
+      "description": "A pause before you take the next hit: a little extra grace after being struck.\nA small pause, and all the difference.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "paperback_binding",
+      "name": "Paperback Binding",
+      "description": "Cheap, light and quick. +20% speed, but -5% protection.\nRead it until the spine cracks.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "red_pen",
+      "name": "The Red Pen",
+      "description": "+25% Quill damage.\nStrike it out. Strike it all out.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "softcover_binding",
+      "name": "Softcover Binding",
+      "description": "Light, flexible leather. +12% speed, faster dash, -10% damage taken.\nDog-eared. Loved.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "sticky_note",
+      "name": "Sticky Note",
+      "description": "Sticks every Error nearby to the page for a few seconds. They cannot move, and a hit on one counts as a sneak attack.\nReminder: do not be eaten.",
+      "color": 9076848,
+      "max": 0,
+      "use": {
+        "setVariable": "used_sticky_note",
+        "setValue": 1,
+        "consume": true,
+        "message": ""
+      }
+    },
+    {
+      "id": "thimble",
+      "name": "The Tailor's Thimble",
+      "description": "A small, dented thimble. -8% damage taken and a faster dash.\nMade to push the needle through, so the sewing could keep going.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "torn_page",
+      "name": "The Torn Page",
+      "description": "The last page of Pip's storybook, torn out and hidden. It fits the door to the final room.\nHe tore it out so no one could spoil it. Then he spoiled it himself.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "void_ink",
+      "name": "Void Ink",
+      "description": "A crafting material scraped from the Redaction.\nIt stains your fingers with bad memories.",
+      "color": 9076848,
+      "max": 0
+    },
+    {
+      "id": "warm_loaf",
+      "name": "Warm Loaf",
+      "description": "Restores a good deal of ink.\nStill warm. Someone made it for you.",
+      "color": 9076848,
+      "max": 0,
+      "use": {
+        "heal": 60,
+        "consume": true,
+        "message": ""
+      }
+    }
+  ]
+}

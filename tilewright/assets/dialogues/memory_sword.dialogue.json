@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "memory_sword",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The sword is small, and plain, and a little crooked. It is warm, as if someone has only just let go of it.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Far above the frozen flame, an old man is holding a hammer and does not know why. You know why now.[/i]"
+    }
+  ]
+}

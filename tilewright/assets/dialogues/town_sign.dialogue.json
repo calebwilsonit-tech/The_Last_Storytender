@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "town_sign",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "THISTLEDOWN",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "Population: ████.   Founded: ████.   Please enjoy your ████."
+    }
+  ]
+}

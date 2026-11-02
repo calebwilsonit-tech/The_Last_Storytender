@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "pip_book_enter",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The book is open to a page with nothing on it. The pages around it shiver, as if someone has been holding their breath.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You lean in. The lantern's light falls into the white space, and the white space falls into you.[/i]"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "maud_oven_enter",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You look into the oven. Cold ashes. In the middle of them, one very small light is still burning.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You hold up the lantern, and the light in the ashes leans toward it.[/i]"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "name": "shard_memory_2",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Night. A small figure is awake in the dark, holding her blanket like a shield.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Wren",
+      "text": "Garrick? Will you stay till I fall asleep?",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "Young Garrick",
+      "text": "Is it the thing under the bed again?",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Wren",
+      "text": "It has teeth.",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "Young Garrick",
+      "text": "Then I'll make you something. A sword.",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "Wren",
+      "text": "Swords are for monsters.",
+      "next": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "line",
+      "speaker": "Young Garrick",
+      "text": "A hero's sword makes the dark afraid of her.",
+      "next": "n8"
+    },
+    {
+      "id": "n8",
+      "type": "line",
+      "speaker": "Wren",
+      "text": "Then I'll hold it very tight."
+    }
+  ]
+}

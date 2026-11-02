@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "pip_door_fit",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You slide the Torn Page into the slot. It fits exactly. Of course it does. He knows how this story ends.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The door of bound pages swings open onto a vast white room.[/i]"
+    }
+  ]
+}

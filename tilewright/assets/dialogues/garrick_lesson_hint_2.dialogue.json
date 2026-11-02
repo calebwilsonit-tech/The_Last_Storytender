@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "garrick_lesson_hint_2",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Now run at nothing and run away from it. Shift. A step before the blow lands is worth ten after."
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "name": "scissor_finale",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "The Scissor-Man",
+      "text": "...That isn't how it works. You can't just put it back.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The clippings are all around him now, hundreds of them, small cut-out scenes with their edges still sharp. In one, a young man hammers a blade straight and then does not. In another, a boy tears out a page. In another, a woman sets a table for six, and then for one.[/i]",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "The Scissor-Man",
+      "text": "I cut them to keep the story short. Every one of them was somebody's favorite part.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You hold up the lantern. In its light the clippings turn over, one at a time. Every one has a back side, and on every back side something has been written: kept.[/i]",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "The Scissor-Man",
+      "text": "...Kept.",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The shears fall open and are only shears. Without them his hands are just hands: a tailor's, thimble-dented and tired.[/i]",
+      "next": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "line",
+      "speaker": "Wick",
+      "text": "My name's Wick. I used to mend things. Somewhere along the way I got confused and started cutting them out instead.",
+      "next": "n8"
+    },
+    {
+      "id": "n8",
+      "type": "line",
+      "speaker": "Wick",
+      "text": "Take this. It's the only thing I ever made that I didn't have to cut anything off to finish."
+    }
+  ]
+}

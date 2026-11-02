@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "name": "icon_marginalia_dust",
+  "width": 96,
+  "height": 96,
+  "palette": [
+    "#00000000",
+    "#000000ff",
+    "#ffffffff",
+    "#e8553dff",
+    "#f4a259ff",
+    "#f6d55cff",
+    "#6fae5bff",
+    "#2f6f4eff",
+    "#4a90d9ff",
+    "#2b4c7eff",
+    "#8e7cc3ff",
+    "#c9964aff",
+    "#7b5a3aff",
+    "#a3a7b3ff",
+    "#5c6070ff",
+    "#2a2d38ff",
+    "#9a6ac8ff",
+    "#d8b4f0ff"
+  ],
+  "layers": [
+    {
+      "id": "l1",
+      "name": "Layer 1",
+      "visible": true
+    }
+  ],
+  "frames": [
+    {"duration":100,"cels":{"l1":"2543x0 2x2 94x0 2x2 94x0 2x2 93x0 4x2 76x0 7x16 9x0 4x2 4x0 6x16 65x0 3x16 3x17 3x16 7x0 6x2 1x0 4x16 2x17 3x16 63x0 2x16 7x17 2x16 3x0 12x2 6x17 2x16 61x0 2x16 9x17 1x16 18x2 4x17 2x16 60x0 2x16 9x17 2x16 2x0 12x2 7x17 2x16 60x0 2x16 9x17 2x16 5x0 6x2 1x16 10x17 1x16 60x0 1x16 10x17 2x16 6x0 4x2 2x16 10x17 1x16 60x0 2x16 9x17 2x16 6x0 4x2 2x16 10x17 1x16 60x0 2x16 9x17 2x16 3x0 1x16 3x0 2x2 1x0 2x16 9x17 2x16 61x0 2x16 7x17 2x16 1x0 7x16 2x2 2x0 2x16 8x17 2x16 61x0 3x16 5x17 6x16 4x17 1x16 2x2 3x0 2x16 6x17 2x16 63x0 11x16 7x17 2x16 4x0 8x16 66x0 5x16 2x0 1x16 9x17 2x16 4x0 5x16 74x0 2x16 9x17 2x16 83x0 2x16 10x17 1x16 83x0 2x16 10x17 1x16 83x0 2x16 9x17 2x16 83x0 2x16 9x17 2x16 11x0 4x16 69x0 2x16 7x17 2x16 10x0 7x16 69x0 2x16 5x17 3x16 9x0 2x16 5x17 3x16 62x0 5x16 1x0 7x16 10x0 2x16 7x17 2x16 60x0 8x16 2x0 3x16 11x0 2x16 9x17 2x16 58x0 3x16 5x17 2x16 15x0 2x16 9x17 2x16 58x0 2x16 7x17 2x16 14x0 2x16 10x17 1x16 57x0 2x16 9x17 2x16 7x0 1x16 5x0 2x16 10x17 1x16 57x0 2x16 9x17 2x16 4x0 7x16 2x0 2x16 9x17 2x16 57x0 1x16 10x17 2x16 3x0 3x16 4x17 5x16 9x17 2x16 57x0 1x16 10x17 2x16 2x0 2x16 7x17 2x16 1x0 2x16 7x17 2x16 58x0 2x16 9x17 2x16 2x0 2x16 8x17 2x16 1x0 3x16 3x17 3x16 59x0 2x16 9x17 1x16 2x0 2x16 10x17 1x16 2x0 7x16 61x0 2x16 7x17 2x16 2x0 2x16 10x17 1x16 71x0 3x16 3x17 3x16 3x0 2x16 10x17 2x16 71x0 7x16 4x0 2x16 10x17 1x16 84x0 2x16 8x17 2x16 84x0 2x16 8x17 2x16 85x0 3x16 4x17 3x16 87x0 8x16 90x0 4x16 2731x0"},"boxes":[]}
+  ],
+  "origin": {
+    "x": 48,
+    "y": 95
+  },
+  "clips": [],
+  "procedural": null
+}

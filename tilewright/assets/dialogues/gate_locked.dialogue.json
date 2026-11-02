@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "gate_locked",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The Margin Gate is shut, a wall of pages bound with ribbon. Its lock is shaped like a full stop.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Whatever lies beyond cannot be opened until the Prologue is finished: Thistledown still has an Editor.[/i]"
+    }
+  ]
+}

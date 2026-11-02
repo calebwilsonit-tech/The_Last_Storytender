@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "name": "garrick_lesson_end",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Not bad. Crooked, but not bad.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Out there, the Redaction is sending Errors. Bares, mostly. Poor beasts. Spelling mistakes with teeth.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "You can cut them down. Or you can hold your light on them until they remember what they were.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "The second way takes longer. It's usually worth it.",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Here. Hardcover. Heavy. It'll keep the Errors from reading you too closely.",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "And these: eraser crumbs. Throw them at anything you'd rather not read."
+    }
+  ]
+}

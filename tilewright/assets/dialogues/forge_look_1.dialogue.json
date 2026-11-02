@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "forge_look_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Every tool on the bench has a name scratched into the handle. Hammer: Gerald. Tongs: Also Gerald. Chisel: He ran out of names around week three.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Under the vise, a note in a child's writing: 'You are allowed to stop for today.' It is signed with a drawing of a very small sword.[/i]"
+    }
+  ]
+}

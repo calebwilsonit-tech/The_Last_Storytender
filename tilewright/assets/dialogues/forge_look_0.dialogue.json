@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "forge_look_0",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A small girl asleep by the cold hearth, under a blanket made of oven mitts. She would not go to bed unless the forge was lit.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]'It's the only thing in the house that's awake,' she told him. He lit it every night after that, even when there was nothing to forge.[/i]"
+    }
+  ]
+}

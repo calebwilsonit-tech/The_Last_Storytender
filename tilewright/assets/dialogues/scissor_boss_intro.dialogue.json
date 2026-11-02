@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "name": "scissor_boss_intro",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A long green mat runs out under a wall of black. The air smells of cut paper. Something enormous stands in the middle of it, unfinished: half colored, half sketch, with a pair of shears where its hands should be.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "The Scissor-Man",
+      "text": "Cut for pacing.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "The Scissor-Man",
+      "text": "Cut for length. Cut for 'it doesn't serve the story.'",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "The Scissor-Man",
+      "text": "Everything has a page count. Yours is up.",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Every cut leaves a clipping behind. Strike a clipping to pick it up, and press [V] to paste it back. Paper that has been patched, scissors will not cut.[/i]"
+    }
+  ]
+}

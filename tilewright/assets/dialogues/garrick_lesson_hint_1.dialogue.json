@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "garrick_lesson_hint_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "The dummy, little scribble. Click, or J. It won't hit back. That's the whole appeal."
+    }
+  ]
+}

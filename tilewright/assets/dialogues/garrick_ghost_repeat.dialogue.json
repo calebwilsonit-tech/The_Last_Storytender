@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "garrick_ghost_repeat",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Lorem Ipsum",
+      "text": "Lorem... ipsum...",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The frozen flame in his forge is still waiting. Touch it.[/i]"
+    }
+  ]
+}

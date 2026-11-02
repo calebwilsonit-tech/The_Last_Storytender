@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "name": "forge_flame",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The flame is frozen mid-lick. One moment, held so long it has gone cold.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Far inside it, small as a coin, a boy is swinging a hammer.[/i]",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You hold up the lantern. The flame leans toward the light, as if it has been waiting for someone to ask.[/i]"
+    }
+  ]
+}

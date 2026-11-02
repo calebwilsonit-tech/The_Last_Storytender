@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "pip_page_found",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The last page of the story, torn out and folded very small, as if someone were hiding it from himself.[/i]"
+    }
+  ]
+}

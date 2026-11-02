@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "echo_grant",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The lantern remembers more than you do. Press [R], walk somewhere, and press [R] again: a ghost of you will play it back and then stand where it ended.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A remembered you has weight. It can hold a plate down, and the curious are drawn to it. You can keep two.[/i]"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "name": "pip_restoration",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Lorem Ipsum",
+      "text": "Dolor... sit... ",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Pip",
+      "text": "...Who are you?",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "Pip",
+      "text": "Oh. You're the doodle from the page.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Pip",
+      "text": "I was reading a book and then I wasn't. It was scary. But I think I finished a chapter.",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "Pip",
+      "text": "Mister Garrick says you can swing a quill. Will you show me how to hold one? I want to write the next page myself.",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]He is smiling at the sky, where the underside of the next page is very faintly beginning to show text. It is not an ending. It is a sentence that starts with \"Once.\"[/i]"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "garrick_lesson_hint_0",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Hold your light up. Q, or the right mouse button. Let it say what matters."
+    }
+  ]
+}

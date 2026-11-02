@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "name": "maud_restoration",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Lorem Ipsum",
+      "text": "Consectetur...",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "...Oh. The oven's warm.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "I had a whole table of people in my head just now. All of them talking at once. I'd forgotten how loud it was. How good.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "Here. Take these. A loaf is for carrying to someone who needs it. That's the only rule I've ever had.",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]She is already kneading something. The smell of bread spreads out across the square like a held breath let go.[/i]"
+    }
+  ]
+}

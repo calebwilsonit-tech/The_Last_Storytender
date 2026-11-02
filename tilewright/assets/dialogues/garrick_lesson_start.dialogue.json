@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "name": "garrick_lesson_start",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "You've got a lantern. Good. A lantern is how you tell the dark what matters.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "But light doesn't swing back. For that...",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]He sets a feather on the anvil and takes the hammer to its nib. Four clean strikes. No bending.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "A Quill. Not a sword. A sword ends things. This one rewrites them.",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Go on. Hit the dummy. Three times. Don't think about whether it's pretty."
+    }
+  ]
+}

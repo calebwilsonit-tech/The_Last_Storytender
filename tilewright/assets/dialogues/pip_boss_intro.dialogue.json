@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "name": "pip_boss_intro",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The room is one enormous open book, its pages stacked like stairs. At the far end a small boy sits with his hands pressed over his eyes.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "The Spoiler",
+      "text": "The knight dies.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "The Spoiler",
+      "text": "The dragon wins. The kingdom burns. Everyone you love is gone by chapter nine.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Pip",
+      "text": "I didn't want to know! I just wanted to see if it was okay!",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "The Spoiler",
+      "text": "It is not okay. I have read the end. I read it for you.",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Its words are enormous and they are not lying: when it says the floor will fall, the floor falls. But they are written in ink, and ink can be rewritten.[/i]"
+    }
+  ]
+}

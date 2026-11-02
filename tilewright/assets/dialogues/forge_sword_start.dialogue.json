@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "forge_sword_start",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A sword lies in the first room, small and plain and a little crooked, as if somebody put it down for a moment and never came back.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]It is warm. It does not feel like a weapon. It feels like something that was meant to be carried out of here. Take it, and keep it safe.[/i]"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "forge_look_5",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The night watch was meant to be a grown man with a lantern. It was a boy with a hammer and a stool, and he fell asleep every night at the third hour.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Every night, someone put a blanket over him and told nobody. He never worked out who. He knew, though. He just never said.[/i]"
+    }
+  ]
+}
