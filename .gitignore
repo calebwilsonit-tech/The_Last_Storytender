@@ -12,3 +12,4 @@ export_presets.cfg
 tilewright/.tilewright/
 tilewright/saves/
 tilewright/logs/
+__pycache__/
