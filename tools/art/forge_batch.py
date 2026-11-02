@@ -36,8 +36,12 @@ DIRS = {
     '4_up_right': ('three-quarter back view, walking away toward the upper right, backpack visible, no eyes visible', 'storytender_back.png'),
     '5_away': ('back view, facing away from the viewer, backpack with gear emblem, no face, no eyes', 'storytender_away.png'),
 }
-POSE_WORDS = {'a_stand': 'standing', 'b_walk': 'walking', 'c_walk': 'walking', 'd_walk': 'walking', 'e_walk': 'walking',
-              'f_strike': 'swinging a long cream feather quill pen overhead'}
+POSE_WORDS = {'a_stand': 'standing still',
+              'b_walk': '(walking, mid stride, one leg stepping forward, legs apart:1.3)',
+              'c_walk': '(walking, one knee raised high, one boot lifted off the ground:1.4)',
+              'd_walk': '(walking, mid stride, the other leg stepping forward, legs apart:1.3)',
+              'e_walk': '(walking, the other knee raised high, one boot lifted off the ground:1.4)',
+              'f_strike': '(swinging a long cream feather quill pen overhead, arm raised high:1.3)'}
 
 PEOPLE = {
     'garrick': '(chibi:1.3) broad middle-aged blacksmith, short dark beard, rolled up sleeves, brown leather apron, hammer at his belt, kind tired eyes, simple cartoon face',
@@ -128,12 +132,12 @@ def setup():
     return pose_model, ip_model, ip_module
 
 
-def unit(image, module, model, weight, mode='Balanced'):
+def unit(image, module, model, weight, mode='Balanced', end=1.0):
     return {'enabled': True, 'image': image, 'module': module or 'None', 'model': model, 'weight': weight,
-            'resize_mode': 'Crop and Resize', 'control_mode': mode, 'pixel_perfect': False, 'guidance_start': 0.0, 'guidance_end': 1.0}
+            'resize_mode': 'Crop and Resize', 'control_mode': mode, 'pixel_perfect': False, 'guidance_start': 0.0, 'guidance_end': end}
 
 
-def make(name, prompt, negative, seed, ref=None, ref_weight=0.6, pose=None, size=(1024, 1024), models=(None, None, None)):
+def make(name, prompt, negative, seed, ref=None, ref_weight=0.6, pose=None, size=(1024, 1024), models=(None, None, None), ref_end=1.0, pose_weight=1.0):
     out_dir = os.path.join(OUT, os.path.dirname(name))
     os.makedirs(out_dir, exist_ok=True)
     first = os.path.join(OUT, f'{name}_s0.png')
@@ -142,9 +146,9 @@ def make(name, prompt, negative, seed, ref=None, ref_weight=0.6, pose=None, size
     pose_model, ip_model, ip_module = models
     units = []
     if ref and ip_model and os.path.exists(ref):
-        units.append(unit(b64(ref), ip_module, ip_model, ref_weight))
+        units.append(unit(b64(ref), ip_module, ip_model, ref_weight, end=ref_end))
     if pose and pose_model and os.path.exists(pose):
-        units.append(unit(b64(pose), 'None', pose_model, 1.0, 'ControlNet is more important'))
+        units.append(unit(b64(pose), 'None', pose_model, pose_weight, 'ControlNet is more important'))
     payload = {'prompt': prompt, 'negative_prompt': negative, 'width': size[0], 'height': size[1], 'steps': 30, 'cfg_scale': 6,
                'sampler_name': 'DPM++ 2M', 'scheduler': 'Karras', 'seed': seed, 'batch_size': 1, 'n_iter': 4,
                'alwayson_scripts': {'ControlNet': {'args': units}} if units else {}}
@@ -172,8 +176,10 @@ def main():
         for d, (words, ref) in DIRS.items():
             seed = 1000 + list(DIRS).index(d) * 10   # the same seeds for every pose of a direction, so the frames match
             for p, pw in POSE_WORDS.items():
-                make(f'storytender/{d}_{p}', f'{HERO}, {words}, {pw}, {STYLE}', NEG_CHAR, seed, os.path.join(REF, ref), 0.6,
-                     os.path.join(POSES, f'{d}_{p}.png'), models=models)
+                moving = p != 'a_stand'   # in moving frames the pose must win over the reference picture
+                make(f'storytender/{d}_{p}', f'{HERO}, {words}, {pw}, {STYLE}', NEG_CHAR + (', standing still, feet together' if moving else ''),
+                     seed, os.path.join(REF, ref), 0.45 if moving else 0.6, os.path.join(POSES, f'{d}_{p}.png'), models=models,
+                     ref_end=0.7 if moving else 1.0, pose_weight=1.3 if moving else 1.0)
     if 'people' in groups:
         for who, desc in PEOPLE.items():
             for d in ('1_toward', '2_down_right', '4_up_right', '5_away'):
