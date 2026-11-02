@@ -22,16 +22,22 @@ COLORS = [(255, 0, 0), (255, 85, 0), (255, 170, 0), (255, 255, 0), (170, 255, 0)
 def body(phase=None, strike=False):
     """The skeleton in body space: x = the character's right, y = up, z = forward (where it faces)."""
     sw = 0.0 if phase is None else math.sin(phase)
-    leg = math.radians(28) * sw      # right leg swing (left is opposite)
-    arm = math.radians(24) * sw      # arms swing opposite to the legs
-    bob = 0.0 if phase is None else 0.04 * abs(math.cos(phase))
+    pas = 0.0 if phase is None else math.cos(phase)   # passing frames: +1 lifts the right leg, -1 the left
+    leg = math.radians(36) * sw      # right leg swing (left is opposite)
+    arm = math.radians(30) * sw      # arms swing opposite to the legs
+    bob = 0.0 if phase is None else 0.07 * abs(pas)
     p = {}
     hip_y = 0.9 + bob
     for side, s, a_leg in (('R', 1, leg), ('L', -1, -leg)):
         hip = (0.18 * s, hip_y, 0.0)
-        knee = (0.18 * s, hip_y - 0.45 * math.cos(a_leg), 0.45 * math.sin(a_leg))
-        bend = 0.12 if (phase is not None and a_leg < 0) else 0.0   # the back leg bends a little
-        ankle = (0.18 * s, knee[1] - 0.45 * math.cos(a_leg - bend), knee[2] + 0.45 * math.sin(a_leg - bend))
+        lift = max(0.0, pas * s)     # this leg is swinging through, knee raised and foot off the ground
+        if lift > 0.5:
+            knee = (0.2 * s, hip_y - 0.3, 0.3)
+            ankle = (0.2 * s, hip_y - 0.62, 0.1)
+        else:
+            knee = (0.18 * s, hip_y - 0.45 * math.cos(a_leg), 0.45 * math.sin(a_leg))
+            bend = 0.12 if (phase is not None and a_leg < 0) else 0.0   # the back leg bends a little
+            ankle = (0.18 * s, knee[1] - 0.45 * math.cos(a_leg - bend), knee[2] + 0.45 * math.sin(a_leg - bend))
         p['hip' + side], p['knee' + side], p['ankle' + side] = hip, knee, ankle
     p['neck'] = (0.0, 1.58 + bob, 0.0)
     for side, s, a_arm in (('R', 1, -arm), ('L', -1, arm)):
