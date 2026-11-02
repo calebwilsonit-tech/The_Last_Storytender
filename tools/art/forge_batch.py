@@ -33,8 +33,8 @@ DIRS = {
     '1_toward': ('facing the viewer, front view', 'storytender_front.png'),
     '2_down_right': ('three-quarter front view, turned toward the right, backpack visible behind left shoulder', 'storytender_front.png'),
     '3_right': ('side view, facing right, profile, backpack on the left side of the body', 'storytender_front.png'),
-    '4_up_right': ('three-quarter back view, walking away toward the upper right, backpack visible, no eyes visible', 'storytender_back.png'),
-    '5_away': ('back view, facing away from the viewer, backpack with gear emblem, no face, no eyes', 'storytender_away.png'),
+    '4_up_right': ('three-quarter back view, turned away toward the upper right, (big brown leather backpack on the back with a grey gear emblem:1.4), short stubby legs, no eyes visible', 'storytender_away.png'),
+    '5_away': ('back view, facing away from the viewer, (big brown leather backpack on the back with a grey gear emblem and a wrench:1.4), short stubby legs, no face, no eyes', 'storytender_away.png'),
 }
 # Only the standing frame and the strike come from Forge: the walk cycle is built from the standing frame
 # (body bob and stepping boots), so the character stays exactly the same in every walk frame.
