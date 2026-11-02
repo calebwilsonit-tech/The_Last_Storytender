@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_wells_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The ink in these wells never dries. Don't stare into them too long. They tend to take notes.[/i]"
+    }
+  ]
+}

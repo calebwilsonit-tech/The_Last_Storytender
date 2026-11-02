@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_margin_2",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]This used to be the wing where unfinished books were kept. They are still here. They are still unfinished. They seem fine with it.[/i]"
+    }
+  ]
+}

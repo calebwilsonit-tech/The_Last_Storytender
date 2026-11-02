@@ -12,6 +12,7 @@ import { TileMap, FLAG, SLOPE, tileMapToRows, currentFlags, stringifySprite, dec
 import { baseProject, playerEntity, setActivePacks, attachBehavior } from '@tilewright/plugin-sdk/legacy';
 import '@tilewright/bundled-plugins';
 import { importPng } from '@tw-editor/renderer/studio/assets';
+import { decorateOverworld, writeOverworldTalk, type World } from './overworld';
 
 const SNAP = process.env.SNAP!;
 const ART = process.env.ART!;
@@ -22,7 +23,7 @@ const ICONS = process.env.ICONS ?? '';
 const HERE = process.env.HERE!;
 const OUT = process.env.OUT!;
 
-const PLUGINS = ['combat', 'inventory', 'story', 'ai', 'lighting', 'storytender', 'prebuilt-screens'];
+const PLUGINS = ['combat', 'inventory', 'story', 'ai', 'lighting', 'storytender', 'prebuilt-screens', 'parchment'];
 const LEVEL_PX = 28; // Iso.LEVEL_H in the game
 setActivePacks(PLUGINS);
 
@@ -232,6 +233,46 @@ function entityFor(scene: string, n: Snap['nodes'][number], art: ArtEntry | unde
   return { id, name: `${n.class} ${n.name}`, tags, components: { transform: { x: gx, y: gy, h, facing: 2 }, sprite } };
 }
 
+/** Adds a behaviour with settings; a script behaviour (script_<Name>) is just its settings, checked when the editor compiles it. */
+function attach(components: Record<string, unknown>, id: string, settings: object): void {
+  if (id.startsWith('script_')) {
+    components[id] = { ...settings };
+    return;
+  }
+  attachBehavior(components, id);
+  Object.assign(components[id] as object, settings);
+}
+
+let world: World | null = null;
+function loadWorld(): World | null {
+  if (!DATA) return null;
+  const read = (k: string) => JSON.parse(readFileSync(join(DATA, `${k}.json`), 'utf8'));
+  const cat = read('catalog').constants.ITEMS;
+  mkdirSync(join(OUT, 'assets/dialogues'), { recursive: true });
+  return {
+    story: read('story'),
+    map: read('prologue_map').constants,
+    rolls: read('chest_rolls'),
+    items: { ...cat, ...read('items').constants.ITEMS },
+    keyed,
+    write: (name, data) => writeFileSync(join(OUT, `assets/dialogues/${name}.dialogue.json`), JSON.stringify(data, null, 2) + '\n'),
+    attach,
+  };
+}
+
+/** The Storytender's abilities (player.gd): ink, the quill, the dash, the lantern, echoes, and the script for the rest. */
+function storytenderKit(p: EntityData): void {
+  const c = p.components;
+  Object.assign(c.playerController as object, { speed: 4.2, runMultiplier: 1, jumpSpeed: 0 });
+  attach(c, 'health', { max: 100, invulnerableSeconds: 0.9, onDeath: 'respawn', fallDamage: 15, team: 'player', showBar: false });
+  // reach 74 px of ground (2.1 cells), a swing of +-1.2 rad, 0.3 s between strikes (the combo's finisher is not ported yet)
+  attach(c, 'meleeAttack', { damage: 1.1, range: 2.1, arc: 137, windup: 0.04, active: 0.14, cooldown: 0.3, knockback: 4.7, hurts: 'enemies', hitStop: 0.05, shake: 2 });
+  attach(c, 'dodge', { speed: 14.5, seconds: 0.2, cooldown: 0.75, invulnerable: true });
+  attach(c, 'light', { radius: 1.2, intensity: 0.35, color: 'cool', shadows: true, flicker: 0.15, mode: 'always' });
+  attach(c, 'echoRecorder', { seconds: 9, capacity: 0, capacityVariable: '', ending: 'hold', ghostAlpha: 0.55 });
+  attach(c, 'script_Storytender', { speed: 4.2, lanternRadius: 4.9 });
+}
+
 function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
   const map = buildMap(scene, snap);
   const blocked = new Set(snap.floor.blockers.map(([x, y]) => `${x},${y}`));
@@ -256,6 +297,7 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
       } else if (a?.file) (p.components.sprite as Record<string, unknown>).asset = spriteFor(join(ART, a.file), 'storytender', a.feet);
       attachBehavior(p.components, 'followCamera');
       Object.assign(p.components.followCamera as object, { zoom: 1.5 }); // LevelBase.ZOOM
+      storytenderKit(p);
       player = p;
       entities.push(p);
       continue;
@@ -263,6 +305,7 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
     if (['IsoFloor', 'GroundChunks', 'AmbientDrift', 'PasteGhost'].includes(n.class)) continue;
     const e = entityFor(scene, n, byNode.get(n.name), `e${i++}`, levelOf);
     if (!e) continue;
+    if (world && scene === 'overworld') decorateOverworld(e, n, [Math.round(n.grid[0]), Math.round(n.grid[1])], world);
     const cell = `${Math.round(n.grid[0])},${Math.round(n.grid[1])}`;
     if (blocked.has(cell) && !taken.has(cell)) {
       taken.add(cell);
@@ -391,6 +434,12 @@ function main(): void {
   const tiles: TileEntry[] = JSON.parse(readFileSync(join(TILES, 'index.json'), 'utf8'));
   buildKinds(tiles, snaps);
   addPaper();
+  world = loadWorld();
+  if (world) writeOverworldTalk(world);
+  if (existsSync(join(HERE, 'scripts'))) {
+    mkdirSync(join(OUT, 'assets/scripts'), { recursive: true });
+    for (const f of readdirSync(join(HERE, 'scripts'))) writeFileSync(join(OUT, 'assets/scripts', f), readFileSync(join(HERE, 'scripts', f)));
+  }
   const scenes: string[] = [];
   for (const k of Object.keys(SCENES)) {
     const scene = buildScene(k, snaps[k]!, art);

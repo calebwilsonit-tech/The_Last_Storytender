@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_meadow_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A stone with a sentence carved into it: 'It was a bright, cold day in April, and the clocks were striking thirteen.' Underneath, in pencil: 'Too familiar?'[/i]"
+    }
+  ]
+}

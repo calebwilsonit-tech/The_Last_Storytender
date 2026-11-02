@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_ridge_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A ruined mill. Its sails are the pages of an unfinished manuscript, still turning in a wind that is not there.[/i]"
+    }
+  ]
+}

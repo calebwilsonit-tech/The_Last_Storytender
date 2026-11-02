@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_meadow_3",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A scrap of map is tucked under this stone. It says HERE BE PLOT. The rest has been rubbed out.[/i]"
+    }
+  ]
+}

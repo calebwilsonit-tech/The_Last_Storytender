@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_graves_3",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]HERE LIES A FLASHBACK. IT WILL BE BACK.[/i]"
+    }
+  ]
+}

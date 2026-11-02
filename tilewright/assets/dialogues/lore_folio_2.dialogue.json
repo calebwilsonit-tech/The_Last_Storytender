@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_folio_2",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Someone has underlined 'once upon a time' in a book that is now missing. The underline is all that is left.[/i]"
+    }
+  ]
+}

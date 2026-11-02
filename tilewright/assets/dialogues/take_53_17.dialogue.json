@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "name": "take_53_17",
+  "start": "n5",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "give",
+      "item": "void_ink",
+      "amount": 1,
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "got_k_53_17",
+      "op": "set",
+      "value": 1,
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "Received: Void Ink"
+    },
+    {
+      "id": "n4",
+      "type": "end"
+    },
+    {
+      "id": "n5",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "got_k_53_17",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n4",
+      "else": "n1"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_smudge_2",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A signpost points three ways: 'ahead', 'back', and 'somewhere'. Someone has circled 'somewhere'.[/i]"
+    }
+  ]
+}

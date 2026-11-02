@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_edge_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A margin note, very small: 'Start here. It gets better. (the writer, 3 a.m.)'[/i]"
+    }
+  ]
+}

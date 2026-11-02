@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "name": "chest_53_84",
+  "start": "n7",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "set",
+      "variable": "got_chest_53_84",
+      "op": "set",
+      "value": 1,
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "renown",
+      "op": "add",
+      "value": 5,
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "give",
+      "item": "warm_loaf",
+      "amount": 2,
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "Received: Warm Loaf x2",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]It was never locked, only ignored.[/i]"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The chest is empty.[/i]"
+    },
+    {
+      "id": "n7",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "got_chest_53_84",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n6",
+      "else": "n1"
+    }
+  ]
+}

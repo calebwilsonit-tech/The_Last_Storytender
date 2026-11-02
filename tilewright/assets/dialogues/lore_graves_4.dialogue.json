@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_graves_4",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]HERE LIES THE ORIGINAL ENDING. NO ONE ASKED FOR IT. IT WAITED ANYWAY.[/i]"
+    }
+  ]
+}

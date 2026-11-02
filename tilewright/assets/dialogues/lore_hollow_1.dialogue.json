@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_hollow_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Down here the footnotes live. They are small, and numbered, and a little bitter about it.[/i]"
+    }
+  ]
+}

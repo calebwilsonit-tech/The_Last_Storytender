@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_gate_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A sign on the gate: 'The next chapter is not yet written. Check back when the last one is finished.' Underneath, smaller: 'Please.'[/i]"
+    }
+  ]
+}

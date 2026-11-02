@@ -19,6 +19,14 @@ if [ -z "${SKIP_CAPTURE:-}" ]; then
   python3 "$REPO/tools/port/quantize.py" "$WORK/art" "$WORK/art_q" && cp "$WORK/art/index.json" "$WORK/art_q/"
   python3 "$REPO/tools/port/quantize.py" "$WORK/tiles" "$WORK/tiles_q" && cp "$WORK/tiles/index.json" "$WORK/tiles_q/"
 fi
+# the owner's drawn art (art/incoming) in place of the captured pictures
+CUT="$WORK/cut"
+python3 "$REPO/tools/port/cut_sheet.py" "$REPO/art/incoming/world_props_sheet.jpg" "$CUT/props" prop --grid 10,4
+python3 "$REPO/tools/port/cut_sheet.py" "$REPO/art/incoming/item_icons_sheet.jpg" "$CUT/icons" icon --crop 110,0,1905,898 --grid 12,6
+python3 "$REPO/tools/port/cut_sheet.py" "$REPO/art/incoming/storytender_sheet.jpg" "$CUT/hero" hero --gap 10
+python3 "$REPO/tools/port/apply_art.py" "$WORK"
+python3 "$REPO/tools/port/quantize.py" "$WORK/art_q" "$WORK/art_q"
+python3 "$REPO/tools/port/quantize.py" "$WORK/icons" "$WORK/icons"
 NODE_PATH="$TILEWRIGHT/node_modules" "$TILEWRIGHT/node_modules/.bin/esbuild" "$REPO/tools/port/porter.ts" --bundle --platform=node --format=esm --outfile="$WORK/porter.mjs" \
   --alias:@tw-editor="$TILEWRIGHT/packages/editor/src" --log-level=warning \
   --banner:js="import { createRequire as __cr } from 'module'; const require = __cr(import.meta.url);"

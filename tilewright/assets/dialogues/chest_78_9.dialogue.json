@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "name": "chest_78_9",
+  "start": "n9",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "set",
+      "variable": "got_chest_78_9",
+      "op": "set",
+      "value": 1,
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "renown",
+      "op": "add",
+      "value": 5,
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "give",
+      "item": "library_binding",
+      "amount": 1,
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "Received: Library Binding",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]It was never locked, only ignored.[/i]"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The chest is sealed. Something nearby is holding it shut.[/i]"
+    },
+    {
+      "id": "n7",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "site_p_echo_folio",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n1",
+      "else": "n6"
+    },
+    {
+      "id": "n8",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The chest is empty.[/i]"
+    },
+    {
+      "id": "n9",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "got_chest_78_9",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n8",
+      "else": "n7"
+    }
+  ]
+}

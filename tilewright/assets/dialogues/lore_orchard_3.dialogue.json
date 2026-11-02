@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_orchard_3",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A plaque: 'First drafts are allowed to be bad.' Someone has added: 'This one was.'[/i]"
+    }
+  ]
+}

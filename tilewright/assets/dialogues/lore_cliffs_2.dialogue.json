@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_cliffs_2",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A footnote, carved small: 'See also: the view from the top. Worth the stairs.'[/i]"
+    }
+  ]
+}

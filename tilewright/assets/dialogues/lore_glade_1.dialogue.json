@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_glade_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A glade nobody wrote on purpose. It happened in the margins, between two sentences, and it stayed.[/i]"
+    }
+  ]
+}

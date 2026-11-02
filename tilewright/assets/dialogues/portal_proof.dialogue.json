@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "name": "portal_proof",
+  "start": "n5",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You step into The Proof Room.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "go_proof",
+      "op": "set",
+      "value": 1
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A door painted on the air, covered in editor's marks. Every one of them is a question mark.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]It does not open yet. You would need something to write with before a place like this would take you seriously.[/i]"
+    },
+    {
+      "id": "n5",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "has_quill",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n1",
+      "else": "n3"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_graves_2",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]HERE LIES THE SIDEKICK WHO WAS ONLY EVER CALLED 'HE'. HE WAS MORE THAN THAT.[/i]"
+    }
+  ]
+}

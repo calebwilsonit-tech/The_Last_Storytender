@@ -1166,7 +1166,8 @@
     "ai",
     "lighting",
     "storytender",
-    "prebuilt-screens"
+    "prebuilt-screens",
+    "parchment"
   ],
   "compat": {
     "fadeBySight": true,

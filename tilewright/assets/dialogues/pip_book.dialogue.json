@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "name": "pip_book",
+  "start": "n5",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The book is open to a page with nothing on it. The pages around it shiver, as if someone has been holding their breath.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You lean in. The lantern's light falls into the white space, and the white space falls into you.[/i]",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "set",
+      "variable": "go_pip",
+      "op": "set",
+      "value": 1
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A storybook lies open on the ground, its last page torn out. The words on the pages keep rearranging themselves. You will need something that can rewrite them.[/i]"
+    },
+    {
+      "id": "n5",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "has_quill",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n1",
+      "else": "n4"
+    }
+  ]
+}

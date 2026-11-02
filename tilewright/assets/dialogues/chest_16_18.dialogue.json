@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "name": "chest_16_18",
+  "start": "n9",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "set",
+      "variable": "got_chest_16_18",
+      "op": "set",
+      "value": 1,
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "renown",
+      "op": "add",
+      "value": 5,
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "set",
+      "variable": "mnemosynth",
+      "op": "add",
+      "value": 45,
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "Received: 45 Mnemosynth",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The lid creaks like a page turning. Whoever hid this had good taste and poor handwriting.[/i]"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The chest is sealed. Something nearby is holding it shut.[/i]"
+    },
+    {
+      "id": "n7",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "site_p_words_margin",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n1",
+      "else": "n6"
+    },
+    {
+      "id": "n8",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The chest is empty.[/i]"
+    },
+    {
+      "id": "n9",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "got_chest_16_18",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n8",
+      "else": "n7"
+    }
+  ]
+}

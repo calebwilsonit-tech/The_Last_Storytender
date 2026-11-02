@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_ridge_2",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]From up here you can see the whole town, drafted in pencil. Somebody is going to ink it one day. Maybe you.[/i]"
+    }
+  ]
+}

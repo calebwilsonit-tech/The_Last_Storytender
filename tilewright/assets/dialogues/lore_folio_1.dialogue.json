@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_folio_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A shelf, a ladder, and no books: only the dust-shapes where they used to lean on each other.[/i]"
+    }
+  ]
+}

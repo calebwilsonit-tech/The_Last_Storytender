@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "name": "forge",
+  "start": "n8",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The flame is frozen mid-lick. One moment, held so long it has gone cold.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Far inside it, small as a coin, a boy is swinging a hammer.[/i]",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You hold up the lantern. The flame leans toward the light, as if it has been waiting for someone to ask.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "set",
+      "variable": "go_forge",
+      "op": "set",
+      "value": 1
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The forge is quiet now. Whatever it was holding, it has let go.[/i]"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The fire in the forge is frozen in a single moment. Someone nearby might know why.[/i]"
+    },
+    {
+      "id": "n7",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "met_garrick",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n1",
+      "else": "n6"
+    },
+    {
+      "id": "n8",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "memory_done",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n5",
+      "else": "n7"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_meadow_2",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]'Show, don't tell,' says the stone. Then it just sits there, showing.[/i]"
+    }
+  ]
+}

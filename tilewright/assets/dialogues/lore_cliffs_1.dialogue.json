@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_cliffs_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The cliffs are layered like pages: dog-eared at the corners where someone could not wait to find out what happened.[/i]"
+    }
+  ]
+}

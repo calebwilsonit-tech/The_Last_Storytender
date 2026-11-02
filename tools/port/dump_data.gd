@@ -49,6 +49,19 @@ func _run() -> void:
 		f.store_string(JSON.stringify(d, " "))
 		f.close()
 		print("data ", key, ": ", d.constants.size(), " constants, ", d.functions.size(), " functions")
+	# what each tiered chest of the overworld pays out (TrialPrizes.roll is seeded by the chest's cell)
+	var pm = load("res://data/prologue_map.gd")
+	var tp = load("res://scripts/trial_prizes.gd")
+	var rolls := {}
+	for key in pm.CHESTS:
+		var r: String = pm.CHESTS[key]
+		var parts: PackedStringArray = String(key).split(",")
+		var cell := Vector2i(int(parts[0]), int(parts[1]))
+		rolls[key] = tp.roll(int(r.split(":")[1]), cell) if r.begins_with("tier:") else r
+	var f2 := FileAccess.open(out.path_join("chest_rolls.json"), FileAccess.WRITE)
+	f2.store_string(JSON.stringify(rolls, " "))
+	f2.close()
+	print("data chest_rolls: ", rolls.size())
 	quit()
 
 func _plain(v: Variant) -> Variant:

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_wells_2",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A wishing coin sits on the rim. It is the letter Q. It did not get what it wished for.[/i]"
+    }
+  ]
+}

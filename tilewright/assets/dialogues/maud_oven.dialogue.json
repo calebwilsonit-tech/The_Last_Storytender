@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "name": "maud_oven",
+  "start": "n7",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The oven is warm again.[/i]"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You look into the oven. Cold ashes. In the middle of them, one very small light is still burning.[/i]",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You hold up the lantern, and the light in the ashes leans toward it.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "set",
+      "variable": "go_maud",
+      "op": "set",
+      "value": 1
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The oven is cold. Not just unlit: cold the way a room is cold when everyone has left it. Something else has to teach your Quill a new edge before you can reach what is in the ashes.[/i]"
+    },
+    {
+      "id": "n6",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "pip_memory_done",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n2",
+      "else": "n5"
+    },
+    {
+      "id": "n7",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "maud_memory_done",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n1",
+      "else": "n6"
+    }
+  ]
+}

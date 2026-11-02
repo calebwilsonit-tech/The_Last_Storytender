@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "name": "take_84_78",
+  "start": "n5",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "give",
+      "item": "eraser_crumbs",
+      "amount": 1,
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "got_k_84_78",
+      "op": "set",
+      "value": 1,
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "Received: Eraser Crumbs"
+    },
+    {
+      "id": "n4",
+      "type": "end"
+    },
+    {
+      "id": "n5",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "got_k_84_78",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n4",
+      "else": "n1"
+    }
+  ]
+}

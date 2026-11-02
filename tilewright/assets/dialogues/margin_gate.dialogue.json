@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "name": "margin_gate",
+  "start": "n8",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The ribbon on the Margin Gate stays tied. A small tag hangs from it: 'Not enough people know your name yet.'[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Renown {renown} / 220. Beat Errors, open chests, solve riddles, light posts, explore: any of it counts. The page remembers what you do.[/i]"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The ribbon unties itself. The pages part like a curtain, and beyond them is white, and a faint sound like someone, far away, turning a page.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]There is nothing there yet. But there will be.[/i]"
+    },
+    {
+      "id": "n5",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "renown",
+        "op": ">=",
+        "value": 220
+      },
+      "then": "n3",
+      "else": "n1"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The Margin Gate is shut, a wall of pages bound with ribbon. Its lock is shaped like a full stop.[/i]",
+      "next": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Whatever lies beyond cannot be opened until the Prologue is finished: Thistledown still has an Editor.[/i]"
+    },
+    {
+      "id": "n8",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "town_published",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n5",
+      "else": "n6"
+    }
+  ]
+}

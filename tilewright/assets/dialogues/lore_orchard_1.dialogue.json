@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_orchard_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Every apple on this tree is a half-written idea. They taste of almost.[/i]"
+    }
+  ]
+}

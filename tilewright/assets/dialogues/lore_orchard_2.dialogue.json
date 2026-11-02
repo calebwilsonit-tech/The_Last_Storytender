@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_orchard_2",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A name is scratched into the bark: WREN. Then a heart. Then a careful correction: 'sister, not that kind of heart.'[/i]"
+    }
+  ]
+}

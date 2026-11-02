@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_margin_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Notes in the margin of the world, all in the same handwriting: 'unclear', 'expand', 'but why?'[/i]"
+    }
+  ]
+}

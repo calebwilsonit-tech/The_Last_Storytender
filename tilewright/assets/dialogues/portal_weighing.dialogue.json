@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "name": "portal_weighing",
+  "start": "n5",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You step into The Weighing Room.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "go_weighing",
+      "op": "set",
+      "value": 1
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A doorway of stacked scales, left open. It hums when you stand near it, as if comparing you to something.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]It does not open yet. Something in you has to learn to be in two places at once first: finish Garrick's memory.[/i]"
+    },
+    {
+      "id": "n5",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "memory_done",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n1",
+      "else": "n3"
+    }
+  ]
+}

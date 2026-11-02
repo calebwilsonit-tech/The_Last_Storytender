@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_smudge_1",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Ink pooled here once and never quite dried. Things that stand still too long start to blur.[/i]"
+    }
+  ]
+}

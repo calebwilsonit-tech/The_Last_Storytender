@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "name": "garrick",
+  "start": "n37",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Go on. The dark has nothing on you."
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "The dummy, little scribble. Click, or J. It won't hit back. That's the whole appeal."
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "You've got a lantern. Good. A lantern is how you tell the dark what matters.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "But light doesn't swing back. For that...",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]He sets a feather on the anvil and takes the hammer to its nib. Four clean strikes. No bending.[/i]",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "A Quill. Not a sword. A sword ends things. This one rewrites them.",
+      "next": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Go on. Hit the dummy. Three times. Don't think about whether it's pretty.",
+      "next": "n8"
+    },
+    {
+      "id": "n8",
+      "type": "set",
+      "variable": "has_quill",
+      "op": "set",
+      "value": 1,
+      "next": "n9"
+    },
+    {
+      "id": "n9",
+      "type": "line",
+      "speaker": "",
+      "text": "Received: Garrick's Quill"
+    },
+    {
+      "id": "n10",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "has_quill",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n2",
+      "else": "n3"
+    },
+    {
+      "id": "n11",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "lesson_done",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n1",
+      "else": "n10"
+    },
+    {
+      "id": "n12",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You hold out the sword.[/i]",
+      "next": "n13"
+    },
+    {
+      "id": "n13",
+      "type": "line",
+      "speaker": "Lorem Ipsum",
+      "text": "Lorem. Ip-- ...",
+      "next": "n14"
+    },
+    {
+      "id": "n14",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "That's not a horseshoe.",
+      "next": "n15"
+    },
+    {
+      "id": "n15",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "I made this when I was sixteen. Bent the blade twice. The Author was kind enough to write that I got it right on the third try.",
+      "next": "n16"
+    },
+    {
+      "id": "n16",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "I didn't forge it for a war. I forged it for Wren. My little sister. She was afraid of the dark.",
+      "next": "n17"
+    },
+    {
+      "id": "n17",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "I told her a hero's sword makes the dark afraid of her.",
+      "next": "n18"
+    },
+    {
+      "id": "n18",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Then the chapter ended. I got old. Nobody needed a hero anymore, so I told myself horseshoes were enough.",
+      "next": "n19"
+    },
+    {
+      "id": "n19",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Funny. I forgot I ever loved it. Not the sword. The making.",
+      "next": "n20"
+    },
+    {
+      "id": "n20",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Thank you, little scribble. You didn't have to find it. You aren't even in the story.",
+      "next": "n21"
+    },
+    {
+      "id": "n21",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You are in the story now.[/i]",
+      "next": "n22"
+    },
+    {
+      "id": "n22",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Hm. Colors. I'd forgotten about those, too.",
+      "next": "n23"
+    },
+    {
+      "id": "n23",
+      "type": "line",
+      "speaker": "Garrick",
+      "text": "Come find me when you're ready to learn. Swinging a sword is mostly knowing what you're swinging it for.",
+      "next": "n24"
+    },
+    {
+      "id": "n24",
+      "type": "set",
+      "variable": "restored_garrick",
+      "op": "set",
+      "value": 1,
+      "next": "n25"
+    },
+    {
+      "id": "n25",
+      "type": "set",
+      "variable": "mnemosynth",
+      "op": "add",
+      "value": 25,
+      "next": "n26"
+    },
+    {
+      "id": "n26",
+      "type": "set",
+      "variable": "renown",
+      "op": "add",
+      "value": 35,
+      "next": "n27"
+    },
+    {
+      "id": "n27",
+      "type": "line",
+      "speaker": "",
+      "text": "Restored: Garrick"
+    },
+    {
+      "id": "n28",
+      "type": "line",
+      "speaker": "Lorem Ipsum",
+      "text": "Lorem... ipsum...",
+      "next": "n29"
+    },
+    {
+      "id": "n29",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The frozen flame in his forge is still waiting. Touch it.[/i]"
+    },
+    {
+      "id": "n30",
+      "type": "line",
+      "speaker": "Lorem Ipsum",
+      "text": "Lorem ipsum dolor sit amet...",
+      "next": "n31"
+    },
+    {
+      "id": "n31",
+      "type": "line",
+      "speaker": "Lorem Ipsum",
+      "text": "...consectetur. Horseshoe? Horseshoe.",
+      "next": "n32"
+    },
+    {
+      "id": "n32",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]He is not a person right now. He is a placeholder holding a hammer.[/i]",
+      "next": "n33"
+    },
+    {
+      "id": "n33",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]But the forge behind him is holding something, too. Its fire is frozen in a single moment. He cannot let go of it, and he cannot remember it.[/i]",
+      "next": "n34"
+    },
+    {
+      "id": "n34",
+      "type": "set",
+      "variable": "met_garrick",
+      "op": "set",
+      "value": 1
+    },
+    {
+      "id": "n35",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "met_garrick",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n28",
+      "else": "n30"
+    },
+    {
+      "id": "n36",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "memory_done",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n12",
+      "else": "n35"
+    },
+    {
+      "id": "n37",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "restored_garrick",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n11",
+      "else": "n36"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_edge_2",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The page ends in a clean, white edge. Someone has drawn a very small door in the margin, crossed it out, and drawn it again.[/i]"
+    }
+  ]
+}
