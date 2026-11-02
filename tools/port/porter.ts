@@ -365,7 +365,7 @@ function writeInput(): void {
       attack: ['key:KeyJ', 'mouse:0', 'pad:button2', 'pad:axis5+'],
       echo: ['key:KeyR', 'pad:button4'],
       inventory: ['key:Tab', 'key:KeyI', 'pad:button8'],
-      map: ['key:KeyM'],
+      map: ['key:KeyM', 'pad:button13'],
       quick_1: [], quick_2: [], quick_3: [], quick_4: [], // the game has two quick slots, on F and G (1 2 3 are the styles)
     },
     actions: [

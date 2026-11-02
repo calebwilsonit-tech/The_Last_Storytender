@@ -30,7 +30,8 @@
       "pad:button8"
     ],
     "map": [
-      "key:KeyM"
+      "key:KeyM",
+      "pad:button13"
     ],
     "quick_1": [],
     "quick_2": [],
