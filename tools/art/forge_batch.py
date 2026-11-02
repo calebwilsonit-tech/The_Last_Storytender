@@ -36,12 +36,10 @@ DIRS = {
     '4_up_right': ('three-quarter back view, walking away toward the upper right, backpack visible, no eyes visible', 'storytender_back.png'),
     '5_away': ('back view, facing away from the viewer, backpack with gear emblem, no face, no eyes', 'storytender_away.png'),
 }
+# Only the standing frame and the strike come from Forge: the walk cycle is built from the standing frame
+# (body bob and stepping boots), so the character stays exactly the same in every walk frame.
 POSE_WORDS = {'a_stand': 'standing still',
-              'b_walk': '(walking, mid stride, one leg stepping forward, legs apart:1.3)',
-              'c_walk': '(walking, one knee raised high, one boot lifted off the ground:1.4)',
-              'd_walk': '(walking, mid stride, the other leg stepping forward, legs apart:1.3)',
-              'e_walk': '(walking, the other knee raised high, one boot lifted off the ground:1.4)',
-              'f_strike': '(swinging a long cream feather quill pen overhead, arm raised high:1.3)'}
+              'f_strike': '(swinging a long cream feather quill pen overhead, arm raised high:1.2)'}
 
 PEOPLE = {
     'garrick': '(chibi:1.3) broad middle-aged blacksmith, short dark beard, rolled up sleeves, brown leather apron, hammer at his belt, kind tired eyes, simple cartoon face',
@@ -176,10 +174,10 @@ def main():
         for d, (words, ref) in DIRS.items():
             seed = 1000 + list(DIRS).index(d) * 10   # the same seeds for every pose of a direction, so the frames match
             for p, pw in POSE_WORDS.items():
-                moving = p != 'a_stand'   # in moving frames the pose must win over the reference picture
-                make(f'storytender/{d}_{p}', f'{HERO}, {words}, {pw}, {STYLE}', NEG_CHAR + (', standing still, feet together' if moving else ''),
-                     seed, os.path.join(REF, ref), 0.45 if moving else 0.6, os.path.join(POSES, f'{d}_{p}.png'), models=models,
-                     ref_end=0.7 if moving else 1.0, pose_weight=1.3 if moving else 1.0)
+                strike = p == 'f_strike'   # the raised arm needs the pose to win a little over the reference picture
+                make(f'storytender/{d}_{p}', f'{HERO}, {words}, {pw}, {STYLE}', NEG_CHAR + (', angry, eyebrows, mouth' if strike else ''),
+                     seed, os.path.join(REF, ref), 0.55 if strike else 0.6, os.path.join(POSES, f'{d}_{p}.png'), models=models,
+                     ref_end=0.85 if strike else 1.0, pose_weight=1.15 if strike else 1.0)
     if 'people' in groups:
         for who, desc in PEOPLE.items():
             for d in ('1_toward', '2_down_right', '4_up_right', '5_away'):
