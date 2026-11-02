@@ -4,3 +4,4 @@
 *.jpg binary
 *.ttf binary
 *.import -text
+*.bat text eol=crlf
