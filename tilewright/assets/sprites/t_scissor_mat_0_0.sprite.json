@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "name": "t_scissor_mat_0_0",
+  "width": 64,
+  "height": 32,
+  "palette": [
+    "#00000000",
+    "#000000ff",
+    "#ffffffff",
+    "#e8553dff",
+    "#f4a259ff",
+    "#f6d55cff",
+    "#6fae5bff",
+    "#2f6f4eff",
+    "#4a90d9ff",
+    "#2b4c7eff",
+    "#8e7cc3ff",
+    "#c9964aff",
+    "#7b5a3aff",
+    "#a3a7b3ff",
+    "#5c6070ff",
+    "#2a2d38ff",
+    "#50826bff",
+    "#3b735aff",
+    "#558670ff",
+    "#367056ff",
+    "#2f6b50ff",
+    "#769d8cff",
+    "#88aa9bff",
+    "#6d9784ff",
+    "#5d8c76ff",
+    "#54856fff",
+    "#5c8b76ff"
+  ],
+  "layers": [
+    {
+      "id": "l1",
+      "name": "Layer 1",
+      "visible": true
+    }
+  ],
+  "frames": [
+    {"duration":100,"cels":{"l1":"95x0 1x16 1x17 1x18 59x0 1x16 1x19 3x20 1x17 1x18 55x0 1x16 1x19 7x20 1x21 1x22 51x0 1x16 1x19 9x20 1x23 1x20 1x17 1x18 47x0 1x16 1x19 15x20 1x17 1x18 43x0 1x16 1x19 19x20 1x17 1x18 39x0 1x16 1x19 23x20 1x17 1x18 35x0 1x16 1x19 27x20 1x17 1x18 31x0 1x16 1x19 29x20 2x23 1x21 1x18 27x0 1x16 1x19 35x20 1x17 1x18 23x0 1x16 1x19 39x20 1x17 1x18 19x0 1x16 1x19 43x20 1x17 1x18 15x0 1x16 1x19 47x20 1x17 1x18 11x0 1x16 1x19 50x20 1x23 1x21 1x22 7x0 1x16 1x19 25x20 1x24 26x20 1x23 2x20 1x17 1x18 3x0 1x16 1x19 27x20 3x24 29x20 1x17 1x18 2x0 1x25 29x20 3x24 27x20 1x26 5x0 1x25 29x20 1x24 25x20 1x26 9x0 1x25 51x20 1x26 13x0 1x25 47x20 1x26 17x0 1x25 43x20 1x26 21x0 1x25 39x20 1x26 25x0 1x25 35x20 1x26 29x0 1x25 31x20 1x26 33x0 1x25 27x20 1x26 37x0 1x25 23x20 1x26 41x0 1x25 19x20 1x26 45x0 1x25 15x20 1x26 49x0 1x25 11x20 1x26 53x0 1x25 7x20 1x26 57x0 1x25 3x20 1x26 29x0"},"boxes":[]}
+  ],
+  "origin": {
+    "x": 32,
+    "y": 31
+  },
+  "clips": [],
+  "procedural": null
+}

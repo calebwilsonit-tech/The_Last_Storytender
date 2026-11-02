@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "name": "t_overworld_plains_0_2",
+  "width": 64,
+  "height": 32,
+  "palette": [
+    "#00000000",
+    "#000000ff",
+    "#ffffffff",
+    "#e8553dff",
+    "#f4a259ff",
+    "#f6d55cff",
+    "#6fae5bff",
+    "#2f6f4eff",
+    "#4a90d9ff",
+    "#2b4c7eff",
+    "#8e7cc3ff",
+    "#c9964aff",
+    "#7b5a3aff",
+    "#a3a7b3ff",
+    "#5c6070ff",
+    "#2a2d38ff",
+    "#6a914dff",
+    "#aacb79ff",
+    "#4d8038ff",
+    "#507a3cff"
+  ],
+  "layers": [
+    {
+      "id": "l1",
+      "name": "Layer 1",
+      "visible": true
+    }
+  ],
+  "frames": [
+    {"duration":100,"cels":{"l1":"95x0 2x16 60x0 2x16 2x17 2x16 56x0 2x16 6x17 2x16 52x0 2x16 10x17 2x16 48x0 2x16 1x18 13x17 2x16 44x0 5x18 15x17 2x16 40x0 1x16 6x18 17x17 2x16 36x0 2x16 1x17 8x18 17x17 2x16 32x0 2x16 3x17 8x18 19x17 2x16 28x0 2x16 6x17 6x18 22x17 2x16 24x0 2x16 11x17 3x18 24x17 2x16 20x0 2x16 13x17 2x18 27x17 2x16 16x0 2x16 46x17 2x16 12x0 2x16 36x17 2x18 12x17 2x16 8x0 2x16 37x17 1x18 1x17 1x18 14x17 2x16 4x0 2x16 39x17 4x18 15x17 2x16 2x0 2x19 39x17 5x18 14x17 2x16 4x0 2x19 38x17 4x18 12x17 2x16 8x0 2x19 37x17 3x18 10x17 2x16 12x0 2x19 35x17 3x18 8x17 2x16 16x0 2x19 34x17 2x18 6x17 2x16 20x0 2x19 38x17 2x16 24x0 2x19 34x17 2x16 28x0 2x19 30x17 2x16 32x0 2x19 26x17 2x16 36x0 2x19 22x17 2x16 40x0 2x19 18x17 2x16 44x0 2x19 14x17 2x16 48x0 2x19 10x17 2x16 52x0 2x19 6x17 2x16 56x0 2x19 2x17 2x16 29x0"},"boxes":[]}
+  ],
+  "origin": {
+    "x": 32,
+    "y": 31
+  },
+  "clips": [],
+  "procedural": null
+}

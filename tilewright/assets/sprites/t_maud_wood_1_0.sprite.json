@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "name": "t_maud_wood_1_0",
+  "width": 64,
+  "height": 32,
+  "palette": [
+    "#00000000",
+    "#000000ff",
+    "#ffffffff",
+    "#e8553dff",
+    "#f4a259ff",
+    "#f6d55cff",
+    "#6fae5bff",
+    "#2f6f4eff",
+    "#4a90d9ff",
+    "#2b4c7eff",
+    "#8e7cc3ff",
+    "#c9964aff",
+    "#7b5a3aff",
+    "#a3a7b3ff",
+    "#5c6070ff",
+    "#2a2d38ff",
+    "#b88b55ff",
+    "#966e42ff"
+  ],
+  "layers": [
+    {
+      "id": "l1",
+      "name": "Layer 1",
+      "visible": true
+    }
+  ],
+  "frames": [
+    {"duration":100,"cels":{"l1":"32x0 2x16 60x0 6x16 56x0 10x16 52x0 4x17 10x16 48x0 3x16 5x17 10x16 44x0 7x16 5x17 10x16 40x0 11x16 5x17 10x16 36x0 15x16 5x17 10x16 32x0 4x17 15x16 5x17 10x16 28x0 3x16 5x17 15x16 5x17 10x16 24x0 7x16 5x17 15x16 5x17 10x16 20x0 11x16 5x17 15x16 5x17 10x16 16x0 15x16 5x17 15x16 5x17 10x16 12x0 4x17 15x16 5x17 15x16 5x17 10x16 8x0 3x16 5x17 15x16 5x17 15x16 5x17 10x16 4x0 7x16 5x17 15x16 5x17 15x16 5x17 10x16 2x0 9x16 5x17 15x16 5x17 15x16 5x17 8x16 4x0 9x16 5x17 15x16 5x17 15x16 5x17 4x16 8x0 9x16 5x17 15x16 5x17 15x16 5x17 12x0 9x16 5x17 15x16 5x17 15x16 1x17 16x0 9x16 5x17 15x16 5x17 12x16 20x0 9x16 5x17 15x16 5x17 8x16 24x0 9x16 5x17 15x16 5x17 4x16 28x0 9x16 5x17 15x16 5x17 32x0 9x16 5x17 15x16 1x17 36x0 9x16 5x17 12x16 40x0 9x16 5x17 8x16 44x0 9x16 5x17 4x16 48x0 9x16 5x17 52x0 9x16 1x17 56x0 6x16 60x0 2x16 30x0"},"boxes":[]}
+  ],
+  "origin": {
+    "x": 32,
+    "y": 31
+  },
+  "clips": [],
+  "procedural": null
+}

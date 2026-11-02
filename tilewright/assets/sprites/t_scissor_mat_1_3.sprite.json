@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "name": "t_scissor_mat_1_3",
+  "width": 64,
+  "height": 32,
+  "palette": [
+    "#00000000",
+    "#000000ff",
+    "#ffffffff",
+    "#e8553dff",
+    "#f4a259ff",
+    "#f6d55cff",
+    "#6fae5bff",
+    "#2f6f4eff",
+    "#4a90d9ff",
+    "#2b4c7eff",
+    "#8e7cc3ff",
+    "#c9964aff",
+    "#7b5a3aff",
+    "#a3a7b3ff",
+    "#5c6070ff",
+    "#2a2d38ff",
+    "#7b9d8eff",
+    "#668d7dff",
+    "#497764ff",
+    "#2c624bff",
+    "#2a6049ff",
+    "#94afa4ff",
+    "#a3bab0ff",
+    "#6a9080ff",
+    "#6b9181ff",
+    "#80a092ff",
+    "#bbccc5ff",
+    "#9fb7adff",
+    "#598371ff",
+    "#688e7eff",
+    "#8eab9fff",
+    "#a0b8aeff",
+    "#c4d3cdff",
+    "#b9cbc3ff",
+    "#93aea3ff",
+    "#648b7bff",
+    "#2e634dff",
+    "#92ada2ff",
+    "#adc2b9ff",
+    "#afc3baff",
+    "#afc4bbff",
+    "#e0e8e4ff"
+  ],
+  "layers": [
+    {
+      "id": "l1",
+      "name": "Layer 1",
+      "visible": true
+    }
+  ],
+  "frames": [
+    {"duration":100,"cels":{"l1":"31x0 2x16 60x0 2x16 2x17 2x16 56x0 2x16 1x17 1x18 2x19 1x18 1x17 2x16 52x0 2x16 1x17 1x18 1x19 4x20 1x19 1x18 1x21 2x22 48x0 2x16 1x17 1x18 1x19 7x20 1x23 1x24 1x18 1x17 2x16 44x0 2x16 1x17 1x18 1x19 12x20 1x19 1x18 1x17 2x16 40x0 2x16 1x17 1x18 1x19 16x20 1x19 1x18 1x17 2x16 36x0 2x16 1x17 1x18 1x19 20x20 1x19 1x18 1x17 2x16 32x0 2x16 1x17 1x18 1x19 24x20 1x19 1x18 1x21 1x22 1x16 28x0 2x16 1x17 1x18 1x19 27x20 1x23 1x19 1x18 1x17 2x16 24x0 2x16 1x17 1x18 1x19 32x20 1x19 1x18 1x17 2x16 20x0 2x16 1x17 1x18 1x19 36x20 1x19 1x18 1x17 2x16 16x0 2x16 1x17 1x18 1x19 40x20 1x19 1x18 1x17 2x16 12x0 2x16 1x17 1x18 1x19 44x20 1x19 1x25 1x21 1x22 1x16 8x0 2x16 1x17 1x18 1x19 46x20 2x23 1x19 1x18 1x17 2x16 4x0 1x26 1x27 1x23 1x18 1x19 24x20 2x28 26x20 1x19 1x18 1x29 1x30 1x31 2x0 1x32 1x33 1x34 1x35 1x36 26x20 2x28 24x20 1x36 1x35 1x37 2x38 4x0 2x38 1x37 1x35 1x36 48x20 1x36 1x35 1x37 2x38 8x0 2x38 1x37 1x35 1x36 44x20 1x36 1x35 1x37 2x38 12x0 2x38 1x37 1x35 1x36 40x20 1x36 1x35 1x37 2x38 16x0 2x38 1x37 1x35 1x36 36x20 1x36 1x35 1x37 2x38 20x0 2x38 1x37 1x35 1x36 32x20 1x36 1x35 1x37 2x38 24x0 2x38 1x37 1x35 1x36 28x20 1x36 1x35 1x37 2x38 28x0 2x38 1x37 1x35 1x36 24x20 1x36 1x35 1x37 2x38 32x0 2x38 1x37 1x35 1x36 20x20 1x36 1x35 1x37 2x38 36x0 2x38 1x37 1x35 1x36 16x20 1x36 1x35 1x37 2x38 40x0 2x38 1x37 1x35 1x36 12x20 1x36 1x35 1x37 2x38 44x0 2x38 1x37 1x35 1x36 8x20 1x36 1x35 1x37 2x38 48x0 2x38 1x37 1x35 1x36 4x20 1x36 1x35 1x37 2x38 52x0 2x38 1x37 1x35 2x36 1x35 1x37 2x38 56x0 1x38 1x39 2x40 1x39 1x38 60x0 2x41 31x0"},"boxes":[]}
+  ],
+  "origin": {
+    "x": 32,
+    "y": 31
+  },
+  "clips": [],
+  "procedural": null
+}

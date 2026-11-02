@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "name": "t_scissor_mat_1_0",
+  "width": 64,
+  "height": 32,
+  "palette": [
+    "#00000000",
+    "#000000ff",
+    "#ffffffff",
+    "#e8553dff",
+    "#f4a259ff",
+    "#f6d55cff",
+    "#6fae5bff",
+    "#2f6f4eff",
+    "#4a90d9ff",
+    "#2b4c7eff",
+    "#8e7cc3ff",
+    "#c9964aff",
+    "#7b5a3aff",
+    "#a3a7b3ff",
+    "#5c6070ff",
+    "#2a2d38ff",
+    "#2a6049ff",
+    "#598371ff"
+  ],
+  "layers": [
+    {
+      "id": "l1",
+      "name": "Layer 1",
+      "visible": true
+    }
+  ],
+  "frames": [
+    {"duration":100,"cels":{"l1":"32x0 1x16 61x0 5x16 57x0 9x16 53x0 13x16 49x0 17x16 45x0 21x16 41x0 25x16 37x0 29x16 33x0 33x16 29x0 37x16 25x0 41x16 21x0 45x16 17x0 49x16 13x0 22x16 2x17 29x16 9x0 24x16 4x17 29x16 5x0 27x16 5x17 29x16 2x0 30x16 5x17 28x16 3x0 30x16 4x17 25x16 7x0 30x16 2x17 23x16 11x0 51x16 15x0 47x16 19x0 43x16 23x0 39x16 27x0 35x16 31x0 31x16 35x0 27x16 39x0 23x16 43x0 19x16 47x0 15x16 51x0 11x16 55x0 7x16 59x0 3x16 30x0"},"boxes":[]}
+  ],
+  "origin": {
+    "x": 32,
+    "y": 31
+  },
+  "clips": [],
+  "procedural": null
+}
