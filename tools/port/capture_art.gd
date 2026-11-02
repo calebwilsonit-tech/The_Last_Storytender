@@ -47,6 +47,50 @@ func _targets(n: Node, out: Array) -> void:
 				out.append(c)
 		_targets(c, out)
 
+## Engine facings (grid directions, see Tilewright's FACING_NAMES) as the screen direction the game's figures use.
+const FACINGS := {"E": Vector2(2, 1), "SE": Vector2(0, 1), "S": Vector2(-2, 1), "SW": Vector2(-1, 0), "W": Vector2(-2, -1), "NW": Vector2(0, -1), "N": Vector2(2, -1), "NE": Vector2(1, 0)}
+const FRAME := Vector2i(160, 150)      # every pose frame: this size, the feet at FEET
+const FEET := Vector2i(80, 128)
+
+## The Storytender standing and walking in the eight directions, as frames of one size.
+func _poses(level: Node, cam: Camera2D, targets: Array) -> void:
+	var player: Node2D = level.get("_player")
+	if player == null:
+		return
+	var frames := []
+	var up: Node = player
+	while up != null and up != level:
+		var par: Node = up.get_parent()
+		for c in par.get_children():
+			if c is CanvasItem:
+				c.visible = c == up
+		up = par
+	for f in FACINGS:
+		var d: Vector2 = FACINGS[f].normalized()
+		for i in 5:   # 0 = standing, 1..4 = walking
+			player.set("_face_dir", d)
+			player.set("_facing_right", d.x >= 0.0)
+			player.set("_facing_back", d.y < -0.1)
+			player.set("velocity", Vector2.ZERO if i == 0 else d * 120.0)
+			player.set("_walk", 0.0 if i == 0 else (i - 1) * PI * 0.5)
+			player.set("_t", 0.0)
+			player.queue_redraw()
+			cam.zoom = Vector2.ONE
+			cam.position_smoothing_enabled = false
+			cam.global_position = player.global_position - Vector2(0, 60)
+			cam.force_update_scroll()
+			for k in 3:
+				await process_frame
+			var img := root.get_texture().get_image()
+			var feet: Vector2 = root.get_canvas_transform() * player.global_position
+			var box := Rect2i(Vector2i(feet) - FEET, FRAME)
+			var file := "pose_storytender_%s_%d.png" % [f, i]
+			img.get_region(box).save_png(_out.path_join(file))
+			frames.append({"figure": "storytender", "facing": f, "pose": "idle" if i == 0 else "walk", "step": i, "file": file})
+	var fp := FileAccess.open(_out.path_join("poses.json"), FileAccess.WRITE)
+	fp.store_string(JSON.stringify({"frame": [FRAME.x, FRAME.y], "feet": [FEET.x, FEET.y], "frames": frames}, " "))
+	fp.close()
+
 func _set_all(n: Node, v: bool) -> void:
 	for c in n.get_children():
 		if c is CanvasItem:
@@ -129,6 +173,8 @@ func _run() -> void:
 			_index.append(entry)
 			for a in was:
 				a.visible = was[a]
+		if key == "overworld":
+			await _poses(level, cam, targets)
 		print("art ", key, ": ", targets.size(), " objects, ", n_saved, " new pictures")
 		level.queue_free()
 		for i in 3:

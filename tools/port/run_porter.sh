@@ -20,4 +20,4 @@ fi
 NODE_PATH="$TILEWRIGHT/node_modules" "$TILEWRIGHT/node_modules/.bin/esbuild" "$REPO/tools/port/porter.ts" --bundle --platform=node --format=esm --outfile="$WORK/porter.mjs" \
   --alias:@tw-editor="$TILEWRIGHT/packages/editor/src" --log-level=warning \
   --banner:js="import { createRequire as __cr } from 'module'; const require = __cr(import.meta.url);"
-SNAP="$WORK/snap" ART="$WORK/art_q" TILES="$WORK/tiles_q" OUT="$REPO/tilewright" node "$WORK/porter.mjs"
+SNAP="$WORK/snap" ART="$WORK/art_q" TILES="$WORK/tiles_q" POSES="$WORK/art" HERE="$REPO/tools/port" OUT="$REPO/tilewright" node "$WORK/porter.mjs"

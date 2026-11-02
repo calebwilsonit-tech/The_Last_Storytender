@@ -8,7 +8,7 @@
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
-import { TileMap, FLAG, SLOPE, tileMapToRows, currentFlags, stringifySprite, decodePng, pauseButtonRow, CURRENT_SCHEMA_VERSION, type EntityData, type SceneData, type ProjectData } from '@tilewright/runtime';
+import { TileMap, FLAG, SLOPE, tileMapToRows, currentFlags, stringifySprite, decodePng, pauseButtonRow, makeAnimator, locomotionController, encodePng, CURRENT_SCHEMA_VERSION, type EntityData, type SceneData, type ProjectData } from '@tilewright/runtime';
 import { baseProject, playerEntity, setActivePacks, attachBehavior } from '@tilewright/plugin-sdk/legacy';
 import '@tilewright/bundled-plugins';
 import { importPng } from '@tw-editor/renderer/studio/assets';
@@ -16,6 +16,8 @@ import { importPng } from '@tw-editor/renderer/studio/assets';
 const SNAP = process.env.SNAP!;
 const ART = process.env.ART!;
 const TILES = process.env.TILES!;
+const POSES = process.env.POSES ?? '';
+const HERE = process.env.HERE!;
 const OUT = process.env.OUT!;
 
 const PLUGINS = ['combat', 'inventory', 'story', 'ai', 'lighting', 'storytender', 'prebuilt-screens'];
@@ -58,6 +60,41 @@ function spriteFor(file: string, name: string, feet?: [number, number]): string 
 }
 
 const safe = (s: string): string => s.replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 40);
+
+/** The Storytender, standing and walking in the eight directions (capture_art.gd's pose pass), as one animated sprite. */
+let storytender: string | null | undefined;
+function storytenderSprite(): string | null {
+  if (storytender !== undefined) return storytender;
+  storytender = null;
+  if (!POSES || !existsSync(join(POSES, 'poses.json'))) return null;
+  const poses = JSON.parse(readFileSync(join(POSES, 'poses.json'), 'utf8')) as { frame: [number, number]; feet: [number, number]; frames: { facing: string; pose: string; step: number; file: string }[] };
+  const [fw, fh] = poses.frame;
+  const sheet = new Uint8Array(fw * fh * 4 * poses.frames.length);
+  poses.frames.forEach((f, i) => {
+    const img = decodePng(new Uint8Array(readFileSync(join(POSES, f.file))));
+    for (let y = 0; y < fh; y++) for (let x = 0; x < fw; x++) {
+      const src = (y * img.width + x) * 4;
+      const dst = ((i * fh + y) * fw + x) * 4;
+      for (let k = 0; k < 4; k++) sheet[dst + k] = img.rgba[src + k]!;
+    }
+  });
+  const { sprite } = importPng(encodePng(fw, fh * poses.frames.length, sheet), 'storytender', fw, fh);
+  sprite.origin = { x: poses.feet[0], y: poses.feet[1] };
+  const idle: Record<string, number[]> = {};
+  const walk: Record<string, number[]> = {};
+  poses.frames.forEach((f, i) => {
+    (f.pose === 'idle' ? idle : walk)[f.facing] ??= [];
+    (f.pose === 'idle' ? idle : walk)[f.facing]!.push(i);
+  });
+  for (const fr of sprite.frames) fr.duration = 120;
+  sprite.clips = [
+    { name: 'idle', loop: true, mirror: false, all: idle.S ?? [0], dirs: idle, events: [] },
+    { name: 'walk', loop: true, mirror: false, all: walk.S ?? [1], dirs: walk, events: [] },
+  ];
+  writeFileSync(join(spriteDir, 'storytender.sprite.json'), stringifySprite(sprite));
+  storytender = 'storytender';
+  return storytender;
+}
 
 // ---------------------------------------------------------------- tiles
 
@@ -136,6 +173,14 @@ function buildKinds(tiles: TileEntry[], snaps: Record<string, Snap>): void {
   }
 }
 
+/** The edge of the page: the game shows its parchment there. Tilewright has no background picture or colour per scene, so the
+ * void around the land is filled with flat, blocked paper tiles at the lowest level. */
+let paperTile = 0;
+function addPaper(): void {
+  paperTile = nextTile++;
+  tileset.push({ id: paperTile, name: 'page edge (paper)', top: 0xdecea6, left: 0xc9b58a, right: 0xb8a47a, art: spriteFor(join(HERE, 'paper_tile.png'), 't_paper'), props: { solid: true, walkable: false } });
+}
+
 const hash = (x: number, y: number): number => (((x * 73856093) ^ (y * 19349663)) >>> 0) % 9973;
 
 // ---------------------------------------------------------------- scenes
@@ -144,7 +189,8 @@ function buildMap(scene: string, snap: Snap): TileMap {
   const keys = Object.keys(snap.floor.cells).map((k) => k.split(',').map(Number) as [number, number]);
   const w = Math.max(...keys.map((k) => k[0])) + 2;
   const h = Math.max(...keys.map((k) => k[1])) + 2;
-  const map = new TileMap(w, h);
+  // (the map is a little bigger than the land, so the paper shows all round it)
+  const map = new TileMap(w + 4, h + 4);
   for (const [x, y] of keys) {
     const kind = snap.floor.cells[`${x},${y}`]!;
     const k = kinds.get(`${scene}|${kind}`)!;
@@ -159,7 +205,12 @@ function buildMap(scene: string, snap: Snap): TileMap {
     }
     if (kind === '#') map.setFlag(x, y, FLAG.PIT);
   }
-  for (const [x, y] of snap.floor.blockers) if (x >= 0 && y >= 0 && x < w && y < h) map.setFlag(x, y, FLAG.BLOCK);
+  for (let y = 0; y < h + 4; y++)
+    for (let x = 0; x < w + 4; x++)
+      if (!snap.floor.cells[`${x},${y}`]) {
+        map.set(x, y, paperTile, 0);
+        map.setFlag(x, y, FLAG.BLOCK);
+      }
   return map;
 }
 
@@ -181,6 +232,8 @@ function entityFor(scene: string, n: Snap['nodes'][number], art: ArtEntry | unde
 
 function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
   const map = buildMap(scene, snap);
+  const blocked = new Set(snap.floor.blockers.map(([x, y]) => `${x},${y}`));
+  const taken = new Set<string>();
   const levelOf = (x: number, y: number): number => snap.floor.heights[`${x},${y}`] ?? 0;
   const entities: EntityData[] = [];
   const byNode = new Map(art.filter((a) => a.scene === scene).map((a) => [a.node, a]));
@@ -194,15 +247,30 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
       const a = byNode.get(n.name);
       const t = p.components.transform as { h: number };
       t.h = levelOf(Math.round(start[0]), Math.round(start[1]));
-      if (a?.file) (p.components.sprite as Record<string, unknown>).asset = spriteFor(join(ART, a.file), 'storytender', a.feet);
+      const anim = storytenderSprite();
+      if (anim) {
+        (p.components.sprite as Record<string, unknown>).asset = anim;
+        p.components.animator = makeAnimator({ clip: 'idle', controller: locomotionController({ idle: 'idle', walk: 'walk' }) });
+      } else if (a?.file) (p.components.sprite as Record<string, unknown>).asset = spriteFor(join(ART, a.file), 'storytender', a.feet);
       attachBehavior(p.components, 'followCamera');
+      Object.assign(p.components.followCamera as object, { zoom: 1.5 }); // LevelBase.ZOOM
       player = p;
       entities.push(p);
       continue;
     }
     if (['IsoFloor', 'GroundChunks', 'AmbientDrift', 'PasteGhost'].includes(n.class)) continue;
     const e = entityFor(scene, n, byNode.get(n.name), `e${i++}`, levelOf);
-    if (e) entities.push(e);
+    if (!e) continue;
+    const cell = `${Math.round(n.grid[0])},${Math.round(n.grid[1])}`;
+    if (blocked.has(cell) && !taken.has(cell)) {
+      taken.add(cell);
+      e.components.collider = { w: 0.9, d: 0.9, height: Math.max(1, (e.components.sprite as { height: number }).height), solid: true, trigger: false, layer: 16, mask: 65535, enabled: true, inside: [] };
+    }
+    entities.push(e);
+  }
+  for (const c of blocked) if (!taken.has(c)) {
+    const [x, y] = c.split(',').map(Number) as [number, number];
+    map.setFlag(x, y, FLAG.BLOCK);
   }
   return {
     schemaVersion: CURRENT_SCHEMA_VERSION,
@@ -228,6 +296,7 @@ function main(): void {
   const art: ArtEntry[] = JSON.parse(readFileSync(join(ART, 'index.json'), 'utf8'));
   const tiles: TileEntry[] = JSON.parse(readFileSync(join(TILES, 'index.json'), 'utf8'));
   buildKinds(tiles, snaps);
+  addPaper();
   const scenes: string[] = [];
   for (const k of Object.keys(SCENES)) {
     const scene = buildScene(k, snaps[k]!, art);

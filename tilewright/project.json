@@ -1134,6 +1134,18 @@
       "art": "t_scissor_mat_1_5",
       "faceLevels": 1,
       "props": {}
+    },
+    {
+      "id": 103,
+      "name": "page edge (paper)",
+      "top": 14601894,
+      "left": 13219210,
+      "right": 12100730,
+      "art": "t_paper",
+      "props": {
+        "solid": true,
+        "walkable": false
+      }
     }
   ],
   "autotile": [],
