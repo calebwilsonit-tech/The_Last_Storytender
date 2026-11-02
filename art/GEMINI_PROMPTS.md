@@ -15,27 +15,59 @@ on its own (one sheet per request) so the style and the layout stay clean.
 > under each standing thing is fine. Keep every drawing at the **same scale** across the sheet; standing figures
 > stand on the **same invisible baseline** in each row. Arrange drawings in a **strict grid** exactly as described.
 
-## 1. The Storytender, walking in 8 directions (most important)
+## 1. The Storytender, walking (five strips, one direction each)
 
-> A small hooded wanderer: dark brown cowl with a dark face and two glowing teal eyes, tan tunic with stitched seams,
-> dark trousers, brown boots, a leather satchel across the chest, a big leather backpack with a grey gear emblem and a
-> wrench, and a small glass lantern with a teal glow hanging at the hip. About 3 heads tall.
-> A sprite sheet in a strict grid of **8 rows x 6 columns**, every cell the same size, the figure the same size in
-> every cell, feet on the same baseline in each row.
-> Rows are the 8 directions the figure faces, **in this order, as seen on screen**:
-> 1 facing down toward the viewer, 2 facing down-right, 3 facing right, 4 facing up-right, 5 facing up away from the
-> viewer (back fully visible), 6 facing up-left, 7 facing left, 8 facing down-left.
-> Columns: 1 standing still, 2 to 5 a looping 4-frame walk cycle (contact, passing, contact with the other foot,
-> passing), 6 a quick overhead swing of a long feather quill pen held in the right hand.
-> Same character, same outfit and same colours in every cell.
+Image models lose track of directions when one picture holds many of them, so this is **five separate requests**,
+one per direction. The game mirrors the right-facing strips to make the left-facing ones, so five are enough.
+For every request: paste the Style block, **attach one good picture of the Storytender as a reference**, paste the
+prompt below, and replace `[DIRECTION]` with one of the five direction texts. If a strip comes back with a frame that
+turns, regenerate only that strip.
 
-## 2. The Storytender, extra poses
+> **Reference:** the attached character. Draw exactly this character and nothing else: a small hooded wanderer about
+> 3 heads tall, dark brown cowl hiding a dark face with two glowing teal eyes, tan tunic with stitched seams, a brown
+> leather satchel strap across the chest, dark green trousers, brown boots, a big brown leather backpack with a grey
+> gear emblem and a wrench sticking out of it, and a small glass lantern glowing teal hanging at the right hip. Same
+> colours, same proportions and same details in every frame.
+>
+> A sprite strip of **exactly 6 frames in one single row**, every frame the same width, the character the same size
+> in every frame, the feet on the same invisible baseline, at least 60 pixels of plain background between frames.
+>
+> **Every frame faces exactly the same way: [DIRECTION]. The character must not turn, rotate or change viewing angle
+> between frames; only the arms and legs move.**
+>
+> Frame 1: standing still, relaxed. Frames 2 to 5: a 4-frame walk cycle **in place** (not moving across the strip):
+> 2 right foot forward and left arm forward, 3 feet together passing with a slight bob up, 4 left foot forward and
+> right arm forward, 5 feet together passing with a slight bob up. Frame 6: an overhead strike with a long cream
+> feather quill pen held in the right hand, swinging forward in the facing direction.
 
-> The same hooded wanderer as before (paste the description from prompt 1). A strict grid of **4 rows x 4 columns**,
-> same size and baseline everywhere. Row 1: holding the lantern up high, its teal light shining forward, facing down,
-> down-right, up-right, up. Row 2: a short dash forward with motion lines, facing down, down-right, up-right, up.
-> Row 3: crouched creeping, facing down, down-right, up-right, up. Row 4: knocked down and crumpled like a crumpled
-> paper drawing, then three frames of standing back up.
+The five `[DIRECTION]` texts:
+
+1. **toward the viewer**: the whole face and the front of the tunic are visible, looking straight out of the image;
+   the backpack only peeks out above both shoulders; the lantern hangs at the left side of the image.
+2. **diagonally down and to the right, a three-quarter front view**: the face and the front of the body are visible
+   and turned toward the lower right corner of the image; the backpack shows behind the left shoulder.
+3. **to the right, a side view**: the right side of the body; the hood in profile, looking at the right edge of the
+   image, one glowing eye visible; the backpack fully visible on the left side of the body.
+4. **diagonally up and to the right, a three-quarter back view**: mostly the back and the backpack, the hood turned
+   toward the upper right corner of the image; no eyes visible; the right shoulder nearer to the viewer.
+5. **away from the viewer**: the full back, the backpack in the middle with the gear emblem facing the viewer; no face
+   and no eyes visible; the lantern hangs at the right side of the image.
+
+## 2. The Storytender, extra poses (four strips, the same way)
+
+The same method: one request per strip, the reference picture attached, the reference text from prompt 1, and the
+same rules (one row, same size, same baseline, same facing in every frame). Make each strip twice: facing **toward
+the viewer** and facing **away from the viewer** (8 requests in all).
+
+> A strip of **exactly 4 frames in one row**, all facing [toward the viewer / away from the viewer], not turning
+> between frames.
+> - Strip A, **lantern up**: holding the lantern up high in the right hand, its teal light shining forward; frames
+>   1 to 4 the light gently flickering brighter and dimmer.
+> - Strip B, **dash**: a quick dash forward: 1 crouch, 2 leaning far forward with speed lines behind, 3 the same
+>   further, 4 straightening up.
+> - Strip C, **creeping**: crouched low and sneaking on tiptoe, a 4-frame slow sneaking walk in place.
+> - Strip D, **crumpled**: 1 hit and stumbling, 2 falling, 3 lying crumpled flat like a crumpled paper drawing,
+>   4 getting back up.
 
 ## 3. Thistledown's people, as placeholders and restored
 
