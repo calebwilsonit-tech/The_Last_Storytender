@@ -42,10 +42,15 @@ POSE_WORDS = {'a_stand': 'standing still',
               'f_strike': '(swinging a long cream feather quill pen overhead, arm raised high:1.2)'}
 
 PEOPLE = {
-    'garrick': '(chibi:1.3) broad middle-aged blacksmith, short dark beard, rolled up sleeves, brown leather apron, hammer at his belt, kind tired eyes, simple cartoon face',
-    'pip': '(chibi:1.3) small curious child, messy hair, big striped scarf, hugging an open storybook to the chest, simple cartoon face',
-    'maud': '(chibi:1.3) warm older baker woman, grey hair in a bun, flour on her apron, sleeves pushed up, holding a wooden bread paddle, simple cartoon face',
+    'garrick': '(chibi:1.3) broad middle-aged blacksmith, short dark beard, (kind gentle face, warm tired eyes, soft smile:1.3), rolled up sleeves, (long brown leather apron down to the knees:1.2), long dark trousers, hammer hanging at his belt, simple cartoon face',
+    'pip': '(chibi:1.3) small curious child, messy hair, big striped scarf, hugging an open storybook to the chest, (curious happy face:1.2), simple cartoon face',
+    'maud': '(chibi:1.3) warm older baker woman, grey hair in a bun, flour on her apron, sleeves pushed up, holding a wooden bread paddle, (kind smiling face:1.2), simple cartoon face',
 }
+# Direction words for the villagers (the Storytender's mention his backpack)
+PEOPLE_DIRS = {'1_toward': 'facing the viewer, front view', '2_down_right': 'three-quarter front view, turned toward the right',
+               '4_up_right': 'three-quarter back view, turned away toward the upper right', '5_away': 'back view, facing away from the viewer'}
+PEOPLE_STYLE = 'storybook illustration, hand drawn, soft muted colours, matte flat colours, (not anime:1.2)'
+NEG_PEOPLE_EXTRA = ', anime, manga, glossy hair, shiny, angry, frown, scowl, backpack, bag on back, shorts, bare knees'
 ERRORS = {
     'bare': '(chibi:1.3) grumpy bear missing patches of fur as if erased with an eraser, heavy body, storybook monster',
     'mite': '(tiny:1.3) ink bug made of a single scribble, many thin little legs, dark ink, storybook monster',
@@ -182,8 +187,8 @@ def main():
         for who, desc in PEOPLE.items():
             for d in ('1_toward', '2_down_right', '4_up_right', '5_away'):
                 for look, extra, neg in (('restored', '', NEG_PEOPLE), ('placeholder', ', grey graphite pencil sketch, unfinished drawing, rough hatching, no colour, monochrome', NEG_PEOPLE + ', colour, colorful')):
-                    make(f'people/{who}_{look}_{d}', f'{desc}, {DIRS[d][0]}, standing{extra}, {STYLE}', neg, 2000 + len(who),
-                         ref_style, 0.4, os.path.join(POSES, f'{d}_a_stand.png'), models=models)
+                    make(f'people/{who}_{look}_{d}', f'{desc}, {PEOPLE_DIRS[d]}, standing{extra}, {PEOPLE_STYLE}, {STYLE}', neg + NEG_PEOPLE_EXTRA,
+                         2000 + len(who), ref_style, 0.4, os.path.join(POSES, f'{d}_a_stand.png'), models=models)
     if 'errors' in groups:
         for who, desc in ERRORS.items():
             for st, sw in ERROR_STATES.items():
