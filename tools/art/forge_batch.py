@@ -150,11 +150,18 @@ def make(name, prompt, negative, seed, ref=None, ref_weight=0.6, pose=None, size
                'alwayson_scripts': {'ControlNet': {'args': units}} if units else {}}
     t = time.time()
     r = call('/sdapi/v1/txt2img', payload)
-    imgs = [i for i in r.get('images', [])][:4]   # extra images (ControlNet previews) come after the four pictures
+    every = r.get('images', [])
+    imgs = every[:4]   # extra images (ControlNet's previews) come after the four pictures
     for k, im in enumerate(imgs):
         with open(os.path.join(OUT, f'{name}_s{k}.png'), 'wb') as f:
             f.write(base64.b64decode(im.split(',', 1)[-1]))
-    print(f'{name}: {len(imgs)} pictures in {time.time() - t:.0f} s')
+    extra = every[4:]
+    for k, im in enumerate(extra):   # kept so we can see what ControlNet saw
+        os.makedirs(os.path.join(OUT, '_controlnet'), exist_ok=True)
+        with open(os.path.join(OUT, '_controlnet', f'{name.replace("/", "_")}_{k}.png'), 'wb') as f:
+            f.write(base64.b64decode(im.split(',', 1)[-1]))
+    note = f' (+{len(extra)} ControlNet previews)' if extra else (' - WARNING: ControlNet sent nothing back, the pose/reference may be ignored' if units else '')
+    print(f'{name}: {len(imgs)} pictures in {time.time() - t:.0f} s{note}')
 
 
 def main():
