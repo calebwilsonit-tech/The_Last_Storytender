@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "theme": {
+    "font": "serif",
+    "text": "#1b1722",
+    "accent": "#1f6b87",
+    "panel": "#f6ecd2",
+    "border": "#3b2a1c",
+    "highlight": "#f2b84b",
+    "radius": 4,
+    "scale": 1
+  },
+  "widgets": [
+    {
+      "id": "hearts",
+      "kind": "hearts",
+      "anchor": "default",
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "visible": true,
+      "label": "",
+      "variable": "",
+      "max": 10,
+      "maxVariable": "",
+      "color": "#6aa8ff",
+      "text": ""
+    },
+    {
+      "id": "lightbar",
+      "kind": "lightbar",
+      "anchor": "default",
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "visible": true,
+      "label": "",
+      "variable": "",
+      "max": 10,
+      "maxVariable": "",
+      "color": "#6aa8ff",
+      "text": ""
+    },
+    {
+      "id": "slots",
+      "kind": "slots",
+      "anchor": "default",
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "visible": true,
+      "label": "",
+      "variable": "",
+      "max": 10,
+      "maxVariable": "",
+      "color": "#6aa8ff",
+      "text": ""
+    },
+    {
+      "id": "bosses",
+      "kind": "bosses",
+      "anchor": "default",
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "visible": true,
+      "label": "",
+      "variable": "",
+      "max": 10,
+      "maxVariable": "",
+      "color": "#6aa8ff",
+      "text": ""
+    },
+    {
+      "id": "toasts",
+      "kind": "toasts",
+      "anchor": "default",
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "visible": true,
+      "label": "",
+      "variable": "",
+      "max": 10,
+      "maxVariable": "",
+      "color": "#6aa8ff",
+      "text": ""
+    }
+  ]
+}

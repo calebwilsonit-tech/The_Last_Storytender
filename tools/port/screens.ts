@@ -213,6 +213,66 @@ function restart(): Screen {
   return screen(RESTART, stage('restart', kids), { id: 'storytender-restart', back: 'previous', dim: 0.6 });
 }
 
+// ---------------------------------------------------------------- settings (the engine's menu, in the game's colours)
+
+/**
+ * Settings, on a page of parchment: three sections with a colour each (ink-well teal for sound, the Errors' red for play, gold for the
+ * screen), a thin rule under each, and rows that alternate a shade so the eye can follow them across. The controls are the engine's own
+ * (sliders, tick boxes, the pop-up list), bound to the same settings as the stock menu, so saving and the Controls screen work as before.
+ */
+function settings(): Screen {
+  const X = 330; // the box's left edge on the stage
+  const WIDTH = 620;
+  const section = (id: string, y: number, label: string, color: string): W[] => [
+    box(`${id}.bar`, 24, y + 4, 6, 24, { fill: color, radius: 3 }),
+    text(`${id}.head`, label, 42, y, 24, color, { w: 300, style: { bold: true } }),
+    rule(`${id}.rule`, 24, y + 33, WIDTH - 48, `${color}59`, 2),
+  ];
+  const row = (id: string, y: number, label: string, i: number, control: W, extra: Style = {}): W =>
+    box(`set.${id}`, 24, y, WIDTH - 48, 40, { fill: i % 2 ? '#3b2a1c0d' : '#3b2a1c00' }, [text(`set.${id}.label`, label, 12, 6, 22, C.ink, { w: 300, h: 28 }), control], extra);
+  const slider = (id: string, value: string, min: number, max: number, step: number): W =>
+    w('slider', `set.${id}.slider`, { name: `${id} slider`, ...at(300, 6, 260, 28), value, min, max: String(max), step });
+  const tick = (id: string, value: string): W => w('toggle', `set.${id}.box`, { name: `${id} tick box`, ...at(520, 4, 40, 32), value, text: '' });
+  const pick = (id: string, value: string, options: string): W => w('dropdown', `set.${id}.choice`, { name: `${id} choice`, ...at(340, 4, 220, 32), value, options });
+  const controls = box(
+    'set.controls',
+    24,
+    594,
+    WIDTH - 48,
+    40,
+    { fill: '#f2b84b40', border: C.inkBrown, borderWidth: 2 },
+    [text('set.controls.label', 'Controls', 12, 6, 22, C.ink, { w: 300, h: 28 }), text('set.controls.go', 'change keys and buttons  ›', 240, 9, 18, C.inkBrown, { w: 310, h: 24, style: { align: 'right', opacity: 0.8 } })],
+    { states: { hover: { fill: '#f2b84b99', borderWidth: 4 }, focus: { fill: '#f2b84b99', borderWidth: 4 } }, on: { click: [open('role:controls')], hover: [], change: [] } },
+  );
+  const panel = box(
+    'set.box',
+    X,
+    36,
+    WIDTH,
+    648,
+    { fill: C.paperLight, border: C.inkBrown, borderWidth: 4, radius: 4, shadow: true },
+    [
+      text('set.head', 'Settings', 24, 10, 46, C.ink, { w: 400 }),
+      rule('set.headrule', 24, 66, WIDTH - 48, C.gold, 4),
+      ...section('set.s1', 80, 'SOUND', C.cyanDeep),
+      row('master', 120, 'Master volume', 0, slider('master', 'settings.master', 0, 1, 0.1)),
+      row('music', 162, 'Music', 1, slider('music', 'settings.music', 0, 1, 0.1)),
+      row('sfx', 204, 'Effects', 0, slider('sfx', 'settings.sfx', 0, 1, 0.1)),
+      row('voice', 246, 'Voices', 1, slider('voice', 'settings.voice', 0, 1, 0.1)),
+      ...section('set.s2', 296, 'PLAY', C.red),
+      row('difficulty', 336, 'Difficulty', 0, pick('difficulty', 'settings.difficulty', 'story, normal')),
+      row('shake', 378, 'Screen shake and hit freeze', 1, tick('shake', 'settings.screenShake')),
+      row('zoom', 420, 'Camera zoom', 0, slider('zoom', 'settings.cameraZoom', 0.75, 1.5, 0.25)),
+      ...section('set.s3', 470, 'SCREEN', C.goldDark),
+      row('fullscreen', 510, 'Full screen', 0, tick('fullscreen', 'settings.fullscreen'), { visible: '{host.fullscreen}' }),
+      row('fps', 552, 'Show frame rate', 1, tick('fps', 'settings.showFps')),
+      controls,
+    ],
+  );
+  const kids = [panel, legend('settings.legend', [['W S', 'Choose'], ['A D', 'Change'], ['E', 'Select'], ['Esc', 'Back']])];
+  return screen('Settings', stage('settings', kids), { id: 'storytender-settings', role: 'settings', dim: 0.6 });
+}
+
 // ---------------------------------------------------------------- the binder (inventory_screen.gd)
 
 function card(itemIds: string[]): W {
@@ -336,7 +396,76 @@ function here(): W {
   ]);
 }
 
-function map(paperTile: number): Screen {
+/** An unlit lantern post on the map: the same post, dark. The lit ones (Lamp) are drawn over it. */
+function darkPost(): W {
+  return box('darkpost', 0, 0, 12, 18, {}, [
+    box('darkpost.post', 3, 5, 5, 13, { fill: '#7a6a58' }),
+    box('darkpost.lamp', 2, 0, 8, 8, { fill: C.paperLight, border: '#5a4a3a', borderWidth: 1, radius: 4 }),
+  ]);
+}
+
+/** A door into a memory: a small teal diamond with a dark rim. */
+function memoryDoor(): W {
+  return box('door', 0, 0, 14, 14, {}, [box('door.mark', 1, 1, 11, 11, { fill: '#7fd0e6', border: C.cyanDeep, borderWidth: 2, radius: 2 })]);
+}
+
+/** Nothing to see: a label's marker (the words come from the labels layer). */
+function blankMark(): W {
+  return box('blank', 0, 0, 1, 1, {});
+}
+
+/** The names the map shows over the world (made by the porter from the Godot game's regions, lantern posts and doors). */
+export interface MapNames {
+  regions: { id: string; x: number; y: number; label: string }[];
+  posts: { id: string; x: number; y: number; label: string }[];
+  doors: { id: string; x: number; y: number; label: string }[];
+}
+
+/** The parts of the Godot game's prologue map (data/prologue_map.gd) the map screen names. */
+export interface MapConstants {
+  REGION_ROWS: string[];
+  REGIONS: Record<string, string>;
+  WAYPOINTS: { id: string; name: string; cell: [number, number] }[];
+  PORTALS: Record<string, { name: string; cell: [number, number] }>;
+}
+
+/** A region's name as the map prints it: short, so neighbours do not run into each other. */
+const SHORT: Record<string, string> = { 'Graveyard of Deleted Scenes': 'Graveyard', 'Whispering Orchard': 'Orchard', 'Footnote Hollow': 'Hollow', 'Hushed Glade': 'Glade', 'Dog-Ear Cliffs': 'Dog-Ears', 'Folio Heights': 'Folio', 'Margins Meadow': 'Margins' };
+const shortName = (name: string): string => SHORT[name.replace(/^The /, '')] ?? name.replace(/^The /, '');
+
+/** Each region (named at a cell inside it, nearest its middle), every lantern post and the memory doors. */
+export function mapNamesFrom(c: MapConstants): MapNames {
+  const cells = new Map<string, [number, number][]>();
+  c.REGION_ROWS.forEach((row, y) => [...row].forEach((ch, x) => ch !== ' ' && (cells.get(ch) ?? cells.set(ch, []).get(ch)!).push([x, y])));
+  const regions = [...cells.entries()]
+    .filter(([ch, list]) => c.REGIONS[ch] && list.length >= 12)
+    .map(([ch, list]) => {
+      const mx = list.reduce((s, p) => s + p[0], 0) / list.length;
+      const my = list.reduce((s, p) => s + p[1], 0) / list.length;
+      const [x, y] = list.reduce((best, p) => (Math.hypot(p[0] - mx, p[1] - my) < Math.hypot(best[0] - mx, best[1] - my) ? p : best));
+      return { id: `region_${ch}`, x, y, label: shortName(c.REGIONS[ch]!) };
+    });
+  return {
+    regions,
+    posts: c.WAYPOINTS.map((p) => ({ id: p.id, x: p.cell[0], y: p.cell[1], label: p.name })),
+    doors: Object.entries(c.PORTALS).map(([id, p]) => ({ id, x: p.cell[0], y: p.cell[1], label: p.name })),
+  };
+}
+
+/** What the little pictures on the map mean, under the map. */
+function mapKey(): W[] {
+  const item = (id: string, x: number, mark: W, label: string, wd: number): W[] => [mark, text(`${id}.t`, label, x + 22, 584, 17, C.ink, { w: wd, h: 24, style: { opacity: 0.8 } })];
+  const dot = (id: string, x: number, style: Style): W => box(id, x, 587, 14, 14, style);
+  return [
+    ...item('key.you', 480, dot('key.you.m', 480, { fill: C.red, border: C.ink, borderWidth: 2, radius: 3 }), 'You', 60),
+    ...item('key.lit', 570, dot('key.lit.m', 570, { fill: '#e6f7fb', border: C.cyanDeep, borderWidth: 2, radius: 7 }), 'Lit lantern', 130),
+    ...item('key.dark', 730, dot('key.dark.m', 730, { fill: C.paperLight, border: '#5a4a3a', borderWidth: 2, radius: 7 }), 'Unlit lantern', 150),
+    ...item('key.door', 910, dot('key.door.m', 910, { fill: '#7fd0e6', border: C.cyanDeep, borderWidth: 2, radius: 2 }), 'Memory door', 150),
+  ];
+}
+
+function map(paperTile: number, names: MapNames): Screen {
+  const hand = (list: MapNames['regions']): object[] => list.map((p) => ({ id: p.id, x: p.x, y: p.y, label: p.label, state: '' }));
   const chapters = CHAPTERS.flatMap((c, i) => {
     const y = 170 + i * 92;
     const fill = i === 0 ? '#f2b84b59' : '#0000000f';
@@ -353,10 +482,16 @@ function map(paperTile: number): Screen {
     source: { kind: 'scene', scene: 'scenes/overworld.scene.json', scenes: [], table: '', width: 137, height: 106 },
     projection: { kind: 'iso', rotation: 'fixed', angle: 0, picture: '' },
     layers: [
-      { id: 'terrain', name: 'Terrain', kind: 'terrain', settings: { colourBy: 'tile', palette: `${paperTile}:#00000000`, fallback: '#a9c78a', outline: 'none', shade: true } },
+      // the ground in its own colours, shaded by height, with a thin brown line where one kind of ground meets another (paths, cliffs, water)
+      { id: 'terrain', name: 'Terrain', kind: 'terrain', settings: { colourBy: 'tile', palette: `${paperTile}:#00000000`, fallback: '#a9c78a', outline: 'edges', outlineColour: '#3b2a1c4d', shade: true } },
+      { id: 'grid', name: 'Page grid', kind: 'grid', settings: { every: 10, colour: '#3b2a1c18', lineWidth: 1 } },
+      { id: 'names', name: 'Region names', kind: 'labels', settings: { from: 'markers', kind: 'regions', colour: '#3b2a1c', size: 13 } },
       { id: 'marks', name: 'Markers', kind: 'markers', settings: {} },
     ],
     markers: [
+      { id: 'regions', name: 'Region names', from: 'hand', hand: hand(names.regions), prefab: 'Blank', choosable: false, scaleWithZoom: false },
+      { id: 'doors', name: 'Memory doors', from: 'hand', hand: hand(names.doors), prefab: 'Door', choosable: false },
+      { id: 'darkposts', name: 'Lantern posts', from: 'hand', hand: hand(names.posts), prefab: 'DarkPost', choosable: false },
       { id: 'posts', name: 'Lit lanterns', from: 'list', source: 'lit-posts', x: 'post.x', y: 'post.y', prefab: 'Lamp', show: '{map.distance} >= 40', choosable: true },
       { id: 'you', name: 'You are here', from: 'tags', source: 'player', prefab: 'Here', choosable: false },
     ],
@@ -370,8 +505,11 @@ function map(paperTile: number): Screen {
     text('map.head', 'The Map', 70, 40, 54, C.ink, { w: 400 }),
     rule('map.rule', 70, 114, 1140, '#1b172280'),
     ...chapters,
-    w('map', 'map.world', { name: 'World', ...at(470, 130, 760, 470), map: spec, style: { fill: '#00000000', border: '#00000000' } }),
-    text('map.none', 'Light a lantern post out in the world, and you can travel to it from here.', 470, 610, 22, C.ink, { w: 760, visible: '!{wm.marker}', style: { opacity: 0.8 } }),
+    // the map sits in a frame of darker paper, like a plate in an atlas
+    box('map.frame', 462, 126, 776, 450, { fill: '#e5d4a7', border: C.inkBrown, borderWidth: 3, radius: 4 }),
+    w('map', 'map.world', { name: 'World', ...at(470, 130, 760, 442), map: spec, style: { fill: '#00000000', border: '#00000000' } }),
+    ...mapKey(),
+    text('map.none', 'Light a lantern post out in the world, and you can travel to it from here.', 470, 626, 22, C.ink, { w: 760, visible: '!{wm.marker}', style: { opacity: 0.8 } }),
     text('map.foot', 'E   Travel (far posts only)          M   Close', 70, 640, 20, C.ink, { w: 700, style: { opacity: 0.8 } }),
     legend('map.legend', [['W A S D', 'Move'], ['E', 'Travel'], ['M', 'Close']]),
   ];
@@ -458,13 +596,25 @@ function hud(usable: string[]): Screen {
 
 // ---------------------------------------------------------------- the file
 
-export function buildScreens(itemIds: string[], schemaVersion: number, paperTile: number, usable: string[] = itemIds): object {
+/** The engine's own menus (settings, controls, saves, the conversation box...) wear the game's colours: parchment, ink, gold, ink-well teal. */
+export function uiTheme(schemaVersion: number): object {
   return {
     schemaVersion,
-    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), binder(itemIds), map(paperTile)],
+    theme: { font: 'serif', text: C.ink, accent: C.cyanDeep, panel: C.paperLight, border: C.inkBrown, highlight: C.gold, radius: 4, scale: 1 },
+    widgets: [],
+  };
+}
+
+export function buildScreens(itemIds: string[], schemaVersion: number, paperTile: number, usable: string[] = itemIds, names: MapNames = { regions: [], posts: [], doors: [] }): object {
+  return {
+    schemaVersion,
+    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), settings(), binder(itemIds), map(paperTile, names)],
     prefabs: [
       { name: 'Lamp', widget: lamp() },
       { name: 'Here', widget: here() },
+      { name: 'DarkPost', widget: darkPost() },
+      { name: 'Door', widget: memoryDoor() },
+      { name: 'Blank', widget: blankMark() },
     ],
     safeArea: 0,
   };
