@@ -160,16 +160,30 @@ func _run() -> void:
 			if box.size.x > 0 and box.size.y > 0:
 				var crop := img.get_region(box)
 				var sub := crop.get_used_rect()
+				if sub.size.x <= 0 or sub.size.y <= 0:
+					_index.append(entry)   # draws nothing (an invisible object): no picture
+					for a in was:
+						a.visible = was[a]
+					continue
 				crop = crop.get_region(sub)
 				var png := crop.save_png_to_buffer()
+				var pad := 0
+				if png.is_empty():
+					# Godot 4.3's PNG encoder fails on a few pictures ("compressed_size <= png_size_estimate"); a transparent
+					# border around the same picture encodes fine, and the feet and size are corrected for it below.
+					pad = 2
+					var padded := Image.create(crop.get_width() + 2 * pad, crop.get_height() + 2 * pad, false, Image.FORMAT_RGBA8)
+					padded.blit_rect(crop.duplicate(), Rect2i(Vector2i.ZERO, crop.get_size()), Vector2i(pad, pad))
+					crop = padded
+					png = crop.save_png_to_buffer()
 				var h := png.hex_encode().md5_text()
 				if not _hashes.has(h):
 					_hashes[h] = file
 					crop.save_png(_out.path_join(file))
 					n_saved += 1
 				entry["file"] = _hashes[h]
-				entry["feet"] = [feet.x - box.position.x - sub.position.x, feet.y - box.position.y - sub.position.y]
-				entry["size"] = [sub.size.x, sub.size.y]
+				entry["feet"] = [feet.x - box.position.x - sub.position.x + pad, feet.y - box.position.y - sub.position.y + pad]
+				entry["size"] = [sub.size.x + 2 * pad, sub.size.y + 2 * pad]
 			_index.append(entry)
 			for a in was:
 				a.visible = was[a]
