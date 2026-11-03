@@ -1,0 +1,145 @@
+[
+ {
+  "out": "art/incoming2/tiles/floor_meadow_1",
+  "kind": "image",
+  "prompt": "meadow grass with tiny tufts, seamless texture, seen from directly above, flat, even lighting, no shadows, no objects, hand-drawn, clean dark-brown ink details, flat cel shading, muted warm colours",
+  "image_type": "texture",
+  "n": 3,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "perspective": "Top-Down"
+  }
+ },
+ {
+  "out": "art/incoming2/tiles/floor_meadow_2",
+  "kind": "image",
+  "prompt": "meadow grass with a few small clover leaves, seamless texture, seen from directly above, flat, even lighting, no shadows, no objects, hand-drawn, clean dark-brown ink details, flat cel shading, muted warm colours",
+  "image_type": "texture",
+  "n": 3,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "perspective": "Top-Down"
+  }
+ },
+ {
+  "out": "art/incoming2/tiles/floor_meadow_3",
+  "kind": "image",
+  "prompt": "meadow grass with a few tiny daisies, seamless texture, seen from directly above, flat, even lighting, no shadows, no objects, hand-drawn, clean dark-brown ink details, flat cel shading, muted warm colours",
+  "image_type": "texture",
+  "n": 3,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "perspective": "Top-Down"
+  }
+ },
+ {
+  "out": "art/incoming2/tiles/floor_dirt",
+  "kind": "image",
+  "prompt": "packed dirt path with small pebbles, seamless texture, seen from directly above, flat, even lighting, no shadows, no objects, hand-drawn, clean dark-brown ink details, flat cel shading, muted warm colours",
+  "image_type": "texture",
+  "n": 3,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "perspective": "Top-Down"
+  }
+ },
+ {
+  "out": "art/incoming2/tiles/floor_cobble",
+  "kind": "image",
+  "prompt": "pale cobblestones with moss between them, seamless texture, seen from directly above, flat, even lighting, no shadows, no objects, hand-drawn, clean dark-brown ink details, flat cel shading, muted warm colours",
+  "image_type": "texture",
+  "n": 3,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "perspective": "Top-Down"
+  }
+ },
+ {
+  "out": "art/incoming2/tiles/floor_flagstone",
+  "kind": "image",
+  "prompt": "large flat grey paving stones, seamless texture, seen from directly above, flat, even lighting, no shadows, no objects, hand-drawn, clean dark-brown ink details, flat cel shading, muted warm colours",
+  "image_type": "texture",
+  "n": 3,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "perspective": "Top-Down"
+  }
+ },
+ {
+  "out": "art/incoming2/tiles/floor_slate",
+  "kind": "image",
+  "prompt": "cold dark blue-grey slate tiles with a little frost, seamless texture, seen from directly above, flat, even lighting, no shadows, no objects, hand-drawn, clean dark-brown ink details, flat cel shading, muted warm colours",
+  "image_type": "texture",
+  "n": 3,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "perspective": "Top-Down"
+  }
+ },
+ {
+  "out": "art/incoming2/tiles/floor_parchment",
+  "kind": "image",
+  "prompt": "an old printed book page with faint lines of text, seamless texture, seen from directly above, flat, even lighting, no shadows, no objects, hand-drawn, clean dark-brown ink details, flat cel shading, muted warm colours",
+  "image_type": "texture",
+  "n": 3,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "perspective": "Top-Down"
+  }
+ },
+ {
+  "out": "art/incoming2/tiles/floor_planks",
+  "kind": "image",
+  "prompt": "warm wooden kitchen floorboards, seamless texture, seen from directly above, flat, even lighting, no shadows, no objects, hand-drawn, clean dark-brown ink details, flat cel shading, muted warm colours",
+  "image_type": "texture",
+  "n": 3,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "perspective": "Top-Down"
+  }
+ },
+ {
+  "out": "art/incoming2/tiles/floor_moss",
+  "kind": "image",
+  "prompt": "dark green moss with tiny glowing teal specks, seamless texture, seen from directly above, flat, even lighting, no shadows, no objects, hand-drawn, clean dark-brown ink details, flat cel shading, muted warm colours",
+  "image_type": "texture",
+  "n": 3,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "perspective": "Top-Down"
+  }
+ },
+ {
+  "out": "art/incoming2/tiles/side_earth",
+  "kind": "image",
+  "image_type": "texture",
+  "n": 2,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "aspect_ratio": "ar_16_9"
+  },
+  "prompt": "the side face of a raised block of earth with roots and small stones, flat front view, seamless left to right, hand-drawn, clean dark-brown ink outline, flat cel shading, muted warm colours"
+ },
+ {
+  "out": "art/incoming2/tiles/side_stone",
+  "kind": "image",
+  "image_type": "texture",
+  "n": 2,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "aspect_ratio": "ar_16_9"
+  },
+  "prompt": "the side face of a raised block of grey stone bricks, flat front view, seamless left to right, hand-drawn, clean dark-brown ink outline, flat cel shading, muted warm colours"
+ },
+ {
+  "out": "art/incoming2/tiles/side_wood",
+  "kind": "image",
+  "image_type": "texture",
+  "n": 2,
+  "extra": {
+   "art_style": "Cel-Shaded",
+   "aspect_ratio": "ar_16_9"
+  },
+  "prompt": "the side face of a raised wooden platform of vertical planks, flat front view, seamless left to right, hand-drawn, clean dark-brown ink outline, flat cel shading, muted warm colours"
+ }
+]

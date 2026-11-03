@@ -1,0 +1,314 @@
+[
+ {
+  "out": "art/incoming2/objects/chest_closed",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a wooden treasure chest, closed, with brass corners and a lock, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/post_unlit",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a wooden lantern post with an unlit glass lantern on top, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/forge_warm",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a stone blacksmith forge with a chimney, roaring orange fire glowing in its opening, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/oven_warm",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a brick bread oven with an arched opening, warm glow inside, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/sign_small",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a small wooden signpost with a completely blank cream paper board, no writing, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/sign_wide",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a wide wooden notice board on two posts with a completely blank cream paper board, no writing, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/sign_tall",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a tall wooden signpost with a completely blank cream paper board, no writing, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/plate_up",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a round stone pressure plate, raised slightly above the ground, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/echo_plate_dim",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a dark diamond-shaped floor stone with a carved eye, dim, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/gate_closed",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a colourful painted wooden fence gate with a brass padlock, closed, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/storygate",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a wall of pale paper strips hanging side by side, three cells wide, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/redaction_bar",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a thick floating black bar with ragged torn edges, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/block_stone",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a plain cube of grey slate stone, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/block_wood",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a plain cube of wooden planks, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/anvil",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a blacksmith anvil, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/hammer",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a blacksmith hammer, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/tongs",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "blacksmith tongs, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/bellows",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a leather blacksmith bellows with a wooden handle, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/shard",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a floating glowing teal crystal splinter, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/first_sword",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a small crooked wooden-hilted sword lying on its side, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/torn_page",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a torn storybook page, floating in the air, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/storybook",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "an open storybook lying on the ground, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/word_bread",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "the word BREAD carved as chunky wooden letter blocks, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/dough_1",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a small lump of bread dough, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/dough_2",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a half-risen lump of bread dough, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/dough_3",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a full risen round loaf of bread dough, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/table_long",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a long wooden kitchen table set for six with plates and cups, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/chair",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a simple wooden chair, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/portal",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a swirling teal rift torn in the air with a glowing edge, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/crystal",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a small glowing teal crystal on the ground, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/dummy",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a straw training dummy on a wooden post, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/scissors",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a pair of giant scissors stuck blade-down in the floor, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/patch",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a paper cut-out patch with torn edges, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/tree_1",
+  "kind": "style",
+  "style_image": "art/training/props_10.png",
+  "prompt": "a round leafy storybook tree, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/tree_2",
+  "kind": "style",
+  "style_image": "art/training/props_10.png",
+  "prompt": "a tall slim leafy storybook tree, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/tree_3",
+  "kind": "style",
+  "style_image": "art/training/props_10.png",
+  "prompt": "a wide bushy leafy storybook tree, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/house_1",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a small timber cottage with a steep roof and chimney, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/house_2",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a two-storey timber house with a chimney, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/objects/house_3",
+  "kind": "style",
+  "style_image": "art/training/props_11.png",
+  "prompt": "a small timber workshop with a lean-to roof, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ }
+]

@@ -1,0 +1,140 @@
+[
+ {
+  "out": "art/incoming2/objects/chest_open",
+  "kind": "edit",
+  "image": "art/incoming2/objects/chest_closed.png",
+  "prompt": "same chest with the lid open and a soft golden glow shining out of the inside, same colours and style",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/post_lit",
+  "kind": "edit",
+  "image": "art/incoming2/objects/post_unlit.png",
+  "prompt": "same lantern post, now lit: a warm teal flame glowing inside the lantern, soft teal light, same style",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/forge_frozen",
+  "kind": "edit",
+  "image": "art/incoming2/objects/forge_warm.png",
+  "prompt": "same forge, but the fire is frozen: a still pale blue ice-crystal flame in the opening, cold blue tint on the stones, frost",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/oven_cold",
+  "kind": "edit",
+  "image": "art/incoming2/objects/oven_warm.png",
+  "prompt": "same oven, but cold and dark: no fire, dark empty opening, no glow, dull colours",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/plate_down",
+  "kind": "edit",
+  "image": "art/incoming2/objects/plate_up.png",
+  "prompt": "same round stone plate pressed down flat into the ground, lower and flatter",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/echo_plate_lit",
+  "kind": "edit",
+  "image": "art/incoming2/objects/echo_plate_dim.png",
+  "prompt": "same diamond stone with the carved eye now glowing bright teal, with a teal glow around it",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/gate_open",
+  "kind": "edit",
+  "image": "art/incoming2/objects/gate_closed.png",
+  "prompt": "same gate swung open to the side, padlock hanging open, same colours",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/house_1_ghost",
+  "kind": "edit",
+  "image": "art/incoming2/objects/house_1.png",
+  "prompt": "the same house drawn as an unfinished grey graphite pencil sketch, no colour, rough hatching, faint lines",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/house_2_ghost",
+  "kind": "edit",
+  "image": "art/incoming2/objects/house_2.png",
+  "prompt": "the same house drawn as an unfinished grey graphite pencil sketch, no colour, rough hatching, faint lines",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/house_3_ghost",
+  "kind": "edit",
+  "image": "art/incoming2/objects/house_3.png",
+  "prompt": "the same house drawn as an unfinished grey graphite pencil sketch, no colour, rough hatching, faint lines",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/word_bread_underline",
+  "kind": "edit",
+  "image": "art/incoming2/objects/word_bread.png",
+  "prompt": "same carved wooden BREAD word with a thick wooden underline bar beneath it",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/word_bread_bold",
+  "kind": "edit",
+  "image": "art/incoming2/objects/word_bread.png",
+  "prompt": "same carved BREAD word but heavier, thicker bolder chunkier letters",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/word_bread_italic",
+  "kind": "edit",
+  "image": "art/incoming2/objects/word_bread.png",
+  "prompt": "same carved BREAD word slanted italic",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/objects/portal",
+  "kind": "style",
+  "style_image": "art/training/props_21.png",
+  "n": 3,
+  "image_type": "sprite",
+  "prompt": "a swirling teal portal rift torn in the air, glowing edge, floating upright, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, muted warm colours, isometric three-quarter view, single subject, centered, plain parchment background"
+ }
+]

@@ -1,0 +1,42 @@
+[
+ {
+  "out": "art/incoming2/characters/garrick_S",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a broad middle-aged blacksmith with a short dark beard, rolled sleeves, a leather apron and a hammer at his belt, kind tired face, standing, facing the viewer, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/characters/pip_S",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a small curious child with messy hair, a big striped scarf and an open storybook hugged to the chest, standing, facing the viewer, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/characters/maud_S",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a warm older baker with a grey hair bun, flour on her apron, sleeves pushed up, holding a wooden bread paddle, standing, facing the viewer, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/characters/figure_memory",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a pale glowing cyan silhouette of a person, translucent, standing, facing the viewer, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/characters/guest_standing",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a pale shadowy dinner guest made of shadow, standing, facing the viewer, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ }
+]

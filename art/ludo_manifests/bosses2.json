@@ -1,0 +1,72 @@
+[
+ {
+  "out": "art/incoming2/bosses/boss_critic_attack",
+  "kind": "edit",
+  "image": "art/incoming2/bosses/boss_critic_idle.png",
+  "prompt": "same character, same colours and style, lunging forward with its arms swinging and its mouth wide open, shouting sharp words",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/bosses/boss_critic_reckoning",
+  "kind": "edit",
+  "image": "art/incoming2/bosses/boss_critic_idle.png",
+  "prompt": "same character, same colours and style, stripped thin and cracked, torn pages falling off, weakened and hunched",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/bosses/boss_spoiler_read",
+  "kind": "edit",
+  "image": "art/incoming2/bosses/boss_spoiler_idle.png",
+  "prompt": "same character, same colours and style, the pages fanned out wide and glowing, letters rising up",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/bosses/boss_spoiler_attack",
+  "kind": "edit",
+  "image": "art/incoming2/bosses/boss_spoiler_idle.png",
+  "prompt": "same character, same colours and style, snapping shut halfway like jaws, glowing letters shooting out",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/bosses/boss_cold_slam",
+  "kind": "edit",
+  "image": "art/incoming2/bosses/boss_cold_idle.png",
+  "prompt": "same character, same colours and style, slamming its huge frozen shoulder down hard, ice shards flying",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/bosses/boss_scissor_cut",
+  "kind": "edit",
+  "image": "art/incoming2/bosses/boss_scissor_idle.png",
+  "prompt": "same character, same colours and style, swinging both shears wide open in a big cutting slash",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/bosses/boss_scissor_jammed",
+  "kind": "edit",
+  "image": "art/incoming2/bosses/boss_scissor_idle.png",
+  "prompt": "same character, same colours and style, the shears jammed and tangled together, stuck, with a crumpled paper strip caught in them",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ }
+]

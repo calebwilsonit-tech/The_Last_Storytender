@@ -14,3 +14,7 @@ tilewright/saves/
 tilewright/logs/
 __pycache__/
 tools/art/python_path.txt
+
+# Ludo.ai tries (only the chosen picture of each is kept); contact sheets
+art/incoming2/**/*_s[0-9].png
+art/_cal/

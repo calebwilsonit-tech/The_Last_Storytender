@@ -1,0 +1,92 @@
+[
+ {
+  "out": "art/incoming2/errors/err_bare_friendly",
+  "kind": "edit",
+  "image": "art/incoming2/errors/err_bare_idle.png",
+  "prompt": "turn this grumpy bear into a friendly cuddly bear: softer colours, full soft fur with no missing patches, a gentle smile",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/errors/err_runon_friendly",
+  "kind": "edit",
+  "image": "art/incoming2/errors/err_runon_idle.png",
+  "prompt": "turn this dark ink slug into a soft cream coloured friendly slug with a gentle smile, softer colours, no ink",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/errors/err_dangler_friendly",
+  "kind": "edit",
+  "image": "art/incoming2/errors/err_dangler_idle.png",
+  "prompt": "make this creature friendly: softer colours, a gentle smile, and holding a little wooden sign instead of loose letters",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/errors/err_bare_attack",
+  "kind": "edit",
+  "image": "art/incoming2/errors/err_bare_idle.png",
+  "prompt": "same creature, same colours and style, rearing up on its hind legs with claws raised, roaring",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/errors/err_mite_attack",
+  "kind": "edit",
+  "image": "art/incoming2/errors/err_mite_idle.png",
+  "prompt": "same creature, same colours and style, lunging forward with its legs spread wide",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/errors/err_runon_attack",
+  "kind": "edit",
+  "image": "art/incoming2/errors/err_runon_idle.png",
+  "prompt": "same creature, same colours and style, rearing up the front of its body to lunge",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/errors/err_dangler_attack",
+  "kind": "edit",
+  "image": "art/incoming2/errors/err_dangler_idle.png",
+  "prompt": "same creature, same colours and style, swinging forward on its thread, throwing letters",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/errors/err_censor_attack",
+  "kind": "edit",
+  "image": "art/incoming2/errors/err_censor_idle.png",
+  "prompt": "same creature, same colours and style, swinging the black bar forward in a bash",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ },
+ {
+  "out": "art/incoming2/errors/err_ellipsis_attack",
+  "kind": "edit",
+  "image": "art/incoming2/errors/err_ellipsis_idle.png",
+  "prompt": "same creature, same colours and style, dots flaring wide and bright, lunging forward",
+  "n": 2,
+  "extra": {
+   "image_type": "sprite"
+  }
+ }
+]

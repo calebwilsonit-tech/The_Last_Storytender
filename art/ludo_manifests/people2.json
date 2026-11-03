@@ -1,0 +1,187 @@
+[
+ {
+  "out": "art/incoming2/characters/garrick_SE",
+  "kind": "rotate",
+  "image": "art/incoming2/characters/garrick_S.png",
+  "n": 1,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/characters/garrick_NE",
+  "kind": "rotate",
+  "image": "art/incoming2/characters/garrick_S.png",
+  "n": 1,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/characters/garrick_N",
+  "kind": "rotate",
+  "image": "art/incoming2/characters/garrick_S.png",
+  "n": 1,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/characters/pip_SE",
+  "kind": "rotate",
+  "image": "art/incoming2/characters/pip_S.png",
+  "n": 1,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/characters/pip_NE",
+  "kind": "rotate",
+  "image": "art/incoming2/characters/pip_S.png",
+  "n": 1,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/characters/pip_N",
+  "kind": "rotate",
+  "image": "art/incoming2/characters/pip_S.png",
+  "n": 1,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/characters/maud_SE",
+  "kind": "rotate",
+  "image": "art/incoming2/characters/maud_S.png",
+  "n": 1,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/characters/maud_NE",
+  "kind": "rotate",
+  "image": "art/incoming2/characters/maud_S.png",
+  "n": 1,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/characters/maud_N",
+  "kind": "rotate",
+  "image": "art/incoming2/characters/maud_S.png",
+  "n": 1,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/objects/tree_4",
+  "kind": "style",
+  "style_image": "art/training/props_10.png",
+  "n": 2,
+  "image_type": "sprite",
+  "prompt": "a round leafy storybook tree with a thick twisty trunk, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background"
+ },
+ {
+  "out": "art/incoming2/objects/tree_5",
+  "kind": "style",
+  "style_image": "art/training/props_10.png",
+  "n": 2,
+  "image_type": "sprite",
+  "prompt": "a small round leafy storybook tree, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background"
+ },
+ {
+  "out": "art/incoming2/objects/tree_6",
+  "kind": "style",
+  "style_image": "art/training/props_10.png",
+  "n": 2,
+  "image_type": "sprite",
+  "prompt": "a tall broad leafy storybook tree with a few apples, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background"
+ },
+ {
+  "out": "art/incoming2/characters/storytender_extras/hero_S_dash",
+  "kind": "pose",
+  "image": "art/incoming2/characters/storytender_idle/idle_000.webp",
+  "n": 2,
+  "extra": {
+   "pose": "Other",
+   "description": "a quick dash: leaning far forward, running fast, same character same outfit backpack and lantern"
+  }
+ },
+ {
+  "out": "art/incoming2/characters/storytender_extras/hero_S_lantern",
+  "kind": "pose",
+  "image": "art/incoming2/characters/storytender_idle/idle_000.webp",
+  "n": 2,
+  "extra": {
+   "pose": "Other",
+   "description": "holding the small glass lantern up high in the right hand, its teal light shining, same character same outfit"
+  }
+ },
+ {
+  "out": "art/incoming2/characters/storytender_extras/hero_S_creep",
+  "kind": "pose",
+  "image": "art/incoming2/characters/storytender_idle/idle_000.webp",
+  "n": 2,
+  "extra": {
+   "pose": "Crouching",
+   "description": "crouched low and sneaking on tiptoe, same character same outfit backpack and lantern"
+  }
+ },
+ {
+  "out": "art/incoming2/characters/storytender_extras/hero_S_crumple",
+  "kind": "pose",
+  "image": "art/incoming2/characters/storytender_idle/idle_000.webp",
+  "n": 2,
+  "extra": {
+   "pose": "Other",
+   "description": "lying flat and crumpled on the ground like a crumpled paper drawing, same character same outfit"
+  }
+ },
+ {
+  "out": "art/incoming2/characters/storytender_extras/hero_N_dash",
+  "kind": "pose",
+  "image": "art/incoming2/characters/storytender_idle/idle_180.webp",
+  "n": 2,
+  "extra": {
+   "pose": "Other",
+   "description": "a quick dash: leaning far forward, running fast, same character same outfit backpack and lantern"
+  }
+ },
+ {
+  "out": "art/incoming2/characters/storytender_extras/hero_N_lantern",
+  "kind": "pose",
+  "image": "art/incoming2/characters/storytender_idle/idle_180.webp",
+  "n": 2,
+  "extra": {
+   "pose": "Other",
+   "description": "holding the small glass lantern up high in the right hand, its teal light shining, same character same outfit"
+  }
+ },
+ {
+  "out": "art/incoming2/characters/storytender_extras/hero_N_creep",
+  "kind": "pose",
+  "image": "art/incoming2/characters/storytender_idle/idle_180.webp",
+  "n": 2,
+  "extra": {
+   "pose": "Crouching",
+   "description": "crouched low and sneaking on tiptoe, same character same outfit backpack and lantern"
+  }
+ },
+ {
+  "out": "art/incoming2/characters/storytender_extras/hero_N_crumple",
+  "kind": "pose",
+  "image": "art/incoming2/characters/storytender_idle/idle_180.webp",
+  "n": 2,
+  "extra": {
+   "pose": "Other",
+   "description": "lying flat and crumpled on the ground like a crumpled paper drawing, same character same outfit"
+  }
+ }
+]

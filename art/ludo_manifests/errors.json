@@ -1,0 +1,50 @@
+[
+ {
+  "out": "art/incoming2/errors/err_bare_idle",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a grumpy heavy storybook bear missing patches of fur, as if letters were erased from it, standing, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/errors/err_mite_idle",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a tiny ink bug made of one scribble with many thin legs, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/errors/err_runon_idle",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a long slow slug of dark glossy ink made of tiny words, with a wet ink trail, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/errors/err_dangler_idle",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a small floating creature hanging from a dangling thread, holding loose letters, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/errors/err_censor_idle",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a stern hooded figure holding a thick black redaction bar across its front like a shield, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/errors/err_ellipsis_idle",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "three floating dark ink dots in a row with a faint shadowy body, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ }
+]

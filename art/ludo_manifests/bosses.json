@@ -1,0 +1,34 @@
+[
+ {
+  "out": "art/incoming2/bosses/boss_critic_idle",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a towering figure made of layered red ink and torn review pages, a mouth full of sharp words, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/bosses/boss_spoiler_idle",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a floating open book with its last page torn out, glowing letters spilling out, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/bosses/boss_cold_idle",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a hunched figure of frost and pale blue cloth turning one huge frozen shoulder toward the viewer, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ },
+ {
+  "out": "art/incoming2/bosses/boss_scissor_idle",
+  "kind": "style",
+  "style_image": "art/training/hero_01.png",
+  "prompt": "a tall thin tailor, half coloured and half pencil sketch, enormous shears for hands, storybook game art, hand-drawn, simple flat cel shading, thick clean dark-brown ink outline, cute chunky proportions, muted warm colours, isometric three-quarter view from above, light from the top left, single subject, centered, full view, plain parchment background",
+  "n": 3,
+  "image_type": "sprite"
+ }
+]
