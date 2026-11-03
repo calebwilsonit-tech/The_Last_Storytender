@@ -17,10 +17,11 @@ from PIL import Image
 from scipy import ndimage
 
 REPO, WORK = sys.argv[1], sys.argv[2]
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 SHEET = os.path.join(REPO, 'art', 'incoming', 'tiles_sheet.jpg')
 COLS = [(20, 164), (168, 312), (317, 460), (466, 609), (614, 757), (763, 906)]
 KIND = {'.': 'plains', ',': 'town', 'm': 'memory', 'p': 'page', 'w': 'wood', 'c': 'mat'}
-PERIOD = 4          # the ground texture is this many cells across
+PERIOD = 6          # the ground texture is this many cells across
 G = 56              # its pixels per cell
 
 # which block (row, column) makes each floor, and how it is made to wrap
@@ -170,6 +171,39 @@ def cell_tile(big, gx, gy):
     return Image.fromarray(out, 'RGBA')
 
 
+# details laid over a floor, per period of cells
+DETAILS = {('overworld', '.'): {'tuft': 22, 'flowers': 6, 'pebble': 5}}
+
+
+def with_details(tiles, gd, counts, rng):
+    """Lays small details over the finished floor, in the game's view. The floor is drawn out over three periods each way, every
+    detail is put down at its place in each copy (so one crossing the edge of the period carries on in the next), and each
+    cell's tile is cut back out of the middle copy."""
+    P = PERIOD
+    W, H = 64 * 3 * P + 128, 32 * 3 * P + 64
+    ox, oy = W // 2, 16
+    canvas = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    at = lambda u, v: (ox + (u - v) * 32, oy + (u + v) * 16)
+    for cy in range(-P, 2 * P):
+        for cx in range(-P, 2 * P):
+            x, y = at(cx, cy)
+            canvas.alpha_composite(tiles[(cx % P, cy % P)], (round(x - 32), round(y)))
+    spots = sorted(gd.scatter(rng, P, counts), key=lambda s: s[1] + s[2])   # drawn back to front
+    for kind, u, v in spots:
+        pic = gd.MAKERS[kind](rng)
+        for k in (-1, 0, 1):
+            for l in (-1, 0, 1):
+                x, y = at(u + k * P, v + l * P)
+                canvas.alpha_composite(pic, (round(x - pic.width / 2), round(y - pic.height + 2)))
+    out = {}
+    for (gx, gy), t in tiles.items():
+        x, y = at(gx + P, gy + P)
+        cut = canvas.crop((round(x - 32), round(y), round(x + 32), round(y + 32)))
+        cut.putalpha(t.getchannel('A'))
+        out[(gx, gy)] = cut
+    return out
+
+
 def save_tile(img, path):
     """The engine keeps a sprite in at most 255 colours: each tile gets its own palette of 200, and a hard edge (no half-see-through
     pixels, which would each need a colour of their own)."""
@@ -194,6 +228,7 @@ def main():
             index.append(e)
     rng = np.random.default_rng(7)
     made = 0
+    import grass_details as gd
     for (scene, kind), ((r, c), how) in PICKS.items():
         face = flat_face(sheet, fg, r, c, rws)
         if how in ('slab', 'planks'):
@@ -205,10 +240,13 @@ def main():
                     made += 1
             continue
         big = ground(face, how, rng)
+        tiles = {(gx, gy): cell_tile(big, gx, gy) for gy in range(PERIOD) for gx in range(PERIOD)}
+        if (scene, kind) in DETAILS:
+            tiles = with_details(tiles, gd, DETAILS[(scene, kind)], rng)
         for gy in range(PERIOD):
             for gx in range(PERIOD):
                 name = f'{scene}_{KIND[kind]}_floor_{gx}_{gy}.png'
-                save_tile(cell_tile(big, gx, gy), os.path.join(out, name))
+                save_tile(tiles[(gx, gy)], os.path.join(out, name))
                 index.append({'cell': [0, 0], 'file': name, 'kind': kind, 'parity': 0, 'scene': scene, 'what': 'top', 'grid': [gx, gy], 'period': PERIOD})
                 made += 1
     json.dump(index, open(os.path.join(out, 'index.json'), 'w'), indent=1)
