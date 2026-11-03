@@ -47,7 +47,9 @@
         "blockedBy": [],
         "blockedTerrain": false
       },
-      "script_ColdShoulder": {}
+      "script_ColdShoulder": {
+        "lookSlam": "boss_cold_slam"
+      }
     },
     "children": []
   }

@@ -26,6 +26,7 @@ export default defineScript({
     unlock: { value: '', label: 'Only out once this flag is set (empty: always)' },
     drops: { value: '', label: 'Drop table: item,chance,low,high; ... (rolled when it is beaten)' },
     friendlyLook: { value: '', label: 'Its picture once proofread (sprite name; empty: unchanged)' },
+    attackLook: { value: '', label: 'Its picture while it rears back and lunges (sprite name; empty: unchanged)' },
     sleepWhen: { value: '', label: 'Asleep while this flag is set (a sentence put it to sleep)' },
   },
   start(me) {
@@ -251,6 +252,16 @@ export default defineScript({
       if (ranged.target !== target || ranged.damage !== damage) me.set('rangedAttack', { ...ranged, target, damage });
     }
 
+    // its attack picture while it rears back and lunges (not once it is a friend)
+    if (me.settings.attackLook && !me.hasTag('friendly')) {
+      const spr = me.get('sprite');
+      const striking = s.mode === 'windup' || s.mode === 'lunge';
+      if (spr && striking && spr.asset !== me.settings.attackLook) {
+        s.idleLook = spr.asset;
+        me.set('sprite', { ...spr, asset: me.settings.attackLook });
+      } else if (spr && !striking && s.idleLook && spr.asset === me.settings.attackLook) me.set('sprite', { ...spr, asset: s.idleLook });
+    }
+
     switch (s.mode) {
       case 'idle': {
         s.wanderT -= dt;
@@ -427,7 +438,7 @@ function proofread(me: ScriptEntity, game: ScriptGame, kind: number): void {
   me.alpha = 1;
   const spr = me.get('sprite');
   if (spr && me.settings.friendlyLook) {
-    me.state.origLook = spr.asset;
+    me.state.origLook = me.state.idleLook ?? spr.asset;   // (the picture before any attack one)
     me.set('sprite', { ...spr, asset: me.settings.friendlyLook });
   }
   const v = game.vars;

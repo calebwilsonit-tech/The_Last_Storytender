@@ -5,7 +5,9 @@ const K = 35.8;
 export default defineScript({
   name: 'ColdShoulder',
   description: 'The boss of the Empty Table.',
-  settings: {},
+  settings: {
+    lookSlam: { value: '', label: 'Its picture after a slam, while it rests (sprite name; empty: unchanged)' },
+  },
   start(me) {
     me.state.ang = 0;
     me.state.mode = 'idle';
@@ -17,6 +19,12 @@ export default defineScript({
     const p = game.player;
     if (!p) return;
     const mult = v.difficulty === 'story' ? 0.6 : 1;
+    const spr = me.get('sprite');
+    if (spr) {
+      s.idleLook ??= spr.asset;
+      const want = (s.mode === 'rest' && me.settings.lookSlam) || s.idleLook;
+      if (spr.asset !== want) me.set('sprite', { ...spr, asset: want });
+    }
     if (v.cold_down) { me.alpha = Math.max(0, me.alpha - game.dt / 2.2); if (me.alpha <= 0.02) me.destroy(); return; }
     let health = me.get('health');
     const want = v.difficulty === 'story' ? 119 : 170;

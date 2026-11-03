@@ -11,6 +11,8 @@ export default defineScript({
   description: 'The boss of the forge memory.',
   settings: {
     arenaX: { value: 42, label: 'The forge hall starts at this x (cells)' },
+    lookAttack: { value: '', label: 'Its picture while it throws words, pools ink or lunges (sprite name; empty: unchanged)' },
+    lookReckoning: { value: '', label: 'Its picture in the reckoning, when it can be hurt (sprite name; empty: unchanged)' },
   },
   start(me) {
     const s = me.state;
@@ -33,6 +35,14 @@ export default defineScript({
       me.alpha = Math.max(0, me.alpha - game.dt * 0.6);
       if (me.alpha <= 0.02) me.destroy();
       return;
+    }
+    // the picture that fits what it is doing
+    const spr = me.get('sprite');
+    if (spr) {
+      s.idleLook ??= spr.asset;
+      const attacking = ['fan', 'pools', 'lunge_tele', 'lunge'].includes(s.mode);
+      const want = (attacking && me.settings.lookAttack) || (v.critic_reckoning && me.settings.lookReckoning) || s.idleLook;
+      if (spr.asset !== want) me.set('sprite', { ...spr, asset: want });
     }
     const inside = p.x >= Number(me.settings.arenaX);
     // stepping into the hall wakes it: its words first (critic_intro sets critic_awake at the end)

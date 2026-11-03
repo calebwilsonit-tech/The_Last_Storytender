@@ -8,7 +8,10 @@ const REGIONS: Record<string, [number, number]> = { WEST: [32, 2], EAST: [39, 2]
 export default defineScript({
   name: 'Spoiler',
   description: 'The boss of the library memory.',
-  settings: {},
+  settings: {
+    lookRead: { value: '', label: 'Its picture while it reads a sentence out (sprite name; empty: unchanged)' },
+    lookAttack: { value: '', label: 'Its picture while it fans paper or dives (sprite name; empty: unchanged)' },
+  },
   start(me) {
     const s = me.state;
     s.home = { x: me.x, y: me.y, h: me.h };
@@ -29,6 +32,14 @@ export default defineScript({
       me.alpha = Math.max(0, me.alpha - game.dt / 2.6);
       if (me.alpha <= 0.02) me.destroy();
       return;
+    }
+    // the picture that fits what it is doing
+    const spr = me.get('sprite');
+    if (spr) {
+      s.idleLook ??= spr.asset;
+      const attacking = ['dive_tele', 'fan_tele', 'dive', 'fan'].includes(s.mode);
+      const want = (s.mode === 'read' && me.settings.lookRead) || (attacking && me.settings.lookAttack) || s.idleLook;
+      if (spr.asset !== want) me.set('sprite', { ...spr, asset: want });
     }
     const inside = p.x >= 30 && p.x <= 42 && p.y <= 6;
     if (inside && v.door_H && !v.spoiler_seen) {
