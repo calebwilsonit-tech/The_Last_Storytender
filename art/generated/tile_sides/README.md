@@ -1,10 +1,12 @@
-Cliff and ledge faces for every floor, made from the Ludo.ai wall pictures (`art/incoming2/tiles/side_*.png`) by `tools/art/ludo_sides.py`.
-`<name>_left.png` and `_right.png` are 32 x 44, the same shape and size as the game's own faces (origin at the foot, 16, 43).
+Cliff and ledge faces for every floor, built from the floor tiles themselves (`tools/art/ludo_tops.py` -> `art/generated/tile_tops/`) by
+`tools/art/ludo_sides.py`. `<floor>_<x><y>_left.png` / `_right.png` are 32 x 44, the same shape and size as the game's own faces (origin at the
+foot, 16, 43); x and y (0 to 3) are the tile of the floor (the floor repeats every 4 x 4 cells), because each tile's face is made from the edge
+of that tile: the colours along the top's edge are carried down the wall, so a plank line, a stone joint or the grass on top continues as the same
+line down the side. `pit` and `page_edge` have one pair each.
 
-Sets: meadow_1, meadow_2, meadow_3, dirt, moss, cobble, flagstone, slate, planks, parchment (the floors), pit (the dark inside of a hole) and
-page_edge (the edge of the page: a stack of leaves). Each takes its colours from its own floor picture, so face and top belong together; the wall
-carries on from one tile to the next without a seam. Each is outlined along the ledge (the top rim), up the corner where the two faces meet and
-along the foot; the open floor has no outline (it would draw a grid), so the edge of a raised floor is easy to see.
+Earth and grass faces have no outline (the grass lip shows where the ground ends). Stone, wood and paper faces are outlined along the ledge, the corner
+and the foot; their back ledges get a line from `tools/art/ludo_ledges.py` (`outline_edges`).
 
-`preview.png`: every set as a run of three blocks. `check.png`: every real floor as a raised platform on another floor (`tools/art/ludo_sides_check.py`).
-Not wired into the porter yet: the porter takes each floor's faces from the Godot game's left/right pictures (TileEntry `what: 'left' | 'right'`).
+`check.png` (and `check_zoom.png`, 2x): every floor as a raised platform on another floor. Not wired into the porter yet: each of a floor's 16 tile ids takes
+its own `leftArt` / `rightArt` (the porter's TileEntry `what: 'left' | 'right'`). The faces can be made from any folder of tops with the same names:
+`ludo_sides.py <repo> <out> --tops <folder>`.
