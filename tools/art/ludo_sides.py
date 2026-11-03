@@ -28,22 +28,26 @@ SRC = os.path.join(REPO, 'art', 'incoming2', 'tiles')
 W, H, THICK, PERIOD = 32, 44, 28, 4
 
 # kind: how the wall is finished. outline: dark line along the ledge, corner and foot. wall: the Ludo picture the earth is made from.
+# Each floor's wall is a Ludo picture made with that floor as its style reference (art/ludo_manifests/sides_matched.json, side_cobble2.json), so the
+# wall has the floor's own stones, colours and line weight. wall: the picture, scale: how much it is shrunk to the game's pixel size (the stones
+# of the wall come out about the size of the floor's), at: where in it the strip is cut, lip: rows at the top that are the floor's own colours,
+# drip: the lip hangs down in a ragged line (grass), recolor: bend the wall's colours onto the floor's darks and lights.
 FLOORS = {
-    'meadow_1': dict(kind='earth', at=(0.30, 0.28), body='floor_dirt', outline=False),
-    'meadow_2': dict(kind='earth', at=(0.55, 0.40), body='floor_dirt', outline=False),
-    'meadow_3': dict(kind='earth', at=(0.12, 0.45), body='floor_dirt', outline=False),
-    'dirt': dict(kind='earth', at=(0.70, 0.30), body='floor_dirt', outline=False),
-    'moss': dict(kind='earth', at=(0.40, 0.55), body='floor_dirt', outline=False),
-    'cobble': dict(kind='stone', outline=True, smooth=True),   # round stones: the gaps between them are blurred, or they turn into bars
-    'flagstone': dict(kind='stone', outline=True),
-    'slate': dict(kind='stone', outline=True),
-    'planks': dict(kind='wood', outline=True),
-    'parchment': dict(kind='paper', outline=True),
+    'meadow_1': dict(kind='earth', wall='wall_earth', scale=0.15, at=(0.30, 0.28), body='floor_dirt', outline=False, drip=True),
+    'meadow_2': dict(kind='earth', wall='wall_earth', scale=0.15, at=(0.55, 0.40), body='floor_dirt', outline=False, drip=True),
+    'meadow_3': dict(kind='earth', wall='wall_earth', scale=0.15, at=(0.12, 0.45), body='floor_dirt', outline=False, drip=True),
+    'dirt': dict(kind='earth', wall='wall_earth', scale=0.15, at=(0.70, 0.30), body='floor_dirt', outline=False, lip=2),
+    'moss': dict(kind='earth', wall='wall_earth', scale=0.15, at=(0.40, 0.55), body='floor_dirt', outline=False, drip=True),
+    'cobble': dict(kind='stone', wall='wall_cobble', scale=0.10, at=(0.30, 0.30), outline=True, lip=2, recolor=True),
+    'flagstone': dict(kind='stone', wall='wall_flagstone', scale=0.15, at=(0.30, 0.30), outline=True, lip=2),
+    'slate': dict(kind='stone', wall='wall_slate', scale=0.15, at=(0.30, 0.30), outline=True, lip=2),
+    'planks': dict(kind='wood', wall='wall_planks', scale=0.15, at=(0.30, 0.30), outline=True, lip=2, recolor=True),
+    'parchment': dict(kind='paper', wall='wall_paper', scale=0.20, at=(0.30, 0.30), outline=True, lip=1, recolor=True),
 }
 # the floors that have no picture of their own: the colours of the dark inside of a hole, and of the edge of the page
 EXTRA = {
-    'pit': dict(kind='stone', outline=True, top=(28, 24, 36), dark=(16, 14, 22), light=(60, 52, 74)),
-    'page_edge': dict(kind='paper', outline=True, top=(222, 206, 166), dark=(150, 128, 96), light=(240, 228, 196)),
+    'pit': dict(kind='stone', wall='wall_slate', scale=0.15, at=(0.30, 0.30), outline=True, lip=0, recolor=True, top=(28, 24, 36), dark=(16, 14, 22), light=(60, 52, 74)),
+    'page_edge': dict(kind='paper', wall='wall_paper', scale=0.20, at=(0.30, 0.30), outline=True, lip=1, recolor=True, top=(222, 206, 166), dark=(150, 128, 96), light=(240, 228, 196)),
 }
 
 
@@ -170,12 +174,36 @@ def shear(strip, left, outline):
     return out
 
 
+def picture_strip(edge, wall, scale, at, lip, drip, recolor):
+    """A wall from a Ludo picture of the wall itself: shrunk to the game's pixel size, cut to a strip that wraps (and bent onto the floor's own
+    darks and lights if `recolor`), with the first `lip` rows the top's own colours so the floor runs on over the edge (`drip`: over a ragged
+    line, for grass)."""
+    size = (max(1, round(wall.width * scale)), max(1, round(wall.height * scale)))
+    rgb = np.asarray(wall.resize(size, Image.LANCZOS)).astype(np.float32)
+    if recolor is not None:
+        rgb = ramp(rgb, recolor[0], recolor[1])
+    strip = seamless_strip(rgb, int(rgb.shape[1] * at[0]), int(rgb.shape[0] * at[1]), W, THICK)
+    body = strip.copy()
+    for x in range(W):
+        n = lip
+        if drip:
+            n = 3 + int((x * 7 + 3) % 5 in (0, 1)) + int((x * 3) % 4 == 0)
+        for k in range(n + (1 if drip else 0)):
+            c = edge[x] * (1.12 if k == 0 and drip else 1.04 if k == 0 else 1.0)
+            strip[k, x] = c if k < n else c * 0.5 + body[k, x] * 0.5
+    return strip
+
+
 def wall_for(kind, edge, top_mean, m):
     """The strip of wall for one face: `edge` is the colours along the tile above."""
     if 'dark' in m:
         dark, light = np.array(m['dark'], np.float32), np.array(m['light'], np.float32)
+        mid = (dark + light) / 2
     else:
-        dark, _, light = palette(m.get('body') or m['top'])
+        dark, mid, light = palette(m.get('body') or m['top'])
+    if m.get('wall'):
+        recolor = (mid * 0.8, light * 1.0) if m.get('recolor') else None   # (from the floor's middle tone, not its darkest joints)
+        return picture_strip(edge, Image.open(os.path.join(SRC, m['wall'] + '.png')).convert('RGB'), m['scale'], m['at'], m.get('lip', 2), m.get('drip', False), recolor)
     if kind == 'earth':
         return earth_strip(edge, Image.open(os.path.join(SRC, 'side_earth.png')).convert('RGB'), dark, light, m['at'])
     if kind == 'stone':
