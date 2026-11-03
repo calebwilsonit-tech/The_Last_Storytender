@@ -290,6 +290,19 @@ function prologueErrors(levelOf: (x: number, y: number) => number, next: () => s
   return out;
 }
 
+/** The crystal a beaten Error drops (Error.script.ts spawns it): the Prologue's crystal picture, picked up by walking into it. */
+function writeCrystalPrefab(overworld: SceneData): void {
+  const crystal = overworld.entities.find((e) => e.tags.includes('prop-3'));
+  const sprite = { ...((crystal?.components.sprite as object) ?? { shape: 'box', color: 0x9fe8ff, w: 0.3, d: 0.3, height: 0.5 }), visible: true };
+  const prefab = {
+    schemaVersion: CURRENT_SCHEMA_VERSION,
+    name: 'DroppedCrystal',
+    root: { name: 'Dropped crystal', tags: ['crystal', 'dropped'], components: { sprite, script_Collect: { flag: '', mnemo: 5, light: 12, radius: 30 / 35.8 + 0.25 } }, children: [] },
+  };
+  mkdirSync(join(OUT, 'assets/prefabs'), { recursive: true });
+  writeFileSync(join(OUT, 'assets/prefabs/DroppedCrystal.prefab.json'), JSON.stringify(prefab, null, 2) + '\n');
+}
+
 let world: World | null = null;
 function loadWorld(): World | null {
   if (!DATA) return null;
@@ -504,6 +517,7 @@ function main(): void {
   const order = [...Object.keys(SCENES).filter((k) => k !== 'overworld'), 'overworld'];
   for (const k of order) {
     const scene = buildScene(k, snaps[k]!, art);
+    if (k === 'overworld') writeCrystalPrefab(scene);
     writeFileSync(join(OUT, SCENES[k]!.file), JSON.stringify(scene) + '\n');
     scenes.push(SCENES[k]!.file);
     console.log(`scene ${k}: ${scene.entities.length} objects, map ${scene.map.width} x ${scene.map.height}`);

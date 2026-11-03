@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "name": "DroppedCrystal",
+  "root": {
+    "name": "Dropped crystal",
+    "tags": [
+      "crystal",
+      "dropped"
+    ],
+    "components": {
+      "sprite": {
+        "shape": "box",
+        "color": 13421772,
+        "w": 0.6,
+        "d": 0.6,
+        "height": 0.6,
+        "sortOffset": 0,
+        "visible": true,
+        "asset": "a_overworld_55d9ad67f7_0"
+      },
+      "script_Collect": {
+        "flag": "",
+        "mnemo": 5,
+        "light": 12,
+        "radius": 1.0879888268156426
+      }
+    },
+    "children": []
+  }
+}

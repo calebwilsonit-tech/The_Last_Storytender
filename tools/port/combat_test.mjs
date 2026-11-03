@@ -54,7 +54,7 @@ const placeAt = (x, y) =>
     if (b) { b.vx = 0; b.vy = 0; b.vz = 0; }
   }, [x, y]);
 const errors = (tag) => page.evaluate((tag) => window.__play.sim.world.withTag(tag).map((e) => ({ id: e.id, x: e.get('transform').x, y: e.get('transform').y, hp: e.get('state:health')?.hp, visible: e.get('sprite')?.visible !== false, friendly: e.tags.has('friendly') })), tag);
-const byId = (id) => page.evaluate((id) => { const e = window.__play.sim.world.all().find((x) => x.id === id); return e ? { hp: e.get('state:health')?.hp, friendly: e.tags.has('friendly'), x: e.get('transform').x, y: e.get('transform').y } : null; }, id);
+const byId = (id) => page.evaluate((id) => { const e = window.__play.sim.world.all().find((x) => x.id === id); return e && e.get('sprite')?.visible !== false ? { hp: e.get('state:health')?.hp, friendly: e.tags.has('friendly'), x: e.get('transform').x, y: e.get('transform').y } : null; }, id);
 const playerHp = () => page.evaluate(() => window.__play.sim.world.withTag('player')[0].get('state:health')?.hp);
 const heal = () => page.evaluate(() => { const h = window.__play.sim.world.withTag('player')[0].get('state:health'); if (h) h.hp = 100; });
 /** Put the Storytender on the open ground beside an Error, on the side with walkable floor, facing it (a short step towards it). */
@@ -114,6 +114,23 @@ try {
     await press('KeyD', 40);
     await press('KeyJ', 80);
   }
+  // it left a crystal: walk into it
+  // it left a crystal (worth 5); standing where the Mite was, the Storytender may already have picked it up
+  const crystals = await page.evaluate(() => window.__play.sim.world.withTag('dropped').map((e) => ({ x: e.get('transform').x, y: e.get('transform').y })));
+  for (const c of crystals) { await placeAt(c.x, c.y); await page.waitForTimeout(300); }
+  const gained = Number((await vars()).mnemosynth ?? 0) - Number(before.mnemosynth ?? 0);
+  check('a beaten Mite drops a crystal worth 5', gained === 5, `gained ${gained}`);
+  // rest at the Margins lantern post (light it, then E again): the Mite comes back once you are away from its spot
+  await placeAt(28.5, 53.6);
+  await page.waitForTimeout(400);
+  await press('KeyE');
+  await page.waitForTimeout(500);
+  for (let i = 0; i < 6 && (await page.evaluate(() => window.__play.sim.runtime.dialogue !== null && window.__play.sim.runtime.dialogue !== undefined)); i++) await press('KeyE');
+  await press('KeyE');
+  await page.waitForTimeout(300);
+  let back = null;
+  for (let i = 0; i < 10 && !back; i++) { await page.waitForTimeout(200); back = await byId(m0.id); }
+  check('resting brings the Mite back', !!back, back ? `hp ${back.hp}` : 'still gone');
   const after = await vars();
   check('the quill beats a Mite', gone && Number(after.renown) > Number(before.renown ?? 0), `renown ${before.renown} -> ${after.renown}, mnemosynth ${before.mnemosynth} -> ${after.mnemosynth}`);
 

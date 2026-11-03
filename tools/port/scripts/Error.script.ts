@@ -54,19 +54,30 @@ export default defineScript({
     const kind = Number(me.settings.kind);
     const dt = game.dt;
     // not in the story yet: hidden and harmless
+    const p = game.player;
+    // resting at a lantern post resets the page: every Error comes back (main.gd _respawn_world)
+    if (game.eventsOf('rested').length > 0) s.reset = true;
+    // beaten ones also come back after a couple of minutes; either way only once you are well away, so nothing appears on top of you
+    if (s.gone && game.time - s.goneAt > 120) s.reset = true;
+    if (s.reset && p && Math.hypot(p.x - s.home.x, p.y - s.home.y) > 8 && me.distanceTo(p) > 8) comeBack(me);
+    if (s.gone) {
+      if (me.visible) me.visible = false;
+      return;
+    }
     const out = !me.settings.unlock || !!v[String(me.settings.unlock)];
     if (me.visible !== out) me.visible = out;
     const touch = me.get('damageOnTouch');
     if (!out) return;
-    const p = game.player;
     const hp = me.get('state:health') as { hp: number; dead?: boolean } | undefined;
 
-    // ---- beaten: renown, Mnemosynth, a drop roll, and gone
+    // ---- beaten: renown, Mnemosynth crystals to pick up (1 from a Mite, 2 from the rest), a drop roll, and gone for now
     if (hp && (hp.dead || hp.hp <= 0)) {
       v.renown = Number(v.renown ?? 0) + RENOWN[kind]!;
-      v.mnemosynth = Number(v.mnemosynth ?? 0) + (kind === 1 ? 1 : 2);
+      dropCrystals(me, game, kind === 1 ? 1 : 2);
       rollDrops(game, String(me.settings.drops));
-      me.destroy();
+      s.gone = true;
+      s.goneAt = game.time;
+      me.visible = false;
       return;
     }
 
@@ -324,6 +335,27 @@ export default defineScript({
   },
 });
 
+/** Mnemosynth crystals scattered where it stood (level_base.gd drop_crystals): +5 Mnemosynth and +12 lantern each, walked into. */
+function dropCrystals(me: ScriptEntity, game: ScriptGame, n: number): void {
+  for (let i = 0; i < n; i++) game.spawn('DroppedCrystal', me.x + (game.random() - 0.5) * (52 / K), me.y + (game.random() - 0.5) * (24 / K), me.h);
+}
+
+/** Back at its post, whole, hostile again (a proofread friend too: the page has been reset). */
+function comeBack(me: ScriptEntity): void {
+  const s = me.state;
+  me.moveTo(s.home.x, s.home.y);
+  const max = me.get('health')?.max ?? 1;
+  const hs = me.get('state:health');
+  if (hs) me.set('state:health', { ...hs, hp: max, dead: false });
+  const health = me.get('health');
+  if (health) me.set('health', { ...health, team: 'enemy', showBar: false });
+  me.tags.delete('friendly');
+  me.tags.add('error');
+  me.tags.add('enemy');
+  Object.assign(s, { gone: false, reset: false, mode: 'idle', alert: 0, proof: 0, hp: max, cd: 0.8, phase: 'visible', bar: 0 });
+  me.alpha = 1;
+}
+
 function burn(me: ScriptEntity, amount: number): void {
   const hp = me.get('state:health') as { hp: number } | undefined;
   if (hp) me.set('state:health', { ...hp, hp: Math.max(0, hp.hp - amount) });
@@ -370,7 +402,7 @@ function proofread(me: ScriptEntity, game: ScriptGame, kind: number): void {
   if (health) me.set('health', { ...health, team: 'player', showBar: false });
   me.alpha = 1;
   const v = game.vars;
-  v.mnemosynth = Number(v.mnemosynth ?? 0) + 6;
+  dropCrystals(me, game, 6);
   if (v.difficulty === 'story' || game.random() < 0.6) game.giveItem('ink_vial', 1);
   game.say(`Proofread: ${NAMES[kind]} -> ${FRIENDS[kind] || NAMES[kind]}`);
 }
