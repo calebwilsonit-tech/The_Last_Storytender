@@ -4814,6 +4814,969 @@
       "dim": 0.6
     },
     {
+      "id": "storytender-settings",
+      "name": "Settings",
+      "root": {
+        "id": "settings.root",
+        "name": "Root",
+        "type": "panel",
+        "children": [
+          {
+            "id": "settings.stage",
+            "name": "Stage",
+            "type": "panel",
+            "children": [
+              {
+                "id": "set.box",
+                "name": "set.box",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "set.head",
+                    "name": "set.head",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 10,
+                    "w": 400,
+                    "h": 62,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Settings",
+                    "style": {
+                      "fontSize": 46,
+                      "color": "#1b1722"
+                    }
+                  },
+                  {
+                    "id": "set.headrule",
+                    "name": "set.headrule",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 66,
+                    "w": 572,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2b84b"
+                    }
+                  },
+                  {
+                    "id": "set.s1.bar",
+                    "name": "set.s1.bar",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 84,
+                    "w": 6,
+                    "h": 24,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#1f6b87",
+                      "radius": 3
+                    }
+                  },
+                  {
+                    "id": "set.s1.head",
+                    "name": "set.s1.head",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 42,
+                    "y": 80,
+                    "w": 300,
+                    "h": 32,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "SOUND",
+                    "style": {
+                      "fontSize": 24,
+                      "color": "#1f6b87",
+                      "bold": true
+                    }
+                  },
+                  {
+                    "id": "set.s1.rule",
+                    "name": "set.s1.rule",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 113,
+                    "w": 572,
+                    "h": 2,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#1f6b8759"
+                    }
+                  },
+                  {
+                    "id": "set.master",
+                    "name": "set.master",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "set.master.label",
+                        "name": "set.master.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 12,
+                        "y": 6,
+                        "w": 300,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Master volume",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "set.master.slider",
+                        "name": "master slider",
+                        "type": "slider",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 300,
+                        "y": 6,
+                        "w": 260,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "value": "settings.master",
+                        "min": 0,
+                        "max": "1",
+                        "step": 0.1
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 120,
+                    "w": 572,
+                    "h": 40,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c00"
+                    }
+                  },
+                  {
+                    "id": "set.music",
+                    "name": "set.music",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "set.music.label",
+                        "name": "set.music.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 12,
+                        "y": 6,
+                        "w": 300,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Music",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "set.music.slider",
+                        "name": "music slider",
+                        "type": "slider",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 300,
+                        "y": 6,
+                        "w": 260,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "value": "settings.music",
+                        "min": 0,
+                        "max": "1",
+                        "step": 0.1
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 162,
+                    "w": 572,
+                    "h": 40,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c0d"
+                    }
+                  },
+                  {
+                    "id": "set.sfx",
+                    "name": "set.sfx",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "set.sfx.label",
+                        "name": "set.sfx.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 12,
+                        "y": 6,
+                        "w": 300,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Effects",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "set.sfx.slider",
+                        "name": "sfx slider",
+                        "type": "slider",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 300,
+                        "y": 6,
+                        "w": 260,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "value": "settings.sfx",
+                        "min": 0,
+                        "max": "1",
+                        "step": 0.1
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 204,
+                    "w": 572,
+                    "h": 40,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c00"
+                    }
+                  },
+                  {
+                    "id": "set.voice",
+                    "name": "set.voice",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "set.voice.label",
+                        "name": "set.voice.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 12,
+                        "y": 6,
+                        "w": 300,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Voices",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "set.voice.slider",
+                        "name": "voice slider",
+                        "type": "slider",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 300,
+                        "y": 6,
+                        "w": 260,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "value": "settings.voice",
+                        "min": 0,
+                        "max": "1",
+                        "step": 0.1
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 246,
+                    "w": 572,
+                    "h": 40,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c0d"
+                    }
+                  },
+                  {
+                    "id": "set.s2.bar",
+                    "name": "set.s2.bar",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 300,
+                    "w": 6,
+                    "h": 24,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#c0405a",
+                      "radius": 3
+                    }
+                  },
+                  {
+                    "id": "set.s2.head",
+                    "name": "set.s2.head",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 42,
+                    "y": 296,
+                    "w": 300,
+                    "h": 32,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "PLAY",
+                    "style": {
+                      "fontSize": 24,
+                      "color": "#c0405a",
+                      "bold": true
+                    }
+                  },
+                  {
+                    "id": "set.s2.rule",
+                    "name": "set.s2.rule",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 329,
+                    "w": 572,
+                    "h": 2,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#c0405a59"
+                    }
+                  },
+                  {
+                    "id": "set.difficulty",
+                    "name": "set.difficulty",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "set.difficulty.label",
+                        "name": "set.difficulty.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 12,
+                        "y": 6,
+                        "w": 300,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Difficulty",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "set.difficulty.choice",
+                        "name": "difficulty choice",
+                        "type": "dropdown",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 340,
+                        "y": 4,
+                        "w": 220,
+                        "h": 32,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "value": "settings.difficulty",
+                        "options": "story, normal"
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 336,
+                    "w": 572,
+                    "h": 40,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c00"
+                    }
+                  },
+                  {
+                    "id": "set.shake",
+                    "name": "set.shake",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "set.shake.label",
+                        "name": "set.shake.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 12,
+                        "y": 6,
+                        "w": 300,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Screen shake and hit freeze",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "set.shake.box",
+                        "name": "shake tick box",
+                        "type": "toggle",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 520,
+                        "y": 4,
+                        "w": 40,
+                        "h": 32,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "value": "settings.screenShake",
+                        "text": ""
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 378,
+                    "w": 572,
+                    "h": 40,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c0d"
+                    }
+                  },
+                  {
+                    "id": "set.zoom",
+                    "name": "set.zoom",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "set.zoom.label",
+                        "name": "set.zoom.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 12,
+                        "y": 6,
+                        "w": 300,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Camera zoom",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "set.zoom.slider",
+                        "name": "zoom slider",
+                        "type": "slider",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 300,
+                        "y": 6,
+                        "w": 260,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "value": "settings.cameraZoom",
+                        "min": 0.75,
+                        "max": "1.5",
+                        "step": 0.25
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 420,
+                    "w": 572,
+                    "h": 40,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c00"
+                    }
+                  },
+                  {
+                    "id": "set.s3.bar",
+                    "name": "set.s3.bar",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 474,
+                    "w": 6,
+                    "h": 24,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#a97d2f",
+                      "radius": 3
+                    }
+                  },
+                  {
+                    "id": "set.s3.head",
+                    "name": "set.s3.head",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 42,
+                    "y": 470,
+                    "w": 300,
+                    "h": 32,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "SCREEN",
+                    "style": {
+                      "fontSize": 24,
+                      "color": "#a97d2f",
+                      "bold": true
+                    }
+                  },
+                  {
+                    "id": "set.s3.rule",
+                    "name": "set.s3.rule",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 503,
+                    "w": 572,
+                    "h": 2,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#a97d2f59"
+                    }
+                  },
+                  {
+                    "id": "set.fullscreen",
+                    "name": "set.fullscreen",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "set.fullscreen.label",
+                        "name": "set.fullscreen.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 12,
+                        "y": 6,
+                        "w": 300,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Full screen",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "set.fullscreen.box",
+                        "name": "fullscreen tick box",
+                        "type": "toggle",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 520,
+                        "y": 4,
+                        "w": 40,
+                        "h": 32,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "value": "settings.fullscreen",
+                        "text": ""
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 510,
+                    "w": 572,
+                    "h": 40,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c00"
+                    },
+                    "visible": "{host.fullscreen}"
+                  },
+                  {
+                    "id": "set.fps",
+                    "name": "set.fps",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "set.fps.label",
+                        "name": "set.fps.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 12,
+                        "y": 6,
+                        "w": 300,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Show frame rate",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "set.fps.box",
+                        "name": "fps tick box",
+                        "type": "toggle",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 520,
+                        "y": 4,
+                        "w": 40,
+                        "h": 32,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "value": "settings.showFps",
+                        "text": ""
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 552,
+                    "w": 572,
+                    "h": 40,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c0d"
+                    }
+                  },
+                  {
+                    "id": "set.controls",
+                    "name": "set.controls",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "set.controls.label",
+                        "name": "set.controls.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 12,
+                        "y": 6,
+                        "w": 300,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Controls",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "set.controls.go",
+                        "name": "set.controls.go",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 240,
+                        "y": 9,
+                        "w": 310,
+                        "h": 24,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "change keys and buttons  ›",
+                        "style": {
+                          "fontSize": 18,
+                          "color": "#3b2a1c",
+                          "align": "right",
+                          "opacity": 0.8
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 594,
+                    "w": 572,
+                    "h": 40,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2b84b40",
+                      "border": "#3b2a1c",
+                      "borderWidth": 2
+                    },
+                    "states": {
+                      "hover": {
+                        "fill": "#f2b84b99",
+                        "borderWidth": 4
+                      },
+                      "focus": {
+                        "fill": "#f2b84b99",
+                        "borderWidth": 4
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "uiScreen",
+                          "params": {
+                            "op": "open",
+                            "screen": "role:controls"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    }
+                  }
+                ],
+                "anchor": "tl",
+                "x": 330,
+                "y": 36,
+                "w": 620,
+                "h": 648,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#f6ecd2",
+                  "border": "#3b2a1c",
+                  "borderWidth": 4,
+                  "radius": 4,
+                  "shadow": true
+                }
+              },
+              {
+                "id": "settings.legend",
+                "name": "Legend",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "settings.legend.cap0",
+                    "name": "settings.legend.cap0",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "W S",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#f4ecd8",
+                      "radius": 5,
+                      "bold": true
+                    },
+                    "padding": 4
+                  },
+                  {
+                    "id": "settings.legend.label0",
+                    "name": "settings.legend.label0",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "Choose",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#f4ecd8"
+                    }
+                  },
+                  {
+                    "id": "settings.legend.cap1",
+                    "name": "settings.legend.cap1",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "A D",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#f4ecd8",
+                      "radius": 5,
+                      "bold": true
+                    },
+                    "padding": 4
+                  },
+                  {
+                    "id": "settings.legend.label1",
+                    "name": "settings.legend.label1",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "Change",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#f4ecd8"
+                    }
+                  },
+                  {
+                    "id": "settings.legend.cap2",
+                    "name": "settings.legend.cap2",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "E",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#f4ecd8",
+                      "radius": 5,
+                      "bold": true
+                    },
+                    "padding": 4
+                  },
+                  {
+                    "id": "settings.legend.label2",
+                    "name": "settings.legend.label2",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "Select",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#f4ecd8"
+                    }
+                  },
+                  {
+                    "id": "settings.legend.cap3",
+                    "name": "settings.legend.cap3",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "Esc",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#f4ecd8",
+                      "radius": 5,
+                      "bold": true
+                    },
+                    "padding": 4
+                  },
+                  {
+                    "id": "settings.legend.label3",
+                    "name": "settings.legend.label3",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "Back",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#f4ecd8"
+                    }
+                  }
+                ],
+                "anchor": "b",
+                "x": 0,
+                "y": 14,
+                "wMode": "auto",
+                "hMode": "fixed",
+                "h": 36,
+                "layout": "row",
+                "align": "center",
+                "gap": 10,
+                "padding": 6,
+                "style": {
+                  "fill": "#16171fd1",
+                  "radius": 18
+                }
+              }
+            ],
+            "anchor": "c",
+            "w": 1280,
+            "h": 720,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {}
+          }
+        ],
+        "anchor": "fill",
+        "layout": "free",
+        "padding": 0,
+        "style": {}
+      },
+      "modal": true,
+      "back": "auto",
+      "dim": 0.6,
+      "role": "settings"
+    },
+    {
       "id": "storytender-binder",
       "name": "Binder",
       "root": {
@@ -6584,22 +7547,6 @@
                         "style": {}
                       },
                       {
-                        "id": "binder.card.icon.ghost_pepper_ink",
-                        "name": "Icon ghost_pepper_ink",
-                        "type": "image",
-                        "children": [],
-                        "anchor": "tl",
-                        "x": 30,
-                        "y": 30,
-                        "w": 44,
-                        "h": 44,
-                        "wMode": "fixed",
-                        "hMode": "fixed",
-                        "sprite": "icon_ghost_pepper_ink",
-                        "visible": "{item.id} = ghost_pepper_ink",
-                        "style": {}
-                      },
-                      {
                         "id": "binder.card.icon.ghostwriter_glove",
                         "name": "Icon ghostwriter_glove",
                         "type": "image",
@@ -6613,6 +7560,22 @@
                         "hMode": "fixed",
                         "sprite": "icon_ghostwriter_glove",
                         "visible": "{item.id} = ghostwriter_glove",
+                        "style": {}
+                      },
+                      {
+                        "id": "binder.card.icon.ghost_pepper_ink",
+                        "name": "Icon ghost_pepper_ink",
+                        "type": "image",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 30,
+                        "y": 30,
+                        "w": 44,
+                        "h": 44,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "sprite": "icon_ghost_pepper_ink",
+                        "visible": "{item.id} = ghost_pepper_ink",
                         "style": {}
                       },
                       {
@@ -6648,22 +7611,6 @@
                         "style": {}
                       },
                       {
-                        "id": "binder.card.icon.gold_leaf",
-                        "name": "Icon gold_leaf",
-                        "type": "image",
-                        "children": [],
-                        "anchor": "tl",
-                        "x": 30,
-                        "y": 30,
-                        "w": 44,
-                        "h": 44,
-                        "wMode": "fixed",
-                        "hMode": "fixed",
-                        "sprite": "icon_gold_leaf",
-                        "visible": "{item.id} = gold_leaf",
-                        "style": {}
-                      },
-                      {
                         "id": "binder.card.icon.golden_ratio",
                         "name": "Icon golden_ratio",
                         "type": "image",
@@ -6677,6 +7624,22 @@
                         "hMode": "fixed",
                         "sprite": "icon_golden_ratio",
                         "visible": "{item.id} = golden_ratio",
+                        "style": {}
+                      },
+                      {
+                        "id": "binder.card.icon.gold_leaf",
+                        "name": "Icon gold_leaf",
+                        "type": "image",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 30,
+                        "y": 30,
+                        "w": 44,
+                        "h": 44,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "sprite": "icon_gold_leaf",
+                        "visible": "{item.id} = gold_leaf",
                         "style": {}
                       },
                       {
@@ -6936,6 +7899,22 @@
                         "style": {}
                       },
                       {
+                        "id": "binder.card.icon.marginalia_dust",
+                        "name": "Icon marginalia_dust",
+                        "type": "image",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 30,
+                        "y": 30,
+                        "w": 44,
+                        "h": 44,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "sprite": "icon_marginalia_dust",
+                        "visible": "{item.id} = marginalia_dust",
+                        "style": {}
+                      },
+                      {
                         "id": "binder.card.icon.margin_doodle",
                         "name": "Icon margin_doodle",
                         "type": "image",
@@ -6965,22 +7944,6 @@
                         "hMode": "fixed",
                         "sprite": "icon_margin_note",
                         "visible": "{item.id} = margin_note",
-                        "style": {}
-                      },
-                      {
-                        "id": "binder.card.icon.marginalia_dust",
-                        "name": "Icon marginalia_dust",
-                        "type": "image",
-                        "children": [],
-                        "anchor": "tl",
-                        "x": 30,
-                        "y": 30,
-                        "w": 44,
-                        "h": 44,
-                        "wMode": "fixed",
-                        "hMode": "fixed",
-                        "sprite": "icon_marginalia_dust",
-                        "visible": "{item.id} = marginalia_dust",
                         "style": {}
                       },
                       {
@@ -7032,6 +7995,22 @@
                         "style": {}
                       },
                       {
+                        "id": "binder.card.icon.paperback_binding",
+                        "name": "Icon paperback_binding",
+                        "type": "image",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 30,
+                        "y": 30,
+                        "w": 44,
+                        "h": 44,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "sprite": "icon_paperback_binding",
+                        "visible": "{item.id} = paperback_binding",
+                        "style": {}
+                      },
+                      {
                         "id": "binder.card.icon.paper_clip",
                         "name": "Icon paper_clip",
                         "type": "image",
@@ -7061,22 +8040,6 @@
                         "hMode": "fixed",
                         "sprite": "icon_paper_scrap",
                         "visible": "{item.id} = paper_scrap",
-                        "style": {}
-                      },
-                      {
-                        "id": "binder.card.icon.paperback_binding",
-                        "name": "Icon paperback_binding",
-                        "type": "image",
-                        "children": [],
-                        "anchor": "tl",
-                        "x": 30,
-                        "y": 30,
-                        "w": 44,
-                        "h": 44,
-                        "wMode": "fixed",
-                        "hMode": "fixed",
-                        "sprite": "icon_paperback_binding",
-                        "visible": "{item.id} = paperback_binding",
                         "style": {}
                       },
                       {
@@ -8160,6 +9123,27 @@
                 }
               },
               {
+                "id": "map.frame",
+                "name": "map.frame",
+                "type": "panel",
+                "children": [],
+                "anchor": "tl",
+                "x": 462,
+                "y": 126,
+                "w": 776,
+                "h": 450,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#e5d4a7",
+                  "border": "#3b2a1c",
+                  "borderWidth": 3,
+                  "radius": 4
+                }
+              },
+              {
                 "id": "map.world",
                 "name": "World",
                 "type": "map",
@@ -8168,7 +9152,7 @@
                 "x": 470,
                 "y": 130,
                 "w": 760,
-                "h": 470,
+                "h": 442,
                 "wMode": "fixed",
                 "hMode": "fixed",
                 "map": {
@@ -8193,10 +9177,32 @@
                       "kind": "terrain",
                       "settings": {
                         "colourBy": "tile",
-                        "palette": "295:#00000000",
+                        "palette": "183:#00000000",
                         "fallback": "#a9c78a",
-                        "outline": "none",
+                        "outline": "edges",
+                        "outlineColour": "#3b2a1c4d",
                         "shade": true
+                      }
+                    },
+                    {
+                      "id": "grid",
+                      "name": "Page grid",
+                      "kind": "grid",
+                      "settings": {
+                        "every": 10,
+                        "colour": "#3b2a1c18",
+                        "lineWidth": 1
+                      }
+                    },
+                    {
+                      "id": "names",
+                      "name": "Region names",
+                      "kind": "labels",
+                      "settings": {
+                        "from": "markers",
+                        "kind": "regions",
+                        "colour": "#3b2a1c",
+                        "size": 13
                       }
                     },
                     {
@@ -8207,6 +9213,202 @@
                     }
                   ],
                   "markers": [
+                    {
+                      "id": "regions",
+                      "name": "Region names",
+                      "from": "hand",
+                      "hand": [
+                        {
+                          "id": "region_f",
+                          "x": 85,
+                          "y": 9,
+                          "label": "Folio",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_a",
+                          "x": 122,
+                          "y": 23,
+                          "label": "Dog-Ears",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_l",
+                          "x": 15,
+                          "y": 23,
+                          "label": "Lost Margin",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_r",
+                          "x": 46,
+                          "y": 20,
+                          "label": "Orchard",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_h",
+                          "x": 94,
+                          "y": 28,
+                          "label": "Mill Ridge",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_x",
+                          "x": 31,
+                          "y": 35,
+                          "label": "Glade",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_m",
+                          "x": 37,
+                          "y": 53,
+                          "label": "Margins",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_t",
+                          "x": 94,
+                          "y": 50,
+                          "label": "Thistledown",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_o",
+                          "x": 77,
+                          "y": 55,
+                          "label": "Old Meadow",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_s",
+                          "x": 10,
+                          "y": 55,
+                          "label": "Page's Edge",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_e",
+                          "x": 120,
+                          "y": 55,
+                          "label": "Margin Gate",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_u",
+                          "x": 112,
+                          "y": 81,
+                          "label": "Smudge",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_g",
+                          "x": 79,
+                          "y": 78,
+                          "label": "Graveyard",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_i",
+                          "x": 41,
+                          "y": 83,
+                          "label": "Ink-Wells",
+                          "state": ""
+                        },
+                        {
+                          "id": "region_n",
+                          "x": 60,
+                          "y": 95,
+                          "label": "Hollow",
+                          "state": ""
+                        }
+                      ],
+                      "prefab": "Blank",
+                      "choosable": false,
+                      "scaleWithZoom": false
+                    },
+                    {
+                      "id": "doors",
+                      "name": "Memory doors",
+                      "from": "hand",
+                      "hand": [
+                        {
+                          "id": "weighing",
+                          "x": 107,
+                          "y": 74,
+                          "label": "The Weighing Room",
+                          "state": ""
+                        },
+                        {
+                          "id": "proof",
+                          "x": 13,
+                          "y": 25,
+                          "label": "The Proof Room",
+                          "state": ""
+                        }
+                      ],
+                      "prefab": "Door",
+                      "choosable": false
+                    },
+                    {
+                      "id": "darkposts",
+                      "name": "Lantern posts",
+                      "from": "hand",
+                      "hand": [
+                        {
+                          "id": "meadow",
+                          "x": 28,
+                          "y": 52,
+                          "label": "Margins Lantern Post",
+                          "state": ""
+                        },
+                        {
+                          "id": "orchard",
+                          "x": 46,
+                          "y": 27,
+                          "label": "Orchard Lantern Post",
+                          "state": ""
+                        },
+                        {
+                          "id": "oldmeadow",
+                          "x": 76,
+                          "y": 50,
+                          "label": "Old Meadow Lantern Post",
+                          "state": ""
+                        },
+                        {
+                          "id": "square",
+                          "x": 95,
+                          "y": 52,
+                          "label": "Thistledown Square",
+                          "state": ""
+                        },
+                        {
+                          "id": "gate",
+                          "x": 118,
+                          "y": 52,
+                          "label": "Margin Gate Lantern Post",
+                          "state": ""
+                        },
+                        {
+                          "id": "folio",
+                          "x": 85,
+                          "y": 11,
+                          "label": "Folio Heights Lantern Post",
+                          "state": ""
+                        },
+                        {
+                          "id": "smudge",
+                          "x": 115,
+                          "y": 68,
+                          "label": "Smudge Lantern Post",
+                          "state": ""
+                        }
+                      ],
+                      "prefab": "DarkPost",
+                      "choosable": false
+                    },
                     {
                       "id": "posts",
                       "name": "Lit lanterns",
@@ -8279,13 +9481,173 @@
                 }
               },
               {
+                "id": "key.you.m",
+                "name": "key.you.m",
+                "type": "panel",
+                "children": [],
+                "anchor": "tl",
+                "x": 480,
+                "y": 587,
+                "w": 14,
+                "h": 14,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#c0405a",
+                  "border": "#1b1722",
+                  "borderWidth": 2,
+                  "radius": 3
+                }
+              },
+              {
+                "id": "key.you.t",
+                "name": "key.you.t",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 502,
+                "y": 584,
+                "w": 60,
+                "h": 24,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "You",
+                "style": {
+                  "fontSize": 17,
+                  "color": "#1b1722",
+                  "opacity": 0.8
+                }
+              },
+              {
+                "id": "key.lit.m",
+                "name": "key.lit.m",
+                "type": "panel",
+                "children": [],
+                "anchor": "tl",
+                "x": 570,
+                "y": 587,
+                "w": 14,
+                "h": 14,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#e6f7fb",
+                  "border": "#1f6b87",
+                  "borderWidth": 2,
+                  "radius": 7
+                }
+              },
+              {
+                "id": "key.lit.t",
+                "name": "key.lit.t",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 592,
+                "y": 584,
+                "w": 130,
+                "h": 24,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "Lit lantern",
+                "style": {
+                  "fontSize": 17,
+                  "color": "#1b1722",
+                  "opacity": 0.8
+                }
+              },
+              {
+                "id": "key.dark.m",
+                "name": "key.dark.m",
+                "type": "panel",
+                "children": [],
+                "anchor": "tl",
+                "x": 730,
+                "y": 587,
+                "w": 14,
+                "h": 14,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#f6ecd2",
+                  "border": "#5a4a3a",
+                  "borderWidth": 2,
+                  "radius": 7
+                }
+              },
+              {
+                "id": "key.dark.t",
+                "name": "key.dark.t",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 752,
+                "y": 584,
+                "w": 150,
+                "h": 24,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "Unlit lantern",
+                "style": {
+                  "fontSize": 17,
+                  "color": "#1b1722",
+                  "opacity": 0.8
+                }
+              },
+              {
+                "id": "key.door.m",
+                "name": "key.door.m",
+                "type": "panel",
+                "children": [],
+                "anchor": "tl",
+                "x": 910,
+                "y": 587,
+                "w": 14,
+                "h": 14,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#7fd0e6",
+                  "border": "#1f6b87",
+                  "borderWidth": 2,
+                  "radius": 2
+                }
+              },
+              {
+                "id": "key.door.t",
+                "name": "key.door.t",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 932,
+                "y": 584,
+                "w": 150,
+                "h": 24,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "Memory door",
+                "style": {
+                  "fontSize": 17,
+                  "color": "#1b1722",
+                  "opacity": 0.8
+                }
+              },
+              {
                 "id": "map.none",
                 "name": "map.none",
                 "type": "text",
                 "children": [],
                 "anchor": "tl",
                 "x": 470,
-                "y": 610,
+                "y": 626,
                 "w": 760,
                 "h": 30,
                 "wMode": "fixed",
@@ -8604,6 +9966,125 @@
         "y": 0,
         "w": 14,
         "h": 14,
+        "wMode": "fixed",
+        "hMode": "fixed",
+        "layout": "free",
+        "padding": 0,
+        "style": {}
+      }
+    },
+    {
+      "name": "DarkPost",
+      "widget": {
+        "id": "darkpost",
+        "name": "darkpost",
+        "type": "panel",
+        "children": [
+          {
+            "id": "darkpost.post",
+            "name": "darkpost.post",
+            "type": "panel",
+            "children": [],
+            "anchor": "tl",
+            "x": 3,
+            "y": 5,
+            "w": 5,
+            "h": 13,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {
+              "fill": "#7a6a58"
+            }
+          },
+          {
+            "id": "darkpost.lamp",
+            "name": "darkpost.lamp",
+            "type": "panel",
+            "children": [],
+            "anchor": "tl",
+            "x": 2,
+            "y": 0,
+            "w": 8,
+            "h": 8,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {
+              "fill": "#f6ecd2",
+              "border": "#5a4a3a",
+              "borderWidth": 1,
+              "radius": 4
+            }
+          }
+        ],
+        "anchor": "tl",
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 18,
+        "wMode": "fixed",
+        "hMode": "fixed",
+        "layout": "free",
+        "padding": 0,
+        "style": {}
+      }
+    },
+    {
+      "name": "Door",
+      "widget": {
+        "id": "door",
+        "name": "door",
+        "type": "panel",
+        "children": [
+          {
+            "id": "door.mark",
+            "name": "door.mark",
+            "type": "panel",
+            "children": [],
+            "anchor": "tl",
+            "x": 1,
+            "y": 1,
+            "w": 11,
+            "h": 11,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {
+              "fill": "#7fd0e6",
+              "border": "#1f6b87",
+              "borderWidth": 2,
+              "radius": 2
+            }
+          }
+        ],
+        "anchor": "tl",
+        "x": 0,
+        "y": 0,
+        "w": 14,
+        "h": 14,
+        "wMode": "fixed",
+        "hMode": "fixed",
+        "layout": "free",
+        "padding": 0,
+        "style": {}
+      }
+    },
+    {
+      "name": "Blank",
+      "widget": {
+        "id": "blank",
+        "name": "blank",
+        "type": "panel",
+        "children": [],
+        "anchor": "tl",
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1,
         "wMode": "fixed",
         "hMode": "fixed",
         "layout": "free",

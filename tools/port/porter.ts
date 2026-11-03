@@ -6,7 +6,7 @@
  *
  * Bundled and run by run_porter.sh. Inputs come from environment variables: SNAP, ART, TILES, OUT.
  */
-import { buildScreens } from './screens';
+import { buildScreens, mapNamesFrom, uiTheme, type MapConstants, type MapNames } from './screens';
 import { decorateForge, forgeExtras, forgeRows, writeForgePrefabs, writeForgeTalk } from './forge';
 import { decoratePip, pipExtras, pipGapCells, pipMap, writePipTalk, type PipMap } from './pip';
 import { decorateMaud, maudExtras, maudGaps, maudMap, writeMaudTalk, type MaudMap } from './maud';
@@ -485,12 +485,19 @@ function placeSettings(scene: string): { regions: string; regionNames: string; p
   return { regions: c.REGION_ROWS.join('|'), regionNames: JSON.stringify(c.REGIONS), place: '' };
 }
 
+/** What the map screen names: each region (a spot inside it, nearest its middle), every lantern post and the memory doors. */
+function mapNames(): MapNames {
+  const none: MapNames = { regions: [], posts: [], doors: [] };
+  if (!DATA || !existsSync(join(DATA, 'prologue_map.json'))) return none;
+  return mapNamesFrom((JSON.parse(readFileSync(join(DATA, 'prologue_map.json'), 'utf8')) as { constants: MapConstants }).constants);
+}
+
 function storytenderKit(p: EntityData, scene: string): void {
   const c = p.components;
   Object.assign(c.playerController as object, { speed: 4.2, runMultiplier: 1, jumpSpeed: 0 });
   attach(c, 'health', { max: 100, invulnerableSeconds: 0.9, onDeath: 'respawn', fallDamage: 15, team: 'player', showBar: false });
   // reach 74 px of ground (2.1 cells), a swing of +-1.2 rad, 0.3 s between strikes (the combo's finisher is not ported yet)
-  attach(c, 'meleeAttack', { damage: 1.1, range: 2.1, arc: 137, windup: 0.04, active: 0.14, cooldown: 0.3, knockback: 4.7, hurts: 'enemies', hitStop: 0.05, shake: 2 });
+  attach(c, 'meleeAttack', { damage: 1.1, range: 2.1, arc: 137, windup: 0.04, active: 0.14, cooldown: 0.3, knockback: 4.7, hurts: 'enemies', hitStop: 0.05, shake: 2, showSwing: false }); // the strike pose is the swing: no pale diamond on the ground
   attach(c, 'dodge', { speed: 14.5, seconds: 0.2, cooldown: 0.75, invulnerable: true });
   attach(c, 'light', { radius: 1.2, intensity: 0.35, color: 'cool', shadows: true, flicker: 0.15, mode: 'always' });
   attach(c, 'echoRecorder', { seconds: 9, capacity: 0, capacityVariable: '', ending: 'hold', ghostAlpha: 0.55 });
@@ -764,7 +771,9 @@ function main(): void {
   // the game's own HUD, title, pause, binder and map screens (the quick slots show the items that can be used)
   const usableItems = (JSON.parse(readFileSync(join(OUT, 'assets/items.json'), 'utf8')) as { items: { id: string; use?: unknown }[] }).items.filter((it) => it.use).map((it) => it.id);
   const itemIds = readdirSync(spriteDir).filter((f) => f.startsWith('icon_')).map((f) => f.slice(5).replace('.sprite.json', ''));
-  writeFileSync(join(OUT, 'assets/screens.json'), JSON.stringify(buildScreens(itemIds, CURRENT_SCHEMA_VERSION, paperTile, usableItems), null, 2) + '\n');
+  writeFileSync(join(OUT, 'assets/screens.json'), JSON.stringify(buildScreens(itemIds, CURRENT_SCHEMA_VERSION, paperTile, usableItems, mapNames()), null, 2) + '\n');
+  // the engine's own menus (settings, controls, saves, the conversation box) in the game's colours: parchment, ink and gold
+  writeFileSync(join(OUT, 'assets/ui.json'), JSON.stringify(uiTheme(CURRENT_SCHEMA_VERSION), null, 2) + '\n');
   console.log(`items ${data.items}, dialogues ${data.dialogues}`);
   const project = baseProject('The Last Storytender', PLUGINS);
   project.iso = { tileW: 64, tileH: 32, heightPx: LEVEL_PX };
