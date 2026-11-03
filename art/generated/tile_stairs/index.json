@@ -1,0 +1,74 @@
+{
+ "size": [
+  64,
+  60
+ ],
+ "origin": [
+  32,
+  44
+ ],
+ "steps": 4,
+ "rise": 28,
+ "stairs": {
+  "meadow_1": {
+   "n": "meadow_1_n.png",
+   "e": "meadow_1_e.png",
+   "s": "meadow_1_s.png",
+   "w": "meadow_1_w.png"
+  },
+  "meadow_2": {
+   "n": "meadow_2_n.png",
+   "e": "meadow_2_e.png",
+   "s": "meadow_2_s.png",
+   "w": "meadow_2_w.png"
+  },
+  "meadow_3": {
+   "n": "meadow_3_n.png",
+   "e": "meadow_3_e.png",
+   "s": "meadow_3_s.png",
+   "w": "meadow_3_w.png"
+  },
+  "dirt": {
+   "n": "dirt_n.png",
+   "e": "dirt_e.png",
+   "s": "dirt_s.png",
+   "w": "dirt_w.png"
+  },
+  "moss": {
+   "n": "moss_n.png",
+   "e": "moss_e.png",
+   "s": "moss_s.png",
+   "w": "moss_w.png"
+  },
+  "cobble": {
+   "n": "cobble_n.png",
+   "e": "cobble_e.png",
+   "s": "cobble_s.png",
+   "w": "cobble_w.png"
+  },
+  "flagstone": {
+   "n": "flagstone_n.png",
+   "e": "flagstone_e.png",
+   "s": "flagstone_s.png",
+   "w": "flagstone_w.png"
+  },
+  "slate": {
+   "n": "slate_n.png",
+   "e": "slate_e.png",
+   "s": "slate_s.png",
+   "w": "slate_w.png"
+  },
+  "planks": {
+   "n": "planks_n.png",
+   "e": "planks_e.png",
+   "s": "planks_s.png",
+   "w": "planks_w.png"
+  },
+  "parchment": {
+   "n": "parchment_n.png",
+   "e": "parchment_e.png",
+   "s": "parchment_s.png",
+   "w": "parchment_w.png"
+  }
+ }
+}

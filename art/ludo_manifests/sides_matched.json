@@ -1,0 +1,12 @@
+[
+ {"out": "art/incoming2/tiles/wall_earth", "kind": "style", "style_image": "art/incoming2/tiles/floor_dirt.png", "image_type": "texture", "n": 3,
+  "prompt": "the soil face of a raised bank of packed earth seen flat from the front: brown soil with small stones and a few roots, same soil colours and ink line as the reference, hand-drawn, flat cel shading, seamless"},
+ {"out": "art/incoming2/tiles/wall_flagstone", "kind": "style", "style_image": "art/incoming2/tiles/floor_flagstone.png", "image_type": "texture", "n": 3,
+  "prompt": "the face of a wall built from large flat grey stone slabs in dark mortar seen flat from the front, the same slabs and colours and ink line as the reference, hand-drawn, flat cel shading, seamless"},
+ {"out": "art/incoming2/tiles/wall_slate", "kind": "style", "style_image": "art/incoming2/tiles/floor_slate.png", "image_type": "texture", "n": 3,
+  "prompt": "the face of a wall built from blue-grey slate slabs in dark mortar seen flat from the front, the same slabs and colours and ink line as the reference, hand-drawn, flat cel shading, seamless"},
+ {"out": "art/incoming2/tiles/wall_planks", "kind": "style", "style_image": "art/incoming2/tiles/floor_planks.png", "image_type": "texture", "n": 3,
+  "prompt": "the side of a wooden platform: the edges of wooden planks seen flat from the front, same wood colours and grain and ink line as the reference, hand-drawn, flat cel shading, seamless"},
+ {"out": "art/incoming2/tiles/wall_paper", "kind": "style", "style_image": "art/incoming2/tiles/floor_parchment.png", "image_type": "texture", "n": 3,
+  "prompt": "the edge of a thick stack of parchment pages seen flat from the side: many thin horizontal leaves, same cream parchment colours and ink line as the reference, hand-drawn, flat cel shading, seamless"}
+]

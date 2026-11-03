@@ -1,0 +1,74 @@
+[
+ {
+  "out": "art/incoming2/tiles/top3_dirt",
+  "kind": "style",
+  "style_image": "art/incoming2/tiles/wall_earth.png",
+  "image_type": "texture",
+  "n": 3,
+  "prompt": "packed brown earth ground with small stones and clods, no grass, the same soil and stones as the reference, same colours and the same thick dark outline weight as the reference, hand-drawn, flat cel shading, seamless tileable texture, evenly lit, top-down view"
+ },
+ {
+  "out": "art/incoming2/tiles/top3_flagstone",
+  "kind": "style",
+  "style_image": "art/incoming2/tiles/wall_flagstone.png",
+  "image_type": "texture",
+  "n": 3,
+  "prompt": "a floor of large flat grey stone slabs set in dark mortar, slabs the same size as the reference, same colours and the same thick dark outline weight as the reference, hand-drawn, flat cel shading, seamless tileable texture, evenly lit, top-down view"
+ },
+ {
+  "out": "art/incoming2/tiles/top3_slate",
+  "kind": "style",
+  "style_image": "art/incoming2/tiles/wall_slate.png",
+  "image_type": "texture",
+  "n": 3,
+  "prompt": "a floor of blue-grey slate slabs set in dark mortar, slabs the same size as the reference, same colours and the same thick dark outline weight as the reference, hand-drawn, flat cel shading, seamless tileable texture, evenly lit, top-down view"
+ },
+ {
+  "out": "art/incoming2/tiles/top3_planks",
+  "kind": "style",
+  "style_image": "art/incoming2/tiles/wall_planks.png",
+  "image_type": "texture",
+  "n": 3,
+  "prompt": "a wooden plank floor, planks all running one way, the same planks and wood grain as the reference, planks the same width, same colours and the same thick dark outline weight as the reference, hand-drawn, flat cel shading, seamless tileable texture, evenly lit, top-down view"
+ },
+ {
+  "out": "art/incoming2/tiles/top3_parchment",
+  "kind": "style",
+  "style_image": "art/incoming2/tiles/wall_paper.png",
+  "image_type": "texture",
+  "n": 3,
+  "prompt": "a sheet of aged cream parchment paper with faint fibres and soft darker patches, no joins or cracks, same colours and the same thick dark outline weight as the reference, hand-drawn, flat cel shading, seamless tileable texture, evenly lit, top-down view"
+ },
+ {
+  "out": "art/incoming2/tiles/top3_meadow_1",
+  "kind": "style",
+  "style_image": "art/incoming2/tiles/floor_meadow_1.png",
+  "image_type": "texture",
+  "n": 3,
+  "prompt": "a calm grass meadow with a few tiny flowers, even and not noisy, soft short grass blades, same colours and the same thick dark outline weight as the reference, hand-drawn, flat cel shading, seamless tileable texture, evenly lit, top-down view"
+ },
+ {
+  "out": "art/incoming2/tiles/top3_meadow_2",
+  "kind": "style",
+  "style_image": "art/incoming2/tiles/floor_meadow_2.png",
+  "image_type": "texture",
+  "n": 3,
+  "prompt": "a calm grass meadow with a few tiny flowers, even and not noisy, soft short grass blades, same colours and the same thick dark outline weight as the reference, hand-drawn, flat cel shading, seamless tileable texture, evenly lit, top-down view"
+ },
+ {
+  "out": "art/incoming2/tiles/top3_meadow_3",
+  "kind": "style",
+  "style_image": "art/incoming2/tiles/floor_meadow_3.png",
+  "image_type": "texture",
+  "n": 3,
+  "prompt": "a calm grass meadow with a few tiny flowers, even and not noisy, soft short grass blades, same colours and the same thick dark outline weight as the reference, hand-drawn, flat cel shading, seamless tileable texture, evenly lit, top-down view"
+ },
+ {
+  "out": "art/incoming2/tiles/top3_moss",
+  "kind": "style",
+  "style_image": "art/incoming2/tiles/floor_moss.png",
+  "image_type": "texture",
+  "n": 3,
+  "prompt": "a floor of dark green moss with small lighter patches, even and not noisy, same colours and the same thick dark outline weight as the reference, hand-drawn, flat cel shading, seamless tileable texture, evenly lit, top-down view"
+ }
+]

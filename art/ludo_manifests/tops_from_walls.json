@@ -1,0 +1,6 @@
+[
+ {"out": "art/incoming2/tiles/top2_cobble", "kind": "style", "style_image": "art/incoming2/tiles/wall_cobble.png", "image_type": "texture", "n": 3,
+  "prompt": "a top-down view of a floor of the same rounded cream cobblestones as the reference, with the same thick dark brown outline round every stone and the same green moss filling the gaps between them, stones the same size as the reference, hand-drawn, flat cel shading, seamless tileable texture, evenly lit"},
+ {"out": "art/incoming2/tiles/top3_cobble", "kind": "style", "style_image": "art/incoming2/tiles/wall_cobble.png", "image_type": "texture", "n": 3,
+  "prompt": "a top-down view of a cobblestone floor, big round-cornered cream stones set apart like paving, about ten stones across the picture, each stone drawn with a very thick dark brown outline, wide green moss in the gaps between the stones, same colours and thick line weight as the reference, no rows or bricks, irregular stones, hand-drawn, flat cel shading, seamless tileable texture"}
+]

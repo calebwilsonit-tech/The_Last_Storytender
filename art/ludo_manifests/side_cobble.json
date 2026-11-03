@@ -1,0 +1,11 @@
+[
+ {
+  "out": "art/incoming2/tiles/side_cobble",
+  "kind": "style",
+  "style_image": "art/incoming2/tiles/floor_cobble.png",
+  "image_type": "texture",
+  "n": 3,
+  "extra": {"art_style": "Cel-Shaded", "aspect_ratio": "ar_16_9"},
+  "prompt": "the side face of a low wall of rounded cobblestones of different sizes packed tightly in dark mortar, rubble wall, flat front view, seamless left to right, hand-drawn, same stones and colours as the reference, clean dark ink outline, flat cel shading"
+ }
+]
