@@ -38,7 +38,7 @@ type Snap = {
   nodes: { class: string; name: string; pos: [number, number]; grid: [number, number]; visible: boolean; props: Record<string, unknown>; parent: string }[];
 };
 type ArtEntry = { scene: string; key: string; node: string; cls: string; grid: [number, number]; file: string; feet?: [number, number]; size?: [number, number] };
-type TileEntry = { scene: string; kind: string; parity?: number; what: 'top' | 'left' | 'right'; file: string };
+type TileEntry = { scene: string; kind: string; parity?: number; what: 'top' | 'left' | 'right'; file: string; grid?: [number, number]; period?: number };
 
 const SCENES: Record<string, { file: string; name: string }> = {
   overworld: { file: 'scenes/overworld.scene.json', name: 'The Prologue Plains' },
@@ -106,7 +106,7 @@ function storytenderSprite(): string | null {
 
 // ---------------------------------------------------------------- tiles
 
-type Kind = { base: number; variants: number[][] /* by parity */; name: string };
+type Kind = { base: number; variants: number[][] /* by parity */; name: string; grid?: { period: number; ids: number[] } /* a seamless floor: the tile of (x mod period, y mod period) */ };
 const tileset: ProjectData['tileset'] = [];
 const kinds = new Map<string, Kind>(); // "scene|kind" -> tiles
 let nextTile = 1;
@@ -149,6 +149,19 @@ function buildKinds(tiles: TileEntry[], snaps: Record<string, Snap>): void {
         ...(left ? { leftArt: spriteFor(join(TILES, left.file), safe(`t_${kname}_left`)) } : {}),
         ...(right ? { rightArt: spriteFor(join(TILES, right.file), safe(`t_${kname}_right`)) } : {}),
       };
+      // a seamless floor (sheet_tiles.py): one tile per cell of its period, placed by position
+      const gridTops = lend.filter((t) => t.what === 'top' && t.grid);
+      if (gridTops.length > 0) {
+        const period = gridTops[0]!.period!;
+        const ids: number[] = new Array(period * period).fill(0);
+        for (const t of gridTops) {
+          const id = nextTile++;
+          tileset.push({ id, name: `${kname} ${t.grid![0]},${t.grid![1]}`, top: meanColour(join(TILES, t.file)), left: fb[1], right: fb[2], art: spriteFor(join(TILES, t.file), safe(`t_${kname}_g${t.grid![0]}${t.grid![1]}`)), ...sideArt, faceLevels: 1, props: {} });
+          ids[t.grid![1] * period + t.grid![0]] = id;
+        }
+        kinds.set(key, { base: ids[0]!, variants: [ids, ids], name: kname, grid: { period, ids } });
+        continue;
+      }
       const variants: number[][] = [[], []];
       for (const par of [0, 1]) {
         const tops = lend.filter((t) => t.what === 'top' && t.parity === par);
@@ -203,7 +216,7 @@ function buildMap(scene: string, snap: Snap): TileMap {
     const kind = snap.floor.cells[`${x},${y}`]!;
     const k = kinds.get(`${scene}|${kind}`)!;
     const vs = k.variants[(x + y) % 2]!;
-    const tile = vs[hash(x, y) % vs.length]!;
+    const tile = k.grid ? k.grid.ids[(y % k.grid.period) * k.grid.period + (x % k.grid.period)]! : vs[hash(x, y) % vs.length]!;
     const stair = snap.floor.stairs[`${x},${y}`];
     const level = snap.floor.heights[`${x},${y}`] ?? 0;
     map.set(x, y, tile, level);

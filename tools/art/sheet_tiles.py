@@ -1,25 +1,36 @@
-"""The floor tiles from the user's tile sheet (art/incoming/tiles_sheet.jpg: blocks drawn in rows of six). Each chosen block's
-top face is cut out as a 64 x 32 diamond, the game's tile size. Every pick is used as drawn and mirrored, and the darker
-half of the checkerboard (the "dark" parity the game has always had) is the same picture a shade darker. The cliff sides stay
-the game's own. Writes <work>/tiles_sheet/ with an index.json in the porter's format (the sides copied from <work>/tiles_q).
+"""The floor tiles from the user's tile sheet (art/incoming/tiles_sheet.jpg: blocks drawn in rows of six), made into floors
+that run on without seams.
+
+Each block on the sheet is drawn on its own: its top is lit in the middle and shaded at the edges, so laid side by side the
+blocks show a diamond grid. So the top face of each chosen block is turned flat (seen from straight above), its edges are
+trimmed off, its lighting is evened out, and it is made to wrap: organic floors (grass, parchment, moss) by blending it with
+itself shifted by half, built floors (cobbles, slate, planks) by mirroring. That gives a ground texture 4 x 4 cells big with
+a gentle colour drift over it, and the tile of each cell (x mod 4, y mod 4) is the 64 x 32 diamond of that texture seen in the
+game's view, so neighbouring tiles meet exactly. Each diamond is a pixel wider than the cell all round, so no gap shows
+where their corners meet. The cliff sides stay the game's own.
+
+Writes <work>/tiles_sheet/ with an index.json in the porter's format (each new tile has "grid": [x, y] and "period": 4).
     python3 -I tools/art/sheet_tiles.py <repo> <work>"""
 import json, os, shutil, sys
 import numpy as np
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image
+from scipy import ndimage
 
 REPO, WORK = sys.argv[1], sys.argv[2]
 SHEET = os.path.join(REPO, 'art', 'incoming', 'tiles_sheet.jpg')
-KIND = {'.': 'plains', ',': 'town', 'm': 'memory', 'p': 'page', 'w': 'wood', 'c': 'mat'}
 COLS = [(20, 164), (168, 312), (317, 460), (466, 609), (614, 757), (763, 906)]
+KIND = {'.': 'plains', ',': 'town', 'm': 'memory', 'p': 'page', 'w': 'wood', 'c': 'mat'}
+PERIOD = 4          # the ground texture is this many cells across
+G = 56              # its pixels per cell
 
-# which blocks (row, column) make each floor of each place
+# which block (row, column) makes each floor, and how it is made to wrap
 PICKS = {
-    ('overworld', '.'): [(9, 2)],                    # meadow grass
-    ('overworld', ','): [(2, 2), (1, 4), (0, 5)],    # Thistledown: cobbles, a pale stone path, flagstones
-    ('forge', 'm'): [(1, 1), (2, 3)],                # the cold forge memory: dark slate, purple stone
-    ('pip', 'p'): [(4, 4), (4, 5), (4, 0)],          # the storybook: parchment, a torn page
-    ('maud', 'w'): [(3, 1), (3, 2), (3, 3)],         # Maud's kitchen: planks
-    ('scissor', 'c'): [(11, 4), (11, 5)],            # the cutting room: dark moss
+    ('overworld', '.'): ((9, 2), 'blend'),    # meadow grass
+    ('overworld', ','): ((2, 2), 'slab'),     # Thistledown's cobbles
+    ('forge', 'm'): ((1, 1), 'slab'),         # the cold forge memory: dark slate
+    ('pip', 'p'): ((4, 5), 'blend'),          # the storybook: parchment
+    ('maud', 'w'): ((3, 1), 'planks'),       # Maud's kitchen: planks
+    ('scissor', 'c'): ((11, 5), 'blend'),     # the cutting room: dark moss
 }
 
 
@@ -33,9 +44,8 @@ def rows(fg):
             if i - start >= 40:
                 out.append([start, i])
             start = None
-    # two rows of tall pieces run together: split them at their thinnest line
     fixed = []
-    for a, b in out:
+    for a, b in out:   # two rows of tall pieces run together: split them at their thinnest line
         if b - a > 250:
             mid = a + 100 + int(np.argmin(fg[a + 100:b - 100].sum(axis=1)))
             fixed += [[a, mid], [mid, b]]
@@ -44,26 +54,135 @@ def rows(fg):
     return fixed
 
 
-def top_face(sheet, fg, r, c, rws):
+def sample(img, x, y):
+    """Bilinear sample of an H x W x 3 float image at float coordinates (wrapping)."""
+    h, w, _ = img.shape
+    x0 = np.floor(x).astype(int)
+    y0 = np.floor(y).astype(int)
+    fx = (x - x0)[..., None]
+    fy = (y - y0)[..., None]
+    x0 %= w
+    y0 %= h
+    x1 = (x0 + 1) % w
+    y1 = (y0 + 1) % h
+    return (img[y0, x0] * (1 - fx) * (1 - fy) + img[y0, x1] * fx * (1 - fy) + img[y1, x0] * (1 - fx) * fy + img[y1, x1] * fx * fy)
+
+
+def flat_face(sheet, fg, r, c, rws, size=128):
+    """The block's top face seen from straight above, as a size x size square (u across, v down)."""
     (y0, y1), (x0, x1) = rws[r], COLS[c]
-    m = fg[y0:y1, x0:x1]
-    ys, xs = np.nonzero(m)
-    left, right, top = xs.min(), xs.max(), ys.min()
+    ys, xs = np.nonzero(fg[y0:y1, x0:x1])
+    left, right, top = xs.min() + x0, xs.max() + x0, ys.min() + y0
     w = right - left
-    # the top face: a diamond as wide as the block, half as tall, from the block's top corner (a little inside the outline)
-    inset = 0.13 * w   # well inside the outline and the light bevel along the block's top edges
-    box = (x0 + left + inset, y0 + top + inset / 2, x0 + right - inset, y0 + top + w / 2 - inset / 2)
-    face = sheet.crop(tuple(round(v) for v in box)).resize((64, 32), Image.LANCZOS).convert('RGBA')
-    mask = Image.new('L', (64, 32), 0)
-    ImageDraw.Draw(mask).polygon([(32, -1), (65, 16), (32, 33), (-1, 16)], fill=255)   # a hair past the edge: no gaps between tiles
-    face.putalpha(mask)
-    return face
+    cx, ty = (left + right) / 2, top            # the face's top corner
+    u, v = np.meshgrid((np.arange(size) + 0.5) / size, (np.arange(size) + 0.5) / size)
+    sx = cx + (u - v) * w / 2
+    sy = ty + (u + v) * w / 4
+    return sample(sheet, sx, sy)
+
+
+def fill_background(t):
+    """Any of the sheet's white background still in the face (near its corners) is filled from the nearest face pixel."""
+    bad = (t.min(axis=2) > 222)
+    if not bad.any():
+        return t
+    _, (iy, ix) = ndimage.distance_transform_edt(bad, return_indices=True)
+    return t[iy, ix]
+
+
+def even_light(t):
+    """Takes out the face's own shading (lighter middle, darker edges), keeping its detail and colour."""
+    lum = t.mean(axis=2)
+    low = ndimage.gaussian_filter(lum, sigma=t.shape[0] / 5, mode='reflect')
+    return np.clip(t * (lum.mean() / np.maximum(low, 1))[..., None], 0, 255)
+
+
+def wrap_blend(t):
+    """Seamless by blending with itself shifted half way: the shifted copy covers the edges, the original the middle."""
+    n = t.shape[0]
+    s = np.roll(np.roll(t, n // 2, 0), n // 2, 1)
+    d = np.abs(np.linspace(-1, 1, n))
+    wgt = np.clip(1.6 * np.maximum(d[None, :], d[:, None]) - 0.6, 0, 1) ** 1.5
+    return t * (1 - wgt[..., None]) + s * wgt[..., None]
+
+
+def wrap_mirror(t):
+    """Seamless by mirroring into a 2 x 2 block (for stones and planks, which a blend would ghost)."""
+    top = np.concatenate([t, t[:, ::-1]], axis=1)
+    return np.concatenate([top, top[::-1]], axis=0)
+
+
+def ground(face, how, rng):
+    inner = fill_background(face[16:112, 16:112])  # trim the edge (outline, bevel, shading)
+    inner = even_light(inner)
+    patch = wrap_blend(inner) if how == 'blend' else wrap_mirror(inner)
+    cells = 2                                      # the patch covers 2 x 2 cells (the detail at the size it was drawn)
+    n = PERIOD * G
+    reps = PERIOD // cells
+    big = np.tile(patch, (reps, reps, 1))
+    big = np.asarray(Image.fromarray(big.clip(0, 255).astype(np.uint8)).resize((n, n), Image.LANCZOS)).astype(np.float32)
+    # a gentle, wrapping drift of brightness over the 4 x 4 cells, so the repeats do not line up
+    noise = rng.normal(size=(PERIOD * 2, PERIOD * 2))
+    noise = ndimage.zoom(np.tile(noise, (3, 3)), n / (PERIOD * 2), order=3)[n:2 * n, n:2 * n]
+    noise = noise / (np.abs(noise).max() + 1e-6)
+    return np.clip(big * (1 + 0.06 * noise[..., None]), 0, 255)
+
+
+def slab_variants(face, how):
+    """Built floors: each cell one clean slab (the face without its outline and shading), turned so the slabs do not repeat in
+    lines: stones every quarter turn and mirrored, planks only half turns (the boards keep running one way)."""
+    inner = fill_background(face[20:108, 20:108])
+    inner = even_light(inner)
+    turns = [0, 2] if how == 'planks' else [0, 1, 2, 3]
+    out = []
+    for k in turns:
+        t = np.rot90(inner, k)
+        out.append(t)
+        if how != 'planks':
+            out.append(t[:, ::-1])
+    return out
+
+
+def slab_tile(t):
+    """One slab seen in the game's view, as a 64 x 32 diamond."""
+    n = t.shape[0]
+    sx, sy = np.meshgrid(np.arange(64) + 0.5, np.arange(32) + 0.5)
+    X, Y = sx - 32, sy
+    u = np.clip((X / 32 + Y / 16) / 2, 0, 0.999)
+    v = np.clip((Y / 16 - X / 32) / 2, 0, 0.999)
+    rgb = sample(t, u * (n - 1), v * (n - 1))
+    dist = np.abs(X) / 32 + np.abs(Y - 16) / 16
+    alpha = np.clip((1 + 1.4 / 16 - dist) * 16, 0, 1) * 255
+    return Image.fromarray(np.dstack([rgb, alpha]).clip(0, 255).astype(np.uint8), 'RGBA')
+
+
+def cell_tile(big, gx, gy):
+    """The 64 x 32 diamond of cell (gx, gy) of the ground texture, as the game draws it, a pixel wider all round."""
+    sx, sy = np.meshgrid(np.arange(64) + 0.5, np.arange(32) + 0.5)
+    X, Y = sx - 32, sy
+    u = (X / 32 + Y / 16) / 2
+    v = (Y / 16 - X / 32) / 2
+    rgb = sample(big, (gx + u) * G, (gy + v) * G)
+    # the diamond, grown by a little over a pixel, with a soft edge
+    dist = np.abs(X) / 32 + np.abs(Y - 16) / 16       # 1 on the diamond's edge
+    alpha = np.clip((1 + 1.4 / 16 - dist) * 16, 0, 1) * 255
+    out = np.dstack([rgb, alpha]).clip(0, 255).astype(np.uint8)
+    return Image.fromarray(out, 'RGBA')
+
+
+def save_tile(img, path):
+    """The engine keeps a sprite in at most 255 colours: each tile gets its own palette of 200, and a hard edge (no half-see-through
+    pixels, which would each need a colour of their own)."""
+    a = np.asarray(img)
+    alpha = np.where(a[..., 3] >= 96, 255, 0).astype(np.uint8)
+    q = img.convert('RGB').quantize(colors=200, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE).convert('RGB')
+    Image.fromarray(np.dstack([np.asarray(q), alpha]), 'RGBA').save(path)
 
 
 def main():
-    sheet = Image.open(SHEET).convert('RGB')
-    a = np.asarray(sheet).astype(int)
-    fg = a.min(axis=2) < 225
+    sheet_img = Image.open(SHEET).convert('RGB')
+    sheet = np.asarray(sheet_img).astype(np.float32)
+    fg = sheet.min(axis=2) < 225
     rws = rows(fg)
     out = os.path.join(WORK, 'tiles_sheet')
     os.makedirs(out, exist_ok=True)
@@ -73,23 +192,27 @@ def main():
         if e['what'] != 'top' or (e['scene'], e['kind']) not in PICKS:
             shutil.copy(os.path.join(WORK, 'tiles_q', e['file']), os.path.join(out, e['file']))
             index.append(e)
-    for (scene, kind), picks in PICKS.items():
-        n = 0
-        for r, c in picks:
-            face = top_face(sheet, fg, r, c, rws)
-            for v in (face, ImageOps.mirror(face)):
+    rng = np.random.default_rng(7)
+    made = 0
+    for (scene, kind), ((r, c), how) in PICKS.items():
+        face = flat_face(sheet, fg, r, c, rws)
+        if how in ('slab', 'planks'):
+            for i, t in enumerate(slab_variants(face, how)):
                 for parity in (0, 1):
-                    pic = v
-                    if parity:
-                        arr = np.asarray(v).astype(np.float32)
-                        arr[..., :3] *= 0.92
-                        pic = Image.fromarray(arr.astype(np.uint8), 'RGBA')
-                    name = f'{scene}_{KIND[kind]}_sheet_{parity}_{n}.png'
-                    pic.save(os.path.join(out, name))
+                    name = f'{scene}_{KIND[kind]}_slab_{parity}_{i}.png'
+                    save_tile(slab_tile(t), os.path.join(out, name))
                     index.append({'cell': [0, 0], 'file': name, 'kind': kind, 'parity': parity, 'scene': scene, 'what': 'top'})
-                n += 1
+                    made += 1
+            continue
+        big = ground(face, how, rng)
+        for gy in range(PERIOD):
+            for gx in range(PERIOD):
+                name = f'{scene}_{KIND[kind]}_floor_{gx}_{gy}.png'
+                save_tile(cell_tile(big, gx, gy), os.path.join(out, name))
+                index.append({'cell': [0, 0], 'file': name, 'kind': kind, 'parity': 0, 'scene': scene, 'what': 'top', 'grid': [gx, gy], 'period': PERIOD})
+                made += 1
     json.dump(index, open(os.path.join(out, 'index.json'), 'w'), indent=1)
-    print('sheet tiles', sum(1 for e in index if '_sheet_' in e['file']))
+    print('sheet tiles', made)
 
 
 main()
