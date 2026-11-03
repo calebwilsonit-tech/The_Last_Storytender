@@ -244,6 +244,52 @@ function attach(components: Record<string, unknown>, id: string, settings: objec
   Object.assign(components[id] as object, settings);
 }
 
+// ---------------------------------------------------------------- the Errors (enemy.gd, enemy_kinds.gd)
+
+const ERROR_HP = [9, 2, 10, 5, 12, 4];
+const ERROR_LETTERS: Record<string, number> = { g: 0, x: 1, l: 2, d: 3, n: 4, z: 5 };
+/** Which flag lets a kind out in the Prologue (main.gd _kind_unlocked). */
+const ERROR_UNLOCK = ['', '', 'restored_pip', 'restored_pip', 'restored_maud', 'restored_maud'];
+const ERROR_COLOUR = [0x8a6f5a, 0x2a2236, 0x3a3150, 0x5a4a7a, 0x1b1722, 0x2f2a3a];
+const ERROR_DROPS = ['bare', 'mite', 'slug', 'dangler', 'censor', 'ellipsis'];
+/** The picture of each kind, from wherever the Godot game showed one. */
+const errorArt = new Map<number, string>();
+let mobDrops: Record<string, [string, number, number, number][]> = {};
+
+function errorKit(e: EntityData, kind: number, unlock: string): void {
+  const c = e.components;
+  e.tags = [...new Set([...e.tags, 'enemy', 'error', `error-${kind}`])];
+  // a body, so it can walk (it stops at ledges and pits rather than falling)
+  c.body = { vx: 0, vy: 0, vz: 0, radius: kind === 1 ? 0.18 : 0.28, height: 1, state: 'ground', stepUp: 0.35, stepDown: 0.4, ledge: 'stop', pits: 'stop', wade: false, gravity: 1, peakZ: 0, layer: 4, mask: 65535, noclip: false, blockedBy: [], blockedTerrain: false };
+  attach(c, 'health', { max: ERROR_HP[kind], invulnerableSeconds: 0.22, onDeath: 'stay', fallDamage: 0, team: 'enemy', showBar: false });
+  if (kind === 1 || kind === 2 || kind === 5) attach(c, 'damageOnTouch', { amount: 0, hurts: 'player', range: 0.25, knockback: kind === 2 ? 3.4 : 4.2 });
+  if (kind === 3) attach(c, 'rangedAttack', { target: 'nothing', range: 10, minRange: 0, cooldown: 2.5, windup: 0.55, volley: 1, speed: 6.4, damage: 6, lifetime: 2.5, needSight: true, color: 0x1b1722, hurts: 'player' });
+  const drops = (mobDrops[ERROR_DROPS[kind]!] ?? []).map((d) => d.join(',')).join('; ');
+  attach(c, 'script_Error', { kind, unlock, drops });
+  const spr = c.sprite as Record<string, unknown>;
+  if (!spr.asset) Object.assign(spr, { color: ERROR_COLOUR[kind], w: kind === 1 ? 0.35 : 0.6, d: kind === 1 ? 0.35 : 0.6, height: kind === 1 ? 0.5 : 1 });
+  else if (!errorArt.has(kind)) errorArt.set(kind, String(spr.asset));
+}
+
+/** The Errors of the Prologue: one per letter of the map (g x l d n z), let out as the story allows. */
+function prologueErrors(levelOf: (x: number, y: number) => number, next: () => string): EntityData[] {
+  if (!DATA) return [];
+  const rows = (JSON.parse(readFileSync(join(DATA, 'prologue_map.json'), 'utf8')) as { constants: { ROWS: string[] } }).constants.ROWS;
+  const out: EntityData[] = [];
+  rows.forEach((row, y) =>
+    [...row].forEach((ch, x) => {
+      const kind = ERROR_LETTERS[ch];
+      if (kind === undefined) return;
+      const asset = errorArt.get(kind);
+      const sprite = { shape: 'box', color: 0xcccccc, w: 0.6, d: 0.6, height: 1, sortOffset: 0, visible: true, ...(asset ? { asset } : {}) };
+      const e: EntityData = { id: next(), name: `Error ${['Bare', 'Mite', 'Run-on', 'Dangler', 'Censor', 'Ellipsis'][kind]}`, tags: [], components: { transform: { x: x + 0.5, y: y + 0.5, h: levelOf(x, y), facing: 2 }, sprite } };
+      errorKit(e, kind, ERROR_UNLOCK[kind]!);
+      out.push(e);
+    }),
+  );
+  return out;
+}
+
 let world: World | null = null;
 function loadWorld(): World | null {
   if (!DATA) return null;
@@ -306,6 +352,10 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
     if (['IsoFloor', 'GroundChunks', 'AmbientDrift', 'PasteGhost'].includes(n.class)) continue;
     const e = entityFor(scene, n, byNode.get(n.name), `e${i++}`, levelOf);
     if (!e) continue;
+    if (n.class === 'Enemy') {
+      if (scene === 'overworld') continue; // the Prologue's Errors come from its map letters (below)
+      errorKit(e, Number(n.props.kind ?? 0), '');
+    }
     if (world && scene === 'overworld') decorateOverworld(e, n, [Math.round(n.grid[0]), Math.round(n.grid[1])], world);
     const cell = `${Math.round(n.grid[0])},${Math.round(n.grid[1])}`;
     if (blocked.has(cell) && !taken.has(cell)) {
@@ -314,6 +364,7 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
     }
     entities.push(e);
   }
+  if (scene === 'overworld') entities.push(...prologueErrors(levelOf, () => `e${i++}`));
   for (const c of blocked) if (!taken.has(c)) {
     const [x, y] = c.split(',').map(Number) as [number, number];
     map.setFlag(x, y, FLAG.BLOCK);
@@ -441,8 +492,10 @@ function main(): void {
     mkdirSync(join(OUT, 'assets/scripts'), { recursive: true });
     for (const f of readdirSync(join(HERE, 'scripts'))) writeFileSync(join(OUT, 'assets/scripts', f), readFileSync(join(HERE, 'scripts', f)));
   }
+  if (DATA) mobDrops = (JSON.parse(readFileSync(join(DATA, 'drops.json'), 'utf8')) as { constants: { MOBS: typeof mobDrops } }).constants.MOBS;
   const scenes: string[] = [];
-  for (const k of Object.keys(SCENES)) {
+  const order = [...Object.keys(SCENES).filter((k) => k !== 'overworld'), 'overworld'];
+  for (const k of order) {
     const scene = buildScene(k, snaps[k]!, art);
     writeFileSync(join(OUT, SCENES[k]!.file), JSON.stringify(scene) + '\n');
     scenes.push(SCENES[k]!.file);
@@ -457,7 +510,7 @@ function main(): void {
   const project = baseProject('The Last Storytender', PLUGINS);
   project.iso = { tileW: 64, tileH: 32, heightPx: LEVEL_PX };
   project.tileset = tileset;
-  project.scenes = scenes;
+  project.scenes = Object.keys(SCENES).map((k) => SCENES[k]!.file); // (built with the overworld last, listed in the usual order)
   project.startScene = SCENES.overworld!.file;
   project.title = { enabled: true, subtitle: 'The world is not ending; it is being edited.' };
   (project as ProjectData & { compat?: Record<string, boolean> }).compat = currentFlags();

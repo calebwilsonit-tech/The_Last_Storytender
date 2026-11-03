@@ -28,12 +28,13 @@ export default defineScript({
     const light = me.get('light');
     if (light) me.set('light', { ...light, radius: held ? Number(me.settings.lanternRadius) : 1.2, intensity: held ? 1 : 0.35 });
     v.lantern_on = held ? 1 : 0;
-    // speed: x0.72 with the lantern up, x0.55 creeping
+    // speed: x0.72 with the lantern up, x0.55 creeping, x0.55 in ink
     const pc = me.get('playerController');
     if (pc) {
       let s = Number(me.settings.speed);
       if (held) s *= 0.72;
       if (game.input.down('sneak')) s *= 0.55;
+      s *= Number(v.puddle_slow ?? 1); // a Run-on's ink trail (0.55)
       if (pc.speed !== s) me.set('playerController', { ...pc, speed: s });
     }
     // the quill: the pencil stub hits for 0.55 of the quill's 2 until Garrick hands it over
