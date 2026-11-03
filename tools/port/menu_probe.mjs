@@ -41,8 +41,8 @@ await page.evaluate(() => { const v = window.__play.sim.runtime.vars; v['item:in
 await press('KeyP'); await shot('3_pause.png'); console.log('pause', await stack());
 await press('KeyP'); await page.waitForTimeout(300);
 await press('Tab'); await page.mouse.move(800, 400); await shot('4_binder.png'); console.log('binder', await stack());
-await press('KeyP'); await page.waitForTimeout(300); console.log('after P', await stack());
+await press('Tab'); await page.waitForTimeout(300); console.log('after Tab', await stack());
 await press('KeyM'); await shot('5_map.png'); console.log('map', await stack());
-await press('KeyP'); await page.waitForTimeout(300); console.log('closed', await stack());
+await press('KeyM'); await page.waitForTimeout(300); console.log('after M', await stack());
 console.log('errors', errors.slice(0, 8));
 await app.close();

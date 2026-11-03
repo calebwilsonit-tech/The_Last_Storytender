@@ -306,7 +306,7 @@ function binder(itemIds: string[]): Screen {
     ...rings,
     ...left,
     ...right,
-    legend('binder.legend', [['W A S D', 'Move'], ['E', 'Use'], ['A / D', 'Quick slot'], ['Esc', 'Close']]),
+    legend('binder.legend', [['W A S D', 'Move'], ['E', 'Use'], ['A / D', 'Quick slot'], ['Tab', 'Close']]),
   ];
   return screen('Binder', stage('binder', kids), { id: 'storytender-binder', role: 'inventory', dim: 0.62 });
 }
@@ -372,8 +372,8 @@ function map(paperTile: number): Screen {
     ...chapters,
     w('map', 'map.world', { name: 'World', ...at(470, 130, 760, 470), map: spec, style: { fill: '#00000000', border: '#00000000' } }),
     text('map.none', 'Light a lantern post out in the world, and you can travel to it from here.', 470, 610, 22, C.ink, { w: 760, visible: '!{wm.marker}', style: { opacity: 0.8 } }),
-    text('map.foot', 'E   Travel (far posts only)          Esc   Close', 70, 640, 20, C.ink, { w: 700, style: { opacity: 0.8 } }),
-    legend('map.legend', [['W A S D', 'Move'], ['E', 'Travel'], ['Esc', 'Close']]),
+    text('map.foot', 'E   Travel (far posts only)          M   Close', 70, 640, 20, C.ink, { w: 700, style: { opacity: 0.8 } }),
+    legend('map.legend', [['W A S D', 'Move'], ['E', 'Travel'], ['M', 'Close']]),
   ];
   return screen('Map', stage('map', kids), { id: 'storytender-map', role: 'travel', dim: 0.78 });
 }

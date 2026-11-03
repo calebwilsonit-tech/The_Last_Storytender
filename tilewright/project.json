@@ -1182,6 +1182,7 @@
     "timedGravity": true,
     "uiScroll": true,
     "uiControls": true,
+    "menuButtonsClose": true,
     "pauseAction": true
   }
 }

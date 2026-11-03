@@ -5832,7 +5832,7 @@
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
-                    "text": "Esc",
+                    "text": "Tab",
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
@@ -6433,7 +6433,7 @@
                 "h": 27,
                 "wMode": "fixed",
                 "hMode": "fixed",
-                "text": "E   Travel (far posts only)          Esc   Close",
+                "text": "E   Travel (far posts only)          M   Close",
                 "style": {
                   "fontSize": 20,
                   "color": "#1b1722",
@@ -6512,7 +6512,7 @@
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
-                    "text": "Esc",
+                    "text": "M",
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
