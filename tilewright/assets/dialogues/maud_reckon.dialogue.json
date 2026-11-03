@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "name": "maud_reckon",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Six guests, six chairs. And from the dark behind the last chair, something rises to its feet: tall, hunched, glittering, with one great shoulder turned toward the table.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "The Empty Table",
+      "text": "...You came. All of you came. Then why does it feel like I'm being turned away?",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]It is the thing she was afraid of all along: the cold shoulder. It will always show you its side. But anything that turns away has a back, and the guests are warm, and so are you.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "set",
+      "variable": "cold_spawn",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}

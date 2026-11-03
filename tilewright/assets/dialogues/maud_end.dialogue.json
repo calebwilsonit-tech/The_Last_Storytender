@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "name": "maud_end",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "The Empty Table",
+      "text": "...It was set for six. It was always set for six.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The shapes at the table are not guests anyone could name. They are the outlines of people who were loud, and hungry, and late. They are warm now.[/i]",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "The Empty Table",
+      "text": "I thought if no one came, it meant no one had ever needed me.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You hold the lantern up to the long table. It is only a table. A table is just a place where people are invited.[/i]",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "The Empty Table",
+      "text": "...Is the bread still good?",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "set",
+      "variable": "maud_finale",
+      "op": "set",
+      "value": 1,
+      "next": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "set",
+      "variable": "cold_down",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}

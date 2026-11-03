@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "name": "maud_sit",
+  "start": "n14",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "I stopped baking the day the last chair stayed empty.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "Funny thing. I never lost the recipe. I lost the reason.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]She puts her hands into the flour. It is warm. It has been warm the whole time.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "Flour, water, salt, patience... and someone to feed.",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]She looks across the table at you.[/i]",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "Maud",
+      "text": "Sit. You look like you could use a loaf.",
+      "next": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "set",
+      "variable": "maud_memory_done",
+      "op": "set",
+      "value": 1,
+      "next": "n8"
+    },
+    {
+      "id": "n8",
+      "type": "set",
+      "variable": "mnemosynth",
+      "op": "add",
+      "value": 40,
+      "next": "n9"
+    },
+    {
+      "id": "n9",
+      "type": "line",
+      "speaker": "",
+      "text": "Received: 40 Mnemosynth",
+      "next": "n10"
+    },
+    {
+      "id": "n10",
+      "type": "set",
+      "variable": "leave_maud",
+      "op": "set",
+      "value": 1
+    },
+    {
+      "id": "n11",
+      "type": "end"
+    },
+    {
+      "id": "n12",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Maud is watching the door. Not yet.[/i]"
+    },
+    {
+      "id": "n13",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "maud_finale",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n1",
+      "else": "n12"
+    },
+    {
+      "id": "n14",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "maud_memory_done",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n11",
+      "else": "n13"
+    }
+  ]
+}

@@ -81,6 +81,15 @@ export default defineScript({
       if (hs) s.hp = hs.hp;
       return;
     }
+    // another Error raised the alarm nearby
+    if (me.hasTag('alarmed')) {
+      me.tags.delete('alarmed');
+      if (s.mode === 'idle' || s.mode === 'return' || s.mode === 'search') {
+        s.alert = 1;
+        s.mode = 'chase';
+        s.lost = 0;
+      }
+    }
     const out = !me.settings.unlock || !!v[String(me.settings.unlock)];
     if (me.visible !== out) me.visible = out;
     const touch = me.get('damageOnTouch');
@@ -390,11 +399,7 @@ function enterChase(me: ScriptEntity, game: ScriptGame): void {
 function alarm(me: ScriptEntity, game: ScriptGame): void {
   for (const o of game.findAll('tag:error')) {
     if (o.id === me.id || o.hasTag('friendly') || !o.visible) continue;
-    if (me.distanceTo(o) < 170 / K && (o.state.mode === 'idle' || o.state.mode === 'return' || o.state.mode === 'search')) {
-      o.state.alert = 1;
-      o.state.mode = 'chase';
-      o.state.lost = 0;
-    }
+    if (me.distanceTo(o) < 170 / K) o.tags.add('alarmed'); // it joins the chase (another object's state cannot be reached)
   }
 }
 

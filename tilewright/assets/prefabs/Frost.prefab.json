@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "name": "Frost",
+  "root": {
+    "name": "Frost",
+    "tags": [
+      "frost"
+    ],
+    "components": {
+      "sprite": {
+        "shape": "box",
+        "color": 13166330,
+        "w": 1,
+        "d": 1,
+        "height": 0.02,
+        "sortOffset": -1,
+        "visible": true,
+        "asset": "fx_frost"
+      },
+      "lifetime": {
+        "seconds": 0.4
+      }
+    },
+    "children": []
+  }
+}

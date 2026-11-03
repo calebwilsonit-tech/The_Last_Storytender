@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "name": "maud_table",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A long table, set for six, with six empty chairs. The room is cold in the way a kitchen is cold when it has stopped being used.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "The Empty Table",
+      "text": "Set for six.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "The Empty Table",
+      "text": "Nobody is coming.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Shapes stand in the dark at the edges of the room, the outlines of people who sat here once. Warmth is an invitation. Hold your lantern up to them and they will come.[/i]",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Every so often the cold will sweep across the floor and clear it. Anything heavy will shelter whatever stands behind it.[/i]",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "set",
+      "variable": "table_awake",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}

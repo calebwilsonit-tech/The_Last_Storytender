@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "name": "ColdShoulder",
+  "root": {
+    "name": "The Cold Shoulder",
+    "tags": [
+      "boss",
+      "coldshoulder",
+      "enemy"
+    ],
+    "components": {
+      "sprite": {
+        "shape": "box",
+        "color": 12577008,
+        "w": 1,
+        "d": 1,
+        "height": 3,
+        "sortOffset": 0,
+        "visible": true,
+        "asset": "boss_cold_shoulder"
+      },
+      "health": {
+        "max": 170,
+        "invulnerableSeconds": 0.25,
+        "onDeath": "stay",
+        "fallDamage": 0,
+        "team": "enemy",
+        "showBar": false
+      },
+      "body": {
+        "vx": 0,
+        "vy": 0,
+        "vz": 0,
+        "radius": 0.6,
+        "height": 2.5,
+        "state": "ground",
+        "stepUp": 0.35,
+        "stepDown": 0.4,
+        "ledge": "stop",
+        "pits": "stop",
+        "wade": false,
+        "gravity": 1,
+        "peakZ": 0,
+        "layer": 4,
+        "mask": 65535,
+        "noclip": false,
+        "blockedBy": [],
+        "blockedTerrain": false
+      },
+      "script_ColdShoulder": {}
+    },
+    "children": []
+  }
+}

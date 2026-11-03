@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.join(REPO, 'tools', 'art'))
 from pieces import pieces  # noqa: E402
 
 # solid height in the game (px), as the pictures they replace
-HEIGHT = {'chest': 40, 'post': 72, 'forge': 120, 'oven': 104, 'echo': 30, 'first': 30, 'sign': 62}
+HEIGHT = {'chest': 40, 'post': 72, 'forge': 120, 'oven': 104, 'echo': 30, 'first': 30, 'sign': 62, 'guest': 58}
 
 
 def solid_box(im, level=200):

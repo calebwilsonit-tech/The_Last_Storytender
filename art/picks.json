@@ -38,6 +38,10 @@
     "echo_plate_dim": "echo_plate_dim_s2:0",
     "echo_plate_lit": "echo_plate_dim_s2:1",
     "first_sword": "first_sword_s3:0",
-    "sign_wide": "sign_wide_s0:2"
+    "sign_wide": "sign_wide_s0:2",
+    "guest": "guest_s2:1"
+  },
+  "bosses": {
+    "cold_shoulder": "cold_shoulder_standing_s1:0"
   }
 }

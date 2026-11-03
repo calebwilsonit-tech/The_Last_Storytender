@@ -9,6 +9,7 @@
 import { buildScreens } from './screens';
 import { decorateForge, forgeExtras, forgeRows, writeForgePrefabs, writeForgeTalk } from './forge';
 import { decoratePip, pipExtras, pipGapCells, pipMap, writePipTalk, type PipMap } from './pip';
+import { decorateMaud, maudExtras, maudGaps, maudMap, writeMaudTalk, type MaudMap } from './maud';
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { TileMap, FLAG, SLOPE, tileMapToRows, currentFlags, stringifySprite, decodePng, pauseButtonRow, makeAnimator, locomotionController, encodePng, CURRENT_SCHEMA_VERSION, type EntityData, type SceneData, type ProjectData } from '@tilewright/runtime';
@@ -215,10 +216,11 @@ function buildMap(scene: string, snap: Snap): TileMap {
   // (the map is a little bigger than the land, so the paper shows all round it)
   const map = new TileMap(w + 4, h + 4);
   // in Pip's memory the gaps a sentence can fill are floor under a cover (PitCover), not pits
-  const gaps = scene === 'pip' ? pipGapCells((pipMapCache ??= pipMap(join(HERE, '..', '..')))) : new Set<string>();
+  const gaps = scene === 'pip' ? pipGapCells((pipMapCache ??= pipMap(join(HERE, '..', '..')))) : scene === 'maud' ? new Set(maudGaps((maudMapCache ??= maudMap(join(HERE, '..', '..')))).keys()) : new Set<string>();
   for (const [x, y] of keys) {
     const gap = gaps.has(`${x},${y}`);
-    const kind = gap && kinds.has(`${scene}|p`) ? 'p' : snap.floor.cells[`${x},${y}`]!;
+    const floorKind = scene === 'maud' ? 'w' : 'p';
+    const kind = gap && kinds.has(`${scene}|${floorKind}`) ? floorKind : snap.floor.cells[`${x},${y}`]!;
     const k = kinds.get(`${scene}|${kind}`)!;
     const vs = k.variants[(x + y) % 2]!;
     const tile = k.grid ? k.grid.ids[(y % k.grid.period) * k.grid.period + (x % k.grid.period)]! : vs[hash(x, y) % vs.length]!;
@@ -371,6 +373,32 @@ function dressObject(e: EntityData, kind: number, cell: [number, number], sceneF
 
 let forgeRowsCache: string[] | undefined;
 let pipMapCache: PipMap | undefined;
+let maudMapCache: MaudMap | undefined;
+let figureArt = '';
+
+/** What Maud's memory spawns: the guests, the frost of a cold wave, and the Cold Shoulder. */
+function writeMaudPrefabs(): void {
+  const write = (name: string, root: object): void => writeFileSync(join(OUT, `assets/prefabs/${name}.prefab.json`), JSON.stringify({ schemaVersion: CURRENT_SCHEMA_VERSION, name, root }, null, 2) + '\n');
+  const feet = OBJECTS && existsSync(join(OBJECTS, 'objects.json')) ? (JSON.parse(readFileSync(join(OBJECTS, 'objects.json'), 'utf8')) as Record<string, [number, number]>) : {};
+  const seated = feet.guest ? spriteFor(join(OBJECTS, 'guest.png'), 'obj_guest', feet.guest) : '';
+  const body = { vx: 0, vy: 0, vz: 0, radius: 0.25, height: 1, state: 'ground', stepUp: 0.35, stepDown: 0.4, ledge: 'stop', pits: 'stop', wade: false, gravity: 1, peakZ: 0, layer: 4, mask: 65535, noclip: false, blockedBy: [], blockedTerrain: false };
+  write('Guest', { name: 'Guest', tags: ['guest'], components: { sprite: { shape: 'box', color: 0x9fe0ff, w: 0.4, d: 0.4, height: 1.2, sortOffset: 0, visible: true, ...(figureArt ? { asset: figureArt } : {}) }, body, script_Guest: { area: '', lookSeated: seated, lookStanding: figureArt } }, children: [] });
+  const frost = flatArt('frost', [200, 230, 250], 64, 32, true, 200, [150, 200, 230]);
+  write('Frost', { name: 'Frost', tags: ['frost'], components: { sprite: { shape: 'box', color: 0xc8e6fa, w: 1, d: 1, height: 0.02, sortOffset: -1, visible: true, asset: frost }, lifetime: { seconds: 0.4 } }, children: [] });
+  const ef = ERRORS && existsSync(join(ERRORS, 'errors.json')) ? (JSON.parse(readFileSync(join(ERRORS, 'errors.json'), 'utf8')) as Record<string, [number, number]>) : {};
+  const cold = ef.cold_shoulder ? spriteFor(join(ERRORS, 'cold_shoulder.png'), 'boss_cold_shoulder', ef.cold_shoulder) : '';
+  write('ColdShoulder', {
+    name: 'The Cold Shoulder',
+    tags: ['boss', 'coldshoulder', 'enemy'],
+    components: {
+      sprite: { shape: 'box', color: 0xbfe8f0, w: 1, d: 1, height: 3, sortOffset: 0, visible: true, ...(cold ? { asset: cold } : {}) },
+      health: { max: 170, invulnerableSeconds: 0.25, onDeath: 'stay', fallDamage: 0, team: 'enemy', showBar: false },
+      body: { ...body, radius: 0.6, height: 2.5 },
+      script_ColdShoulder: {},
+    },
+    children: [],
+  });
+}
 
 /** What the Spoiler spawns: a read sentence's patch of floor (Hazard), its paper cuts, and the Mites its wolves become. */
 function writePipPrefabs(): void {
@@ -511,6 +539,13 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
       const gy = Math.round(n.grid[1]);
       decoratePip(e, n.class, Number(n.props.kind ?? -1), m.rows[gy]?.[gx] ?? '', [gx, gy], world, n.props);
     }
+    if (scene === 'maud' && world) {
+      const m = (maudMapCache ??= maudMap(join(HERE, '..', '..')));
+      const gx = Math.round(n.grid[0]);
+      const gy = Math.round(n.grid[1]);
+      decorateMaud(e, n.class, Number(n.props.kind ?? -1), m.rows[gy]?.[gx] ?? '', [gx, gy], n.props, m, world);
+    }
+    if (scene === 'forge' && n.class === 'Prop' && Number(n.props.kind) === 9 && !figureArt) figureArt = String((e.components.sprite as { asset?: string }).asset ?? '');
     if (n.class === 'EchoPlate' && e.components.script_Plate && OBJECTS && existsSync(join(OBJECTS, 'echo_plate_dim.png'))) {
       const feet = JSON.parse(readFileSync(join(OBJECTS, 'objects.json'), 'utf8')) as Record<string, [number, number]>;
       const off = spriteFor(join(OBJECTS, 'echo_plate_dim.png'), 'obj_echo_plate_dim', feet.echo_plate_dim);
@@ -546,6 +581,10 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
   }
   if (scene === 'overworld') entities.push(...prologueErrors(levelOf, () => `e${i++}`));
   if (scene === 'forge' && forgeAnvil) entities.push(...forgeExtras(forgeAnvil, forgeSwordArt(), () => `e${i++}`));
+  if (scene === 'maud' && maudMapCache) {
+    entities.push(...maudExtras(maudMapCache, levelOf, flatArt('hole', [22, 18, 30], 64, 32, true, 255, [10, 8, 14]), flatArt('plank', [150, 104, 60], 64, 32, true, 255, [70, 44, 24]), () => `e${i++}`));
+    writeMaudPrefabs();
+  }
   if (scene === 'pip' && pipMapCache) {
     const looks = { hole: flatArt('hole', [22, 18, 30], 64, 32, true, 255, [10, 8, 14]), plank: flatArt('plank', [150, 104, 60], 64, 32, true, 255, [70, 44, 24]), ice: flatArt('ice', [190, 228, 240], 64, 32, true, 235, [110, 160, 190]) };
     entities.push(...pipExtras(pipMapCache, levelOf, looks, () => `e${i++}`));
@@ -676,6 +715,7 @@ function main(): void {
     writeOverworldTalk(world);
     writeForgeTalk(world);
     writePipTalk(world);
+    writeMaudTalk(world);
   }
   writeForgePrefabs(OUT, CURRENT_SCHEMA_VERSION, flatArt('pool', [138, 20, 20], 192, 96), flatArt('bolt', [70, 12, 16], 18, 18));
   writePipPrefabs();

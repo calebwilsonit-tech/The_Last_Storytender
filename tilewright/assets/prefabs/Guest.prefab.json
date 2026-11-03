@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "name": "Guest",
+  "root": {
+    "name": "Guest",
+    "tags": [
+      "guest"
+    ],
+    "components": {
+      "sprite": {
+        "shape": "box",
+        "color": 10477823,
+        "w": 0.4,
+        "d": 0.4,
+        "height": 1.2,
+        "sortOffset": 0,
+        "visible": true,
+        "asset": "a_forge_276e780dd2_0"
+      },
+      "body": {
+        "vx": 0,
+        "vy": 0,
+        "vz": 0,
+        "radius": 0.25,
+        "height": 1,
+        "state": "ground",
+        "stepUp": 0.35,
+        "stepDown": 0.4,
+        "ledge": "stop",
+        "pits": "stop",
+        "wade": false,
+        "gravity": 1,
+        "peakZ": 0,
+        "layer": 4,
+        "mask": 65535,
+        "noclip": false,
+        "blockedBy": [],
+        "blockedTerrain": false
+      },
+      "script_Guest": {
+        "area": "",
+        "lookSeated": "obj_guest",
+        "lookStanding": "a_forge_276e780dd2_0"
+      }
+    },
+    "children": []
+  }
+}

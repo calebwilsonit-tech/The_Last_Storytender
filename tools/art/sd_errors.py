@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.join(REPO, 'tools', 'art'))
 from pieces import pieces  # noqa: E402
 
 # how tall each stands in the game (px of solid figure; the Storytender is 63)
-HEIGHT = {'bare': 56, 'mite': 26, 'runon': 30, 'dangler': 50, 'censor': 60, 'ellipsis': 40}
+HEIGHT = {'bare': 56, 'mite': 26, 'runon': 30, 'dangler': 50, 'censor': 60, 'ellipsis': 40, 'cold': 120}
 
 
 def solid_box(im, level=200):
@@ -20,10 +20,13 @@ def solid_box(im, level=200):
 
 
 def piece(pick):
+    group = 'errors'
+    if pick.startswith('B'):
+        group, pick = 'bosses', pick[1:]
     name, k = pick.split(':')
     kind = name.split('_')[0]
     with tempfile.TemporaryDirectory() as tmp:
-        files = pieces(os.path.join(REPO, 'art', 'generated', 'errors', name + '.png'), tmp, int(k) + 1)
+        files = pieces(os.path.join(REPO, 'art', 'generated', group, name + '.png'), tmp, int(k) + 1)
         return Image.open(files[int(k)]).convert('RGBA').copy(), kind
 
 
@@ -46,7 +49,10 @@ def redaction_bar(im):
 
 
 def main():
-    picks = {k: v for k, v in json.load(open(os.path.join(REPO, 'art', 'picks.json'))).get('errors', {}).items() if not k.startswith('_')}
+    allp = json.load(open(os.path.join(REPO, 'art', 'picks.json')))
+    picks = {k: v for k, v in allp.get('errors', {}).items() if not k.startswith('_')}
+    # bosses that live in no snapshot (made mid-fight), from the boss pictures
+    picks.update({k: 'B' + v for k, v in allp.get('bosses', {}).items()})
     out_dir = os.path.join(WORK, 'errors')
     os.makedirs(out_dir, exist_ok=True)
     feet = {}

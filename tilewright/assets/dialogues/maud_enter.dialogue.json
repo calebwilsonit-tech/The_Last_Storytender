@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "name": "maud_enter",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The Quill hums. It has learned a new edge: it can format.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Press [1], [2] or [3] to choose Underline, Bold or Italic, then strike a word. Words in this kitchen have weight.[/i]",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Press [1] [2] [3] to choose underline, bold or italic, then strike a word with the quill.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Flour on every surface. The smell of bread that is not baking.[/i]",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "set",
+      "variable": "format_mark",
+      "op": "set",
+      "value": 1,
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "set",
+      "variable": "maud_entered",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}
