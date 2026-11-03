@@ -27,9 +27,9 @@ python3 "$REPO/tools/port/cut_sheet.py" "$REPO/art/incoming/storytender_sheet.jp
 python3 "$REPO/tools/port/apply_art.py" "$WORK"
 # the Storytender from the generated art (art/picks.json), when it has been chosen
 if [ -f "$REPO/art/picks.json" ]; then python3 -I "$REPO/tools/art/sd_hero.py" "$REPO" "$WORK"; python3 -I "$REPO/tools/art/sd_people.py" "$REPO" "$WORK"; python3 -I "$REPO/tools/art/sd_errors.py" "$REPO" "$WORK"; python3 -I "$REPO/tools/art/sd_objects.py" "$REPO" "$WORK"; fi
-# the floor from the tile sheet (art/incoming/tiles_sheet.jpg)
+# the floor from the tile sheet (art/incoming/tiles_sheet.jpg) and from the Ludo.ai floors (art/incoming2/tiles; NO_LUDO=1 ignores them)
 TILES_DIR="$WORK/tiles_q"
-if [ -f "$REPO/art/incoming/tiles_sheet.jpg" ]; then python3 -I "$REPO/tools/art/sheet_tiles.py" "$REPO" "$WORK" && TILES_DIR="$WORK/tiles_sheet"; fi
+if [ -f "$REPO/art/incoming/tiles_sheet.jpg" ] || { [ -z "${NO_LUDO:-}" ] && [ -d "$REPO/art/incoming2/tiles" ]; }; then python3 -I "$REPO/tools/art/sheet_tiles.py" "$REPO" "$WORK" && TILES_DIR="$WORK/tiles_sheet"; fi
 python3 "$REPO/tools/port/quantize.py" "$WORK/art_q" "$WORK/art_q"
 python3 "$REPO/tools/port/quantize.py" "$WORK/icons" "$WORK/icons"
 NODE_PATH="$TILEWRIGHT/node_modules" "$TILEWRIGHT/node_modules/.bin/esbuild" "$REPO/tools/port/porter.ts" --bundle --platform=node --format=esm --outfile="$WORK/porter.mjs" \

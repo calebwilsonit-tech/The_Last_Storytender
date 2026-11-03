@@ -8193,7 +8193,7 @@
                       "kind": "terrain",
                       "settings": {
                         "colourBy": "tile",
-                        "palette": "183:#00000000",
+                        "palette": "295:#00000000",
                         "fallback": "#a9c78a",
                         "outline": "none",
                         "shade": true
