@@ -36,7 +36,14 @@ const press = async (k) => { await page.keyboard.down(k); await page.waitForTime
 const stack = () => page.evaluate(() => JSON.stringify(window.__play.sim.runtime.ui.stack));
 await shot('0_title.png'); console.log('title', await stack());
 await press('KeyE'); await shot('1_difficulty.png'); console.log('after E', await stack());
-await press('KeyE'); await page.waitForTimeout(800); await shot('2_game.png'); console.log('after story', await stack(), await page.evaluate(() => window.__play.sim.runtime.vars.difficulty));
+await press('KeyE'); await page.waitForTimeout(800);
+await page.evaluate(() => { const s = window.__play.sim; const v = s.runtime.vars; v['item:ink_vial'] = 3; v['item:eraser_crumbs'] = 2; v['slot:1'] = 'ink_vial'; v['slot:2'] = 'eraser_crumbs'; v.renown = 50; v.mnemosynth = 37; v.light = 15; const h = s.world.withTag('player')[0].get('state:health'); h.hp = 20; });
+await page.waitForTimeout(600); await shot('2_game.png');
+const q = () => page.evaluate(() => { const s = window.__play.sim; const v = s.runtime.vars; return `hp ${s.world.withTag('player')[0].get('state:health').hp} vials ${v['item:ink_vial']} active ${v.quick_active ?? 0} rank ${v.rank} region ${v.region_name}`; });
+console.log('hud before', await q());
+await press('KeyF'); console.log('after F', await q());
+await press('KeyG'); await page.waitForTimeout(300); await shot('2b_swapped.png'); console.log('after G', await q());
+await press('KeyG'); console.log('after story', await stack(), await page.evaluate(() => window.__play.sim.runtime.vars.difficulty));
 await page.evaluate(() => { const v = window.__play.sim.runtime.vars; v['item:ink_vial'] = 3; v['item:eraser_crumbs'] = 2; v['item:hardcover_binding'] = 1; v['item:lantern_oil'] = 1; v.mnemosynth = 20; v.has_quill = 1; });
 await press('KeyP'); await shot('3_pause.png'); console.log('pause', await stack());
 await press('KeyP'); await page.waitForTimeout(300);

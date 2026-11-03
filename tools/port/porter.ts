@@ -308,7 +308,14 @@ function loadWorld(): World | null {
 }
 
 /** The Storytender's abilities (player.gd): ink, the quill, the dash, the lantern, echoes, and the script for the rest. */
-function storytenderKit(p: EntityData): void {
+/** Where the Storytender is, for the region name in the corner: the Prologue's region map, or the name of a memory. */
+function placeSettings(scene: string): { regions: string; regionNames: string; place: string } {
+  if (scene !== 'overworld' || !DATA) return { regions: '', regionNames: '', place: SCENES[scene]!.name };
+  const c = (JSON.parse(readFileSync(join(DATA, 'prologue_map.json'), 'utf8')) as { constants: { REGION_ROWS: string[]; REGIONS: Record<string, string> } }).constants;
+  return { regions: c.REGION_ROWS.join('|'), regionNames: JSON.stringify(c.REGIONS), place: '' };
+}
+
+function storytenderKit(p: EntityData, scene: string): void {
   const c = p.components;
   Object.assign(c.playerController as object, { speed: 4.2, runMultiplier: 1, jumpSpeed: 0 });
   attach(c, 'health', { max: 100, invulnerableSeconds: 0.9, onDeath: 'respawn', fallDamage: 15, team: 'player', showBar: false });
@@ -317,7 +324,7 @@ function storytenderKit(p: EntityData): void {
   attach(c, 'dodge', { speed: 14.5, seconds: 0.2, cooldown: 0.75, invulnerable: true });
   attach(c, 'light', { radius: 1.2, intensity: 0.35, color: 'cool', shadows: true, flicker: 0.15, mode: 'always' });
   attach(c, 'echoRecorder', { seconds: 9, capacity: 0, capacityVariable: '', ending: 'hold', ghostAlpha: 0.55 });
-  attach(c, 'script_Storytender', { speed: 4.2, lanternRadius: 4.9 });
+  attach(c, 'script_Storytender', { speed: 4.2, lanternRadius: 4.9, ...placeSettings(scene) });
 }
 
 function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
@@ -344,7 +351,7 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
       } else if (a?.file) (p.components.sprite as Record<string, unknown>).asset = spriteFor(join(ART, a.file), 'storytender', a.feet);
       attachBehavior(p.components, 'followCamera');
       Object.assign(p.components.followCamera as object, { zoom: 1.5 }); // LevelBase.ZOOM
-      storytenderKit(p);
+      storytenderKit(p, scene);
       player = p;
       entities.push(p);
       continue;
@@ -503,9 +510,10 @@ function main(): void {
   }
   writeInput();
   const data = writeData();
-  // the game's own title, pause, binder and map screens
+  // the game's own HUD, title, pause, binder and map screens (the quick slots show the items that can be used)
+  const usableItems = (JSON.parse(readFileSync(join(OUT, 'assets/items.json'), 'utf8')) as { items: { id: string; use?: unknown }[] }).items.filter((it) => it.use).map((it) => it.id);
   const itemIds = readdirSync(spriteDir).filter((f) => f.startsWith('icon_')).map((f) => f.slice(5).replace('.sprite.json', ''));
-  writeFileSync(join(OUT, 'assets/screens.json'), JSON.stringify(buildScreens(itemIds, CURRENT_SCHEMA_VERSION, paperTile), null, 2) + '\n');
+  writeFileSync(join(OUT, 'assets/screens.json'), JSON.stringify(buildScreens(itemIds, CURRENT_SCHEMA_VERSION, paperTile, usableItems), null, 2) + '\n');
   console.log(`items ${data.items}, dialogues ${data.dialogues}`);
   const project = baseProject('The Last Storytender', PLUGINS);
   project.iso = { tileW: 64, tileH: 32, heightPx: LEVEL_PX };

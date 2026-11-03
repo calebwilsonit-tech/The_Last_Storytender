@@ -2,6 +2,1883 @@
   "schemaVersion": 1,
   "screens": [
     {
+      "id": "storytender-hud",
+      "name": "HUD",
+      "root": {
+        "id": "hud.root",
+        "name": "Root",
+        "type": "panel",
+        "children": [
+          {
+            "id": "hud.tl",
+            "name": "Top left",
+            "type": "panel",
+            "children": [
+              {
+                "id": "hud.bottle",
+                "name": "Ink bottle",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "hud.ink.row0",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 98,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.000"
+                  },
+                  {
+                    "id": "hud.ink.row1",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 94,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.059"
+                  },
+                  {
+                    "id": "hud.ink.row2",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 90,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.118"
+                  },
+                  {
+                    "id": "hud.ink.row3",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 86,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.176"
+                  },
+                  {
+                    "id": "hud.ink.row4",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 82,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.235"
+                  },
+                  {
+                    "id": "hud.ink.row5",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 78,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.294"
+                  },
+                  {
+                    "id": "hud.ink.row6",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 74,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.353"
+                  },
+                  {
+                    "id": "hud.ink.row7",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 70,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.412"
+                  },
+                  {
+                    "id": "hud.ink.row8",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 66,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.471"
+                  },
+                  {
+                    "id": "hud.ink.row9",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 62,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.529"
+                  },
+                  {
+                    "id": "hud.ink.row10",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 58,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.588"
+                  },
+                  {
+                    "id": "hud.ink.row11",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 54,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.647"
+                  },
+                  {
+                    "id": "hud.ink.row12",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 50,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.706"
+                  },
+                  {
+                    "id": "hud.ink.row13",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 46,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.765"
+                  },
+                  {
+                    "id": "hud.ink.row14",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 42,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.824"
+                  },
+                  {
+                    "id": "hud.ink.row15",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 38,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.882"
+                  },
+                  {
+                    "id": "hud.ink.row16",
+                    "name": "Ink",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 34,
+                    "w": 54,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.941"
+                  },
+                  {
+                    "id": "hud.glass",
+                    "name": "hud.glass",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 38,
+                    "w": 54,
+                    "h": 68,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#bfd9e640",
+                      "border": "#261a14",
+                      "borderWidth": 3
+                    }
+                  },
+                  {
+                    "id": "hud.neck",
+                    "name": "hud.neck",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 16,
+                    "w": 22,
+                    "h": 24,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#bfd9e640",
+                      "border": "#261a14",
+                      "borderWidth": 3
+                    }
+                  },
+                  {
+                    "id": "hud.cork",
+                    "name": "hud.cork",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 22,
+                    "y": 6,
+                    "w": 26,
+                    "h": 12,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#8c6133",
+                      "border": "#261a14",
+                      "borderWidth": 2
+                    }
+                  },
+                  {
+                    "id": "hud.crack1",
+                    "name": "hud.crack1",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 18,
+                    "y": 44,
+                    "w": 20,
+                    "h": 26,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "⟋",
+                    "style": {
+                      "fontSize": 22,
+                      "color": "#261a14"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} < 0.5"
+                  },
+                  {
+                    "id": "hud.crack2",
+                    "name": "hud.crack2",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 18,
+                    "y": 70,
+                    "w": 20,
+                    "h": 26,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "⟋",
+                    "style": {
+                      "fontSize": 22,
+                      "color": "#261a14"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} < 0.5"
+                  },
+                  {
+                    "id": "hud.crack3",
+                    "name": "hud.crack3",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 40,
+                    "y": 52,
+                    "w": 20,
+                    "h": 26,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "⟋",
+                    "style": {
+                      "fontSize": 22,
+                      "color": "#261a14"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} < 0.25"
+                  },
+                  {
+                    "id": "hud.crack4",
+                    "name": "hud.crack4",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 80,
+                    "w": 20,
+                    "h": 26,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "⟋",
+                    "style": {
+                      "fontSize": 22,
+                      "color": "#261a14"
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} < 0.25"
+                  },
+                  {
+                    "id": "hud.leak",
+                    "name": "hud.leak",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 37,
+                    "y": 104,
+                    "w": 6,
+                    "h": 6,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#0f0d24",
+                      "radius": 3
+                    },
+                    "visible": "{@Player.state:health.hp} / {@Player.health.max} < 0.25",
+                    "anim": [
+                      {
+                        "on": "show",
+                        "kind": "pulse",
+                        "ms": 800,
+                        "dir": "down"
+                      }
+                    ]
+                  }
+                ],
+                "anchor": "tl",
+                "x": 20,
+                "y": 14,
+                "w": 70,
+                "h": 110,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {}
+              },
+              {
+                "id": "hud.gauge",
+                "name": "Lantern gauge",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "hud.lamp.top",
+                    "name": "hud.lamp.top",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 8,
+                    "y": 4,
+                    "w": 12,
+                    "h": 3,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3a3f4a"
+                    }
+                  },
+                  {
+                    "id": "hud.lamp.glass",
+                    "name": "hud.lamp.glass",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 5,
+                    "y": 7,
+                    "w": 18,
+                    "h": 16,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#6fe3ffb0",
+                      "border": "#14111a",
+                      "borderWidth": 2
+                    },
+                    "visible": "{light} >= 20"
+                  },
+                  {
+                    "id": "hud.lamp.glass.low",
+                    "name": "hud.lamp.glass.low",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 5,
+                    "y": 7,
+                    "w": 18,
+                    "h": 16,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#ff8a6a80",
+                      "border": "#14111a",
+                      "borderWidth": 2
+                    },
+                    "visible": "{light} < 20",
+                    "anim": [
+                      {
+                        "on": "show",
+                        "kind": "pulse",
+                        "ms": 400,
+                        "dir": "up"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "hud.lamp.base",
+                    "name": "hud.lamp.base",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 3,
+                    "y": 23,
+                    "w": 22,
+                    "h": 4,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3a3f4a"
+                    }
+                  },
+                  {
+                    "id": "hud.fuel",
+                    "name": "Lantern fuel",
+                    "type": "bar",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 34,
+                    "y": 10,
+                    "w": 140,
+                    "h": 10,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "value": "light",
+                    "max": "100",
+                    "visible": "{light} >= 20",
+                    "style": {
+                      "fill": "#00000073",
+                      "color": "#6fe3ff",
+                      "border": "#14111a",
+                      "borderWidth": 2
+                    }
+                  },
+                  {
+                    "id": "hud.fuel.low",
+                    "name": "Lantern fuel",
+                    "type": "bar",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 34,
+                    "y": 10,
+                    "w": 140,
+                    "h": 10,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "value": "light",
+                    "max": "100",
+                    "visible": "{light} < 20",
+                    "style": {
+                      "fill": "#00000073",
+                      "color": "#ff8a6a",
+                      "border": "#14111a",
+                      "borderWidth": 2
+                    }
+                  }
+                ],
+                "anchor": "tl",
+                "x": 104,
+                "y": 22,
+                "w": 190,
+                "h": 30,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {}
+              },
+              {
+                "id": "hud.mnemo",
+                "name": "hud.mnemo",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 104,
+                "y": 52,
+                "w": 120,
+                "h": 35,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "◆ {mnemosynth}",
+                "style": {
+                  "fontSize": 26,
+                  "color": "#b58a37"
+                }
+              },
+              {
+                "id": "hud.rank",
+                "name": "hud.rank",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 180,
+                "y": 62,
+                "w": 260,
+                "h": 23,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "Rank {rank}   {renown} / {rank_next}",
+                "style": {
+                  "fontSize": 17,
+                  "color": "#3b2a1cd9"
+                }
+              }
+            ],
+            "anchor": "tl",
+            "x": 0,
+            "y": 0,
+            "w": 460,
+            "h": 130,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {}
+          },
+          {
+            "id": "hud.region",
+            "name": "Region",
+            "type": "text",
+            "children": [],
+            "anchor": "tr",
+            "x": 40,
+            "y": 14,
+            "w": 600,
+            "h": 40,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "text": "{region_name}",
+            "visible": "{region_show}",
+            "style": {
+              "fontSize": 30,
+              "color": "#3b2a1c",
+              "align": "right"
+            },
+            "anim": [
+              {
+                "on": "show",
+                "kind": "fade",
+                "ms": 600,
+                "dir": "down"
+              },
+              {
+                "on": "hide",
+                "kind": "fade",
+                "ms": 900,
+                "dir": "up"
+              }
+            ]
+          },
+          {
+            "id": "hud.quick",
+            "name": "Quick slots",
+            "type": "panel",
+            "children": [
+              {
+                "id": "hud.quick1",
+                "name": "Quick slot 1 active",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "hud.quick1.big.clarity_tonic",
+                    "name": "Icon clarity_tonic",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_clarity_tonic",
+                    "visible": "{slot:1} = clarity_tonic",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.ghost_pepper_ink",
+                    "name": "Icon ghost_pepper_ink",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_ghost_pepper_ink",
+                    "visible": "{slot:1} = ghost_pepper_ink",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.herbal_tea",
+                    "name": "Icon herbal_tea",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_herbal_tea",
+                    "visible": "{slot:1} = herbal_tea",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.honey_biscuit",
+                    "name": "Icon honey_biscuit",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_honey_biscuit",
+                    "visible": "{slot:1} = honey_biscuit",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.memory_jar",
+                    "name": "Icon memory_jar",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_memory_jar",
+                    "visible": "{slot:1} = memory_jar",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.phoenix_draught",
+                    "name": "Icon phoenix_draught",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_phoenix_draught",
+                    "visible": "{slot:1} = phoenix_draught",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.reader_digest",
+                    "name": "Icon reader_digest",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_reader_digest",
+                    "visible": "{slot:1} = reader_digest",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.time_in_a_bottle",
+                    "name": "Icon time_in_a_bottle",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_time_in_a_bottle",
+                    "visible": "{slot:1} = time_in_a_bottle",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.eraser_crumbs",
+                    "name": "Icon eraser_crumbs",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_eraser_crumbs",
+                    "visible": "{slot:1} = eraser_crumbs",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.ink_flask",
+                    "name": "Icon ink_flask",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_ink_flask",
+                    "visible": "{slot:1} = ink_flask",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.ink_vial",
+                    "name": "Icon ink_vial",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_ink_vial",
+                    "visible": "{slot:1} = ink_vial",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.lantern_oil",
+                    "name": "Icon lantern_oil",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_lantern_oil",
+                    "visible": "{slot:1} = lantern_oil",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.sticky_note",
+                    "name": "Icon sticky_note",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_sticky_note",
+                    "visible": "{slot:1} = sticky_note",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.big.warm_loaf",
+                    "name": "Icon warm_loaf",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_warm_loaf",
+                    "visible": "{slot:1} = warm_loaf",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick1.label",
+                    "name": "hud.quick1.label",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 38,
+                    "y": 70,
+                    "w": 120,
+                    "h": 27,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "F   ×{item:{slot:1}}",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#3b2a1c"
+                    },
+                    "visible": "{slot:1}"
+                  },
+                  {
+                    "id": "hud.quick1.small.clarity_tonic",
+                    "name": "Icon clarity_tonic",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_clarity_tonic",
+                    "visible": "{slot:2} = clarity_tonic",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.ghost_pepper_ink",
+                    "name": "Icon ghost_pepper_ink",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_ghost_pepper_ink",
+                    "visible": "{slot:2} = ghost_pepper_ink",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.herbal_tea",
+                    "name": "Icon herbal_tea",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_herbal_tea",
+                    "visible": "{slot:2} = herbal_tea",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.honey_biscuit",
+                    "name": "Icon honey_biscuit",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_honey_biscuit",
+                    "visible": "{slot:2} = honey_biscuit",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.memory_jar",
+                    "name": "Icon memory_jar",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_memory_jar",
+                    "visible": "{slot:2} = memory_jar",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.phoenix_draught",
+                    "name": "Icon phoenix_draught",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_phoenix_draught",
+                    "visible": "{slot:2} = phoenix_draught",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.reader_digest",
+                    "name": "Icon reader_digest",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_reader_digest",
+                    "visible": "{slot:2} = reader_digest",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.time_in_a_bottle",
+                    "name": "Icon time_in_a_bottle",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_time_in_a_bottle",
+                    "visible": "{slot:2} = time_in_a_bottle",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.eraser_crumbs",
+                    "name": "Icon eraser_crumbs",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_eraser_crumbs",
+                    "visible": "{slot:2} = eraser_crumbs",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.ink_flask",
+                    "name": "Icon ink_flask",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_ink_flask",
+                    "visible": "{slot:2} = ink_flask",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.ink_vial",
+                    "name": "Icon ink_vial",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_ink_vial",
+                    "visible": "{slot:2} = ink_vial",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.lantern_oil",
+                    "name": "Icon lantern_oil",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_lantern_oil",
+                    "visible": "{slot:2} = lantern_oil",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.sticky_note",
+                    "name": "Icon sticky_note",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_sticky_note",
+                    "visible": "{slot:2} = sticky_note",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.small.warm_loaf",
+                    "name": "Icon warm_loaf",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_warm_loaf",
+                    "visible": "{slot:2} = warm_loaf",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick1.count2",
+                    "name": "hud.quick1.count2",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 6,
+                    "y": 82,
+                    "w": 60,
+                    "h": 22,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "×{item:{slot:2}}",
+                    "style": {
+                      "fontSize": 16,
+                      "color": "#3b2a1c"
+                    },
+                    "visible": "{slot:2}"
+                  },
+                  {
+                    "id": "hud.quick1.hint",
+                    "name": "hud.quick1.hint",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 0,
+                    "w": 100,
+                    "h": 22,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "G  swap",
+                    "style": {
+                      "fontSize": 16,
+                      "color": "#3b2a1c"
+                    },
+                    "visible": "{slot:2}"
+                  }
+                ],
+                "anchor": "tl",
+                "x": 0,
+                "y": 0,
+                "w": 180,
+                "h": 110,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {},
+                "visible": "!{quick_active}"
+              },
+              {
+                "id": "hud.quick2",
+                "name": "Quick slot 2 active",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "hud.quick2.big.clarity_tonic",
+                    "name": "Icon clarity_tonic",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_clarity_tonic",
+                    "visible": "{slot:2} = clarity_tonic",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.ghost_pepper_ink",
+                    "name": "Icon ghost_pepper_ink",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_ghost_pepper_ink",
+                    "visible": "{slot:2} = ghost_pepper_ink",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.herbal_tea",
+                    "name": "Icon herbal_tea",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_herbal_tea",
+                    "visible": "{slot:2} = herbal_tea",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.honey_biscuit",
+                    "name": "Icon honey_biscuit",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_honey_biscuit",
+                    "visible": "{slot:2} = honey_biscuit",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.memory_jar",
+                    "name": "Icon memory_jar",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_memory_jar",
+                    "visible": "{slot:2} = memory_jar",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.phoenix_draught",
+                    "name": "Icon phoenix_draught",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_phoenix_draught",
+                    "visible": "{slot:2} = phoenix_draught",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.reader_digest",
+                    "name": "Icon reader_digest",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_reader_digest",
+                    "visible": "{slot:2} = reader_digest",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.time_in_a_bottle",
+                    "name": "Icon time_in_a_bottle",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_time_in_a_bottle",
+                    "visible": "{slot:2} = time_in_a_bottle",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.eraser_crumbs",
+                    "name": "Icon eraser_crumbs",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_eraser_crumbs",
+                    "visible": "{slot:2} = eraser_crumbs",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.ink_flask",
+                    "name": "Icon ink_flask",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_ink_flask",
+                    "visible": "{slot:2} = ink_flask",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.ink_vial",
+                    "name": "Icon ink_vial",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_ink_vial",
+                    "visible": "{slot:2} = ink_vial",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.lantern_oil",
+                    "name": "Icon lantern_oil",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_lantern_oil",
+                    "visible": "{slot:2} = lantern_oil",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.sticky_note",
+                    "name": "Icon sticky_note",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_sticky_note",
+                    "visible": "{slot:2} = sticky_note",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.big.warm_loaf",
+                    "name": "Icon warm_loaf",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 68,
+                    "y": 20,
+                    "w": 64,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_warm_loaf",
+                    "visible": "{slot:2} = warm_loaf",
+                    "style": {}
+                  },
+                  {
+                    "id": "hud.quick2.label",
+                    "name": "hud.quick2.label",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 38,
+                    "y": 70,
+                    "w": 120,
+                    "h": 27,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "F   ×{item:{slot:2}}",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#3b2a1c"
+                    },
+                    "visible": "{slot:2}"
+                  },
+                  {
+                    "id": "hud.quick2.small.clarity_tonic",
+                    "name": "Icon clarity_tonic",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_clarity_tonic",
+                    "visible": "{slot:1} = clarity_tonic",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.ghost_pepper_ink",
+                    "name": "Icon ghost_pepper_ink",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_ghost_pepper_ink",
+                    "visible": "{slot:1} = ghost_pepper_ink",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.herbal_tea",
+                    "name": "Icon herbal_tea",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_herbal_tea",
+                    "visible": "{slot:1} = herbal_tea",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.honey_biscuit",
+                    "name": "Icon honey_biscuit",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_honey_biscuit",
+                    "visible": "{slot:1} = honey_biscuit",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.memory_jar",
+                    "name": "Icon memory_jar",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_memory_jar",
+                    "visible": "{slot:1} = memory_jar",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.phoenix_draught",
+                    "name": "Icon phoenix_draught",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_phoenix_draught",
+                    "visible": "{slot:1} = phoenix_draught",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.reader_digest",
+                    "name": "Icon reader_digest",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_reader_digest",
+                    "visible": "{slot:1} = reader_digest",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.time_in_a_bottle",
+                    "name": "Icon time_in_a_bottle",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_time_in_a_bottle",
+                    "visible": "{slot:1} = time_in_a_bottle",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.eraser_crumbs",
+                    "name": "Icon eraser_crumbs",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_eraser_crumbs",
+                    "visible": "{slot:1} = eraser_crumbs",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.ink_flask",
+                    "name": "Icon ink_flask",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_ink_flask",
+                    "visible": "{slot:1} = ink_flask",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.ink_vial",
+                    "name": "Icon ink_vial",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_ink_vial",
+                    "visible": "{slot:1} = ink_vial",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.lantern_oil",
+                    "name": "Icon lantern_oil",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_lantern_oil",
+                    "visible": "{slot:1} = lantern_oil",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.sticky_note",
+                    "name": "Icon sticky_note",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_sticky_note",
+                    "visible": "{slot:1} = sticky_note",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.small.warm_loaf",
+                    "name": "Icon warm_loaf",
+                    "type": "image",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 36,
+                    "w": 52,
+                    "h": 52,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "sprite": "icon_warm_loaf",
+                    "visible": "{slot:1} = warm_loaf",
+                    "style": {
+                      "opacity": 0.6
+                    }
+                  },
+                  {
+                    "id": "hud.quick2.count2",
+                    "name": "hud.quick2.count2",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 6,
+                    "y": 82,
+                    "w": 60,
+                    "h": 22,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "×{item:{slot:1}}",
+                    "style": {
+                      "fontSize": 16,
+                      "color": "#3b2a1c"
+                    },
+                    "visible": "{slot:1}"
+                  },
+                  {
+                    "id": "hud.quick2.hint",
+                    "name": "hud.quick2.hint",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 0,
+                    "w": 100,
+                    "h": 22,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "G  swap",
+                    "style": {
+                      "fontSize": 16,
+                      "color": "#3b2a1c"
+                    },
+                    "visible": "{slot:1}"
+                  }
+                ],
+                "anchor": "tl",
+                "x": 0,
+                "y": 0,
+                "w": 180,
+                "h": 110,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {},
+                "visible": "{quick_active} = 1"
+              }
+            ],
+            "anchor": "br",
+            "x": 0,
+            "y": 0,
+            "w": 180,
+            "h": 110,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {}
+          }
+        ],
+        "anchor": "fill",
+        "layout": "free",
+        "padding": 0,
+        "style": {}
+      },
+      "modal": false,
+      "back": "pass",
+      "dim": 0,
+      "role": "hud",
+      "opensOnStart": true
+    },
+    {
       "id": "storytender-title",
       "name": "Title",
       "root": {

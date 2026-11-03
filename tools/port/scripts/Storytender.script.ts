@@ -7,6 +7,9 @@ export default defineScript({
   settings: {
     speed: { value: 4.2, label: 'Walking speed (cells per second)' },
     lanternRadius: { value: 4.9, label: 'Lantern reach (cells)' },
+    regions: { value: '', label: 'Region map: one letter per cell, rows split by |' },
+    regionNames: { value: '', label: 'Region names (JSON: letter -> name)' },
+    place: { value: '', label: 'Name of this place (when there is no region map)' },
   },
   start(me, game) {
     if (game.vars.light === undefined) game.vars.light = 100;
@@ -16,6 +19,33 @@ export default defineScript({
   },
   update(me, game) {
     const v = game.vars;
+    // rank, from renown (game_state.gd RANK_STEPS)
+    const steps = [0, 40, 100, 180, 280, 400, 560, 760, 1000, 1300, 1650];
+    const renown = Number(v.renown ?? 0);
+    const rank = steps.filter((x) => renown >= x).length;
+    if (v.rank !== rank) {
+      v.rank = rank;
+      v.rank_next = steps[Math.min(rank, steps.length - 1)]!;
+    }
+    // the name of the region, shown in the corner for a few seconds when it changes (hud.gd set_region)
+    if (me.state.rows === undefined) {
+      me.state.rows = String(me.settings.regions || '').split('|');
+      try { me.state.names = me.settings.regionNames ? JSON.parse(String(me.settings.regionNames)) : {}; } catch { me.state.names = {}; }
+      me.state.regionT = 0;
+    }
+    const letter = me.state.rows[Math.floor(me.y)]?.[Math.floor(me.x)] ?? '';
+    const region = me.state.names[letter] ?? String(me.settings.place || '');
+    if (region && region !== v.region_name) {
+      v.region_name = region;
+      v.region_show = 1;
+      me.state.regionT = 3.5;
+    } else if (me.state.regionT > 0 && (me.state.regionT -= game.dt) <= 0) v.region_show = 0;
+    // two quick slots (slot:1 and slot:2): F uses the active one, G swaps which is active
+    if (game.input.pressed('quick_switch')) v.quick_active = v.quick_active ? 0 : 1;
+    if (game.input.pressed('use_item')) {
+      const item = String(v[`slot:${v.quick_active ? 2 : 1}`] ?? '');
+      if (item) game.do('useItem', { item });
+    }
     const held = game.input.down('lantern') && Number(v.light) > 0;
     // lantern fuel: drains 24 a second while shining, comes back 14 a second after 0.9 s off (player.gd)
     if (held) {

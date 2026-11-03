@@ -378,12 +378,90 @@ function map(paperTile: number): Screen {
   return screen('Map', stage('map', kids), { id: 'storytender-map', role: 'travel', dim: 0.78 });
 }
 
+// ---------------------------------------------------------------- the heads-up display (hud.gd, ink_bottle.gd, lantern_gauge.gd)
+
+const HP = '{@Player.state:health.hp}';
+const HP_MAX = '{@Player.health.max}';
+
+/** The ink bottle: the ink level drops as health drains; the glass cracks below 50% and leaks below 25%. */
+function inkBottle(): W {
+  const outline = '#261a14';
+  const glass = '#bfd9e640';
+  const ink = '#0f0d24';
+  const slices = 17; // the ink is drawn as 17 rows of 4 px, each shown while health is above its share
+  const rows = Array.from({ length: slices }, (_, i) =>
+    box(`hud.ink.row${i}`, 8, 102 - (i + 1) * 4, 54, 4, { fill: ink }, [], { name: 'Ink', visible: `${HP} / ${HP_MAX} > ${(i / slices).toFixed(3)}` }),
+  );
+  const crack = (id: string, x: number, y: number, visible: string): W => text(id, '⟋', x, y, 22, outline, { w: 20, h: 26, visible });
+  return box('hud.bottle', 20, 14, 70, 110, {}, [
+    ...rows,
+    box('hud.glass', 8, 38, 54, 68, { fill: glass, border: outline, borderWidth: 3 }),
+    box('hud.neck', 24, 16, 22, 24, { fill: glass, border: outline, borderWidth: 3 }),
+    box('hud.cork', 22, 6, 26, 12, { fill: '#8c6133', border: outline, borderWidth: 2 }),
+    crack('hud.crack1', 18, 44, `${HP} / ${HP_MAX} < 0.5`),
+    crack('hud.crack2', 18, 70, `${HP} / ${HP_MAX} < 0.5`),
+    crack('hud.crack3', 40, 52, `${HP} / ${HP_MAX} < 0.25`),
+    crack('hud.crack4', 36, 80, `${HP} / ${HP_MAX} < 0.25`),
+    box('hud.leak', 37, 104, 6, 6, { fill: ink, radius: 3 }, [], { visible: `${HP} / ${HP_MAX} < 0.25`, anim: [{ on: 'show', kind: 'pulse', ms: 800, dir: 'down' }] }),
+  ], { name: 'Ink bottle' });
+}
+
+/** The lantern gauge: a small lantern and a cyan bar that drains while the beam is on (red and flickering when low). */
+function lanternGauge(): W {
+  const low = '{light} < 20';
+  const high = '{light} >= 20';
+  const bar = (id: string, color: string, visible: string): W =>
+    w('bar', id, { name: 'Lantern fuel', ...at(34, 10, 140, 10), value: 'light', max: '100', visible, style: { fill: '#00000073', color, border: '#14111a', borderWidth: 2 } });
+  return box('hud.gauge', 104, 22, 190, 30, {}, [
+    box('hud.lamp.top', 8, 4, 12, 3, { fill: '#3a3f4a' }),
+    box('hud.lamp.glass', 5, 7, 18, 16, { fill: '#6fe3ffb0', border: '#14111a', borderWidth: 2 }, [], { visible: high }),
+    box('hud.lamp.glass.low', 5, 7, 18, 16, { fill: '#ff8a6a80', border: '#14111a', borderWidth: 2 }, [], { visible: low, anim: [{ on: 'show', kind: 'pulse', ms: 400, dir: 'up' }] }),
+    box('hud.lamp.base', 3, 23, 22, 4, { fill: '#3a3f4a' }),
+    bar('hud.fuel', '#6fe3ff', high),
+    bar('hud.fuel.low', '#ff8a6a', low),
+  ], { name: 'Lantern gauge' });
+}
+
+/** The quick slots, bottom right: the active one big with its key and count, the other small and dimmed, and the swap key. */
+function quickSlots(usable: string[]): W {
+  const icons = (slot: string, prefix: string, x: number, y: number, size: number): W[] =>
+    usable.map((id) => w('image', `${prefix}.${id}`, { name: `Icon ${id}`, ...at(x, y, size, size), sprite: `icon_${id}`, visible: `{${slot}} = ${id}`, style: {} }));
+  const active = '{quick_active}';
+  // slot 1 is active unless quick_active is 1
+  const kids: W[] = [];
+  for (const [n, other] of [[1, 2], [2, 1]] as const) {
+    const on = n === 1 ? `!${active}` : `${active} = 1`;
+    const group = box(`hud.quick${n}`, 0, 0, 180, 110, {}, [
+      ...icons(`slot:${n}`, `hud.quick${n}.big`, 68, 20, 64),
+      text(`hud.quick${n}.label`, `F   ×{item:{slot:${n}}}`, 38, 70, 20, C.inkBrown, { w: 120, visible: `{slot:${n}}` }),
+      ...icons(`slot:${other}`, `hud.quick${n}.small`, 0, 36, 52).map((x) => ({ ...x, style: { opacity: 0.6 } })),
+      text(`hud.quick${n}.count2`, `×{item:{slot:${other}}}`, 6, 82, 16, C.inkBrown, { w: 60, visible: `{slot:${other}}` }),
+      text(`hud.quick${n}.hint`, 'G  swap', 0, 0, 16, C.inkBrown, { w: 100, visible: `{slot:${other}}` }),
+    ], { name: `Quick slot ${n} active`, visible: on });
+    kids.push(group);
+  }
+  return w('panel', 'hud.quick', { name: 'Quick slots', anchor: 'br', x: 0, y: 0, w: 180, h: 110, wMode: 'fixed', hMode: 'fixed', layout: 'free', padding: 0, style: {}, children: kids });
+}
+
+function hud(usable: string[]): Screen {
+  // pinned to the corners of the window, as the Godot HUD is: the bottle and gauges top left, the place top right, the quick slots bottom right
+  const topLeft = box('hud.tl', 0, 0, 460, 130, {}, [
+    inkBottle(),
+    lanternGauge(),
+    text('hud.mnemo', '◆ {mnemosynth}', 104, 52, 26, '#b58a37', { w: 120 }),
+    text('hud.rank', 'Rank {rank}   {renown} / {rank_next}', 180, 62, 17, '#3b2a1cd9', { w: 260 }),
+  ], { name: 'Top left' });
+  const region = w('text', 'hud.region', { name: 'Region', anchor: 'tr', x: 40, y: 14, w: 600, h: 40, wMode: 'fixed', hMode: 'fixed', text: '{region_name}', visible: '{region_show}', style: { fontSize: 30, color: C.inkBrown, align: 'right' }, anim: [{ on: 'show', kind: 'fade', ms: 600, dir: 'down' }, { on: 'hide', kind: 'fade', ms: 900, dir: 'up' }] });
+  const root = w('panel', 'hud.root', { name: 'Root', anchor: 'fill', layout: 'free', padding: 0, style: {}, children: [topLeft, region, quickSlots(usable)] });
+  return { ...screen('HUD', root, { id: 'storytender-hud', role: 'hud', modal: false, back: 'pass' }), opensOnStart: true } as Screen;
+}
+
 // ---------------------------------------------------------------- the file
 
-export function buildScreens(itemIds: string[], schemaVersion: number, paperTile: number): object {
+export function buildScreens(itemIds: string[], schemaVersion: number, paperTile: number, usable: string[] = itemIds): object {
   return {
     schemaVersion,
-    screens: [title(), begin(), difficulty(), pause(), restart(), binder(itemIds), map(paperTile)],
+    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), binder(itemIds), map(paperTile)],
     prefabs: [
       { name: 'Lamp', widget: lamp() },
       { name: 'Here', widget: here() },
