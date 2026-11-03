@@ -10,7 +10,7 @@
     {
       "id": 1,
       "name": "overworld_plains light 1",
-      "top": 8499544,
+      "top": 8888907,
       "left": 7047748,
       "right": 5928248,
       "art": "t_overworld_plains_0_0",
@@ -22,7 +22,7 @@
     {
       "id": 2,
       "name": "overworld_plains light 2",
-      "top": 8762714,
+      "top": 8888907,
       "left": 7047748,
       "right": 5928248,
       "art": "t_overworld_plains_0_1",
@@ -33,56 +33,8 @@
     },
     {
       "id": 3,
-      "name": "overworld_plains light 3",
-      "top": 10272623,
-      "left": 7047748,
-      "right": 5928248,
-      "art": "t_overworld_plains_0_2",
-      "leftArt": "t_overworld_plains_left",
-      "rightArt": "t_overworld_plains_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 4,
-      "name": "overworld_plains light 4",
-      "top": 8762458,
-      "left": 7047748,
-      "right": 5928248,
-      "art": "t_overworld_plains_0_3",
-      "leftArt": "t_overworld_plains_left",
-      "rightArt": "t_overworld_plains_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 5,
-      "name": "overworld_plains light 5",
-      "top": 10601332,
-      "left": 7047748,
-      "right": 5928248,
-      "art": "t_overworld_plains_0_4",
-      "leftArt": "t_overworld_plains_left",
-      "rightArt": "t_overworld_plains_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 6,
-      "name": "overworld_plains light 6",
-      "top": 8499287,
-      "left": 7047748,
-      "right": 5928248,
-      "art": "t_overworld_plains_0_5",
-      "leftArt": "t_overworld_plains_left",
-      "rightArt": "t_overworld_plains_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 7,
       "name": "overworld_plains dark 1",
-      "top": 8039507,
+      "top": 8098885,
       "left": 7047748,
       "right": 5928248,
       "art": "t_overworld_plains_1_0",
@@ -92,9 +44,9 @@
       "props": {}
     },
     {
-      "id": 8,
+      "id": 4,
       "name": "overworld_plains dark 2",
-      "top": 7842129,
+      "top": 8098885,
       "left": 7047748,
       "right": 5928248,
       "art": "t_overworld_plains_1_1",
@@ -104,55 +56,7 @@
       "props": {}
     },
     {
-      "id": 9,
-      "name": "overworld_plains dark 3",
-      "top": 7841873,
-      "left": 7047748,
-      "right": 5928248,
-      "art": "t_overworld_plains_1_2",
-      "leftArt": "t_overworld_plains_left",
-      "rightArt": "t_overworld_plains_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 10,
-      "name": "overworld_plains dark 4",
-      "top": 8695901,
-      "left": 7047748,
-      "right": 5928248,
-      "art": "t_overworld_plains_1_3",
-      "leftArt": "t_overworld_plains_left",
-      "rightArt": "t_overworld_plains_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 11,
-      "name": "overworld_plains dark 5",
-      "top": 10863481,
-      "left": 7047748,
-      "right": 5928248,
-      "art": "t_overworld_plains_1_4",
-      "leftArt": "t_overworld_plains_left",
-      "rightArt": "t_overworld_plains_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 12,
-      "name": "overworld_plains dark 6",
-      "top": 7842129,
-      "left": 7047748,
-      "right": 5928248,
-      "art": "t_overworld_plains_1_5",
-      "leftArt": "t_overworld_plains_left",
-      "rightArt": "t_overworld_plains_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 13,
+      "id": 5,
       "name": "overworld_pit",
       "top": 1841188,
       "left": 1380891,
@@ -162,9 +66,9 @@
       }
     },
     {
-      "id": 14,
+      "id": 6,
       "name": "overworld_town light 1",
-      "top": 15459016,
+      "top": 9338991,
       "left": 13219986,
       "right": 11772540,
       "art": "t_overworld_town_0_0",
@@ -172,9 +76,9 @@
       "props": {}
     },
     {
-      "id": 15,
+      "id": 7,
       "name": "overworld_town light 2",
-      "top": 15590855,
+      "top": 9338991,
       "left": 13219986,
       "right": 11772540,
       "art": "t_overworld_town_0_1",
@@ -182,9 +86,9 @@
       "props": {}
     },
     {
-      "id": 16,
+      "id": 8,
       "name": "overworld_town light 3",
-      "top": 15459016,
+      "top": 9274221,
       "left": 13219986,
       "right": 11772540,
       "art": "t_overworld_town_0_2",
@@ -192,9 +96,9 @@
       "props": {}
     },
     {
-      "id": 17,
+      "id": 9,
       "name": "overworld_town light 4",
-      "top": 15459016,
+      "top": 9274221,
       "left": 13219986,
       "right": 11772540,
       "art": "t_overworld_town_0_3",
@@ -202,9 +106,9 @@
       "props": {}
     },
     {
-      "id": 18,
+      "id": 10,
       "name": "overworld_town light 5",
-      "top": 15525063,
+      "top": 8616818,
       "left": 13219986,
       "right": 11772540,
       "art": "t_overworld_town_0_4",
@@ -212,9 +116,9 @@
       "props": {}
     },
     {
-      "id": 19,
+      "id": 11,
       "name": "overworld_town light 6",
-      "top": 15459016,
+      "top": 8616818,
       "left": 13219986,
       "right": 11772540,
       "art": "t_overworld_town_0_5",
@@ -222,9 +126,9 @@
       "props": {}
     },
     {
-      "id": 20,
+      "id": 12,
       "name": "overworld_town dark 1",
-      "top": 15063999,
+      "top": 8549734,
       "left": 13219986,
       "right": 11772540,
       "art": "t_overworld_town_1_0",
@@ -232,9 +136,9 @@
       "props": {}
     },
     {
-      "id": 21,
+      "id": 13,
       "name": "overworld_town dark 2",
-      "top": 15063999,
+      "top": 8549734,
       "left": 13219986,
       "right": 11772540,
       "art": "t_overworld_town_1_1",
@@ -242,9 +146,9 @@
       "props": {}
     },
     {
-      "id": 22,
+      "id": 14,
       "name": "overworld_town dark 3",
-      "top": 15261376,
+      "top": 8484964,
       "left": 13219986,
       "right": 11772540,
       "art": "t_overworld_town_1_2",
@@ -252,9 +156,9 @@
       "props": {}
     },
     {
-      "id": 23,
+      "id": 15,
       "name": "overworld_town dark 4",
-      "top": 15064255,
+      "top": 8484964,
       "left": 13219986,
       "right": 11772540,
       "art": "t_overworld_town_1_3",
@@ -262,9 +166,9 @@
       "props": {}
     },
     {
-      "id": 24,
+      "id": 16,
       "name": "overworld_town dark 5",
-      "top": 15261376,
+      "top": 7893096,
       "left": 13219986,
       "right": 11772540,
       "art": "t_overworld_town_1_4",
@@ -272,9 +176,9 @@
       "props": {}
     },
     {
-      "id": 25,
+      "id": 17,
       "name": "overworld_town dark 6",
-      "top": 15063999,
+      "top": 7893096,
       "left": 13219986,
       "right": 11772540,
       "art": "t_overworld_town_1_5",
@@ -282,9 +186,9 @@
       "props": {}
     },
     {
-      "id": 26,
+      "id": 18,
       "name": "forge_memory light 1",
-      "top": 4609646,
+      "top": 5460824,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_0_0",
@@ -294,9 +198,9 @@
       "props": {}
     },
     {
-      "id": 27,
+      "id": 19,
       "name": "forge_memory light 2",
-      "top": 4609646,
+      "top": 5460824,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_0_1",
@@ -306,9 +210,9 @@
       "props": {}
     },
     {
-      "id": 28,
+      "id": 20,
       "name": "forge_memory light 3",
-      "top": 4808566,
+      "top": 7498611,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_0_2",
@@ -318,9 +222,9 @@
       "props": {}
     },
     {
-      "id": 29,
+      "id": 21,
       "name": "forge_memory light 4",
-      "top": 4874359,
+      "top": 7498611,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_0_3",
@@ -330,33 +234,9 @@
       "props": {}
     },
     {
-      "id": 30,
-      "name": "forge_memory light 5",
-      "top": 4742774,
-      "left": 2898000,
-      "right": 2305088,
-      "art": "t_forge_memory_0_4",
-      "leftArt": "t_forge_memory_left",
-      "rightArt": "t_forge_memory_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 31,
-      "name": "forge_memory light 6",
-      "top": 4742774,
-      "left": 2898000,
-      "right": 2305088,
-      "art": "t_forge_memory_0_5",
-      "leftArt": "t_forge_memory_left",
-      "rightArt": "t_forge_memory_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 32,
+      "id": 22,
       "name": "forge_memory dark 1",
-      "top": 4083044,
+      "top": 5000272,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_1_0",
@@ -366,9 +246,9 @@
       "props": {}
     },
     {
-      "id": 33,
+      "id": 23,
       "name": "forge_memory dark 2",
-      "top": 4282222,
+      "top": 5000272,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_1_1",
@@ -378,9 +258,9 @@
       "props": {}
     },
     {
-      "id": 34,
+      "id": 24,
       "name": "forge_memory dark 3",
-      "top": 4281709,
+      "top": 6906474,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_1_2",
@@ -390,9 +270,9 @@
       "props": {}
     },
     {
-      "id": 35,
+      "id": 25,
       "name": "forge_memory dark 4",
-      "top": 4281709,
+      "top": 6906474,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_1_3",
@@ -402,31 +282,7 @@
       "props": {}
     },
     {
-      "id": 36,
-      "name": "forge_memory dark 5",
-      "top": 4281709,
-      "left": 2898000,
-      "right": 2305088,
-      "art": "t_forge_memory_1_4",
-      "leftArt": "t_forge_memory_left",
-      "rightArt": "t_forge_memory_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 37,
-      "name": "forge_memory dark 6",
-      "top": 4413552,
-      "left": 2898000,
-      "right": 2305088,
-      "art": "t_forge_memory_1_5",
-      "leftArt": "t_forge_memory_left",
-      "rightArt": "t_forge_memory_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 38,
+      "id": 26,
       "name": "forge_pit",
       "top": 1841188,
       "left": 1380891,
@@ -436,9 +292,9 @@
       }
     },
     {
-      "id": 39,
+      "id": 27,
       "name": "pip_page light 1",
-      "top": 14602934,
+      "top": 12949095,
       "left": 13088143,
       "right": 11575164,
       "art": "t_pip_page_0_0",
@@ -447,9 +303,9 @@
       "props": {}
     },
     {
-      "id": 40,
+      "id": 28,
       "name": "pip_page light 2",
-      "top": 14602934,
+      "top": 12949095,
       "left": 13088143,
       "right": 11575164,
       "art": "t_pip_page_0_1",
@@ -458,9 +314,9 @@
       "props": {}
     },
     {
-      "id": 41,
+      "id": 29,
       "name": "pip_page light 3",
-      "top": 14602934,
+      "top": 13741692,
       "left": 13088143,
       "right": 11575164,
       "art": "t_pip_page_0_2",
@@ -469,9 +325,9 @@
       "props": {}
     },
     {
-      "id": 42,
+      "id": 30,
       "name": "pip_page light 4",
-      "top": 14602934,
+      "top": 13741692,
       "left": 13088143,
       "right": 11575164,
       "art": "t_pip_page_0_3",
@@ -480,9 +336,9 @@
       "props": {}
     },
     {
-      "id": 43,
+      "id": 31,
       "name": "pip_page light 5",
-      "top": 14602934,
+      "top": 13217682,
       "left": 13088143,
       "right": 11575164,
       "art": "t_pip_page_0_4",
@@ -491,9 +347,9 @@
       "props": {}
     },
     {
-      "id": 44,
+      "id": 32,
       "name": "pip_page light 6",
-      "top": 14602934,
+      "top": 13217682,
       "left": 13088143,
       "right": 11575164,
       "art": "t_pip_page_0_5",
@@ -502,9 +358,9 @@
       "props": {}
     },
     {
-      "id": 45,
+      "id": 33,
       "name": "pip_page dark 1",
-      "top": 13746328,
+      "top": 11897182,
       "left": 13088143,
       "right": 11575164,
       "art": "t_pip_page_1_0",
@@ -513,9 +369,9 @@
       "props": {}
     },
     {
-      "id": 46,
+      "id": 34,
       "name": "pip_page dark 2",
-      "top": 7117503,
+      "top": 11897182,
       "left": 13088143,
       "right": 11575164,
       "art": "t_pip_page_1_1",
@@ -524,9 +380,9 @@
       "props": {}
     },
     {
-      "id": 47,
+      "id": 35,
       "name": "pip_page dark 3",
-      "top": 13746328,
+      "top": 12623730,
       "left": 13088143,
       "right": 11575164,
       "art": "t_pip_page_1_2",
@@ -535,9 +391,9 @@
       "props": {}
     },
     {
-      "id": 48,
+      "id": 36,
       "name": "pip_page dark 4",
-      "top": 13746328,
+      "top": 12623730,
       "left": 13088143,
       "right": 11575164,
       "art": "t_pip_page_1_3",
@@ -546,9 +402,9 @@
       "props": {}
     },
     {
-      "id": 49,
+      "id": 37,
       "name": "pip_page dark 5",
-      "top": 13746328,
+      "top": 12099718,
       "left": 13088143,
       "right": 11575164,
       "art": "t_pip_page_1_4",
@@ -557,9 +413,9 @@
       "props": {}
     },
     {
-      "id": 50,
+      "id": 38,
       "name": "pip_page dark 6",
-      "top": 13746328,
+      "top": 12099718,
       "left": 13088143,
       "right": 11575164,
       "art": "t_pip_page_1_5",
@@ -568,7 +424,7 @@
       "props": {}
     },
     {
-      "id": 51,
+      "id": 39,
       "name": "pip_pit",
       "top": 1841188,
       "left": 1380891,
@@ -578,9 +434,9 @@
       }
     },
     {
-      "id": 52,
+      "id": 40,
       "name": "maud_wood light 1",
-      "top": 8214067,
+      "top": 10058329,
       "left": 7227944,
       "right": 5913632,
       "art": "t_maud_wood_0_0",
@@ -588,9 +444,9 @@
       "props": {}
     },
     {
-      "id": 53,
+      "id": 41,
       "name": "maud_wood light 2",
-      "top": 8411445,
+      "top": 10058329,
       "left": 7227944,
       "right": 5913632,
       "art": "t_maud_wood_0_1",
@@ -598,9 +454,9 @@
       "props": {}
     },
     {
-      "id": 54,
+      "id": 42,
       "name": "maud_wood light 3",
-      "top": 16182482,
+      "top": 10584926,
       "left": 7227944,
       "right": 5913632,
       "art": "t_maud_wood_0_2",
@@ -608,9 +464,9 @@
       "props": {}
     },
     {
-      "id": 55,
+      "id": 43,
       "name": "maud_wood light 4",
-      "top": 8937530,
+      "top": 10584926,
       "left": 7227944,
       "right": 5913632,
       "art": "t_maud_wood_0_3",
@@ -618,9 +474,9 @@
       "props": {}
     },
     {
-      "id": 56,
+      "id": 44,
       "name": "maud_wood light 5",
-      "top": 11766104,
+      "top": 11371354,
       "left": 7227944,
       "right": 5913632,
       "art": "t_maud_wood_0_4",
@@ -628,9 +484,9 @@
       "props": {}
     },
     {
-      "id": 57,
+      "id": 45,
       "name": "maud_wood light 6",
-      "top": 8411702,
+      "top": 11371354,
       "left": 7227944,
       "right": 5913632,
       "art": "t_maud_wood_0_5",
@@ -638,9 +494,9 @@
       "props": {}
     },
     {
-      "id": 58,
+      "id": 46,
       "name": "maud_wood dark 1",
-      "top": 11568209,
+      "top": 9269073,
       "left": 7227944,
       "right": 5913632,
       "art": "t_maud_wood_1_0",
@@ -648,9 +504,9 @@
       "props": {}
     },
     {
-      "id": 59,
+      "id": 47,
       "name": "maud_wood dark 2",
-      "top": 14800572,
+      "top": 9269073,
       "left": 7227944,
       "right": 5913632,
       "art": "t_maud_wood_1_1",
@@ -658,9 +514,9 @@
       "props": {}
     },
     {
-      "id": 60,
+      "id": 48,
       "name": "maud_wood dark 3",
-      "top": 6176806,
+      "top": 9664598,
       "left": 7227944,
       "right": 5913632,
       "art": "t_maud_wood_1_2",
@@ -668,9 +524,9 @@
       "props": {}
     },
     {
-      "id": 61,
+      "id": 49,
       "name": "maud_wood dark 4",
-      "top": 10779469,
+      "top": 9664598,
       "left": 7227944,
       "right": 5913632,
       "art": "t_maud_wood_1_3",
@@ -678,9 +534,9 @@
       "props": {}
     },
     {
-      "id": 62,
+      "id": 50,
       "name": "maud_wood dark 5",
-      "top": 11436882,
+      "top": 10451026,
       "left": 7227944,
       "right": 5913632,
       "art": "t_maud_wood_1_4",
@@ -688,9 +544,9 @@
       "props": {}
     },
     {
-      "id": 63,
+      "id": 51,
       "name": "maud_wood dark 6",
-      "top": 10779210,
+      "top": 10451026,
       "left": 7227944,
       "right": 5913632,
       "art": "t_maud_wood_1_5",
@@ -698,7 +554,7 @@
       "props": {}
     },
     {
-      "id": 64,
+      "id": 52,
       "name": "maud_pit",
       "top": 1841188,
       "left": 1380891,
@@ -708,9 +564,9 @@
       }
     },
     {
-      "id": 65,
+      "id": 53,
       "name": "proof_memory light 1",
-      "top": 4609646,
+      "top": 5460824,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_0_0",
@@ -720,9 +576,9 @@
       "props": {}
     },
     {
-      "id": 66,
+      "id": 54,
       "name": "proof_memory light 2",
-      "top": 4609646,
+      "top": 5460824,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_0_1",
@@ -732,9 +588,9 @@
       "props": {}
     },
     {
-      "id": 67,
+      "id": 55,
       "name": "proof_memory light 3",
-      "top": 4808566,
+      "top": 7498611,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_0_2",
@@ -744,9 +600,9 @@
       "props": {}
     },
     {
-      "id": 68,
+      "id": 56,
       "name": "proof_memory light 4",
-      "top": 4874359,
+      "top": 7498611,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_0_3",
@@ -756,33 +612,9 @@
       "props": {}
     },
     {
-      "id": 69,
-      "name": "proof_memory light 5",
-      "top": 4742774,
-      "left": 2898000,
-      "right": 2305088,
-      "art": "t_forge_memory_0_4",
-      "leftArt": "t_forge_memory_left",
-      "rightArt": "t_forge_memory_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 70,
-      "name": "proof_memory light 6",
-      "top": 4742774,
-      "left": 2898000,
-      "right": 2305088,
-      "art": "t_forge_memory_0_5",
-      "leftArt": "t_forge_memory_left",
-      "rightArt": "t_forge_memory_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 71,
+      "id": 57,
       "name": "proof_memory dark 1",
-      "top": 4083044,
+      "top": 5000272,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_1_0",
@@ -792,9 +624,9 @@
       "props": {}
     },
     {
-      "id": 72,
+      "id": 58,
       "name": "proof_memory dark 2",
-      "top": 4282222,
+      "top": 5000272,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_1_1",
@@ -804,9 +636,9 @@
       "props": {}
     },
     {
-      "id": 73,
+      "id": 59,
       "name": "proof_memory dark 3",
-      "top": 4281709,
+      "top": 6906474,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_1_2",
@@ -816,9 +648,9 @@
       "props": {}
     },
     {
-      "id": 74,
+      "id": 60,
       "name": "proof_memory dark 4",
-      "top": 4281709,
+      "top": 6906474,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_1_3",
@@ -828,31 +660,7 @@
       "props": {}
     },
     {
-      "id": 75,
-      "name": "proof_memory dark 5",
-      "top": 4281709,
-      "left": 2898000,
-      "right": 2305088,
-      "art": "t_forge_memory_1_4",
-      "leftArt": "t_forge_memory_left",
-      "rightArt": "t_forge_memory_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 76,
-      "name": "proof_memory dark 6",
-      "top": 4413552,
-      "left": 2898000,
-      "right": 2305088,
-      "art": "t_forge_memory_1_5",
-      "leftArt": "t_forge_memory_left",
-      "rightArt": "t_forge_memory_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 77,
+      "id": 61,
       "name": "proof_pit",
       "top": 1841188,
       "left": 1380891,
@@ -862,9 +670,9 @@
       }
     },
     {
-      "id": 78,
+      "id": 62,
       "name": "weighing_memory light 1",
-      "top": 4609646,
+      "top": 5460824,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_0_0",
@@ -874,9 +682,9 @@
       "props": {}
     },
     {
-      "id": 79,
+      "id": 63,
       "name": "weighing_memory light 2",
-      "top": 4609646,
+      "top": 5460824,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_0_1",
@@ -886,9 +694,9 @@
       "props": {}
     },
     {
-      "id": 80,
+      "id": 64,
       "name": "weighing_memory light 3",
-      "top": 4808566,
+      "top": 7498611,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_0_2",
@@ -898,9 +706,9 @@
       "props": {}
     },
     {
-      "id": 81,
+      "id": 65,
       "name": "weighing_memory light 4",
-      "top": 4874359,
+      "top": 7498611,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_0_3",
@@ -910,33 +718,9 @@
       "props": {}
     },
     {
-      "id": 82,
-      "name": "weighing_memory light 5",
-      "top": 4742774,
-      "left": 2898000,
-      "right": 2305088,
-      "art": "t_forge_memory_0_4",
-      "leftArt": "t_forge_memory_left",
-      "rightArt": "t_forge_memory_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 83,
-      "name": "weighing_memory light 6",
-      "top": 4742774,
-      "left": 2898000,
-      "right": 2305088,
-      "art": "t_forge_memory_0_5",
-      "leftArt": "t_forge_memory_left",
-      "rightArt": "t_forge_memory_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 84,
+      "id": 66,
       "name": "weighing_memory dark 1",
-      "top": 4083044,
+      "top": 5000272,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_1_0",
@@ -946,9 +730,9 @@
       "props": {}
     },
     {
-      "id": 85,
+      "id": 67,
       "name": "weighing_memory dark 2",
-      "top": 4282222,
+      "top": 5000272,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_1_1",
@@ -958,9 +742,9 @@
       "props": {}
     },
     {
-      "id": 86,
+      "id": 68,
       "name": "weighing_memory dark 3",
-      "top": 4281709,
+      "top": 6906474,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_1_2",
@@ -970,9 +754,9 @@
       "props": {}
     },
     {
-      "id": 87,
+      "id": 69,
       "name": "weighing_memory dark 4",
-      "top": 4281709,
+      "top": 6906474,
       "left": 2898000,
       "right": 2305088,
       "art": "t_forge_memory_1_3",
@@ -982,31 +766,7 @@
       "props": {}
     },
     {
-      "id": 88,
-      "name": "weighing_memory dark 5",
-      "top": 4281709,
-      "left": 2898000,
-      "right": 2305088,
-      "art": "t_forge_memory_1_4",
-      "leftArt": "t_forge_memory_left",
-      "rightArt": "t_forge_memory_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 89,
-      "name": "weighing_memory dark 6",
-      "top": 4413552,
-      "left": 2898000,
-      "right": 2305088,
-      "art": "t_forge_memory_1_5",
-      "leftArt": "t_forge_memory_left",
-      "rightArt": "t_forge_memory_right",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 90,
+      "id": 70,
       "name": "weighing_pit",
       "top": 1841188,
       "left": 1380891,
@@ -1016,9 +776,9 @@
       }
     },
     {
-      "id": 91,
+      "id": 71,
       "name": "scissor_mat light 1",
-      "top": 3370323,
+      "top": 3558966,
       "left": 2050615,
       "right": 1587755,
       "art": "t_scissor_mat_0_0",
@@ -1026,9 +786,9 @@
       "props": {}
     },
     {
-      "id": 92,
+      "id": 72,
       "name": "scissor_mat light 2",
-      "top": 3107664,
+      "top": 3558966,
       "left": 2050615,
       "right": 1587755,
       "art": "t_scissor_mat_0_1",
@@ -1036,9 +796,9 @@
       "props": {}
     },
     {
-      "id": 93,
+      "id": 73,
       "name": "scissor_mat light 3",
-      "top": 4487778,
+      "top": 4350015,
       "left": 2050615,
       "right": 1587755,
       "art": "t_scissor_mat_0_2",
@@ -1046,9 +806,9 @@
       "props": {}
     },
     {
-      "id": 94,
+      "id": 74,
       "name": "scissor_mat light 4",
-      "top": 4487778,
+      "top": 4350015,
       "left": 2050615,
       "right": 1587755,
       "art": "t_scissor_mat_0_3",
@@ -1056,29 +816,9 @@
       "props": {}
     },
     {
-      "id": 95,
-      "name": "scissor_mat light 5",
-      "top": 4487778,
-      "left": 2050615,
-      "right": 1587755,
-      "art": "t_scissor_mat_0_4",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 96,
-      "name": "scissor_mat light 6",
-      "top": 4487778,
-      "left": 2050615,
-      "right": 1587755,
-      "art": "t_scissor_mat_0_5",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 97,
+      "id": 75,
       "name": "scissor_mat dark 1",
-      "top": 2842954,
+      "top": 3295282,
       "left": 2050615,
       "right": 1587755,
       "art": "t_scissor_mat_1_0",
@@ -1086,9 +826,9 @@
       "props": {}
     },
     {
-      "id": 98,
+      "id": 76,
       "name": "scissor_mat dark 2",
-      "top": 16182482,
+      "top": 3295282,
       "left": 2050615,
       "right": 1587755,
       "art": "t_scissor_mat_1_1",
@@ -1096,9 +836,9 @@
       "props": {}
     },
     {
-      "id": 99,
+      "id": 77,
       "name": "scissor_mat dark 3",
-      "top": 4157531,
+      "top": 3954745,
       "left": 2050615,
       "right": 1587755,
       "art": "t_scissor_mat_1_2",
@@ -1106,9 +846,9 @@
       "props": {}
     },
     {
-      "id": 100,
+      "id": 78,
       "name": "scissor_mat dark 4",
-      "top": 4157531,
+      "top": 3954745,
       "left": 2050615,
       "right": 1587755,
       "art": "t_scissor_mat_1_3",
@@ -1116,27 +856,7 @@
       "props": {}
     },
     {
-      "id": 101,
-      "name": "scissor_mat dark 5",
-      "top": 4157531,
-      "left": 2050615,
-      "right": 1587755,
-      "art": "t_scissor_mat_1_4",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 102,
-      "name": "scissor_mat dark 6",
-      "top": 4157531,
-      "left": 2050615,
-      "right": 1587755,
-      "art": "t_scissor_mat_1_5",
-      "faceLevels": 1,
-      "props": {}
-    },
-    {
-      "id": 103,
+      "id": 79,
       "name": "page edge (paper)",
       "top": 14601894,
       "left": 13219210,
