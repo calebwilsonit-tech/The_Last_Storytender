@@ -1169,6 +1169,10 @@
     "prebuilt-screens",
     "parchment"
   ],
+  "title": {
+    "enabled": true,
+    "subtitle": "The world is not ending; it is being edited."
+  },
   "compat": {
     "fadeBySight": true,
     "blockPhysics": true,

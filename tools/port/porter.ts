@@ -6,6 +6,7 @@
  *
  * Bundled and run by run_porter.sh. Inputs come from environment variables: SNAP, ART, TILES, OUT.
  */
+import { buildScreens } from './screens';
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { TileMap, FLAG, SLOPE, tileMapToRows, currentFlags, stringifySprite, decodePng, pauseButtonRow, makeAnimator, locomotionController, encodePng, CURRENT_SCHEMA_VERSION, type EntityData, type SceneData, type ProjectData } from '@tilewright/runtime';
@@ -449,12 +450,16 @@ function main(): void {
   }
   writeInput();
   const data = writeData();
+  // the game's own title, pause, binder and map screens
+  const itemIds = readdirSync(spriteDir).filter((f) => f.startsWith('icon_')).map((f) => f.slice(5).replace('.sprite.json', ''));
+  writeFileSync(join(OUT, 'assets/screens.json'), JSON.stringify(buildScreens(itemIds, CURRENT_SCHEMA_VERSION, paperTile), null, 2) + '\n');
   console.log(`items ${data.items}, dialogues ${data.dialogues}`);
   const project = baseProject('The Last Storytender', PLUGINS);
   project.iso = { tileW: 64, tileH: 32, heightPx: LEVEL_PX };
   project.tileset = tileset;
   project.scenes = scenes;
   project.startScene = SCENES.overworld!.file;
+  project.title = { enabled: true, subtitle: 'The world is not ending; it is being edited.' };
   (project as ProjectData & { compat?: Record<string, boolean> }).compat = currentFlags();
   writeFileSync(join(OUT, 'project.json'), JSON.stringify(project, null, 2) + '\n');
   writeFileSync(join(OUT, '.gdignore'), '');

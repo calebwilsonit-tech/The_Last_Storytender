@@ -1,0 +1,393 @@
+// Port tool: the game's own screens (title, pause, binder, map), rebuilt with the engine's UI designer pieces to look and work like
+// the Godot game's (scripts/title.gd, pause_menu.gd, inventory_screen.gd, world_map.gd, menu_column.gd, menu_legend.gd).
+// Positions are the Godot game's, on a 1280 x 720 stage kept in the middle of the window.
+
+type Act = { type: string; params: Record<string, unknown> };
+type Style = Record<string, unknown>;
+interface W {
+  id: string;
+  name: string;
+  type: string;
+  children: W[];
+  [k: string]: unknown;
+}
+
+/** The Godot game's palette (scripts/palette.gd). */
+const C = {
+  ink: '#1b1722',
+  inkBrown: '#3b2a1c',
+  paper: '#e8d6ad',
+  paperLight: '#f6ecd2',
+  gold: '#f2b84b',
+  goldDark: '#a97d2f',
+  cyanDeep: '#1f6b87',
+  red: '#c0405a',
+  card: '#fbf3dc',
+  leather: '#4a3322',
+  leatherEdge: '#1e140c',
+  mapPaper: '#efe2c2',
+  legend: '#16171fd1',
+  legendText: '#f4ecd8',
+};
+
+const act = (type: string, params: Record<string, unknown> = {}): Act => ({ type, params });
+const open = (screen: string): Act => act('uiScreen', { op: 'open', screen });
+const close = (screen: string): Act => act('uiScreen', { op: 'close', screen });
+const setVar = (name: string, value: string): Act => act('setVariable', { name, op: 'set', value });
+
+let seq = 0;
+function w(type: string, id: string, p: Partial<W> & Style = {}): W {
+  return { id: id || `w${++seq}`, name: (p.name as string) ?? id, type, children: [], ...p } as W;
+}
+/** Something placed at a spot of the 1280 x 720 stage. */
+const at = (x: number, y: number, wd: number, h: number): Style => ({ anchor: 'tl', x, y, w: wd, h, wMode: 'fixed', hMode: 'fixed' });
+const text = (id: string, t: string, x: number, y: number, size: number, color: string, extra: Style = {}): W =>
+  w('text', id, { ...at(x, y, (extra.w as number) ?? 700, (extra.h as number) ?? Math.round(size * 1.35)), text: t, style: { fontSize: size, color, ...((extra.style as Style) ?? {}) }, ...extra, ...{ style: { fontSize: size, color, ...((extra.style as Style) ?? {}) } } });
+const box = (id: string, x: number, y: number, wd: number, h: number, style: Style, children: W[] = [], extra: Style = {}): W =>
+  w('panel', id, { ...at(x, y, wd, h), layout: 'free', padding: 0, style, children, ...extra });
+const rule = (id: string, x: number, y: number, wd: number, color: string, h = 2): W => box(id, x, y, wd, h, { fill: color });
+
+/** The stage: 1280 x 720 in the middle of the window, everything placed on it as in the Godot game. */
+function stage(id: string, children: W[], fill?: string): W {
+  const inner = w('panel', `${id}.stage`, { name: 'Stage', anchor: 'c', w: 1280, h: 720, wMode: 'fixed', hMode: 'fixed', layout: 'free', padding: 0, style: {}, children });
+  return w('panel', `${id}.root`, { name: 'Root', anchor: 'fill', layout: 'free', padding: 0, style: fill ? { fill } : {}, children: [inner] });
+}
+
+interface Screen {
+  id: string;
+  name: string;
+  root: W;
+  modal: boolean;
+  back: string;
+  dim: number;
+  role?: string;
+  priority?: number;
+}
+const screen = (name: string, root: W, o: Partial<Screen> = {}): Screen => ({ id: o.id ?? name.toLowerCase().replace(/[^a-z0-9]+/g, '-'), name, root, modal: true, back: 'auto', dim: 0, ...o });
+
+/**
+ * The button legend along the bottom of every menu (menu_legend.gd): a dark rounded bar, a key cap and a word per entry.
+ * The game's own legend swaps keyboard caps for pad buttons; this one names both.
+ */
+function legend(id: string, entries: [string, string][]): W {
+  const kids = entries.flatMap(([cap, label], i) => [
+    w('text', `${id}.cap${i}`, { wMode: 'auto', hMode: 'auto', text: cap, style: { fontSize: 17, color: C.ink, fill: C.legendText, radius: 5, bold: true }, padding: 4 }),
+    w('text', `${id}.label${i}`, { wMode: 'auto', hMode: 'auto', text: label, style: { fontSize: 20, color: C.legendText } }),
+  ]);
+  return w('panel', id, { name: 'Legend', anchor: 'b', x: 0, y: 14, wMode: 'auto', hMode: 'fixed', h: 36, layout: 'row', align: 'center', gap: 10, padding: 6, style: { fill: C.legend, radius: 18 }, children: kids });
+}
+
+/**
+ * A column of parchment buttons (menu_column.gd): light paper, a brown border that thickens on the chosen one, a gold dot beside it,
+ * and an optional line of italic description under the label.
+ */
+interface Item {
+  id: string;
+  label: string;
+  desc?: string;
+  click: Act[];
+  visible?: string;
+  enabled?: string;
+}
+function column(id: string, x: number, y: number, width: number, h: number, gap: number, size: number, items: Item[]): W {
+  const rows = items.map((it) => {
+    const hh = it.desc ? 92 : h;
+    const label = w('text', `${it.id}.label`, { anchor: 'tl', x: 20, y: it.desc ? 10 : Math.round((hh - size * 1.3) / 2), w: width - 40, h: Math.round(size * 1.35), wMode: 'fixed', hMode: 'fixed', text: it.label, style: { fontSize: size, color: C.ink } });
+    const kids = [label];
+    if (it.desc) kids.push(w('text', `${it.id}.desc`, { anchor: 'tl', x: 20, y: 50, w: width - 36, h: 40, wMode: 'fixed', hMode: 'fixed', text: it.desc, style: { fontSize: 17, color: C.ink, opacity: 0.65 } }));
+    kids.push(box(`${it.id}.dot`, -24, hh / 2 - 6, 12, 12, { fill: C.gold, radius: 6, opacity: 0 }, [], { name: 'Chosen dot' }));
+    return w('panel', it.id, {
+      name: it.label,
+      wMode: 'fill',
+      hMode: 'fixed',
+      h: hh,
+      layout: 'free',
+      padding: 0,
+      style: { fill: C.paperLight, border: C.inkBrown, borderWidth: 2, radius: 0, shadow: true, color: C.ink },
+      states: { hover: { border: C.inkBrown, borderWidth: 4, fill: '#fff6dc' }, focus: { border: C.inkBrown, borderWidth: 4, fill: '#fff6dc' }, disabled: { opacity: 0.55 } },
+      on: { click: it.click, hover: [], change: [] },
+      visible: it.visible ?? '',
+      enabled: it.enabled ?? '',
+      children: kids,
+    });
+  });
+  return w('panel', id, { name: 'Menu', ...at(x, y, width, 10), hMode: 'auto', layout: 'column', align: 'stretch', gap, padding: 0, style: {}, children: rows });
+}
+
+/**
+ * The Storytender drawn big (the Godot title shows him at 4.2x, the binder's paper doll at 3.2x). His sprite is a 160 x 150 frame with
+ * the feet at (80, 128); the box is placed so the frame, made `zoom` times bigger, has its top left at (x, y) of the stage.
+ */
+function doll(id: string, x: number, y: number, zoom: number): W {
+  return w('image', id, { name: 'The Storytender', anchor: 'tl', x: Math.round(x / zoom), y: Math.round(y / zoom), w: 160, h: 150, wMode: 'fixed', hMode: 'fixed', sprite: 'storytender', style: { scale: zoom } });
+}
+
+// ---------------------------------------------------------------- title (title.gd)
+
+const TAGLINE = 'The world is not ending; it is being edited.';
+export const BEGIN = 'Title: Begin again';
+export const DIFFICULTY = 'Title: Difficulty';
+
+function titleArt(id: string, header: W[]): W[] {
+  return [
+    text(`${id}.the`, 'The Last', 100, 72, 76, C.ink),
+    text(`${id}.name`, 'Storytender', 100, 120, 120, C.ink, { w: 760, h: 162 }),
+    rule(`${id}.rule`, 100, 285, 660, '#1b172280', 3),
+    text(`${id}.tag`, TAGLINE, 104, 298, 26, C.inkBrown),
+    // the Storytender, lantern lit, waiting
+    doll(`${id}.doll`, 160, 300, 3),
+    ...header,
+    legend(`${id}.legend`, [['W A S D', 'Move'], ['E', 'Select']]),
+  ];
+}
+
+function title(): Screen {
+  const items: Item[] = [
+    { id: 'title.continue', label: 'Continue', click: [act('loadGame', { slot: 'latest' }), close('role:title')], visible: '{host.hasSave}' },
+    { id: 'title.new.save', label: 'New Game', click: [open(BEGIN)], visible: '{host.hasSave}' },
+    { id: 'title.new', label: 'New Game', click: [open(DIFFICULTY)], visible: '!{host.hasSave}' },
+    { id: 'title.settings', label: 'Settings', click: [open('role:settings')] },
+    { id: 'title.quit', label: 'Quit', click: [act('quitGame')], visible: '{host.quit}' },
+  ];
+  return screen('Title', stage('title', [...titleArt('title', []), column('title.menu', 770, 300, 440, 64, 14, 30, items)], C.paper), { id: 'storytender-title', role: 'title', back: 'nothing', dim: 1 });
+}
+
+function begin(): Screen {
+  const header = [text('begin.head', 'Begin a new story?', 770, 230, 28, C.ink, { w: 460 })];
+  const items: Item[] = [
+    { id: 'begin.yes', label: 'Yes, begin again', desc: 'Your current save will be erased.', click: [close(BEGIN), open(DIFFICULTY)] },
+    { id: 'begin.back', label: 'Cancel', click: [close(BEGIN)] },
+  ];
+  return screen(BEGIN, stage('begin', [...titleArt('begin', header), column('begin.menu', 770, 300, 440, 64, 14, 30, items)], C.paper), { id: 'storytender-begin', back: 'previous', dim: 1 });
+}
+
+function difficulty(): Screen {
+  const header = [
+    text('diff.head', 'How should the story treat you?', 770, 205, 28, C.ink, { w: 480 }),
+    text('diff.sub', 'This is fixed for the save you are about to begin.', 770, 246, 18, C.inkBrown, { w: 480 }),
+  ];
+  const pick = (v: string): Act[] => [act('setSetting', { name: 'difficulty', value: v }), setVar('difficulty', v), setVar('difficulty_locked', '1'), close(DIFFICULTY), close('role:title')];
+  const items: Item[] = [
+    { id: 'diff.story', label: 'Story', desc: 'Gentler. Enemies hit softer; crumpling costs nothing.', click: pick('story') },
+    { id: 'diff.normal', label: 'Normal', desc: 'The intended game. Crumpling costs Mnemosynth and restarts the room.', click: pick('normal') },
+    { id: 'diff.back', label: 'Back', click: [close(DIFFICULTY)] },
+  ];
+  return screen(DIFFICULTY, stage('diff', [...titleArt('diff', header), column('diff.menu', 770, 300, 440, 64, 14, 30, items)], C.paper), { id: 'storytender-difficulty', back: 'previous', dim: 1 });
+}
+
+// ---------------------------------------------------------------- pause (pause_menu.gd)
+
+export const RESTART = 'Pause: Start again';
+
+function pause(): Screen {
+  const items: Item[] = [
+    { id: 'pause.resume', label: 'Resume', click: [close('role:pause')] },
+    { id: 'pause.travel', label: 'Travel to a lantern', click: [open('role:travel')], visible: '{dungeon_menu}' },
+    { id: 'pause.restart', label: 'Restart this dungeon', click: [open(RESTART)], visible: '{dungeon_menu}' },
+    { id: 'pause.map', label: 'Map', click: [open('role:travel')] },
+    { id: 'pause.settings', label: 'Settings', click: [open('role:settings')] },
+    { id: 'pause.title', label: 'Save and return to title', click: [act('saveGame', { slot: 'auto' }), close('role:pause'), open('role:title')] },
+    { id: 'pause.quit', label: 'Quit game', click: [act('saveGame', { slot: 'auto' }), act('quitGame')], visible: '{host.quit}' },
+  ];
+  const kids = [
+    text('pause.head', 'Paused', 450, 128, 56, C.paperLight),
+    column('pause.menu', 450, 222, 380, 50, 8, 26, items),
+    legend('pause.legend', [['W A S D', 'Move'], ['E', 'Select'], ['Esc', 'Resume']]),
+  ];
+  return screen('Pause', stage('pause', kids), { id: 'storytender-pause', role: 'pause', dim: 0.6 });
+}
+
+function restart(): Screen {
+  const items: Item[] = [
+    { id: 'restart.yes', label: 'Yes, start again', click: [close(RESTART), close('role:pause'), act('restartArea')] },
+    { id: 'restart.no', label: 'No, keep going', click: [close(RESTART)] },
+  ];
+  const note =
+    'You go back to the entrance and every puzzle in here resets: gates, plates, echoes and anything you were carrying for the doors. Rewards you already took, and lanterns you lit, are still yours.';
+  const kids = [
+    text('restart.head', 'Start this place again?', 450, 150, 44, C.paperLight, { w: 780 }),
+    text('restart.note', note, 450, 214, 17, C.paperLight, { w: 560, h: 80, style: { opacity: 0.8 } }),
+    column('restart.menu', 450, 300, 380, 50, 8, 26, items),
+    legend('restart.legend', [['W A S D', 'Move'], ['E', 'Select'], ['Esc', 'Back']]),
+  ];
+  return screen(RESTART, stage('restart', kids), { id: 'storytender-restart', back: 'previous', dim: 0.6 });
+}
+
+// ---------------------------------------------------------------- the binder (inventory_screen.gd)
+
+function card(itemIds: string[]): W {
+  const pics = itemIds.map((id) => w('image', `binder.card.icon.${id}`, { name: `Icon ${id}`, ...at(30, 30, 44, 44), sprite: `icon_${id}`, visible: `{item.id} = ${id}`, style: {} }));
+  return w('panel', 'binder.card', {
+    name: 'Card',
+    w: 104,
+    h: 104,
+    wMode: 'fixed',
+    hMode: 'fixed',
+    layout: 'free',
+    padding: 0,
+    style: { fill: C.card, border: C.inkBrown, borderWidth: 2, shadow: true, color: C.ink },
+    states: { hover: { border: C.gold, borderWidth: 4 }, focus: { border: C.gold, borderWidth: 4 } },
+    on: {
+      click: [act('useItem', { item: '{item.id}' })],
+      hover: [setVar('binder_name', '{item.name}'), setVar('binder_detail', '{item.description}')],
+      change: [act('quickSlot', { item: '{item.id}', step: '{delta}' })],
+    },
+    children: [
+      rule('binder.card.rule', 0, 22, 104, '#d96a6ab3', 2),
+      rule('binder.card.line1', 0, 62, 104, '#738cbf33', 1),
+      rule('binder.card.line2', 0, 80, 104, '#738cbf33', 1),
+      text('binder.card.name', '{item.name}', 5, 3, 12, C.ink, { w: 96, h: 18 }),
+      ...pics,
+      text('binder.card.count', '×{item.count}', 60, 80, 17, C.ink, { w: 42, h: 22, visible: '{item.count} > 1' }),
+      text('binder.card.slot', '{item.slot}', 84, 28, 19, C.inkBrown, { w: 18, h: 24, visible: '{item.slot} > 0', style: { bold: true } }),
+    ],
+  });
+}
+
+function slot(id: string, label: string, x: number, y: number, worn: string): W {
+  return box(id, x, y, 150, 98, { fill: '#e6d9b366', border: '#3b2a1c80', borderWidth: 2 }, [
+    text(`${id}.label`, label, 8, 4, 17, C.ink, { w: 140, style: { opacity: 0.7 } }),
+    text(`${id}.empty`, 'empty', 50, 44, 18, C.ink, { w: 90, visible: `!{${worn}}`, style: { opacity: 0.35 } }),
+    text(`${id}.worn`, `{${worn}}`, 8, 72, 14, C.ink, { w: 140, visible: `{${worn}}` }),
+  ]);
+}
+
+function binder(itemIds: string[]): Screen {
+  const pages = [box('binder.page.l', 84, 64, 530, 592, { fill: C.paperLight, border: C.leatherEdge, borderWidth: 2 }), box('binder.page.r', 666, 64, 530, 592, { fill: C.paperLight, border: C.leatherEdge, borderWidth: 2 })];
+  for (const p of pages) for (let y = 54, i = 0; y < 584; y += 28, i++) p.children.push(rule(`${p.id}.line${i}`, 12, y, 506, '#738cb221', 1));
+  const rings = [150, 360, 570].flatMap((ry, i) => [box(`binder.ring.bar${i}`, 616, ry - 8, 48, 16, { fill: '#2a2a30' }), box(`binder.ring${i}`, 625, ry - 15, 30, 30, { border: '#9aa0ad', borderWidth: 5, radius: 15 })]);
+  const weapon = [
+    text('binder.tool.quill', 'Quill', 442, 412, 19, C.cyanDeep, { w: 150, visible: '{has_quill}' }),
+    text('binder.tool.quill.d', 'Rewrites what it touches.', 442, 436, 15, C.ink, { w: 150, h: 40, visible: '{has_quill}', style: { opacity: 0.8 } }),
+    text('binder.tool.sword', 'The First Sword', 442, 412, 19, C.ink, { w: 150, visible: '{has_sword} && !{has_quill}', style: { opacity: 0.45 } }),
+    text('binder.tool.pencil', 'Pencil Stub', 442, 412, 19, C.ink, { w: 150, visible: '!{has_sword} && !{has_quill}', style: { opacity: 0.45 } }),
+  ];
+  const stats = ['Damage taken   no change', 'Move speed    no change', 'Dash cooldown   no change', 'Grace after a hit   0.9s', 'Quill damage   no change     Reach   no change', 'Lantern burn   no change     Ink regen   0.0/s'];
+  const left = [
+    text('binder.l.head', 'The Storytender', 108, 64, 36, C.ink, { w: 400 }),
+    rule('binder.l.rule', 108, 118, 392, '#1b172280'),
+    box('binder.plinth', 198, 452, 140, 32, { fill: '#0000001f', radius: 16 }),
+    doll('binder.doll', 112, 140, 2.6),
+    slot('binder.slot.binding', 'Binding', 442, 150, 'worn_binding'),
+    slot('binder.slot.amulet', 'Amulet', 442, 262, 'worn_amulet'),
+    text('binder.tools', 'Tools', 442, 368, 22, C.ink, { w: 150 }),
+    rule('binder.tools.rule', 442, 398, 150, '#1b172266', 1),
+    text('binder.tool.lantern', 'Lantern', 442, 404 - 26, 19, C.cyanDeep, { w: 150, visible: '' }),
+    ...weapon,
+    ...stats.map((s, i) => text(`binder.stat${i}`, s, 108, 520 + i * 20, 17, C.ink, { w: 420, h: 22, style: { opacity: 0.9 } })),
+    text('binder.difficulty.story', 'Difficulty:  Story', 372, 520, 17, C.ink, { w: 230, visible: '{difficulty} = story', style: { opacity: 0.7 } }),
+    text('binder.difficulty.normal', 'Difficulty:  Normal', 372, 520, 17, C.ink, { w: 230, visible: '{difficulty} = normal', style: { opacity: 0.7 } }),
+  ];
+  // the lantern line sits above the weapon, as in the binder
+  left.find((x) => x.id === 'binder.tool.lantern')!.y = 404;
+  for (const k of weapon) (k as W).y = (k.y as number) + 26;
+  const right = [
+    text('binder.r.head', 'Card Catalog', 692, 64, 36, C.ink, { w: 380 }),
+    rule('binder.r.rule', 692, 118, 388, '#1b172280'),
+    text('binder.r.ink', '◆ {mnemosynth}', 1090, 74, 26, C.goldDark, { w: 100, visible: '{mnemosynth}' }),
+    w('grid', 'binder.grid', {
+      name: 'Cards',
+      ...at(684, 150, 448, 340),
+      source: 'items',
+      layout: 'grid',
+      columns: 4,
+      gap: 8,
+      padding: 0,
+      empty: 'Nothing here yet. Cards are filed as you find them: Eraser Crumbs, Ink Vials, Bindings, and stranger things.',
+      style: { scroll: true, color: C.ink, fontSize: 20 },
+      children: [card(itemIds)],
+    }),
+    text('binder.d.name', '{binder_name}', 692, 498, 26, C.ink, { w: 450, visible: '{binder_name}' }),
+    text('binder.d.text', '{binder_detail}', 692, 534, 17, C.ink, { w: 470, h: 88, visible: '{binder_detail}', style: { opacity: 0.9 } }),
+  ];
+  const kids = [
+    box('binder.cover', 52, 36, 1176, 648, { fill: C.leather, border: C.leatherEdge, borderWidth: 5, radius: 20, shadow: true }),
+    ...pages,
+    ...rings,
+    ...left,
+    ...right,
+    legend('binder.legend', [['W A S D', 'Move'], ['E', 'Use'], ['A / D', 'Quick slot'], ['Esc', 'Close']]),
+  ];
+  return screen('Binder', stage('binder', kids), { id: 'storytender-binder', role: 'inventory', dim: 0.62 });
+}
+
+// ---------------------------------------------------------------- the map (world_map.gd)
+
+const CHAPTERS = [
+  { name: 'The Prologue', sub: 'Prologue Plains · Thistledown', open: true },
+  { name: 'Chapter One', sub: 'Plot-Twist Peaks', open: false },
+  { name: 'Chapter Two', sub: 'Purple Prose Swamp', open: false },
+  { name: 'Chapter Three', sub: 'The Final Chapter', open: false },
+];
+
+function lamp(): W {
+  return box('lamp', 0, 0, 14, 22, {}, [
+    box('lamp.post', 4, 6, 6, 16, { fill: '#8a5a35' }),
+    box('lamp.light', 5, 0, 9, 9, { fill: '#e6f7fb', border: C.ink, borderWidth: 1, radius: 5 }),
+    box('lamp.ring', -8, -10, 30, 30, { border: '#2b8fb3', borderWidth: 3, radius: 15 }, [], { visible: '{marker.highlight} = 1' }),
+    w('text', 'lamp.name', { anchor: 'tl', x: -80, y: -40, w: 174, h: 26, wMode: 'fixed', hMode: 'fixed', text: '{post.name}', visible: '{marker.highlight} = 1', style: { fontSize: 18, color: C.legendText, fill: '#1a1e2be0', align: 'center' } }),
+  ]);
+}
+
+function here(): W {
+  return box('here', 0, 0, 14, 14, {}, [
+    box('here.pin', 0, 0, 14, 12, { fill: C.red, border: C.ink, borderWidth: 2, radius: 3 }),
+    text('here.you', 'you', -6, -20, 14, C.red, { w: 40, h: 18 }),
+  ]);
+}
+
+function map(paperTile: number): Screen {
+  const chapters = CHAPTERS.flatMap((c, i) => {
+    const y = 170 + i * 92;
+    const fill = i === 0 ? '#f2b84b59' : '#0000000f';
+    const kids = [
+      text(`map.ch${i}.name`, c.name, 16, 6, 30, C.ink, { w: 330, style: c.open ? {} : { opacity: 0.45 } }),
+      ...(i === 0
+        ? [text(`map.ch${i}.sub.draft`, `${c.sub}  ·  Draft`, 16, 48, 16, C.ink, { w: 330, visible: '!{town_published}', style: { opacity: 0.65 } }), text(`map.ch${i}.sub.done`, `${c.sub}  ·  Complete`, 16, 48, 16, C.ink, { w: 330, visible: '{town_published}', style: { opacity: 0.65 } })]
+        : [text(`map.ch${i}.sub`, 'Unwritten', 16, 48, 16, C.ink, { w: 330, visible: '!{town_published}', style: { opacity: 0.4 } }), text(`map.ch${i}.sub.pub`, c.sub, 16, 48, 16, C.ink, { w: 330, visible: '{town_published}', style: { opacity: 0.4 } })]),
+    ];
+    return [box(`map.ch${i}`, 60, y, 360, 80, { fill, border: c.open ? C.inkBrown : '#1b172259', borderWidth: 2 }, kids)];
+  });
+  const travel = act('travelToPost', { scene: '{post.scene}', id: '{post.id}', name: '{post.name}', x: '{post.x}', y: '{post.y}', h: '{post.h}' });
+  const spec = {
+    source: { kind: 'scene', scene: 'scenes/overworld.scene.json', scenes: [], table: '', width: 137, height: 106 },
+    projection: { kind: 'iso', rotation: 'fixed', angle: 0, picture: '' },
+    layers: [
+      { id: 'terrain', name: 'Terrain', kind: 'terrain', settings: { colourBy: 'tile', palette: `${paperTile}:#00000000`, fallback: '#a9c78a', outline: 'none', shade: true } },
+      { id: 'marks', name: 'Markers', kind: 'markers', settings: {} },
+    ],
+    markers: [
+      { id: 'posts', name: 'Lit lanterns', from: 'list', source: 'lit-posts', x: 'post.x', y: 'post.y', prefab: 'Lamp', show: '{map.distance} >= 40', choosable: true },
+      { id: 'you', name: 'You are here', from: 'tags', source: 'player', prefab: 'Here', choosable: false },
+    ],
+    view: { zoom: 1, zoomMin: 0.5, zoomMax: 6, centre: 'auto', turn: 'none', turnAngle: 0, cell: 8, fit: true },
+    nav: { mode: 'direction', wrap: true, start: 'here', click: true, drag: true, wheel: true, pinch: true, keys: 'highlight' },
+    on: { highlight: [], choose: [travel, close('role:travel')], reveal: [] },
+    bind: 'wm',
+  };
+  const kids = [
+    box('map.sheet', 30, 30, 1220, 660, { fill: C.mapPaper, border: C.inkBrown, borderWidth: 5, radius: 10, shadow: true }),
+    text('map.head', 'The Map', 70, 40, 54, C.ink, { w: 400 }),
+    rule('map.rule', 70, 114, 1140, '#1b172280'),
+    ...chapters,
+    w('map', 'map.world', { name: 'World', ...at(470, 130, 760, 470), map: spec, style: { fill: '#00000000', border: '#00000000' } }),
+    text('map.none', 'Light a lantern post out in the world, and you can travel to it from here.', 470, 610, 22, C.ink, { w: 760, visible: '!{wm.marker}', style: { opacity: 0.8 } }),
+    text('map.foot', 'E   Travel (far posts only)          Esc   Close', 70, 640, 20, C.ink, { w: 700, style: { opacity: 0.8 } }),
+    legend('map.legend', [['W A S D', 'Move'], ['E', 'Travel'], ['Esc', 'Close']]),
+  ];
+  return screen('Map', stage('map', kids), { id: 'storytender-map', role: 'travel', dim: 0.78 });
+}
+
+// ---------------------------------------------------------------- the file
+
+export function buildScreens(itemIds: string[], schemaVersion: number, paperTile: number): object {
+  return {
+    schemaVersion,
+    screens: [title(), begin(), difficulty(), pause(), restart(), binder(itemIds), map(paperTile)],
+    prefabs: [
+      { name: 'Lamp', widget: lamp() },
+      { name: 'Here', widget: here() },
+    ],
+    safeArea: 0,
+  };
+}

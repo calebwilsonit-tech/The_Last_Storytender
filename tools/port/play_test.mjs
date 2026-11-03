@@ -31,6 +31,12 @@ await page.waitForTimeout(3000);
 await page.getByTestId('btn-play').click();
 await page.waitForFunction(() => window.__play !== undefined && window.__play.sim, null, { timeout: 60000 });
 await page.waitForTimeout(2500);
+// the title screen: New Game, then the Story difficulty
+const stack = () => page.evaluate(() => window.__play.sim.runtime.ui.stack.join(','));
+for (let i = 0; i < 2 && /Title/.test(await stack()); i++) {
+  await page.keyboard.press('KeyE');
+  await page.waitForTimeout(700);
+}
 
 const results = [];
 const check = (name, ok, detail = '') => {
@@ -164,6 +170,7 @@ try {
   await page.keyboard.up('KeyQ');
   const l1 = Number((await vars()).light ?? 100);
   check('hold the lantern', l1 < l0, `light ${l0.toFixed(1)} -> ${l1.toFixed(1)}`);
+  check('title screen started the game', !/Title/.test(await stack()), await stack());
 } catch (e) {
   check('test run', false, String(e && e.stack || e).slice(0, 400));
 }
