@@ -57,7 +57,8 @@
         "kind": 1,
         "unlock": "",
         "drops": "",
-        "friendlyLook": ""
+        "friendlyLook": "",
+        "attackLook": "err_mite_attack"
       }
     },
     "children": []

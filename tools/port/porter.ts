@@ -292,14 +292,16 @@ function errorKit(e: EntityData, kind: number, unlock: string): void {
   // the generated art (sd_errors.py), with the friendly look of the kinds the lantern proofreads
   const art = ['bare', 'mite', 'runon', 'dangler', 'censor', 'ellipsis'][kind]!;
   let friendlyLook = '';
+  let attackLook = '';
   const spr = c.sprite as Record<string, unknown>;
   if (ERRORS && existsSync(join(ERRORS, `${art}.png`))) {
     const feet = JSON.parse(readFileSync(join(ERRORS, 'errors.json'), 'utf8')) as Record<string, [number, number]>;
     spr.asset = spriteFor(join(ERRORS, `${art}.png`), `err_${art}`, feet[art]);
     spr.height = [1.6, 0.8, 0.9, 1.4, 1.7, 1.1][kind];
     if (existsSync(join(ERRORS, `${art}_friendly.png`))) friendlyLook = spriteFor(join(ERRORS, `${art}_friendly.png`), `err_${art}_friendly`, feet[`${art}_friendly`]);
+    if (existsSync(join(ERRORS, `${art}_attack.png`))) attackLook = spriteFor(join(ERRORS, `${art}_attack.png`), `err_${art}_attack`, feet[`${art}_attack`]);
   }
-  attach(c, 'script_Error', { kind, unlock, drops, friendlyLook });
+  attach(c, 'script_Error', { kind, unlock, drops, friendlyLook, attackLook });
   if (!spr.asset) Object.assign(spr, { color: ERROR_COLOUR[kind], w: kind === 1 ? 0.35 : 0.6, d: kind === 1 ? 0.35 : 0.6, height: kind === 1 ? 0.5 : 1 });
   else if (!errorArt.has(kind)) errorArt.set(kind, String(spr.asset));
 }
@@ -334,6 +336,19 @@ function writeCrystalPrefab(overworld: SceneData): void {
   };
   mkdirSync(join(OUT, 'assets/prefabs'), { recursive: true });
   writeFileSync(join(OUT, 'assets/prefabs/DroppedCrystal.prefab.json'), JSON.stringify(prefab, null, 2) + '\n');
+}
+
+/** The other pictures of a boss (sd_errors.py: attack, reckoning, slam...): its script switches to them as its moves change. */
+function dressBoss(e: EntityData, cls: string): void {
+  if (!ERRORS || !existsSync(join(ERRORS, 'errors.json'))) return;
+  const feet = JSON.parse(readFileSync(join(ERRORS, 'errors.json'), 'utf8')) as Record<string, [number, number]>;
+  const look = (name: string): string => (existsSync(join(ERRORS, `${name}.png`)) ? spriteFor(join(ERRORS, `${name}.png`), `boss_${name}`, feet[name]) : '');
+  const set = (script: string, looks: Record<string, string>): void => {
+    const c = e.components[script] as Record<string, unknown> | undefined;
+    if (c) Object.assign(c, Object.fromEntries(Object.entries(looks).filter(([, v]) => v)));
+  };
+  if (cls === 'Critic') set('script_Critic', { lookAttack: look('critic_attack'), lookReckoning: look('critic_reckoning') });
+  if (cls === 'Spoiler') set('script_Spoiler', { lookRead: look('spoiler_read'), lookAttack: look('spoiler_attack') });
 }
 
 /** A villager in the generated art: the graphite placeholder until their restoration, then in colour (sd_people.py). */
@@ -381,8 +396,10 @@ function writeMaudPrefabs(): void {
   const write = (name: string, root: object): void => writeFileSync(join(OUT, `assets/prefabs/${name}.prefab.json`), JSON.stringify({ schemaVersion: CURRENT_SCHEMA_VERSION, name, root }, null, 2) + '\n');
   const feet = OBJECTS && existsSync(join(OBJECTS, 'objects.json')) ? (JSON.parse(readFileSync(join(OBJECTS, 'objects.json'), 'utf8')) as Record<string, [number, number]>) : {};
   const seated = feet.guest ? spriteFor(join(OBJECTS, 'guest.png'), 'obj_guest', feet.guest) : '';
+  // the standing guest: its own picture (art/incoming2 guest_standing) if there is one, else the memory figure's
+  const standing = feet.guest_standing ? spriteFor(join(OBJECTS, 'guest_standing.png'), 'obj_guest_standing', feet.guest_standing) : figureArt;
   const body = { vx: 0, vy: 0, vz: 0, radius: 0.25, height: 1, state: 'ground', stepUp: 0.35, stepDown: 0.4, ledge: 'stop', pits: 'stop', wade: false, gravity: 1, peakZ: 0, layer: 4, mask: 65535, noclip: false, blockedBy: [], blockedTerrain: false };
-  write('Guest', { name: 'Guest', tags: ['guest'], components: { sprite: { shape: 'box', color: 0x9fe0ff, w: 0.4, d: 0.4, height: 1.2, sortOffset: 0, visible: true, ...(figureArt ? { asset: figureArt } : {}) }, body, script_Guest: { area: '', lookSeated: seated, lookStanding: figureArt } }, children: [] });
+  write('Guest', { name: 'Guest', tags: ['guest'], components: { sprite: { shape: 'box', color: 0x9fe0ff, w: 0.4, d: 0.4, height: 1.2, sortOffset: 0, visible: true, ...(standing ? { asset: standing } : {}) }, body, script_Guest: { area: '', lookSeated: seated, lookStanding: standing } }, children: [] });
   const frost = flatArt('frost', [200, 230, 250], 64, 32, true, 200, [150, 200, 230]);
   write('Frost', { name: 'Frost', tags: ['frost'], components: { sprite: { shape: 'box', color: 0xc8e6fa, w: 1, d: 1, height: 0.02, sortOffset: -1, visible: true, asset: frost }, lifetime: { seconds: 0.4 } }, children: [] });
   const ef = ERRORS && existsSync(join(ERRORS, 'errors.json')) ? (JSON.parse(readFileSync(join(ERRORS, 'errors.json'), 'utf8')) as Record<string, [number, number]>) : {};
@@ -394,7 +411,7 @@ function writeMaudPrefabs(): void {
       sprite: { shape: 'box', color: 0xbfe8f0, w: 1, d: 1, height: 3, sortOffset: 0, visible: true, ...(cold ? { asset: cold } : {}) },
       health: { max: 170, invulnerableSeconds: 0.25, onDeath: 'stay', fallDamage: 0, team: 'enemy', showBar: false },
       body: { ...body, radius: 0.6, height: 2.5 },
-      script_ColdShoulder: {},
+      script_ColdShoulder: { ...(ef.cold_slam ? { lookSlam: spriteFor(join(ERRORS, 'cold_slam.png'), 'boss_cold_slam', ef.cold_slam) } : {}) },
     },
     children: [],
   });
@@ -553,6 +570,14 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
       Object.assign(e.components.sprite as object, { asset: off, height: 0.3, sortOffset: -0.4 });
       Object.assign(e.components.script_Plate as object, { lookOn: on, lookOff: off });
     }
+    // Maud's kitchen plate: up until something heavy settles on it (the cold door opens), then pressed down
+    if (n.class === 'PressurePlate' && OBJECTS && existsSync(join(OBJECTS, 'plate_up.png'))) {
+      const feet = JSON.parse(readFileSync(join(OBJECTS, 'objects.json'), 'utf8')) as Record<string, [number, number]>;
+      const up = spriteFor(join(OBJECTS, 'plate_up.png'), 'obj_plate_up', feet.plate_up);
+      const down = spriteFor(join(OBJECTS, 'plate_down.png'), 'obj_plate_down', feet.plate_down);
+      Object.assign(e.components.sprite as object, { asset: up, height: 0.3, sortOffset: -0.4 });
+      attach(e.components, 'script_Flagged', { hideWhen: '', showWhen: '', lookWhen: 'cold_gate', look: down });
+    }
     // a sentence stone: a blank board, and the engine writes the live sentence over it
     if (e.components.sentenceStone && OBJECTS && existsSync(join(OBJECTS, 'sign_wide.png'))) {
       const feet = JSON.parse(readFileSync(join(OBJECTS, 'objects.json'), 'utf8')) as Record<string, [number, number]>;
@@ -571,6 +596,7 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
     }
     if (world && scene === 'overworld') decorateOverworld(e, n, [Math.round(n.grid[0]), Math.round(n.grid[1])], world);
     if (n.class === 'Npc') dressPerson(e);
+    if (n.class === 'Critic' || n.class === 'Spoiler') dressBoss(e, n.class);
     if (n.class === 'Prop' && scene === 'overworld') dressObject(e, Number(n.props.kind ?? -1), [Math.round(n.grid[0]), Math.round(n.grid[1])], SCENES[scene]!.file);
     const cell = `${Math.round(n.grid[0])},${Math.round(n.grid[1])}`;
     if (blocked.has(cell) && !taken.has(cell)) {

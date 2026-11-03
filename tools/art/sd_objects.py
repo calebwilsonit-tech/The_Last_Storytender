@@ -1,7 +1,9 @@
 """Objects that change with the story, from the chosen generated pictures (art/picks.json "objects"): a chest closed and open,
 a lantern post unlit and lit, the forge frozen and burning, Maud's oven cold and warm. A pick is <picture>:<piece> (pieces.py),
 or "from:<other>:cold|frozen" to make one state from the other's picture, so the two always match. Each is scaled to the size
-the object has in the game. Writes <work>/objects/<name>.png and objects.json (each one's feet).
+the object has in the game. Where art/incoming2 (the Ludo.ai pictures, ludo.py) has the picture of an object (LUDO below), that is
+used instead: it is already a transparent single subject, so it is only cropped to its solid part and scaled to the same height.
+Writes <work>/objects/<name>.png and objects.json (each one's feet).
     python3 -I tools/art/sd_objects.py <repo> <work>"""
 import colorsys, json, os, sys, tempfile
 import numpy as np
@@ -10,9 +12,27 @@ from PIL import Image
 REPO, WORK = sys.argv[1], sys.argv[2]
 sys.path.insert(0, os.path.join(REPO, 'tools', 'art'))
 from pieces import pieces  # noqa: E402
+import ludo  # noqa: E402
 
 # solid height in the game (px), as the pictures they replace
 HEIGHT = {'chest': 40, 'post': 72, 'forge': 120, 'oven': 104, 'echo': 30, 'first': 30, 'sign': 62, 'guest': 58}
+
+
+# the Ludo.ai picture of each object: (folder of art/incoming2, file); the two states of a thing are two pictures
+LUDO = {
+    'chest_closed': ('objects', 'chest_closed'), 'chest_open': ('objects', 'chest_open'),
+    'post_unlit': ('objects', 'post_unlit'), 'post_lit': ('objects', 'post_lit'),
+    'forge_frozen': ('objects', 'forge_frozen'), 'forge_warm': ('objects', 'forge_warm'),
+    'oven_cold': ('objects', 'oven_cold'), 'oven_warm': ('objects', 'oven_warm'),
+    'echo_plate_dim': ('objects', 'echo_plate_dim'), 'echo_plate_lit': ('objects', 'echo_plate_lit'),
+    'first_sword': ('objects', 'first_sword'), 'sign_wide': ('objects', 'sign_wide'),
+    'guest': ('characters', 'guest_seated'), 'guest_standing': ('characters', 'guest_standing'),
+    'plate_up': ('objects', 'plate_up'), 'plate_down': ('objects', 'plate_down'),
+}
+HEIGHT.update({'plate': 30})
+# the second state of an object is scaled like the first, so the two stay the same size
+SAME_SCALE_AS = {'chest_open': 'chest_closed', 'post_lit': 'post_unlit', 'forge_warm': 'forge_frozen', 'oven_warm': 'oven_cold',
+                 'echo_plate_lit': 'echo_plate_dim', 'plate_down': 'plate_up', 'guest': 'guest_standing'}   # a pressure plate lies as flat as an echo plate
 
 
 def solid_box(im, level=200):
@@ -62,11 +82,17 @@ def frozen(im):
 
 def main():
     picks = {k: v for k, v in json.load(open(os.path.join(REPO, 'art', 'picks.json'))).get('objects', {}).items() if not k.startswith('_')}
+    for name, (folder, file) in LUDO.items():
+        if ludo.find(folder, file):
+            picks[name] = f'ludo:{folder}/{file}'
     out_dir = os.path.join(WORK, 'objects')
     os.makedirs(out_dir, exist_ok=True)
     made, feet = {}, {}
     for name, pick in sorted(picks.items(), key=lambda kv: kv[1].startswith('from:')):
-        if pick.startswith('from:'):
+        if pick.startswith('ludo:'):
+            ref = SAME_SCALE_AS.get(name)
+            im = ludo.fit_height(ludo.load(ludo.find(*pick[5:].split('/'))), HEIGHT[name.split('_')[0]], ludo.load(ludo.find(*LUDO[ref])) if ref else None)
+        elif pick.startswith('from:'):
             _, src, how = pick.split(':')
             im = {'cold': cold, 'frozen': frozen}[how](made[src])
         else:
@@ -80,10 +106,13 @@ def main():
         pad = 3
         canvas = Image.new('RGBA', (im.width + 2 * pad, im.height + 2 * pad), (0, 0, 0, 0))
         canvas.alpha_composite(im, (pad, pad))
-        q = canvas.convert('RGB').quantize(colors=254, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE).convert('RGBA')
-        qa = np.asarray(q).copy()
-        qa[..., 3] = np.asarray(canvas.getchannel('A'))
-        Image.fromarray(qa, 'RGBA').save(os.path.join(out_dir, name + '.png'))
+        if pick.startswith('ludo:'):
+            ludo.quantize_rgba(canvas).save(os.path.join(out_dir, name + '.png'))
+        else:
+            q = canvas.convert('RGB').quantize(colors=254, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE).convert('RGBA')
+            qa = np.asarray(q).copy()
+            qa[..., 3] = np.asarray(canvas.getchannel('A'))
+            Image.fromarray(qa, 'RGBA').save(os.path.join(out_dir, name + '.png'))
         feet[name] = [pad + round((b[0] + b[2]) / 2), pad + b[3]]
     json.dump(feet, open(os.path.join(out_dir, 'objects.json'), 'w'), indent=1)
     print('objects', ', '.join(sorted(picks)))

@@ -49,14 +49,36 @@ def fit_height(im, height, ref=None):
     return im.resize((max(1, round(im.width * s)), max(1, round(im.height * s))), Image.LANCZOS)
 
 
+# how big each boss stands in the game: (what is measured: 'h' height, 'w' width; its px; the idle picture it is measured on). Every other
+# picture of the boss (attack, slam...) is scaled like the idle one, so the body stays the same size from move to move.
+BOSS_FIT = {
+    'critic': ('h', 130, 'boss_critic_idle'),     # (the captures have a ring of glow round the figure, which is not counted)
+    'spoiler': ('w', 175, 'boss_spoiler_idle'),
+    'scissor': ('h', 150, 'boss_scissor_idle'),
+    'cold': ('h', 120, 'boss_cold_idle'),
+}
+
+
+def boss_scale(who):
+    mode, size, idle = BOSS_FIT[who]
+    im = trim(load(find('bosses', idle)))
+    return size / (im.height if mode == 'h' else im.width)
+
+
+def quantize_rgba(im, colors=255):
+    """At most 255 different RGBA values in all (the engine's sprites hold a palette of 255 colours with their alpha, and it
+    re-quantizes a picture with more roughly, which shows as speckles), the see-through kept as it is."""
+    q = im.quantize(colors=colors, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).convert('RGBA')
+    a = np.asarray(q).copy()
+    a[a[..., 3] < 8] = 0
+    return Image.fromarray(a, 'RGBA')
+
+
 def save_sprite(im, path, pad=3):
-    """The picture with a little room all round, in at most 254 colours (the engine's limit), the see-through kept as it is.
-    Returns where its feet are: the bottom middle of the solid part."""
+    """The picture with a little room all round, in at most 255 colours, the see-through kept as it is. Returns where its feet are:
+    the bottom middle of the solid part."""
     canvas = Image.new('RGBA', (im.width + 2 * pad, im.height + 2 * pad), (0, 0, 0, 0))
     canvas.alpha_composite(im, (pad, pad))
     b = solid_box(canvas)
-    q = canvas.convert('RGB').quantize(colors=254, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE).convert('RGBA')
-    qa = np.asarray(q).copy()
-    qa[..., 3] = np.asarray(canvas.getchannel('A'))
-    Image.fromarray(qa, 'RGBA').save(path)
+    quantize_rgba(canvas).save(path)
     return [round((b[0] + b[2]) / 2), b[3]]
