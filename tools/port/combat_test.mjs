@@ -90,6 +90,18 @@ try {
   check('the Prologue has its Errors', bares.length === 12 && mites.length === 14 && danglers.length === 7, `bare ${bares.length}, mite ${mites.length}, dangler ${danglers.length}`);
   check('Danglers stay away until Pip is restored', danglers.every((d) => !d.visible), danglers.map((d) => d.visible).join(','));
 
+  // 0. J swings the quill: the strike plays
+  const anim = () => page.evaluate(() => { const a = window.__play.sim.world.withTag('player')[0].get('animator'); return a ? `${a.state}/${a.clip}` : 'none'; });
+  await page.keyboard.down('KeyJ');
+  const seen = [];
+  for (let i = 0; i < 8; i++) { seen.push(await anim()); await page.waitForTimeout(25); }
+  await page.keyboard.up('KeyJ');
+  await page.waitForTimeout(400);
+  seen.push(await anim());
+  await page.keyboard.down('KeyD'); await page.waitForTimeout(350); const walking = await anim(); await page.keyboard.up('KeyD'); await page.waitForTimeout(300);
+  check('walking plays the walk', walking.includes('walk'), walking);
+  check('J plays the quill strike, then back to standing', seen.some((x) => x.includes('strike')) && !seen[seen.length - 1].includes('strike'), [...new Set(seen)].join(' '));
+
   // 1. a Bare notices you and lunges
   let hit = false;
   for (const b0 of bares.slice(2, 6)) {
@@ -119,7 +131,7 @@ try {
   const crystals = await page.evaluate(() => window.__play.sim.world.withTag('dropped').map((e) => ({ x: e.get('transform').x, y: e.get('transform').y })));
   for (const c of crystals) { await placeAt(c.x, c.y); await page.waitForTimeout(300); }
   const gained = Number((await vars()).mnemosynth ?? 0) - Number(before.mnemosynth ?? 0);
-  check('a beaten Mite drops a crystal worth 5', gained === 5, `gained ${gained}`);
+  check('a beaten Mite drops a crystal worth 5', gained >= 5 && gained % 5 === 0, `gained ${gained} (a crystal lying nearby may be picked up too)`);
   // rest at the Margins lantern post (light it, then E again): the Mite comes back once you are away from its spot
   await placeAt(28.5, 53.6);
   await page.waitForTimeout(400);

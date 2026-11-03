@@ -84,16 +84,17 @@ function storytenderSprite(): string | null {
   });
   const { sprite } = importPng(encodePng(fw, fh * poses.frames.length, sheet), 'storytender', fw, fh);
   sprite.origin = { x: poses.feet[0], y: poses.feet[1] };
-  const idle: Record<string, number[]> = {};
-  const walk: Record<string, number[]> = {};
+  const clips: Record<string, Record<string, number[]>> = { idle: {}, walk: {}, strike: {} };
   poses.frames.forEach((f, i) => {
-    (f.pose === 'idle' ? idle : walk)[f.facing] ??= [];
-    (f.pose === 'idle' ? idle : walk)[f.facing]!.push(i);
+    const c = (clips[f.pose] ??= {});
+    (c[f.facing] ??= []).push(i);
   });
-  for (const fr of sprite.frames) fr.duration = 120;
+  // the walk at 120 ms a frame; the strike quick (its three frames fill the quill's 0.18 s)
+  sprite.frames.forEach((fr, i) => (fr.duration = poses.frames[i]!.pose === 'strike' ? 60 : 120));
   sprite.clips = [
-    { name: 'idle', loop: true, mirror: false, all: idle.S ?? [0], dirs: idle, events: [] },
-    { name: 'walk', loop: true, mirror: false, all: walk.S ?? [1], dirs: walk, events: [] },
+    { name: 'idle', loop: true, mirror: false, all: clips.idle!.S ?? [0], dirs: clips.idle!, events: [] },
+    { name: 'walk', loop: true, mirror: false, all: clips.walk!.S ?? [1], dirs: clips.walk!, events: [] },
+    ...(Object.keys(clips.strike!).length ? [{ name: 'strike', loop: false, mirror: false, all: clips.strike!.S ?? [0], dirs: clips.strike!, events: [] }] : []),
   ];
   writeFileSync(join(spriteDir, 'storytender.sprite.json'), stringifySprite(sprite));
   storytender = 'storytender';
@@ -360,7 +361,14 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
       const anim = storytenderSprite();
       if (anim) {
         (p.components.sprite as Record<string, unknown>).asset = anim;
-        p.components.animator = makeAnimator({ clip: 'idle', controller: locomotionController({ idle: 'idle', walk: 'walk' }) });
+        // idle and walk, and the strike while the quill swings (the combat plugin's "attacking")
+        const controller = locomotionController({ idle: 'idle', walk: 'walk' });
+        controller.states.strike = { clip: 'strike' };
+        controller.transitions.unshift(
+          { from: '*', to: 'strike', when: [{ param: 'attacking', op: '==', value: true }] },
+          { from: 'strike', to: 'idle', when: [{ param: 'attacking', op: '==', value: false }], waitForEnd: true },
+        );
+        p.components.animator = makeAnimator({ asset: anim, clip: 'idle', controller });
       } else if (a?.file) (p.components.sprite as Record<string, unknown>).asset = spriteFor(join(ART, a.file), 'storytender', a.feet);
       attachBehavior(p.components, 'followCamera');
       Object.assign(p.components.followCamera as object, { zoom: 1.5 }); // LevelBase.ZOOM
