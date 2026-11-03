@@ -1,0 +1,6 @@
+[
+ {"out": "art/incoming2/tiles/step_cobble", "kind": "style", "style_image": "art/incoming2/tiles/wall_cobble.png", "image_type": "texture", "n": 2,
+  "prompt": "the front of a stone stair step seen straight on, a wide low horizontal band of the same rounded cream cobblestones as the reference, a pale worn rounded lip running along the top edge, a dark shadow along the bottom edge, same thick dark brown outline and green moss in the gaps as the reference, stones the same size as the reference, hand-drawn, flat cel shading"},
+ {"out": "art/incoming2/tiles/step_planks", "kind": "style", "style_image": "art/incoming2/tiles/wall_planks.png", "image_type": "texture", "n": 2,
+  "prompt": "the front of a wooden stair step seen straight on, a wide low horizontal band of the same planks as the reference, a pale worn rounded lip running along the top edge, a dark shadow along the bottom edge, same colours and thick dark outline as the reference, hand-drawn, flat cel shading"}
+]
