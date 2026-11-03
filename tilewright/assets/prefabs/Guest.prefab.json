@@ -15,7 +15,7 @@
         "height": 1.2,
         "sortOffset": 0,
         "visible": true,
-        "asset": "a_forge_276e780dd2_0"
+        "asset": "obj_guest_standing"
       },
       "body": {
         "vx": 0,
@@ -40,7 +40,7 @@
       "script_Guest": {
         "area": "",
         "lookSeated": "obj_guest",
-        "lookStanding": "a_forge_276e780dd2_0"
+        "lookStanding": "obj_guest_standing"
       }
     },
     "children": []

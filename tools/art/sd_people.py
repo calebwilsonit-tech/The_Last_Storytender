@@ -1,7 +1,10 @@
 """Thistledown's people from the chosen generated pictures (art/picks.json "people"): each is cut out and scaled to their size
 in the game, and also drawn as the unfinished placeholder they are before their restoration: the same picture in faded
 graphite (palette.gd ghostify with nothing restored, then 35% of the static grey), so the outline matches exactly when they
-come back. Writes <work>/people/<who>.png and <who>_ghost.png, with people.json giving each one's feet.
+come back. Where art/incoming2 (the Ludo.ai pictures, ludo.py) has the villager (characters/<who>_SE, the three-quarter view from the
+front that the Errors face too), that picture is used instead: it is a transparent single figure, so it is only cropped to its solid
+part and scaled to the same height, and the ghost is made from it the same way. Writes <work>/people/<who>.png and <who>_ghost.png,
+with people.json giving each one's feet.
     python3 -I tools/art/sd_people.py <repo> <work>"""
 import json, os, sys
 import numpy as np
@@ -10,6 +13,7 @@ from PIL import Image
 REPO, WORK = sys.argv[1], sys.argv[2]
 sys.path.insert(0, os.path.join(REPO, 'tools', 'art'))
 from cutout import cut  # noqa: E402
+import ludo  # noqa: E402
 
 # how tall each stands in the game (px of solid figure; the Storytender is 63)
 HEIGHT = {'garrick': 82, 'maud': 76, 'pip': 62}
@@ -35,15 +39,19 @@ def ghost(im):
 
 def main():
     picks = json.load(open(os.path.join(REPO, 'art', 'picks.json'))).get('people', {})
+    picks = {**picks, **{who: 'ludo' for who in HEIGHT if ludo.find('characters', who + '_SE')}}
     out_dir = os.path.join(WORK, 'people')
     os.makedirs(out_dir, exist_ok=True)
     feet = {}
     for who, pick in picks.items():
-        im = cut(os.path.join(REPO, 'art', 'generated', 'people', pick + '.png'))
-        im = im.crop(im.getbbox())
-        b = solid_box(im)
-        s = HEIGHT.get(who, 70) / max(1, b[3] - b[1])
-        im = im.resize((max(1, round(im.width * s)), max(1, round(im.height * s))), Image.LANCZOS)
+        if pick == 'ludo':
+            im = ludo.fit_height(ludo.load(ludo.find('characters', who + '_SE')), HEIGHT[who])
+        else:
+            im = cut(os.path.join(REPO, 'art', 'generated', 'people', pick + '.png'))
+            im = im.crop(im.getbbox())
+            b = solid_box(im)
+            s = HEIGHT.get(who, 70) / max(1, b[3] - b[1])
+            im = im.resize((max(1, round(im.width * s)), max(1, round(im.height * s))), Image.LANCZOS)
         b = solid_box(im)
         # a little room all round, the feet at the bottom middle of the solid figure
         pad = 4
@@ -51,10 +59,13 @@ def main():
         canvas.alpha_composite(im, (pad, pad))
         f = [pad + round((b[0] + b[2]) / 2), pad + b[3]]
         for name, pic in ((who, canvas), (who + '_ghost', ghost(canvas))):
-            q = pic.convert('RGB').quantize(colors=254, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE).convert('RGBA')
-            qa = np.asarray(q).copy()
-            qa[..., 3] = np.asarray(pic.getchannel('A'))
-            Image.fromarray(qa, 'RGBA').save(os.path.join(out_dir, name + '.png'))
+            if pick == 'ludo':
+                ludo.quantize_rgba(pic).save(os.path.join(out_dir, name + '.png'))
+            else:
+                q = pic.convert('RGB').quantize(colors=254, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE).convert('RGBA')
+                qa = np.asarray(q).copy()
+                qa[..., 3] = np.asarray(pic.getchannel('A'))
+                Image.fromarray(qa, 'RGBA').save(os.path.join(out_dir, name + '.png'))
             feet[name] = f
     json.dump(feet, open(os.path.join(out_dir, 'people.json'), 'w'), indent=1)
     print('people', ', '.join(picks))

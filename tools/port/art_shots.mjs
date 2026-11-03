@@ -3,7 +3,7 @@
 // shortcut, as the other tests do) and saves the picture of the game's viewport as <out_dir>/<scene>_<label>.png. A spot is
 // {label, x, y} (a cell; none: where the Storytender is) or {label, tag, dx, dy, nth} (beside the nth entity with that tag; a tag
 // "name:Dummy" matches an entity by the start of its name), with optional {vars: {...}} set before the picture (a story flag) and
-// {wait: ms}, {press: [keys]}. Also writes <out_dir>/<scene>_entities.json (what the scene holds).
+// {wait: ms}, {press: [keys]}, {look: [script, setting]} (shows the picture a script would switch to). Also writes <out_dir>/<scene>_entities.json (what the scene holds).
 //   TILEWRIGHT=<engine checkout> xvfb-run -a node tools/port/art_shots.mjs <project_dir> <out_dir> <spec.json>
 // scenes: overworld, then forge | pip | maud (entered and left the way the game does, through their door flags: one run can visit them
 // all); a scene that has no door (scissor, proof, weighing) can only be the first of the spec, and is opened in the editor.
@@ -112,6 +112,15 @@ for (const sceneName of order) {
       for (const [k, v] of Object.entries(s.vars)) vars[found ? k.replace('{id}', found.id).replace('{cx}', Math.round(found.x - 0.5)).replace('{cy}', Math.round(found.y - 0.5)) : k] = v;
       await page.evaluate((v) => { Object.assign(window.__play.sim.runtime.vars, v); }, vars);
       await page.waitForTimeout(900);
+    }
+    if (s.look && found) {   // {look: [script, setting]}: shows the picture a script would switch to (its setting holds the sprite name)
+      await page.evaluate(([id, script, key]) => {
+        const e = window.__play.sim.world.get(id);
+        const name = e?.get(script)?.[key];
+        const spr = e?.get('sprite');
+        if (e && name && spr) e.set('sprite', { ...spr, asset: name });
+      }, [found.id, s.look[0], s.look[1]]);
+      await page.waitForTimeout(400);
     }
     await page.screenshot({ path: path.join(outDir, `${sceneName}_${s.label}.png`), clip });
   }

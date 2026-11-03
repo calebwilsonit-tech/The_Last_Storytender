@@ -294,7 +294,8 @@ def save_tiles_shared(tiles, out, make_entry):
     entries = []
     for i, k in enumerate(keys):
         alpha = np.where(np.asarray(tiles[k])[..., 3] >= 96, 255, 0).astype(np.uint8)
-        rgb = np.asarray(q.crop((64 * i, 0, 64 * i + 64, 32)))
+        rgb = np.asarray(q.crop((64 * i, 0, 64 * i + 64, 32))).copy()
+        rgb[alpha == 0] = 0   # (all see-through pixels one value, so the tile holds at most 251 different RGBA values)
         e = make_entry(k)
         Image.fromarray(np.dstack([rgb, alpha]), 'RGBA').save(os.path.join(out, e['file']))
         entries.append(e)
