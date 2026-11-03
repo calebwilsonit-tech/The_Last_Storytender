@@ -25,6 +25,8 @@ python3 "$REPO/tools/port/cut_sheet.py" "$REPO/art/incoming/world_props_sheet.jp
 python3 "$REPO/tools/port/cut_sheet.py" "$REPO/art/incoming/item_icons_sheet.jpg" "$CUT/icons" icon --crop 110,0,1905,898 --grid 12,6
 python3 "$REPO/tools/port/cut_sheet.py" "$REPO/art/incoming/storytender_sheet.jpg" "$CUT/hero" hero --gap 10
 python3 "$REPO/tools/port/apply_art.py" "$WORK"
+# the Storytender from the generated art (art/picks.json), when it has been chosen
+if [ -f "$REPO/art/picks.json" ]; then python3 -I "$REPO/tools/art/sd_hero.py" "$REPO" "$WORK"; fi
 python3 "$REPO/tools/port/quantize.py" "$WORK/art_q" "$WORK/art_q"
 python3 "$REPO/tools/port/quantize.py" "$WORK/icons" "$WORK/icons"
 NODE_PATH="$TILEWRIGHT/node_modules" "$TILEWRIGHT/node_modules/.bin/esbuild" "$REPO/tools/port/porter.ts" --bundle --platform=node --format=esm --outfile="$WORK/porter.mjs" \

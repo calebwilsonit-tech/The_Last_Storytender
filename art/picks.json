@@ -1,0 +1,11 @@
+{
+  "_about": "Which generated try (art/generated/<group>/<name>_sN.png) the game uses. tools/art/sd_hero.py and the porter read this.",
+  "storytender": {
+    "SE": "1_toward_a_stand_s1",
+    "E": "2_down_right_a_stand_s1",
+    "NE": "3_right_a_stand_s3",
+    "N": "4_up_right_a_stand_s3",
+    "NW": "5_away_a_stand_s0",
+    "quill": "3_right_f_strike_s0"
+  }
+}
