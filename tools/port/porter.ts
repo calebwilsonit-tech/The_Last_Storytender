@@ -20,6 +20,7 @@ const ART = process.env.ART!;
 const TILES = process.env.TILES!;
 const POSES = process.env.POSES ?? '';
 const DATA = process.env.DATA ?? '';
+const PEOPLE = process.env.PEOPLE ?? '';
 const ICONS = process.env.ICONS ?? '';
 const HERE = process.env.HERE!;
 const OUT = process.env.OUT!;
@@ -304,6 +305,17 @@ function writeCrystalPrefab(overworld: SceneData): void {
   writeFileSync(join(OUT, 'assets/prefabs/DroppedCrystal.prefab.json'), JSON.stringify(prefab, null, 2) + '\n');
 }
 
+/** A villager in the generated art: the graphite placeholder until their restoration, then in colour (sd_people.py). */
+function dressPerson(e: EntityData): void {
+  const who = ['garrick', 'pip', 'maud'].find((x) => e.tags.includes(x));
+  if (!who || !PEOPLE || !existsSync(join(PEOPLE, `${who}.png`))) return;
+  const feet = JSON.parse(readFileSync(join(PEOPLE, 'people.json'), 'utf8')) as Record<string, [number, number]>;
+  const colour = spriteFor(join(PEOPLE, `${who}.png`), `npc_${who}`, feet[who]);
+  const ghost = spriteFor(join(PEOPLE, `${who}_ghost.png`), `npc_${who}_ghost`, feet[`${who}_ghost`]);
+  Object.assign(e.components.sprite as object, { asset: ghost, height: who === 'pip' ? 1.9 : 2.4 });
+  attach(e.components, 'script_Flagged', { hideWhen: '', showWhen: '', lookWhen: `restored_${who}`, look: colour });
+}
+
 let world: World | null = null;
 function loadWorld(): World | null {
   if (!DATA) return null;
@@ -385,6 +397,7 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
       errorKit(e, Number(n.props.kind ?? 0), '');
     }
     if (world && scene === 'overworld') decorateOverworld(e, n, [Math.round(n.grid[0]), Math.round(n.grid[1])], world);
+    if (n.class === 'Npc') dressPerson(e);
     const cell = `${Math.round(n.grid[0])},${Math.round(n.grid[1])}`;
     if (blocked.has(cell) && !taken.has(cell)) {
       taken.add(cell);

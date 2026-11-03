@@ -170,6 +170,15 @@ try {
   await page.keyboard.up('KeyQ');
   const l1 = Number((await vars()).light ?? 100);
   check('hold the lantern', l1 < l0, `light ${l0.toFixed(1)} -> ${l1.toFixed(1)}`);
+  // 9. Garrick is a graphite placeholder until he is restored, then in colour
+  const look = () => page.evaluate(() => window.__play.sim.world.withTag('garrick')[0]?.get('sprite')?.asset);
+  const lookBefore = await look();
+  await placeAt(93.5, 57.2);
+  await page.evaluate(() => { window.__play.sim.runtime.vars.restored_garrick = 1; });
+  await page.waitForTimeout(500);
+  await shotAs('9_garrick_restored.png');
+  const lookAfter = await look();
+  check("Garrick turns from placeholder to colour when restored", /ghost/.test(lookBefore) && lookAfter === "npc_garrick", `${lookBefore} -> ${lookAfter}`);
   check('title screen started the game', !/Title/.test(await stack()), await stack());
 } catch (e) {
   check('test run', false, String(e && e.stack || e).slice(0, 400));

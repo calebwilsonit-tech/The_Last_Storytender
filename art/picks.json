@@ -7,5 +7,10 @@
     "N": "4_up_right_a_stand_s3",
     "NW": "5_away_a_stand_s0",
     "quill": "3_right_f_strike_s0"
+  },
+  "people": {
+    "garrick": "garrick_restored_1_toward_s0",
+    "maud": "maud_restored_1_toward_s3",
+    "pip": "pip_restored_1_toward_s2"
   }
 }
