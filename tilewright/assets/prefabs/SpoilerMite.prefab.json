@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "name": "SpoilerMite",
+  "root": {
+    "name": "Error Mite",
+    "tags": [
+      "enemy",
+      "error",
+      "error-1"
+    ],
+    "components": {
+      "sprite": {
+        "shape": "box",
+        "color": 2761270,
+        "w": 0.35,
+        "d": 0.35,
+        "height": 0.8,
+        "sortOffset": 0,
+        "visible": true,
+        "asset": "err_mite"
+      },
+      "body": {
+        "vx": 0,
+        "vy": 0,
+        "vz": 0,
+        "radius": 0.18,
+        "height": 1,
+        "state": "ground",
+        "stepUp": 0.35,
+        "stepDown": 0.4,
+        "ledge": "stop",
+        "pits": "stop",
+        "wade": false,
+        "gravity": 1,
+        "peakZ": 0,
+        "layer": 4,
+        "mask": 65535,
+        "noclip": false,
+        "blockedBy": [],
+        "blockedTerrain": false
+      },
+      "health": {
+        "max": 2,
+        "invulnerableSeconds": 0.22,
+        "onDeath": "stay",
+        "fallDamage": 0,
+        "team": "enemy",
+        "showBar": false
+      },
+      "damageOnTouch": {
+        "amount": 0,
+        "hurts": "player",
+        "range": 0.25,
+        "knockback": 4.2
+      },
+      "script_Error": {
+        "kind": 1,
+        "unlock": "",
+        "drops": "",
+        "friendlyLook": ""
+      }
+    },
+    "children": []
+  }
+}

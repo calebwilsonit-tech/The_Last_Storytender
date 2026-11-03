@@ -26,6 +26,7 @@ export default defineScript({
     unlock: { value: '', label: 'Only out once this flag is set (empty: always)' },
     drops: { value: '', label: 'Drop table: item,chance,low,high; ... (rolled when it is beaten)' },
     friendlyLook: { value: '', label: 'Its picture once proofread (sprite name; empty: unchanged)' },
+    sleepWhen: { value: '', label: 'Asleep while this flag is set (a sentence put it to sleep)' },
   },
   start(me) {
     const s = me.state;
@@ -63,6 +64,21 @@ export default defineScript({
     if (s.reset && p && Math.hypot(p.x - s.home.x, p.y - s.home.y) > 8 && me.distanceTo(p) > 8) comeBack(me);
     if (s.gone) {
       if (me.visible) me.visible = false;
+      return;
+    }
+    // asleep (a sentence said so): it does nothing, and a hit wakes it (and does double, as it did not see it coming)
+    if (me.settings.sleepWhen && !v[String(me.settings.sleepWhen)]) s.woke = false;
+    if (me.settings.sleepWhen && v[String(me.settings.sleepWhen)] && !s.woke) {
+      s.mode = 'idle';
+      s.alert = 0;
+      const touch0 = me.get('damageOnTouch');
+      if (touch0 && touch0.amount !== 0) me.set('damageOnTouch', { ...touch0, amount: 0 });
+      const hs = me.get('state:health');
+      if (hs && s.hp !== undefined && hs.hp < s.hp) {
+        s.woke = true; // only this one wakes
+        me.set('state:health', { ...hs, hp: Math.max(0, hs.hp - (s.hp - hs.hp)) });
+      }
+      if (hs) s.hp = hs.hp;
       return;
     }
     const out = !me.settings.unlock || !!v[String(me.settings.unlock)];

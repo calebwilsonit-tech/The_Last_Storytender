@@ -8,6 +8,7 @@
  */
 import { buildScreens } from './screens';
 import { decorateForge, forgeExtras, forgeRows, writeForgePrefabs, writeForgeTalk } from './forge';
+import { decoratePip, pipExtras, pipGapCells, pipMap, writePipTalk, type PipMap } from './pip';
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { TileMap, FLAG, SLOPE, tileMapToRows, currentFlags, stringifySprite, decodePng, pauseButtonRow, makeAnimator, locomotionController, encodePng, CURRENT_SCHEMA_VERSION, type EntityData, type SceneData, type ProjectData } from '@tilewright/runtime';
@@ -213,8 +214,11 @@ function buildMap(scene: string, snap: Snap): TileMap {
   const h = Math.max(...keys.map((k) => k[1])) + 2;
   // (the map is a little bigger than the land, so the paper shows all round it)
   const map = new TileMap(w + 4, h + 4);
+  // in Pip's memory the gaps a sentence can fill are floor under a cover (PitCover), not pits
+  const gaps = scene === 'pip' ? pipGapCells((pipMapCache ??= pipMap(join(HERE, '..', '..')))) : new Set<string>();
   for (const [x, y] of keys) {
-    const kind = snap.floor.cells[`${x},${y}`]!;
+    const gap = gaps.has(`${x},${y}`);
+    const kind = gap && kinds.has(`${scene}|p`) ? 'p' : snap.floor.cells[`${x},${y}`]!;
     const k = kinds.get(`${scene}|${kind}`)!;
     const vs = k.variants[(x + y) % 2]!;
     const tile = k.grid ? k.grid.ids[(y % k.grid.period) * k.grid.period + (x % k.grid.period)]! : vs[hash(x, y) % vs.length]!;
@@ -366,21 +370,38 @@ function dressObject(e: EntityData, kind: number, cell: [number, number], sceneF
 }
 
 let forgeRowsCache: string[] | undefined;
+let pipMapCache: PipMap | undefined;
+
+/** What the Spoiler spawns: a read sentence's patch of floor (Hazard), its paper cuts, and the Mites its wolves become. */
+function writePipPrefabs(): void {
+  flatArt('flowers', [236, 150, 190], 192, 96, true, 210, [120, 170, 80]);
+  flatArt('flash', [255, 244, 170], 192, 96, true, 230, [255, 255, 255]);
+  flatArt('hole', [22, 18, 30], 64, 32, true, 255, [10, 8, 14]);
+  const warn = flatArt('warn', [214, 90, 60], 192, 96, true, 150, [120, 30, 20]);
+  const page = flatArt('page', [246, 240, 226], 14, 14, false, 255, [60, 50, 40]);
+  const write = (name: string, root: object): void => writeFileSync(join(OUT, `assets/prefabs/${name}.prefab.json`), JSON.stringify({ schemaVersion: CURRENT_SCHEMA_VERSION, name, root }, null, 2) + '\n');
+  write('Hazard', { name: 'Read sentence', tags: ['hazard'], components: { sprite: { shape: 'box', color: 0xd65a3c, w: 3, d: 3, height: 0.02, sortOffset: -1, visible: true, asset: warn }, script_Hazard: { kind: 'lightning', window: 5.6 } }, children: [] });
+  write('PageCut', { name: 'Paper cut', tags: ['bolt', 'pagecut'], components: { sprite: { shape: 'box', color: 0xf6f0e2, w: 0.25, d: 0.25, height: 0.25, sortOffset: 0, visible: true, asset: page }, projectile: { speed: 4.2, lifetime: 3, useFacing: false, dirX: 1, dirY: 0, damage: 8, hurts: 'player', knockback: 3 } }, children: [] });
+  const mite: EntityData = { id: 'm', name: 'Error Mite', tags: [], components: { sprite: { shape: 'box', color: 0x2a2236, w: 0.35, d: 0.35, height: 0.5, sortOffset: 0, visible: true } } };
+  errorKit(mite, 1, '');
+  write('SpoilerMite', { name: 'Error Mite', tags: mite.tags, components: mite.components, children: [] });
+}
 let forgeAnvil: { x: number; y: number; h: number } | null = null;
 
 /** A plain flat picture: a diamond on the floor (a pool) or a round blot (a word in flight). */
-function flatArt(name: string, rgb: [number, number, number], w: number, h: number): string {
+function flatArt(name: string, rgb: [number, number, number], w: number, h: number, flat = name === 'pool', alpha = flat ? 200 : 255, edgeRgb: [number, number, number] = [40, 8, 10]): string {
   const px = new Uint8Array(w * h * 4);
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
     const nx = (x + 0.5) / w - 0.5, ny = (y + 0.5) / h - 0.5;
-    const inside = name === 'pool' ? Math.abs(nx) + Math.abs(ny) < 0.5 : nx * nx + ny * ny < 0.25;
-    const edge = name === 'pool' ? Math.abs(nx) + Math.abs(ny) > 0.46 : nx * nx + ny * ny > 0.18;
+    const inside = flat ? Math.abs(nx) + Math.abs(ny) < 0.5 : nx * nx + ny * ny < 0.25;
+    const edge = flat ? Math.abs(nx) + Math.abs(ny) > 0.46 : nx * nx + ny * ny > 0.18;
     if (!inside) continue;
     const o = (y * w + x) * 4;
-    px[o] = edge ? 40 : rgb[0]; px[o + 1] = edge ? 8 : rgb[1]; px[o + 2] = edge ? 10 : rgb[2]; px[o + 3] = name === 'pool' ? 200 : 255;
+    const c = edge ? edgeRgb : rgb;
+    px[o] = c[0]; px[o + 1] = c[1]; px[o + 2] = c[2]; px[o + 3] = alpha;
   }
   const { sprite } = importPng(encodePng(w, h, px), `fx_${name}`, w, h);
-  sprite.origin = { x: Math.round(w / 2), y: name === 'pool' ? Math.round(h / 2) : h };
+  sprite.origin = { x: Math.round(w / 2), y: flat ? Math.round(h / 2) : h };
   writeFileSync(join(spriteDir, `fx_${name}.sprite.json`), stringifySprite(sprite));
   return `fx_${name}`;
 }
@@ -469,8 +490,10 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
       continue;
     }
     if (['IsoFloor', 'GroundChunks', 'AmbientDrift', 'PasteGhost'].includes(n.class)) continue;
-    // the capture and the snapshot are separate runs of the game: match a picture by name, else by kind of object and place
-    const art0 = byNode.get(n.name) ?? sceneArt.find((a) => a.cls === n.class && Math.abs(a.grid[0] - n.grid[0]) < 0.6 && Math.abs(a.grid[1] - n.grid[1]) < 0.6);
+    // the capture and the snapshot are separate runs of the game, and names repeat between them: match a picture by kind of
+  // object and place, and by name only when that finds nothing
+    const named = byNode.get(n.name);
+    const art0 = sceneArt.find((a) => a.cls === n.class && Math.abs(a.grid[0] - n.grid[0]) < 0.6 && Math.abs(a.grid[1] - n.grid[1]) < 0.6) ?? (named && named.cls === n.class ? named : undefined);
     const e = entityFor(scene, n, art0, `e${i++}`, levelOf);
     if (!e) continue;
     if (scene === 'forge' && world) {
@@ -478,20 +501,38 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
       const gx = Math.round(n.grid[0]);
       const gy = Math.round(n.grid[1]);
       decorateForge(e, n.class, Number(n.props.kind ?? -1), rows[gy]?.[gx] ?? '', (n.props.axis as number[]) ?? [0, 1], world);
-      if (n.class === 'EchoPlate' && OBJECTS && existsSync(join(OBJECTS, 'echo_plate_dim.png'))) {
-        const feet = JSON.parse(readFileSync(join(OBJECTS, 'objects.json'), 'utf8')) as Record<string, [number, number]>;
-        const off = spriteFor(join(OBJECTS, 'echo_plate_dim.png'), 'obj_echo_plate_dim', feet.echo_plate_dim);
-        const on = spriteFor(join(OBJECTS, 'echo_plate_lit.png'), 'obj_echo_plate_lit', feet.echo_plate_lit);
-        Object.assign(e.components.sprite as object, { asset: off, height: 0.3, sortOffset: -0.4 });
-        Object.assign(e.components.script_Plate as object, { lookOn: on, lookOff: off });
-      }
       // the forge's stone blocks (memory_forge.gd "B"): slate, about a level tall
       if (n.class === 'IsoBlock') Object.assign(e.components.sprite as object, { color: 0x56627a, w: 1, d: 1, height: 1.05 });
       if (n.class === 'Prop' && Number(n.props.kind) === 7) forgeAnvil = { x: gx + 0.5, y: gy + 0.5, h: levelOf(gx, gy) };
     }
+    if (scene === 'pip' && world) {
+      const m = (pipMapCache ??= pipMap(join(HERE, '..', '..')));
+      const gx = Math.round(n.grid[0]);
+      const gy = Math.round(n.grid[1]);
+      decoratePip(e, n.class, Number(n.props.kind ?? -1), m.rows[gy]?.[gx] ?? '', [gx, gy], world, n.props);
+    }
+    if (n.class === 'EchoPlate' && e.components.script_Plate && OBJECTS && existsSync(join(OBJECTS, 'echo_plate_dim.png'))) {
+      const feet = JSON.parse(readFileSync(join(OBJECTS, 'objects.json'), 'utf8')) as Record<string, [number, number]>;
+      const off = spriteFor(join(OBJECTS, 'echo_plate_dim.png'), 'obj_echo_plate_dim', feet.echo_plate_dim);
+      const on = spriteFor(join(OBJECTS, 'echo_plate_lit.png'), 'obj_echo_plate_lit', feet.echo_plate_lit);
+      Object.assign(e.components.sprite as object, { asset: off, height: 0.3, sortOffset: -0.4 });
+      Object.assign(e.components.script_Plate as object, { lookOn: on, lookOff: off });
+    }
+    // a sentence stone: a blank board, and the engine writes the live sentence over it
+    if (e.components.sentenceStone && OBJECTS && existsSync(join(OBJECTS, 'sign_wide.png'))) {
+      const feet = JSON.parse(readFileSync(join(OBJECTS, 'objects.json'), 'utf8')) as Record<string, [number, number]>;
+      Object.assign(e.components.sprite as object, { asset: spriteFor(join(OBJECTS, 'sign_wide.png'), 'obj_sign_wide', feet.sign_wide), height: 1.6 });
+    }
+    // a Mnemosynth crystal in a memory: walked into
+    if (scene !== 'overworld' && n.class === 'Prop' && Number(n.props.kind) === 3) attach(e.components, 'script_Collect', { flag: `got_${scene}_C_${Math.round(n.grid[0])}_${Math.round(n.grid[1])}`, mnemo: 5, light: 12, radius: 1.2 });
     if (n.class === 'Enemy') {
       if (scene === 'overworld') continue; // the Prologue's Errors come from its map letters (below)
       errorKit(e, Number(n.props.kind ?? 0), '');
+      if (scene === 'pip') {
+        const gx = n.grid[0], gy = n.grid[1];
+        const sleepWhen = gy >= 20 && gx <= 29 ? 'sleep_wood' : gx >= 45 ? 'sleep_archive' : '';
+        if (sleepWhen) Object.assign(e.components.script_Error as object, { sleepWhen });
+      }
     }
     if (world && scene === 'overworld') decorateOverworld(e, n, [Math.round(n.grid[0]), Math.round(n.grid[1])], world);
     if (n.class === 'Npc') dressPerson(e);
@@ -505,6 +546,10 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
   }
   if (scene === 'overworld') entities.push(...prologueErrors(levelOf, () => `e${i++}`));
   if (scene === 'forge' && forgeAnvil) entities.push(...forgeExtras(forgeAnvil, forgeSwordArt(), () => `e${i++}`));
+  if (scene === 'pip' && pipMapCache) {
+    const looks = { hole: flatArt('hole', [22, 18, 30], 64, 32, true, 255, [10, 8, 14]), plank: flatArt('plank', [150, 104, 60], 64, 32, true, 255, [70, 44, 24]), ice: flatArt('ice', [190, 228, 240], 64, 32, true, 235, [110, 160, 190]) };
+    entities.push(...pipExtras(pipMapCache, levelOf, looks, () => `e${i++}`));
+  }
   for (const c of blocked) if (!taken.has(c)) {
     const [x, y] = c.split(',').map(Number) as [number, number];
     map.setFlag(x, y, FLAG.BLOCK);
@@ -630,8 +675,10 @@ function main(): void {
   if (world) {
     writeOverworldTalk(world);
     writeForgeTalk(world);
+    writePipTalk(world);
   }
   writeForgePrefabs(OUT, CURRENT_SCHEMA_VERSION, flatArt('pool', [138, 20, 20], 192, 96), flatArt('bolt', [70, 12, 16], 18, 18));
+  writePipPrefabs();
   if (existsSync(join(HERE, 'scripts'))) {
     mkdirSync(join(OUT, 'assets/scripts'), { recursive: true });
     for (const f of readdirSync(join(HERE, 'scripts'))) writeFileSync(join(OUT, 'assets/scripts', f), readFileSync(join(HERE, 'scripts', f)));

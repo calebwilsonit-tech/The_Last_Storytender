@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "name": "take_page_3",
+  "start": "n8",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "set",
+      "variable": "page_3",
+      "op": "set",
+      "value": 1,
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "pip_pages",
+      "op": "add",
+      "value": 1,
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "Found: a Torn Page",
+      "next": "n6"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Three pages. He is more afraid of the ending than of anything in it, and the door knows.[/i]"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i][/i]"
+    },
+    {
+      "id": "n6",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "pip_pages",
+        "op": ">=",
+        "value": 3
+      },
+      "then": "n4",
+      "else": "n5"
+    },
+    {
+      "id": "n7",
+      "type": "end"
+    },
+    {
+      "id": "n8",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "page_3",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n7",
+      "else": "n1"
+    }
+  ]
+}

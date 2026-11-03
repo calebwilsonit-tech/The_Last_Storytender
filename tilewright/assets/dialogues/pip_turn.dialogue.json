@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "name": "pip_turn",
+  "start": "n19",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "Pip",
+      "text": "Is it... is it over?",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]He is small, and he is gripping the book so tightly his knuckles have gone pale. The page in his lap is blank.[/i]",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "Pip",
+      "text": "I read the last page. I read it before anyone could tell me it was safe to.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Pip",
+      "text": "And after that nothing felt like it mattered, because I already knew how it ended.",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You hold out the lantern. You can't tell him how it ends. You don't know. Nobody does.[/i]",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "Pip",
+      "text": "...That's scary.",
+      "next": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]It is. It is also the only way a story gets to keep going.[/i]",
+      "next": "n8"
+    },
+    {
+      "id": "n8",
+      "type": "line",
+      "speaker": "Pip",
+      "text": "Will you stay while I turn it?",
+      "next": "n9"
+    },
+    {
+      "id": "n9",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You stay.[/i]",
+      "next": "n10"
+    },
+    {
+      "id": "n10",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]He turns the page. Nothing terrible happens. A new sentence begins to write itself, slowly, in handwriting that looks a great deal like his.[/i]",
+      "next": "n11"
+    },
+    {
+      "id": "n11",
+      "type": "set",
+      "variable": "pip_memory_done",
+      "op": "set",
+      "value": 1,
+      "next": "n12"
+    },
+    {
+      "id": "n12",
+      "type": "set",
+      "variable": "mnemosynth",
+      "op": "add",
+      "value": 40,
+      "next": "n13"
+    },
+    {
+      "id": "n13",
+      "type": "give",
+      "item": "bookmark",
+      "amount": 1,
+      "next": "n14"
+    },
+    {
+      "id": "n14",
+      "type": "line",
+      "speaker": "",
+      "text": "Received: Bookmark and 40 Mnemosynth",
+      "next": "n15"
+    },
+    {
+      "id": "n15",
+      "type": "set",
+      "variable": "leave_pip",
+      "op": "set",
+      "value": 1
+    },
+    {
+      "id": "n16",
+      "type": "end"
+    },
+    {
+      "id": "n17",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Pip is hiding behind the book. Not yet.[/i]"
+    },
+    {
+      "id": "n18",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "spoiler_down",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n1",
+      "else": "n17"
+    },
+    {
+      "id": "n19",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "pip_memory_done",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n16",
+      "else": "n18"
+    }
+  ]
+}

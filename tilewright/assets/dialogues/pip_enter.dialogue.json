@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "name": "pip_enter",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Every page is bright and printed. Every sentence is waiting to be true.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A sentence stands here with one word that can change. Strike it with the Quill, or press [E].[/i]",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "set",
+      "variable": "pip_entered",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}

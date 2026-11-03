@@ -37,6 +37,7 @@
     "oven_cold": "from:oven_warm:cold",
     "echo_plate_dim": "echo_plate_dim_s2:0",
     "echo_plate_lit": "echo_plate_dim_s2:1",
-    "first_sword": "first_sword_s3:0"
+    "first_sword": "first_sword_s3:0",
+    "sign_wide": "sign_wide_s0:2"
   }
 }

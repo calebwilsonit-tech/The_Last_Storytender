@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "name": "fx_page",
+  "width": 14,
+  "height": 14,
+  "palette": [
+    "#00000000",
+    "#000000ff",
+    "#ffffffff",
+    "#e8553dff",
+    "#f4a259ff",
+    "#f6d55cff",
+    "#6fae5bff",
+    "#2f6f4eff",
+    "#4a90d9ff",
+    "#2b4c7eff",
+    "#8e7cc3ff",
+    "#c9964aff",
+    "#7b5a3aff",
+    "#a3a7b3ff",
+    "#5c6070ff",
+    "#2a2d38ff",
+    "#3c3228ff",
+    "#f6f0e2ff"
+  ],
+  "layers": [
+    {
+      "id": "l1",
+      "name": "Layer 1",
+      "visible": true
+    }
+  ],
+  "frames": [
+    {"duration":100,"cels":{"l1":"4x0 6x16 7x0 2x16 4x17 2x16 5x0 1x16 8x17 1x16 3x0 1x16 10x17 1x16 1x0 2x16 10x17 3x16 12x17 2x16 12x17 2x16 12x17 2x16 12x17 3x16 10x17 2x16 1x0 1x16 10x17 1x16 3x0 1x16 8x17 1x16 5x0 2x16 4x17 2x16 7x0 6x16 4x0"},"boxes":[]}
+  ],
+  "origin": {
+    "x": 7,
+    "y": 14
+  },
+  "clips": [],
+  "procedural": null
+}

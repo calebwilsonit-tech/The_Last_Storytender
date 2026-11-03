@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "name": "spoiler_reckon",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The book sinks out of the air until it hangs at the height of your eyes. Its pages are shaking. It has run out of things to say that you haven't already changed.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "The Spoiler",
+      "text": "...Fine. If you're so sure of the ending, come and take it.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]It is still the Spoiler, and the next spoiler is already loading. But it is made of paper now, and paper can be written on. Strike it, and when it stops to read, strike harder.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "set",
+      "variable": "spoiler_reckoning",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "name": "fx_ice",
+  "width": 64,
+  "height": 32,
+  "palette": [
+    "#00000000",
+    "#000000ff",
+    "#ffffffff",
+    "#e8553dff",
+    "#f4a259ff",
+    "#f6d55cff",
+    "#6fae5bff",
+    "#2f6f4eff",
+    "#4a90d9ff",
+    "#2b4c7eff",
+    "#8e7cc3ff",
+    "#c9964aff",
+    "#7b5a3aff",
+    "#a3a7b3ff",
+    "#5c6070ff",
+    "#2a2d38ff",
+    "#6ea0beeb",
+    "#bee4f0eb"
+  ],
+  "layers": [
+    {
+      "id": "l1",
+      "name": "Layer 1",
+      "visible": true
+    }
+  ],
+  "frames": [
+    {"duration":100,"cels":{"l1":"31x0 2x16 60x0 6x16 56x0 3x16 4x17 3x16 52x0 3x16 8x17 3x16 48x0 3x16 12x17 3x16 44x0 3x16 16x17 3x16 40x0 3x16 20x17 3x16 36x0 3x16 24x17 3x16 32x0 3x16 28x17 3x16 28x0 3x16 32x17 3x16 24x0 3x16 36x17 3x16 20x0 3x16 40x17 3x16 16x0 3x16 44x17 3x16 12x0 3x16 48x17 3x16 8x0 3x16 52x17 3x16 4x0 3x16 56x17 3x16 2x0 3x16 56x17 3x16 4x0 3x16 52x17 3x16 8x0 3x16 48x17 3x16 12x0 3x16 44x17 3x16 16x0 3x16 40x17 3x16 20x0 3x16 36x17 3x16 24x0 3x16 32x17 3x16 28x0 3x16 28x17 3x16 32x0 3x16 24x17 3x16 36x0 3x16 20x17 3x16 40x0 3x16 16x17 3x16 44x0 3x16 12x17 3x16 48x0 3x16 8x17 3x16 52x0 3x16 4x17 3x16 56x0 6x16 60x0 2x16 31x0"},"boxes":[]}
+  ],
+  "origin": {
+    "x": 32,
+    "y": 16
+  },
+  "clips": [],
+  "procedural": null
+}

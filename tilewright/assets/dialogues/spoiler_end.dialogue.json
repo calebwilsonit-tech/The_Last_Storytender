@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "name": "spoiler_end",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "The Spoiler",
+      "text": "...You can't just change it.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]It sounds younger now. Its pages are shaking.[/i]",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "The Spoiler",
+      "text": "If I don't tell him how it ends, he'll find out alone. That's worse. That's always worse.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You hold up the lantern. The torn page drifts down out of the book and lands in your hand, blank.[/i]",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]It was never torn out. It was never written. That was the whole secret: there was never a last page, only a boy who was afraid to find out.[/i]",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "The Spoiler",
+      "text": "...Oh.",
+      "next": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "set",
+      "variable": "spoiler_down",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "name": "pip_door",
+  "start": "n7",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You slide the Torn Page into the slot. It fits exactly. Of course it does. He knows how this story ends.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The door of bound pages swings open onto a vast white room.[/i]",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "set",
+      "variable": "door_H",
+      "op": "set",
+      "value": 1
+    },
+    {
+      "id": "n4",
+      "type": "end"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A door made of bound pages, with a slot the shape of a missing page.[/i]"
+    },
+    {
+      "id": "n6",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "pip_pages",
+        "op": ">=",
+        "value": 3
+      },
+      "then": "n1",
+      "else": "n5"
+    },
+    {
+      "id": "n7",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "door_H",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n4",
+      "else": "n6"
+    }
+  ]
+}
