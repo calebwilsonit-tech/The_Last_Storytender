@@ -18,6 +18,7 @@ const PER_KEY_MAX := 16     # at most 16 different pictures of one key (trees); 
 var _out := ""
 var _only: Array = []
 var _hashes := {}            # png hash -> file name (identical pictures are saved once)
+var _saved_as := {}          # the file name a slot was meant to get -> the file that really holds its picture
 var _index := []             # one entry per captured instance
 
 func _init() -> void:
@@ -128,7 +129,7 @@ func _run() -> void:
 			var file := "%s_%d.png" % [name_base, slot]
 			var entry := {"scene": key, "key": k, "node": String(t.name), "cls": t.get_script().get_global_name(), "grid": [Iso.to_grid(t.position).x, Iso.to_grid(t.position).y], "file": ""}
 			if per_key[k] > PER_KEY_MAX:
-				entry["file"] = file
+				entry["file"] = _saved_as.get(file, file)
 				_index.append(entry)
 				continue
 			# show only this one: along the path from the level down to it, every sibling is hidden
@@ -168,6 +169,7 @@ func _run() -> void:
 					crop.save_png(_out.path_join(file))
 					n_saved += 1
 				entry["file"] = _hashes[h]
+				_saved_as[file] = _hashes[h]
 				entry["feet"] = [feet.x - box.position.x - sub.position.x, feet.y - box.position.y - sub.position.y]
 				entry["size"] = [sub.size.x, sub.size.y]
 			_index.append(entry)
