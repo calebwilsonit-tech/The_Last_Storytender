@@ -52,9 +52,15 @@ def wall_row(h_top, h):
 
 
 def build(floor, dirname):
+    """The flight of one floor, from its tile VARIANT and that tile's faces."""
     tile = np.asarray(Image.open(os.path.join(TOPS, f'{floor}_{VARIANT}.png')).convert('RGBA'))
     left = np.asarray(Image.open(os.path.join(SIDES, f'{floor}_{VARIANT}_left.png')).convert('RGBA'))
     right = np.asarray(Image.open(os.path.join(SIDES, f'{floor}_{VARIANT}_right.png')).convert('RGBA'))
+    return build_from(tile, left, right, dirname)
+
+
+def build_from(tile, left, right, dirname):
+    """A flight of stairs rising `dirname` from a 64 x 32 tile and its 32 x 44 left and right cliff faces (RGBA arrays)."""
     dx, dy = DIRS[dirname]
     out = np.zeros((H, W, 4), np.float32)
 

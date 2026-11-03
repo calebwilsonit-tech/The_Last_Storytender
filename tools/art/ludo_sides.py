@@ -257,4 +257,5 @@ def main():
     print('wrote', n, 'faces to', OUT)
 
 
-main()
+if __name__ == "__main__":
+    main()
