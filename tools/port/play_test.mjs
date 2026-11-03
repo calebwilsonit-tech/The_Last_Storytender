@@ -170,6 +170,11 @@ try {
   await page.keyboard.up('KeyQ');
   const l1 = Number((await vars()).light ?? 100);
   check('hold the lantern', l1 < l0, `light ${l0.toFixed(1)} -> ${l1.toFixed(1)}`);
+  // 8b. the chest opened in 4 looks open, the post lit in 6 looks lit
+  const assetNear = (x, y) => page.evaluate(([x, y]) => { let best = null, d = 1e9; for (const e of window.__play.sim.world.all()) { const t = e.get('transform'); const a = e.get('sprite')?.asset ?? ''; if (!t || !String(a).startsWith('obj_')) continue; const k = Math.hypot(t.x - x, t.y - y); if (k < d) { d = k; best = a; } } return best; }, [x, y]);
+  check('the opened chest looks open', (await assetNear(21.5, 44.5)) === 'obj_chest_open', await assetNear(21.5, 44.5));
+  check('the lit lantern post looks lit', (await assetNear(28.5, 52.5)) === 'obj_post_lit', await assetNear(28.5, 52.5));
+
   // 9. Garrick is a graphite placeholder until he is restored, then in colour
   const look = () => page.evaluate(() => window.__play.sim.world.withTag('garrick')[0]?.get('sprite')?.asset);
   const lookBefore = await look();

@@ -24,5 +24,16 @@
     "dangler_friendly": "dangler_friendly_s3:0",
     "censor": "censor_stand_s1:0",
     "ellipsis": "ellipsis_stand_s3:3"
+  },
+  "objects": {
+    "_about": "<picture>:<piece>; 'from' makes the other state from the same picture (cold: the fire put out, frozen: the fire turned to ice)",
+    "chest_closed": "chest_closed_s2:1",
+    "chest_open": "chest_open_s2:1",
+    "post_unlit": "post_unlit_s0:1",
+    "post_lit": "post_lit_s0:1",
+    "forge_warm": "forge_warm_s2:1",
+    "forge_frozen": "from:forge_warm:frozen",
+    "oven_warm": "oven_warm_s0:0",
+    "oven_cold": "from:oven_warm:cold"
   }
 }

@@ -22,6 +22,7 @@ const POSES = process.env.POSES ?? '';
 const DATA = process.env.DATA ?? '';
 const PEOPLE = process.env.PEOPLE ?? '';
 const ERRORS = process.env.ERRORS ?? '';
+const OBJECTS = process.env.OBJECTS ?? '';
 const ICONS = process.env.ICONS ?? '';
 const HERE = process.env.HERE!;
 const OUT = process.env.OUT!;
@@ -326,6 +327,30 @@ function dressPerson(e: EntityData): void {
   attach(e.components, 'script_Flagged', { hideWhen: '', showWhen: '', lookWhen: `restored_${who}`, look: colour });
 }
 
+/**
+ * Objects that change with the story, in the generated art (sd_objects.py): a chest opens, a lantern post lights, the forge
+ * burns once Garrick is restored and the oven once Maud is. The first look until the flag, then the second (Flagged).
+ */
+function dressObject(e: EntityData, kind: number, cell: [number, number], sceneFile: string): void {
+  if (!OBJECTS || !existsSync(join(OBJECTS, 'objects.json'))) return;
+  const feet = JSON.parse(readFileSync(join(OBJECTS, 'objects.json'), 'utf8')) as Record<string, [number, number]>;
+  const pair: Record<number, [string, string, string, number]> = {
+    18: ['chest_closed', 'chest_open', `got_chest_${cell[0]}_${cell[1]}`, 0.9],
+    16: ['post_unlit', 'post_lit', `lit:${sceneFile}:${e.id}`, 1.8],
+    2: ['forge_frozen', 'forge_warm', 'restored_garrick', 3],
+    14: ['oven_cold', 'oven_warm', 'restored_maud', 2.6],
+  };
+  const p = pair[kind];
+  if (!p || !existsSync(join(OBJECTS, `${p[0]}.png`))) return;
+  const [first, second, flag, height] = p;
+  const a = spriteFor(join(OBJECTS, `${first}.png`), `obj_${first}`, feet[first]);
+  const b = spriteFor(join(OBJECTS, `${second}.png`), `obj_${second}`, feet[second]);
+  Object.assign(e.components.sprite as object, { asset: a, height });
+  const f = e.components.script_Flagged as Record<string, string> | undefined;
+  if (f) Object.assign(f, { lookWhen: flag, look: b });
+  else attach(e.components, 'script_Flagged', { hideWhen: '', showWhen: '', lookWhen: flag, look: b });
+}
+
 let world: World | null = null;
 function loadWorld(): World | null {
   if (!DATA) return null;
@@ -408,6 +433,7 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
     }
     if (world && scene === 'overworld') decorateOverworld(e, n, [Math.round(n.grid[0]), Math.round(n.grid[1])], world);
     if (n.class === 'Npc') dressPerson(e);
+    if (n.class === 'Prop' && scene === 'overworld') dressObject(e, Number(n.props.kind ?? -1), [Math.round(n.grid[0]), Math.round(n.grid[1])], SCENES[scene]!.file);
     const cell = `${Math.round(n.grid[0])},${Math.round(n.grid[1])}`;
     if (blocked.has(cell) && !taken.has(cell)) {
       taken.add(cell);
