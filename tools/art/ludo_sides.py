@@ -54,7 +54,9 @@ EXTRA = {
 def palette(src):
     """The darks, middle and lights of a picture: mean colours of its darkest 8%, all of it and its lightest 8% (by brightness)."""
     if isinstance(src, str):
-        img = Image.open(os.path.join(SRC, src + '.png')).convert('RGB').resize((96, 96), Image.LANCZOS)
+        new = os.path.join(SRC, 'top_' + src[len('floor_'):] + '.png')     # a top made to match its wall wins over the first floor picture
+        path = new if src.startswith('floor_') and os.path.exists(new) else os.path.join(SRC, src + '.png')
+        img = Image.open(path).convert('RGB').resize((96, 96), Image.LANCZOS)
         px = np.asarray(img).reshape(-1, 3).astype(np.float32)
     else:
         px = np.asarray(src, np.float32).reshape(-1, 3)

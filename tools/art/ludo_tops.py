@@ -59,7 +59,10 @@ def main():
     index = {}
     for name in FLOORS:
         files = {}
-        for (i, j), im in tiles_of(os.path.join(repo, 'art', 'incoming2', 'tiles', f'floor_{name}.png')).items():
+        pic = os.path.join(repo, 'art', 'incoming2', 'tiles', f'top_{name}.png')      # a top made to match its wall (tops_from_walls*.json) wins
+        if not os.path.exists(pic):
+            pic = os.path.join(repo, 'art', 'incoming2', 'tiles', f'floor_{name}.png')
+        for (i, j), im in tiles_of(pic).items():
             f = f'{name}_{i}{j}.png'
             im.save(os.path.join(out, f))
             files[f'{i},{j}'] = f
