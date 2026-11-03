@@ -1,0 +1,12 @@
+PASS the forge door takes you into the memory - scenes/forge.scene.json
+PASS the memory greets you and gives you an echo - [i]Inside the flame, it is always the same afternoon.[/i] | [i]The lantern remembers more than you do. Press [R], walk somewhere, and press 
+PASS standing on a plate opens its gate - plate_a 1
+PASS Garrick's three tools open the forge door - tokens 3
+PASS the lantern lifts the black bar
+PASS the Critic wakes in the forge hall - [i]The air is cold and perfectly still. Sparks hang where they flew, each one wrapped in frost. Nothing here has moved i
+PASS the Critic throws its words - 1 in the air
+PASS three memories strip its layers: the reckoning
+PASS the Critic can be hurt after the reckoning - hp 77 -> 72.60000000000002
+PASS beaten, the First Sword appears on the anvil - [i]On the anvil, something small is waiting.[/i]
+PASS taking the sword ends the memory and brings you home - scenes/overworld.scene.json
+errors 0

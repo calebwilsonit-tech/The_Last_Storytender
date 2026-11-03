@@ -1,0 +1,13 @@
+PASS read the tutorial sign - [WASD] to walk.   [E] to speak, or to pick up what was forgotten. | Mind the plot holes.
+PASS collect a crystal - mnemosynth 0 -> 5
+PASS talk to Garrick - Lorem Ipsum: Lorem ipsum dolor sit amet... | Lorem Ipsum: ...consectetur. Horseshoe? Horseshoe. | [i]He is not a person right now. He is a placeholder holding a
+PASS open a chest - Received: Ink Vial x2 | [i]There is a note inside: 'if you found this, the story is going better than I feared.'[/i]
+PASS take a pickup - Received: Softcover Binding
+PASS light a lantern post - lit:scenes/overworld.scene.json:e416
+PASS strike the dummy - dummy hp 999 -> 997.9
+PASS hold the lantern - light 100.0 -> 70.0
+PASS the opened chest looks open - obj_chest_open
+PASS the lit lantern post looks lit - obj_post_lit
+PASS Garrick turns from placeholder to colour when restored - npc_garrick_ghost -> npc_garrick
+PASS title screen started the game - HUD
+errors 0

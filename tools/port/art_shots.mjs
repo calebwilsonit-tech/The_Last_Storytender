@@ -111,7 +111,7 @@ for (const sceneName of order) {
       const vars = {};
       for (const [k, v] of Object.entries(s.vars)) vars[found ? k.replace('{id}', found.id).replace('{cx}', Math.round(found.x - 0.5)).replace('{cy}', Math.round(found.y - 0.5)) : k] = v;
       await page.evaluate((v) => { Object.assign(window.__play.sim.runtime.vars, v); }, vars);
-      await page.waitForTimeout(900);
+      await page.waitForTimeout(s.after ?? 900);
     }
     if (s.look && found) {   // {look: [script, setting]}: shows the picture a script would switch to (its setting holds the sprite name)
       await page.evaluate(([id, script, key]) => {

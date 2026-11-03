@@ -1,0 +1,13 @@
+PASS Maud's oven takes you into the memory - scenes/maud.scene.json
+PASS the memory greets you and grants the format styles - [i]The Quill hums. It has learned a new edge: it can format.[/i] | [i]Press [1], [2] or [3] to choose Underline, Bold or
+PASS underlining BREAD bridges the gap - style underline
+PASS bold, italic SALT slides onto the plate and opens the COLD door - salt 16.5 -> 24.5
+PASS the dough collapses if rushed, and once risen underlining it bridges the cellar - bridge 1
+PASS the Empty Table wakes in the hall
+PASS guests arrive - 2 guests
+PASS the lantern leads a guest to a chair - seated 1
+PASS the Cold Shoulder comes - hp 119
+PASS the Cold Shoulder can be hurt from behind or as it rests - hp 119 -> 117
+PASS the Cold Shoulder is beaten
+PASS you sit with Maud and are home - scenes/overworld.scene.json
+errors 0

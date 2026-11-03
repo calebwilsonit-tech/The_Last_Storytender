@@ -27,7 +27,7 @@ python3 "$REPO/tools/port/cut_sheet.py" "$REPO/art/incoming/storytender_sheet.jp
 python3 "$REPO/tools/port/apply_art.py" "$WORK"
 # the Storytender from the generated art (art/picks.json), when it has been chosen
 if [ -f "$REPO/art/picks.json" ]; then python3 -I "$REPO/tools/art/sd_hero.py" "$REPO" "$WORK"; python3 -I "$REPO/tools/art/sd_people.py" "$REPO" "$WORK"; python3 -I "$REPO/tools/art/sd_errors.py" "$REPO" "$WORK"; python3 -I "$REPO/tools/art/sd_objects.py" "$REPO" "$WORK"; fi
-# the Ludo.ai pictures (art/incoming2, tools/art/ludo.py) over the world's objects in art_q; sheet_tiles.py and the sd_ scripts read them too
+# the Ludo.ai pictures (art/incoming2, tools/art/ludo.py) over the world's objects in art_q and the item icons; sheet_tiles.py and the sd_ scripts read them too
 python3 -I "$REPO/tools/art/ludo_props.py" "$REPO" "$WORK"
 python3 -I "$REPO/tools/art/ludo_icons.py" "$REPO" "$WORK"
 # the floor from the tile sheet (art/incoming/tiles_sheet.jpg) and from the Ludo.ai floors (art/incoming2/tiles; NO_LUDO=1 ignores them)

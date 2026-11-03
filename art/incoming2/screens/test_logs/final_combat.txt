@@ -1,0 +1,13 @@
+PASS the Prologue has its Errors - bare 12, mite 14, dangler 7
+PASS Danglers stay away until Pip is restored - false,false,false,false,false,false,false
+PASS walking plays the walk - walk/walk
+PASS J plays the quill strike, then back to standing - strike/strike idle/idle
+PASS a Bare notices and lunges - hp 96.4
+PASS a beaten Mite drops a crystal worth 5 - gained 5 (a crystal lying nearby may be picked up too)
+PASS resting brings the Mite back - hp 2
+PASS the quill beats a Mite - renown 0 -> 1, mnemosynth 5 -> 10
+PASS the lantern proofreads a Bare - key KeyD
+PASS a proofread Bare looks friendly - err_bare_friendly
+PASS the lantern burns a Mite away
+PASS Pip restored lets the Danglers out - true,true,true,true,true,true,true
+errors 0

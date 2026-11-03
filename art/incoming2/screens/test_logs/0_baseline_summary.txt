@@ -1,0 +1,5 @@
+play exit=0 240s
+forge exit=0 259s
+pip exit=0 281s
+maud exit=0 261s
+combat exit=0 240s

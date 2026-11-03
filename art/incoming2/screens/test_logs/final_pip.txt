@@ -1,0 +1,13 @@
+PASS Pip's storybook takes you into the memory - scenes/pip.scene.json
+PASS the memory greets you - [i]Every page is bright and printed. Every sentence is waiting to be true.[/i] | [i]A sentence stands here with one word
+PASS rewriting the bridge to HOLDS makes it crossable - stone_a HOLDS
+PASS the wolves fall ASLEEP
+PASS the gate is OPEN
+PASS the river FREEZES for 12 seconds, then the words wear off - frozen true, after 0 FLOWING
+PASS three Torn Pages open THE END - pages 3
+PASS the Spoiler wakes on the Last Page
+PASS a strike while it reads rewrites the sentence - hazards 1, rewrites 1
+PASS after five rewrites it can be hurt - hp 133 -> 123
+PASS the Spoiler is beaten
+PASS Pip turns the page and you are home - scenes/overworld.scene.json
+errors 0
