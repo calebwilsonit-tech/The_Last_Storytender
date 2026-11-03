@@ -8,7 +8,7 @@ bottom corner, 28 px thick) and the right face is its mirror. Each face here is 
   - then each kind of floor finishes the wall its own way: earth gets Ludo's cracked earth under a lip that is the top's own grass, stone
     gets courses, planks get grain, pages get leaves,
   - lit like the rest of the game (the left face lighter, the right darker, both darker toward the foot).
-(Round cobbles are smoothed first, so their gaps do not turn into bars.) Stone, wood and paper are outlined in a dark shade of their floor along the ledge, the corner and the foot; earth and grass are not (their
+(Round cobbles are smoothed first, so their gaps do not turn into bars.) Stone, wood and paper are outlined in a dark shade of their floor along the ledge and the foot (not up the sides: a tile cannot know where a wall ends, and a bar at every tile would cut the wall into panels; the right face is darker than the left, which is what shows the corner); earth and grass are not (their
 lip already shows where the ground ends).
 Every tile of a floor (x and y 0 to 3) has its own pair of faces, because the top is different at each, written as
 <out>/<floor>_<x><y>_left.png and _right.png (32 x 44, transparent); plus pit and page_edge, which have no top picture (one pair each).
@@ -157,20 +157,16 @@ def shear(strip, left, outline):
     for x in range(W):
         sx = x if left else W - 1 - x           # the right face is the left one turned round
         y0 = round(sx * 16 / (W - 1))
-        corner = x >= W - 3 if left else x <= 2   # where the two faces meet the wall turns away: a gentle shade
         for k in range(THICK):
             y = y0 + k
             if y < H:
-                tone = shade * (1.0 - 0.22 * k / THICK) * (0.8 if k >= THICK - 2 else 1.0) * (0.88 if corner else 1.0)
+                tone = shade * (1.0 - 0.22 * k / THICK) * (0.8 if k >= THICK - 2 else 1.0)
                 out[y, x, :3] = strip[k, x] * tone
                 out[y, x, 3] = 255
         if outline is not None:
             for k in (0, THICK - 1):
                 if y0 + k < H:
                     out[y0 + k, x, :3] = outline
-    if outline is not None:
-        c = W - 1 if left else 0
-        out[:, c, :3] = np.where(out[:, c:c + 1, 3] > 0, outline, out[:, c, :3])
     return out
 
 
