@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "name": "WordBolt",
+  "root": {
+    "name": "Word",
+    "tags": [
+      "bolt"
+    ],
+    "components": {
+      "sprite": {
+        "shape": "box",
+        "color": 7999504,
+        "w": 0.25,
+        "d": 0.25,
+        "height": 0.25,
+        "sortOffset": 0,
+        "visible": true,
+        "asset": "fx_bolt"
+      },
+      "projectile": {
+        "speed": 5.3,
+        "lifetime": 3.5,
+        "useFacing": false,
+        "dirX": 1,
+        "dirY": 0,
+        "damage": 9,
+        "hurts": "player",
+        "knockback": 4
+      }
+    },
+    "children": []
+  }
+}

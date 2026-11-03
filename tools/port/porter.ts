@@ -7,6 +7,7 @@
  * Bundled and run by run_porter.sh. Inputs come from environment variables: SNAP, ART, TILES, OUT.
  */
 import { buildScreens } from './screens';
+import { decorateForge, forgeExtras, forgeRows, writeForgePrefabs, writeForgeTalk } from './forge';
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { TileMap, FLAG, SLOPE, tileMapToRows, currentFlags, stringifySprite, decodePng, pauseButtonRow, makeAnimator, locomotionController, encodePng, CURRENT_SCHEMA_VERSION, type EntityData, type SceneData, type ProjectData } from '@tilewright/runtime';
@@ -364,6 +365,35 @@ function dressObject(e: EntityData, kind: number, cell: [number, number], sceneF
   else attach(e.components, 'script_Flagged', { hideWhen: '', showWhen: '', lookWhen: flag, look: b });
 }
 
+let forgeRowsCache: string[] | undefined;
+let forgeAnvil: { x: number; y: number; h: number } | null = null;
+
+/** A plain flat picture: a diamond on the floor (a pool) or a round blot (a word in flight). */
+function flatArt(name: string, rgb: [number, number, number], w: number, h: number): string {
+  const px = new Uint8Array(w * h * 4);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const nx = (x + 0.5) / w - 0.5, ny = (y + 0.5) / h - 0.5;
+    const inside = name === 'pool' ? Math.abs(nx) + Math.abs(ny) < 0.5 : nx * nx + ny * ny < 0.25;
+    const edge = name === 'pool' ? Math.abs(nx) + Math.abs(ny) > 0.46 : nx * nx + ny * ny > 0.18;
+    if (!inside) continue;
+    const o = (y * w + x) * 4;
+    px[o] = edge ? 40 : rgb[0]; px[o + 1] = edge ? 8 : rgb[1]; px[o + 2] = edge ? 10 : rgb[2]; px[o + 3] = name === 'pool' ? 200 : 255;
+  }
+  const { sprite } = importPng(encodePng(w, h, px), `fx_${name}`, w, h);
+  sprite.origin = { x: Math.round(w / 2), y: name === 'pool' ? Math.round(h / 2) : h };
+  writeFileSync(join(spriteDir, `fx_${name}.sprite.json`), stringifySprite(sprite));
+  return `fx_${name}`;
+}
+
+/** The First Sword's picture: the sword item's icon, if there is one. */
+function forgeSwordArt(): string {
+  if (OBJECTS && existsSync(join(OBJECTS, 'first_sword.png'))) {
+    const feet = JSON.parse(readFileSync(join(OBJECTS, 'objects.json'), 'utf8')) as Record<string, [number, number]>;
+    return spriteFor(join(OBJECTS, 'first_sword.png'), 'obj_first_sword', feet.first_sword);
+  }
+  return '';
+}
+
 let world: World | null = null;
 function loadWorld(): World | null {
   if (!DATA) return null;
@@ -398,7 +428,7 @@ function storytenderKit(p: EntityData, scene: string): void {
   attach(c, 'dodge', { speed: 14.5, seconds: 0.2, cooldown: 0.75, invulnerable: true });
   attach(c, 'light', { radius: 1.2, intensity: 0.35, color: 'cool', shadows: true, flicker: 0.15, mode: 'always' });
   attach(c, 'echoRecorder', { seconds: 9, capacity: 0, capacityVariable: '', ending: 'hold', ghostAlpha: 0.55 });
-  attach(c, 'script_Storytender', { speed: 4.2, lanternRadius: 4.9, ...placeSettings(scene) });
+  attach(c, 'script_Storytender', { speed: 4.2, lanternRadius: 4.9, echoesHere: scene === 'forge' ? 1 : 0, ...placeSettings(scene) });
 }
 
 function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
@@ -407,7 +437,8 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
   const taken = new Set<string>();
   const levelOf = (x: number, y: number): number => snap.floor.heights[`${x},${y}`] ?? 0;
   const entities: EntityData[] = [];
-  const byNode = new Map(art.filter((a) => a.scene === scene).map((a) => [a.node, a]));
+  const sceneArt = art.filter((a) => a.scene === scene);
+  const byNode = new Map(sceneArt.map((a) => [a.node, a]));
   let i = 1;
   let player: EntityData | null = null;
   for (const n of snap.nodes) {
@@ -438,8 +469,26 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
       continue;
     }
     if (['IsoFloor', 'GroundChunks', 'AmbientDrift', 'PasteGhost'].includes(n.class)) continue;
-    const e = entityFor(scene, n, byNode.get(n.name), `e${i++}`, levelOf);
+    // the capture and the snapshot are separate runs of the game: match a picture by name, else by kind of object and place
+    const art0 = byNode.get(n.name) ?? sceneArt.find((a) => a.cls === n.class && Math.abs(a.grid[0] - n.grid[0]) < 0.6 && Math.abs(a.grid[1] - n.grid[1]) < 0.6);
+    const e = entityFor(scene, n, art0, `e${i++}`, levelOf);
     if (!e) continue;
+    if (scene === 'forge' && world) {
+      const rows = (forgeRowsCache ??= forgeRows(join(HERE, '..', '..')));
+      const gx = Math.round(n.grid[0]);
+      const gy = Math.round(n.grid[1]);
+      decorateForge(e, n.class, Number(n.props.kind ?? -1), rows[gy]?.[gx] ?? '', (n.props.axis as number[]) ?? [0, 1], world);
+      if (n.class === 'EchoPlate' && OBJECTS && existsSync(join(OBJECTS, 'echo_plate_dim.png'))) {
+        const feet = JSON.parse(readFileSync(join(OBJECTS, 'objects.json'), 'utf8')) as Record<string, [number, number]>;
+        const off = spriteFor(join(OBJECTS, 'echo_plate_dim.png'), 'obj_echo_plate_dim', feet.echo_plate_dim);
+        const on = spriteFor(join(OBJECTS, 'echo_plate_lit.png'), 'obj_echo_plate_lit', feet.echo_plate_lit);
+        Object.assign(e.components.sprite as object, { asset: off, height: 0.3, sortOffset: -0.4 });
+        Object.assign(e.components.script_Plate as object, { lookOn: on, lookOff: off });
+      }
+      // the forge's stone blocks (memory_forge.gd "B"): slate, about a level tall
+      if (n.class === 'IsoBlock') Object.assign(e.components.sprite as object, { color: 0x56627a, w: 1, d: 1, height: 1.05 });
+      if (n.class === 'Prop' && Number(n.props.kind) === 7) forgeAnvil = { x: gx + 0.5, y: gy + 0.5, h: levelOf(gx, gy) };
+    }
     if (n.class === 'Enemy') {
       if (scene === 'overworld') continue; // the Prologue's Errors come from its map letters (below)
       errorKit(e, Number(n.props.kind ?? 0), '');
@@ -455,6 +504,7 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
     entities.push(e);
   }
   if (scene === 'overworld') entities.push(...prologueErrors(levelOf, () => `e${i++}`));
+  if (scene === 'forge' && forgeAnvil) entities.push(...forgeExtras(forgeAnvil, forgeSwordArt(), () => `e${i++}`));
   for (const c of blocked) if (!taken.has(c)) {
     const [x, y] = c.split(',').map(Number) as [number, number];
     map.setFlag(x, y, FLAG.BLOCK);
@@ -577,7 +627,11 @@ function main(): void {
   buildKinds(tiles, snaps);
   addPaper();
   world = loadWorld();
-  if (world) writeOverworldTalk(world);
+  if (world) {
+    writeOverworldTalk(world);
+    writeForgeTalk(world);
+  }
+  writeForgePrefabs(OUT, CURRENT_SCHEMA_VERSION, flatArt('pool', [138, 20, 20], 192, 96), flatArt('bolt', [70, 12, 16], 18, 18));
   if (existsSync(join(HERE, 'scripts'))) {
     mkdirSync(join(OUT, 'assets/scripts'), { recursive: true });
     for (const f of readdirSync(join(HERE, 'scripts'))) writeFileSync(join(OUT, 'assets/scripts', f), readFileSync(join(HERE, 'scripts', f)));

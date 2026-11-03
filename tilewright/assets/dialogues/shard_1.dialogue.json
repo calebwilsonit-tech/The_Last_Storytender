@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "name": "shard_1",
+  "start": "n13",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The shard sinks into the lantern's light, and the forge remembers.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "Young Garrick",
+      "text": "Crooked. Again.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "Young Garrick",
+      "text": "Twice I've bent it. The Author keeps writing me clumsy.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "Wren",
+      "text": "It looks like a river!",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "Young Garrick",
+      "text": "A river's not a sword, Wren.",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "Wren",
+      "text": "Could be both.",
+      "next": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Behind the memory the red voice shrieks DERIVATIVE, and for the first time it sounds a little afraid.[/i]",
+      "next": "n8"
+    },
+    {
+      "id": "n8",
+      "type": "set",
+      "variable": "shard_1",
+      "op": "set",
+      "value": 1,
+      "next": "n9"
+    },
+    {
+      "id": "n9",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]One memory held up to the light. The voice is quieter.[/i]"
+    },
+    {
+      "id": "n10",
+      "type": "end"
+    },
+    {
+      "id": "n11",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "shard_1",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n10",
+      "else": "n1"
+    },
+    {
+      "id": "n12",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A splinter of something remembered. It is not time yet.[/i]"
+    },
+    {
+      "id": "n13",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "critic_awake",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n11",
+      "else": "n12"
+    }
+  ]
+}

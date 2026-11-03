@@ -10,6 +10,7 @@ export default defineScript({
     regions: { value: '', label: 'Region map: one letter per cell, rows split by |' },
     regionNames: { value: '', label: 'Region names (JSON: letter -> name)' },
     place: { value: '', label: 'Name of this place (when there is no region map)' },
+    echoesHere: { value: 0, label: 'Echoes she has here before the forge memory is done' },
   },
   start(me, game) {
     if (game.vars.light === undefined) game.vars.light = 100;
@@ -65,6 +66,7 @@ export default defineScript({
       if (held) s *= 0.72;
       if (game.input.down('sneak')) s *= 0.55;
       s *= Number(v.puddle_slow ?? 1); // a Run-on's ink trail (0.55)
+      if (Number(v.slow_until ?? 0) > game.time) s *= 0.55; // a slowing word of the Critic
       if (pc.speed !== s) me.set('playerController', { ...pc, speed: s });
     }
     // the quill: the pencil stub hits for 0.55 of the quill's 2 until Garrick hands it over
@@ -76,7 +78,7 @@ export default defineScript({
     // echoes: two once the forge memory is done, three with the Locket (echo_third)
     const echo = me.get('echoRecorder');
     if (echo) {
-      const cap = v.memory_done ? (v.echo_third ? 3 : 2) : 0;
+      const cap = v.memory_done ? (v.echo_third ? 3 : 2) : Number(me.settings.echoesHere ?? 0);
       if (echo.capacity !== cap) me.set('echoRecorder', { ...echo, capacity: cap });
     }
     // format styles (1 2 3), once Maud's memory grants them

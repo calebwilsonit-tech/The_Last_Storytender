@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "name": "critic_intro",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The air is cold and perfectly still. Sparks hang where they flew, each one wrapped in frost. Nothing here has moved in a very long time.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "The Critic",
+      "text": "Derivative.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "The Critic",
+      "text": "Overwrought. Overlong. A sword? How original.",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The voice comes from a pool of red ink beside the anvil. It is rising.[/i]",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Three memories glow on the high ground around the forge: small, and warm, and the voice is very loud. Hold them up to the light.[/i]",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "set",
+      "variable": "critic_awake",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}

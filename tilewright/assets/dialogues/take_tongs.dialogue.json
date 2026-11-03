@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "name": "take_tongs",
+  "start": "n6",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "set",
+      "variable": "tok_tongs",
+      "op": "set",
+      "value": 1,
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "forge_tokens",
+      "op": "add",
+      "value": 1,
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "Found: Garrick's tongs",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Two. Somewhere a room full of dust is starting to hum.[/i]"
+    },
+    {
+      "id": "n5",
+      "type": "end"
+    },
+    {
+      "id": "n6",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "tok_tongs",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n5",
+      "else": "n1"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "name": "critic_end",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "The Critic",
+      "text": "...It's crooked.",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "The Critic",
+      "text": "It was always crooked. I told him so every night. Nobody should carry a crooked sword.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You raise the lantern. In its light the blade on the anvil is bent near the tip, and it is the most beautiful thing in the room.[/i]",
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "The Critic",
+      "text": "...Oh.",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "The Critic",
+      "text": "She never once asked for it straight.",
+      "next": "n6"
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The red ink lets go. It runs down the anvil and sinks into the floor like rain into a field.[/i]",
+      "next": "n7"
+    },
+    {
+      "id": "n7",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]On the anvil, something small is waiting.[/i]",
+      "next": "n8"
+    },
+    {
+      "id": "n8",
+      "type": "set",
+      "variable": "critic_down",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}

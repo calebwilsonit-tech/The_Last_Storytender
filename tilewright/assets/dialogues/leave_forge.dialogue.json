@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "name": "leave_forge",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You let go of the memory, and the Prologue comes back.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "leave_forge",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}

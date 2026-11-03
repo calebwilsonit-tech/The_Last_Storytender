@@ -34,6 +34,9 @@
     "forge_warm": "forge_warm_s2:1",
     "forge_frozen": "from:forge_warm:frozen",
     "oven_warm": "oven_warm_s0:0",
-    "oven_cold": "from:oven_warm:cold"
+    "oven_cold": "from:oven_warm:cold",
+    "echo_plate_dim": "echo_plate_dim_s2:0",
+    "echo_plate_lit": "echo_plate_dim_s2:1",
+    "first_sword": "first_sword_s3:0"
   }
 }
