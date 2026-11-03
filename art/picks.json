@@ -12,5 +12,17 @@
     "garrick": "garrick_restored_1_toward_s0",
     "maud": "maud_restored_1_toward_s3",
     "pip": "pip_restored_1_toward_s2"
+  },
+  "errors": {
+    "_about": "<picture>:<piece>, the piece counted biggest first (tools/art/pieces.py)",
+    "bare": "bare_stand_s3:1",
+    "bare_friendly": "bare_friendly_s0:0",
+    "mite": "mite_stand_s0:1",
+    "runon": "runon_stand_s1:0",
+    "runon_friendly": "runon_friendly_s1:2",
+    "dangler": "dangler_stand_s3:2",
+    "dangler_friendly": "dangler_friendly_s3:0",
+    "censor": "censor_stand_s1:0",
+    "ellipsis": "ellipsis_stand_s3:3"
   }
 }

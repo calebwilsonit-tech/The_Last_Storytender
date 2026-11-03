@@ -21,6 +21,7 @@ const TILES = process.env.TILES!;
 const POSES = process.env.POSES ?? '';
 const DATA = process.env.DATA ?? '';
 const PEOPLE = process.env.PEOPLE ?? '';
+const ERRORS = process.env.ERRORS ?? '';
 const ICONS = process.env.ICONS ?? '';
 const HERE = process.env.HERE!;
 const OUT = process.env.OUT!;
@@ -267,8 +268,17 @@ function errorKit(e: EntityData, kind: number, unlock: string): void {
   if (kind === 1 || kind === 2 || kind === 5) attach(c, 'damageOnTouch', { amount: 0, hurts: 'player', range: 0.25, knockback: kind === 2 ? 3.4 : 4.2 });
   if (kind === 3) attach(c, 'rangedAttack', { target: 'nothing', range: 10, minRange: 0, cooldown: 2.5, windup: 0.55, volley: 1, speed: 6.4, damage: 6, lifetime: 2.5, needSight: true, color: 0x1b1722, hurts: 'player' });
   const drops = (mobDrops[ERROR_DROPS[kind]!] ?? []).map((d) => d.join(',')).join('; ');
-  attach(c, 'script_Error', { kind, unlock, drops });
+  // the generated art (sd_errors.py), with the friendly look of the kinds the lantern proofreads
+  const art = ['bare', 'mite', 'runon', 'dangler', 'censor', 'ellipsis'][kind]!;
+  let friendlyLook = '';
   const spr = c.sprite as Record<string, unknown>;
+  if (ERRORS && existsSync(join(ERRORS, `${art}.png`))) {
+    const feet = JSON.parse(readFileSync(join(ERRORS, 'errors.json'), 'utf8')) as Record<string, [number, number]>;
+    spr.asset = spriteFor(join(ERRORS, `${art}.png`), `err_${art}`, feet[art]);
+    spr.height = [1.6, 0.8, 0.9, 1.4, 1.7, 1.1][kind];
+    if (existsSync(join(ERRORS, `${art}_friendly.png`))) friendlyLook = spriteFor(join(ERRORS, `${art}_friendly.png`), `err_${art}_friendly`, feet[`${art}_friendly`]);
+  }
+  attach(c, 'script_Error', { kind, unlock, drops, friendlyLook });
   if (!spr.asset) Object.assign(spr, { color: ERROR_COLOUR[kind], w: kind === 1 ? 0.35 : 0.6, d: kind === 1 ? 0.35 : 0.6, height: kind === 1 ? 0.5 : 1 });
   else if (!errorArt.has(kind)) errorArt.set(kind, String(spr.asset));
 }

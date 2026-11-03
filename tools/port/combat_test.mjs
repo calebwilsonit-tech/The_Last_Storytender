@@ -162,7 +162,9 @@ try {
   }
   await shotAs('3_proofread.png');
   await page.keyboard.up('KeyQ');
+  const lookNow = await page.evaluate((id) => window.__play.sim.world.all().find((x) => x.id === id)?.get('sprite')?.asset, b1.id);
   check('the lantern proofreads a Bare', friend, `key ${key}`);
+  check('a proofread Bare looks friendly', lookNow === 'err_bare_friendly', lookNow);
 
   // 4. the lantern burns a Mite away
   const m1 = mites[1];

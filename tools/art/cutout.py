@@ -11,7 +11,11 @@ from PIL import Image
 from scipy import ndimage
 
 
-def cut(path):
+def cut_all(path):
+    return cut(path, keep_all=True)
+
+
+def cut(path, keep_all=False):
     im = np.asarray(Image.open(path).convert('RGB')).astype(np.float32)
     h, w, _ = im.shape
     # the parchment around the figure: a heavy blur of the border colours stands for the local paper colour everywhere
@@ -39,7 +43,7 @@ def cut(path):
     fig = ~bg
     fig = ndimage.binary_opening(fig, iterations=1)
     lab2, n = ndimage.label(fig)
-    if n > 1:
+    if n > 1 and not keep_all:
         sizes = ndimage.sum(fig, lab2, range(1, n + 1))
         fig = lab2 == (1 + int(np.argmax(sizes)))
     fig = ndimage.binary_fill_holes(fig)

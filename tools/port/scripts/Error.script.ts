@@ -25,6 +25,7 @@ export default defineScript({
     kind: { value: 0, label: 'Kind (0 Bare, 1 Mite, 2 Run-on, 3 Dangler, 4 Censor, 5 Ellipsis)' },
     unlock: { value: '', label: 'Only out once this flag is set (empty: always)' },
     drops: { value: '', label: 'Drop table: item,chance,low,high; ... (rolled when it is beaten)' },
+    friendlyLook: { value: '', label: 'Its picture once proofread (sprite name; empty: unchanged)' },
   },
   start(me) {
     const s = me.state;
@@ -349,6 +350,8 @@ function comeBack(me: ScriptEntity): void {
   if (hs) me.set('state:health', { ...hs, hp: max, dead: false });
   const health = me.get('health');
   if (health) me.set('health', { ...health, team: 'enemy', showBar: false });
+  const spr = me.get('sprite');
+  if (spr && s.origLook && spr.asset !== s.origLook) me.set('sprite', { ...spr, asset: s.origLook });
   me.tags.delete('friendly');
   me.tags.add('error');
   me.tags.add('enemy');
@@ -401,6 +404,11 @@ function proofread(me: ScriptEntity, game: ScriptGame, kind: number): void {
   const health = me.get('health');
   if (health) me.set('health', { ...health, team: 'player', showBar: false });
   me.alpha = 1;
+  const spr = me.get('sprite');
+  if (spr && me.settings.friendlyLook) {
+    me.state.origLook = spr.asset;
+    me.set('sprite', { ...spr, asset: me.settings.friendlyLook });
+  }
   const v = game.vars;
   dropCrystals(me, game, 6);
   if (v.difficulty === 'story' || game.random() < 0.6) game.giveItem('ink_vial', 1);
