@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "name": "riddle_r0",
+  "start": "n7",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "set",
+      "variable": "start_r0",
+      "op": "set",
+      "value": 1,
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "end"
+    },
+    {
+      "id": "n3",
+      "type": "end"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A stone with a sentence cut into it, and a word game set in its face: \"The gate is [ LOCKED / RUSTED / UNLATCHED ].\"[/i]",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "choice",
+      "speaker": "",
+      "prompt": "Attempt the trial?",
+      "options": [
+        {
+          "text": "Attempt the trial  ★",
+          "next": "n1"
+        },
+        {
+          "text": "Leave it",
+          "next": "n3"
+        }
+      ]
+    },
+    {
+      "id": "n6",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The stone has settled on its last word: \"The gate is UNLATCHED.\"[/i]"
+    },
+    {
+      "id": "n7",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "riddle_r0",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n6",
+      "else": "n4"
+    }
+  ]
+}

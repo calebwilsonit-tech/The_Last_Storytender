@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_echo_hint_9",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A pair of stone plates, worn smooth by people who never learned the trick. Something that remembers you can stand in for you.[/i]"
+    }
+  ]
+}

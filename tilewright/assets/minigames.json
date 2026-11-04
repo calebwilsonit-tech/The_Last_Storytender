@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "minigames": [
+    {
+      "kind": "sequence",
+      "name": "Vault Trial r3",
+      "title": "The Vault Trial",
+      "instructions": "The stone shows arrows, one after another. Press them back in the same order.",
+      "winVariable": "",
+      "scoreVariable": "",
+      "rewardItem": "",
+      "rewardAmount": 1,
+      "canQuit": true,
+      "length": 7,
+      "buttons": 4,
+      "showSeconds": 0.55,
+      "allowedMistakes": 1
+    }
+  ]
+}

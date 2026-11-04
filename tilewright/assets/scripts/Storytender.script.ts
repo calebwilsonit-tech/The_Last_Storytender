@@ -37,6 +37,8 @@ export default defineScript({
     for (const v of ['mnemosynth', 'renown', 'saved_run']) if (game.vars[v] === undefined) game.vars[v] = 0;
     for (const v of ATTR_VARS) if (game.vars[v] === undefined) game.vars[v] = 0;
     if (game.vars.level === undefined) game.vars.level = 1;
+    if (game.vars.boss_name === undefined) game.vars.boss_name = '';
+    for (const k of ['slot:1', 'slot:2']) if (game.vars[k] === undefined) game.vars[k] = '';
     if (game.vars.attr_cost === undefined) game.vars.attr_cost = 20;
     if (game.vars.index_pick === undefined) game.vars.index_pick = 'ink';
     me.state.off = 99;
@@ -44,6 +46,7 @@ export default defineScript({
   },
   update(me, game) {
     const v = game.vars;
+    v.boss_on = v.boss_name ? 1 : 0; // the boss bar shows while a boss script has named itself
     // what the points bought at a lantern post (Revise Your Draft) do, and what she does when she rests
     const stat = (k: string): number => Number(v[`attr_${k}`] ?? 0);
     const dt = game.dt;

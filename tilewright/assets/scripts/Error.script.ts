@@ -60,6 +60,8 @@ export default defineScript({
     const p = game.player;
     // resting at a lantern post resets the page: every Error comes back (main.gd _respawn_world)
     if (game.eventsOf('rested').length > 0) s.reset = true;
+    // a puzzle site's arena starts its fight again (Site.script.ts)
+    for (const e of game.eventsOf('error-reset')) if (me.hasTag(String(e.tag))) s.reset = true;
     // beaten ones also come back after a couple of minutes; either way only once you are well away, so nothing appears on top of you
     if (s.gone && game.time - s.goneAt > 120) s.reset = true;
     if (s.reset && p && Math.hypot(p.x - s.home.x, p.y - s.home.y) > 8 && me.distanceTo(p) > 8) comeBack(me);

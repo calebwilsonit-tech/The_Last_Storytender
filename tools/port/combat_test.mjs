@@ -87,7 +87,8 @@ try {
   const bares = await errors('error-0');
   const mites = await errors('error-1');
   const danglers = await errors('error-3');
-  check('the Prologue has its Errors', bares.length === 12 && mites.length === 14 && danglers.length === 7, `bare ${bares.length}, mite ${mites.length}, dangler ${danglers.length}`);
+  // 12 Bares and 14 Mites roam; the arenas hold 6 more Bares and 5 more Mites (and Run-ons), hidden until their fight
+  check('the Prologue has its Errors', bares.length === 18 && mites.length === 19 && danglers.length === 7, `bare ${bares.length}, mite ${mites.length}, dangler ${danglers.length}`);
   check('Danglers stay away until Pip is restored', danglers.every((d) => !d.visible), danglers.map((d) => d.visible).join(','));
 
   // 0. J swings the quill: the strike plays

@@ -17,6 +17,7 @@ import { baseProject, playerEntity, setActivePacks, attachBehavior } from '@tile
 import '@tilewright/bundled-plugins';
 import { importPng } from '@tw-editor/renderer/studio/assets';
 import { decorateOverworld, writeOverworldTalk, type World } from './overworld';
+import { bridgeCells, siteExtras } from './sites';
 
 const SNAP = process.env.SNAP!;
 const ART = process.env.ART!;
@@ -216,7 +217,7 @@ function buildMap(scene: string, snap: Snap): TileMap {
   // (the map is a little bigger than the land, so the paper shows all round it)
   const map = new TileMap(w + 4, h + 4);
   // in Pip's memory the gaps a sentence can fill are floor under a cover (PitCover), not pits
-  const gaps = scene === 'pip' ? pipGapCells((pipMapCache ??= pipMap(join(HERE, '..', '..')))) : scene === 'maud' ? new Set(maudGaps((maudMapCache ??= maudMap(join(HERE, '..', '..')))).keys()) : new Set<string>();
+  const gaps = scene === 'pip' ? pipGapCells((pipMapCache ??= pipMap(join(HERE, '..', '..')))) : scene === 'maud' ? new Set(maudGaps((maudMapCache ??= maudMap(join(HERE, '..', '..')))).keys()) : scene === 'overworld' && world ? bridgeCells(world.map.SITES) : new Set<string>();
   for (const [x, y] of keys) {
     const gap = gaps.has(`${x},${y}`);
     const floorKind = scene === 'maud' ? 'w' : 'p';
@@ -431,6 +432,15 @@ function writePipPrefabs(): void {
   errorKit(mite, 1, '');
   write('SpoilerMite', { name: 'Error Mite', tags: mite.tags, components: mite.components, children: [] });
 }
+/** The vault trials of the riddle stones above tier 1 (Trial.script.ts plays them): the engine's own "repeat the pattern" game. */
+function writeMinigames(): void {
+  if (!world) return;
+  const games = Object.entries(world.map.RIDDLES)
+    .filter(([, r]) => r.tier > 1)
+    .map(([id, r]) => ({ kind: 'sequence', name: `Vault Trial ${id}`, title: 'The Vault Trial', instructions: 'The stone shows arrows, one after another. Press them back in the same order.', winVariable: '', scoreVariable: '', rewardItem: '', rewardAmount: 1, canQuit: true, length: 4 + r.tier, buttons: 4, showSeconds: 0.55, allowedMistakes: 1 }));
+  writeFileSync(join(OUT, 'assets/minigames.json'), JSON.stringify({ schemaVersion: CURRENT_SCHEMA_VERSION, minigames: games }, null, 2) + '\n');
+}
+
 /** What a used item leaves in the world: the thrown Eraser Crumbs (Storytender.script.ts moves it along its arc and rubs things out). */
 function writeItemPrefabs(): void {
   const icon = sprites.get(join(ICONS ?? '', 'icon_eraser_crumbs.png')) ?? (ICONS && existsSync(join(ICONS, 'icon_eraser_crumbs.png')) ? spriteFor(join(ICONS, 'icon_eraser_crumbs.png'), 'icon_eraser_crumbs') : '');
@@ -621,6 +631,17 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
     entities.push(e);
   }
   if (scene === 'overworld') entities.push(...prologueErrors(levelOf, () => `e${i++}`));
+  if (scene === 'overworld' && world) {
+    // the puzzle sites (sites.ts): a controller each, the covers of a bridge, the cracks of a causeway, the waves of an arena
+    const looks = { hole: flatArt('hole', [22, 18, 30], 64, 32, true, 255, [10, 8, 14]), plank: flatArt('plank', [150, 104, 60], 64, 32, true, 255, [70, 44, 24]), crack: flatArt('crack', [70, 56, 44], 64, 32, true, 230, [26, 20, 14]) };
+    const mkError = (kind: number, x: number, y: number, unlock: string): EntityData => {
+      const asset = errorArt.get(kind);
+      const e: EntityData = { id: `e${i++}`, name: `Error ${['Bare', 'Mite', 'Run-on', 'Dangler', 'Censor', 'Ellipsis'][kind]}`, tags: [], components: { transform: { x: x + 0.5, y: y + 0.5, h: levelOf(x, y), facing: 2 }, sprite: { shape: 'box', color: 0xcccccc, w: 0.6, d: 0.6, height: 1, sortOffset: 0, visible: true, ...(asset ? { asset } : {}) } } };
+      errorKit(e, kind, unlock);
+      return e;
+    };
+    entities.push(...siteExtras(world.map.SITES, levelOf, looks, mkError, () => `e${i++}`));
+  }
   if (scene === 'forge' && forgeAnvil) entities.push(...forgeExtras(forgeAnvil, forgeSwordArt(), () => `e${i++}`));
   if (scene === 'maud' && maudMapCache) {
     entities.push(...maudExtras(maudMapCache, levelOf, flatArt('hole', [22, 18, 30], 64, 32, true, 255, [10, 8, 14]), flatArt('plank', [150, 104, 60], 64, 32, true, 255, [70, 44, 24]), () => `e${i++}`));
@@ -761,6 +782,7 @@ function main(): void {
   writeForgePrefabs(OUT, CURRENT_SCHEMA_VERSION, flatArt('pool', [138, 20, 20], 192, 96), flatArt('bolt', [70, 12, 16], 18, 18));
   writePipPrefabs();
   writeItemPrefabs();
+  writeMinigames();
   if (existsSync(join(HERE, 'scripts'))) {
     mkdirSync(join(OUT, 'assets/scripts'), { recursive: true });
     for (const f of readdirSync(join(HERE, 'scripts'))) writeFileSync(join(OUT, 'assets/scripts', f), readFileSync(join(HERE, 'scripts', f)));

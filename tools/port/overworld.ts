@@ -5,6 +5,7 @@
  * cannot (travel, crystals, things that appear or vanish with the story, the Storytender's own rules).
  */
 import type { EntityData } from '@tilewright/runtime';
+import type { SiteData } from './sites';
 
 type Line = { who: string; text: string; style: string };
 type Node = Record<string, unknown> & { id: string };
@@ -49,6 +50,12 @@ export class Talk {
     this.nodes.push({ id, type: 'branch', if: { kind: 'variable', name: cond.name, op: cond.op ?? '>=', value: cond.value ?? 1 }, then: then[0], else: otherwise[0] });
     return [id, id];
   }
+  /** A question with answers; each answer goes on to a step. */
+  choice(prompt: string, options: { text: string; next: string }[], keyed: (t: string) => string): [string, string] {
+    const id = this.id();
+    this.nodes.push({ id, type: 'choice', speaker: '', prompt: keyed(prompt), options: options.map((o) => ({ text: keyed(o.text), next: o.next })) });
+    return [id, id];
+  }
   end(): [string, string] {
     const id = this.id();
     this.nodes.push({ id, type: 'end' });
@@ -61,7 +68,7 @@ export class Talk {
 
 export interface World {
   story: { functions: Record<string, Line[] | Record<string, Line[]>>; constants: Record<string, unknown> };
-  map: { WAYPOINTS: { id: string; name: string; cell: [number, number] }[]; LORE: Record<string, [number, number]>; LORE_TEXT: Record<string, string>; CHESTS: Record<string, string>; PORTALS: Record<string, { cell: [number, number]; name: string; blurb: string; return: [number, number] }>; SITES: Record<string, { type: string; chest: [number, number] }> };
+  map: { WAYPOINTS: { id: string; name: string; cell: [number, number] }[]; LORE: Record<string, [number, number]>; LORE_TEXT: Record<string, string>; CHESTS: Record<string, string>; PORTALS: Record<string, { cell: [number, number]; name: string; blurb: string; return: [number, number] }>; SITES: Record<string, SiteData>; RIDDLES: Record<string, { axis: [number, number]; chest: [number, number]; gate: [number, number]; stone: [number, number]; options: string[]; prefix: string; suffix: string; tier: number }> };
   rolls: Record<string, string>;
   items: Record<string, { name?: string }>;
   keyed: (t: string) => string;
@@ -166,6 +173,19 @@ export function writeOverworldTalk(w: World): void {
   sayOnce(w, 'town_sign', fn(w, 'town_sign'));
   const lore = w.story.constants.LORE as Record<string, string>;
   for (const id of Object.keys(w.map.LORE)) sayOnce(w, `lore_${id}`, [line(lore[id] ?? w.map.LORE_TEXT[id] ?? '')]);
+  // the two riddle stones: a word trial opens from a short conversation (Trial.script.ts runs it when start_<id> is set)
+  for (const [id, r] of Object.entries(w.map.RIDDLES)) {
+    const t = new Talk(`riddle_${id}`);
+    const stars = '★'.repeat(r.tier);
+    const text = `${r.prefix} [ ${r.options.join(' / ')} ]${r.suffix}`;
+    const go = t.seq(t.set(`start_${id}`, 1), t.end());
+    const no = t.end();
+    const ask = t.seq(t.lines([line(`A stone with a sentence cut into it, and a word game set in its face: "${text}"`)], w.keyed), t.choice('Attempt the trial?', [{ text: `Attempt the trial  ${stars}`, next: go[0] }, { text: 'Leave it', next: no[0] }], w.keyed));
+    const done = t.lines([line(`The stone has settled on its last word: "${r.prefix} ${r.options[r.options.length - 1]}${r.suffix}"`)], w.keyed);
+    w.write(t.name, t.data(t.when({ name: `riddle_${id}` }, done, ask)[0]));
+  }
+  // the sign beside each puzzle site: the echo sites' hint, the words sites' answer
+  for (const s of Object.values(w.map.SITES)) for (const id of [s.hint_id, s.sign_id]) if (id) sayOnce(w, `lore_${id}`, [line(lore[id] ?? w.map.LORE_TEXT[id] ?? '')]);
 }
 
 /** Gives one object of the overworld (a node the game built) what it does. Returns extra tags. */
@@ -198,14 +218,46 @@ export function decorateOverworld(e: EntityData, node: { class: string; props: R
     return;
   }
   if (node.class === 'StoryGate') {
-    // a site's gate stays shut until the site is solved (puzzle sites, S-06 will open it); until then it is a wall
+    // a site's gate: WEIGHED opens for good once the site is solved, PROOF is open until the fight starts and open again once it is won
+    // (Site.script.ts); a riddle's gate opens with the riddle. Until then a wall.
     c.collider = alongY ? COLLIDER(0.7, 3, 2) : COLLIDER(3, 0.7, 2);
     e.tags.push('gate');
+    const [sid, s] = Object.entries(w.map.SITES).find(([, x]) => x.gate && near(cell, x.gate, 0.6)) ?? [];
+    const rid = Object.entries(w.map.RIDDLES).find(([, r]) => near(cell, r.gate, 0.6))?.[0];
+    if (rid) w.attach(c, 'script_StoryGate', { needs: `riddle_${rid}`, closeFar: 0, said: '' });
+    if (sid && s) w.attach(c, 'script_StoryGate', s.type === 'arena' ? { needs: `arena_${sid}_open`, closeFar: 1.2, said: '' } : { needs: `site_${sid}`, closeFar: 0, said: '' });
     return;
   }
   if (node.class === 'SentenceStone') {
     c.collider = COLLIDER(0.8, 0.8, 1);
     e.tags.push('stone');
+    // a stone of a words site: the engine's sentence stone, its chosen word kept in stone_<site>_<n>
+    for (const [sid, s] of Object.entries(w.map.SITES)) {
+      const i = (s.stones ?? []).findIndex((st) => near(cell, st.cell, 0.6));
+      if (i < 0) continue;
+      const st = s.stones![i]!;
+      w.attach(c, 'sentenceStone', { before: st.prefix, words: st.options.join(', '), after: st.suffix, selected: 0, reach: 2.2, variable: `stone_${sid}_${i}` });
+      e.tags.push(`site-${sid}-stone`, `i${i}`);
+    }
+    // a riddle's stone: "Attempt the trial" (a conversation sets start_<id>; Trial.script.ts runs the game and settles the stone on its last word)
+    const [rid, r] = Object.entries(w.map.RIDDLES).find(([, x]) => near(cell, x.stone, 0.6)) ?? [];
+    if (rid && r) {
+      w.attach(c, 'sentenceStone', { before: r.prefix, words: r.options.join(', '), after: r.suffix, selected: 0, reach: 0.01, variable: '' });
+      w.attach(c, 'npcTalk', { dialogue: `riddle_${rid}`, reach: 80 / PX + 0.4, facePlayer: false, once: false, hint: false });
+      w.attach(c, 'script_Trial', { id: rid, tier: r.tier, last: r.options.length - 1 });
+      e.tags.push(`riddle-${rid}`);
+    }
+    return;
+  }
+  if (node.class === 'EchoPlate') {
+    // a plate of an echo site (two plates) or an arena's trigger
+    for (const [sid, s] of Object.entries(w.map.SITES)) {
+      const i = (s.plates ?? []).findIndex((p) => near(cell, p, 0.6));
+      if (i >= 0) w.attach(c, 'script_Plate', { flag: `plate_${sid}_${i}`, radius: 0.85 });
+      else if (s.trigger && near(cell, s.trigger, 0.6)) w.attach(c, 'script_Plate', { flag: `plate_${sid}_t`, radius: 0.85 });
+      else continue;
+      e.tags.push('plate', `site-${sid}`);
+    }
     return;
   }
   if (node.class !== 'Prop') return;
@@ -217,7 +269,9 @@ export function decorateOverworld(e: EntityData, node: { class: string; props: R
       else if (near(cell, [87, 55], 0.6)) talk('town_sign');
       else {
         const id = Object.entries(w.map.LORE).find(([, p]) => near(cell, p, 0.6))?.[0];
+        const site = Object.values(w.map.SITES).find((s) => (s.hint && near(cell, s.hint, 0.6)) || (s.sign && near(cell, s.sign, 0.6)));
         if (id) talk(`lore_${id}`);
+        else if (site) talk(`lore_${near(cell, site.hint ?? [-9, -9], 0.6) ? site.hint_id : site.sign_id}`);
       }
       return;
     }

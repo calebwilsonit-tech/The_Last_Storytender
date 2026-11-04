@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_words_sign_12",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The ferry-keeper left a note: 'The bridge is MENDED, the lantern is LIT, the toll is PAID. In that order, or the river wins.'[/i]"
+    }
+  ]
+}

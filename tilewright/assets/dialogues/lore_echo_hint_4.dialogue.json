@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_echo_hint_4",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Two weighing plates and one visitor. The plates are patient. They are waiting for you to be in two places at once. (Remember an Echo with [R], walk to one plate, stop, then stand on the other.)[/i]"
+    }
+  ]
+}

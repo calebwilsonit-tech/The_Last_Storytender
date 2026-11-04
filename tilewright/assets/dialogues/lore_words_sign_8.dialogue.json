@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_words_sign_8",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Pinned to a post: 'Whoever stole the spoons: the pantry is EMPTY, the cat is INNOCENT, and the butler is SLEEPING.'[/i]"
+    }
+  ]
+}

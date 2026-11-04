@@ -577,7 +577,8 @@ function quickSlots(usable: string[]): W {
   for (const [n, other] of [[1, 2], [2, 1]] as const) {
     const on = n === 1 ? `!${active}` : `${active} = 1`;
     const group = box(`hud.quick${n}`, 0, 0, 180, 110, {}, [
-      box(`hud.quick${n}.plate`, 0, 0, 180, 110, { fill: '#f6ecd2e6', border: C.inkBrown, borderWidth: 3, radius: 10 }, [], { name: 'Plate' }),
+      // the plate only when there is something in a slot
+      ...[1, 2].map((k) => box(`hud.quick${n}.plate${k}`, 0, 0, 180, 110, { fill: '#f6ecd2e6', border: C.inkBrown, borderWidth: 3, radius: 10 }, [], { name: 'Plate', visible: `{slot:${k}}` })),
       ...icons(`slot:${n}`, `hud.quick${n}.big`, 104, 10, 64),
       text(`hud.quick${n}.label`, `F   ×{item:{slot:${n}}}`, 84, 76, 22, C.inkBrown, { w: 94, style: { bold: true, align: 'center' } }),
       ...icons(`slot:${other}`, `hud.quick${n}.small`, 16, 38, 44).map((x) => ({ ...x, style: { opacity: 0.6 } })),
@@ -679,6 +680,67 @@ function indexScreen(): Screen {
   return screen('Revise Your Draft', stage('idx', kids), { id: INDEX, dim: 0.6 });
 }
 
+// ---------------------------------------------------------------- a vault trial: Proofread (trial_games.gd Proofread, vault_trial.gd)
+
+export const PROOFREAD = 'storytender-proofread';
+
+/** Find the wrong word in the sentence: three tries. Trial.script.ts fills pf_w0..pf_w11 (the words), pf_bad (which one is wrong) and pf_tries. */
+function proofreadScreen(): Screen {
+  const PX = 160;
+  const PY = 90;
+  const PW = 960;
+  const PH = 540;
+  const leave = [setVar('pf_open', '0'), close(PROOFREAD)];
+  const word = (i: number): W => {
+    const x = 36 + (i % 4) * 224;
+    const y = 150 + Math.floor(i / 4) * 84;
+    const here = `{pf_has_${i}} = 1`;
+    const look = (fill: string, edge: string): Style => ({ fill, border: edge, borderWidth: 3, radius: 8 });
+    const label = (id: string): W => text(id, `{pf_w${i}}`, 0, 12, 30, C.ink, { w: 212, style: { align: 'center' } });
+    const hover = { hover: { fill: '#fff6dc66', border: C.gold, borderWidth: 5 }, focus: { fill: '#fff6dc66', border: C.gold, borderWidth: 5 } };
+    return box(`pf.word${i}`, x, y, 212, 64, {}, [
+      // the word as it stands, green once found, red once wrongly picked
+      box(`pf.word${i}.base`, 0, 0, 212, 64, look('#f6efd8', C.inkBrown), [label(`pf.word${i}.t0`)], { visible: `${here} && {pf_solved} = 0 && {pf_x${i}} = 0` }),
+      box(`pf.word${i}.found`, 0, 0, 212, 64, look('#bfe3b4', C.inkBrown), [label(`pf.word${i}.t1`)], { visible: `${here} && {pf_solved} = 1 && {pf_bad} = ${i}` }),
+      box(`pf.word${i}.fine`, 0, 0, 212, 64, look('#f6efd8', C.inkBrown), [label(`pf.word${i}.t2`)], { visible: `${here} && {pf_solved} = 1 && {pf_bad} != ${i} && {pf_x${i}} = 0` }),
+      box(`pf.word${i}.no`, 0, 0, 212, 64, look('#e6c2bd', C.inkBrown), [label(`pf.word${i}.t3`)], { visible: `${here} && {pf_x${i}} = 1` }),
+      // pressing the wrong word solves it; pressing any other costs a try
+      box(`pf.word${i}.right`, 0, 0, 212, 64, { fill: '#00000000' }, [], {
+        name: 'The wrong word',
+        visible: `${here} && {pf_bad} = ${i} && {pf_solved} = 0 && {pf_tries} > 0`,
+        states: hover,
+        on: { click: [setVar('pf_solved', '1'), setVar('pf_msg', 'All fixed.')], hover: [], change: [] },
+      }),
+      box(`pf.word${i}.other`, 0, 0, 212, 64, { fill: '#00000000' }, [], {
+        name: 'A fine word',
+        visible: `${here} && {pf_bad} != ${i} && {pf_x${i}} = 0 && {pf_solved} = 0 && {pf_tries} > 0`,
+        states: hover,
+        on: { click: [setVar(`pf_x${i}`, '1'), setVar('pf_tries', '{pf_tries} - 1'), setVar('pf_msg', 'That one is fine.')], hover: [], change: [] },
+      }),
+    ]);
+  };
+  const button = (id: string, label: string, x: number, visible: string): W =>
+    box(id, x, PH - 84, 240, 54, { fill: '#f2e8cc', border: C.inkBrown, borderWidth: 3 }, [text(`${id}.t`, label, 0, 10, 26, C.ink, { w: 240, style: { align: 'center' } })], {
+      name: label,
+      visible,
+      states: { hover: { fill: '#fff6dc', borderWidth: 5 }, focus: { fill: '#fff6dc', borderWidth: 5 } },
+      on: { click: leave, hover: [], change: [] },
+    });
+  const panel = box('pf.panel', PX, PY, PW, PH, { fill: C.paperLight, border: C.inkBrown, borderWidth: 4, radius: 14, shadow: true }, [
+    text('pf.title', 'Proofread', 36, 16, 44, C.ink, { w: 500 }),
+    text('pf.stars', '★', PW - 120, 22, 34, C.goldDark, { w: 80, style: { align: 'right' } }),
+    rule('pf.rule', 36, 80, PW - 72, '#1b172273'),
+    text('pf.help', 'Find the wrong word in the sentence. Pick it.', 36, 94, 22, '#1b1722cc', { w: PW - 72, style: { italic: true } }),
+    ...Array.from({ length: 12 }, (_, i) => word(i)),
+    text('pf.tries', 'Tries left: {pf_tries}', 36, PH - 140, 22, '#1b1722b3', { w: 300 }),
+    text('pf.msg', '{pf_msg}', 340, PH - 140, 24, '#a8402f', { w: PW - 376, style: { align: 'right' } }),
+    text('pf.last', 'That was the last try.', 340, PH - 112, 20, '#a8402f', { w: PW - 376, visible: '{pf_tries} <= 0 && {pf_solved} = 0', style: { align: 'right', italic: true } }),
+    button('pf.done', 'The sentence is fixed', PW - 276, '{pf_solved} = 1'),
+    button('pf.giveup', 'Leave it', PW - 276, '{pf_solved} = 0'),
+  ]);
+  return screen('Vault Trial: Proofread', stage('pf', [panel]), { id: PROOFREAD, back: 'nothing', dim: 0.6 });
+}
+
 /** The Margin Gate: two posts and an arch, small, beside the renown count (it opens at 220). */
 function gateIcon(id: string, x: number, y: number): W {
   const ink = C.inkBrown;
@@ -695,7 +757,7 @@ const GATE_RENOWN = 220;
 
 /** The bar across the top while a boss is awake: its name and what is left of it (the boss scripts set boss_name, boss_hp and boss_max). */
 function bossBar(): W {
-  const shown = '{boss_name} != ""';
+  const shown = '{boss_on} = 1';
   const bar = w('bar', 'hud.boss.bar', { name: 'Boss health', ...at(20, 40, 380, 16), value: 'boss_hp', max: '{boss_max}', style: { fill: '#2a1418', color: C.red, border: C.leatherEdge, borderWidth: 3 } });
   return w('panel', 'hud.boss', {
     name: 'Boss',
@@ -750,7 +812,7 @@ export function uiTheme(schemaVersion: number): object {
 export function buildScreens(itemIds: string[], schemaVersion: number, paperTile: number, usable: string[] = itemIds, names: MapNames = { regions: [], posts: [], doors: [] }): object {
   return {
     schemaVersion,
-    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), settings(), binder(itemIds), indexScreen(), map(paperTile, names)],
+    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), settings(), binder(itemIds), indexScreen(), proofreadScreen(), map(paperTile, names)],
     prefabs: [
       { name: 'Lamp', widget: lamp() },
       { name: 'Here', widget: here() },

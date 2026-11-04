@@ -74,6 +74,8 @@ const shotAs = (name) => page.screenshot({ path: path.join(outDir, name) });
 try {
   await page.waitForTimeout(1500);
   await placeAt(60.5, 60.5);
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: path.join(outDir, 'hud_start.png'), clip: await page.evaluate(() => { const r = document.querySelector('[data-testid=viewport]')?.getBoundingClientRect(); return r ? { x: r.x, y: r.y, width: r.width, height: r.height } : undefined; }) });
   await setV({ mnemosynth: 125, renown: 63, light: 70, 'item:ink_vial': 3, 'item:warm_loaf': 2, 'slot:1': 'ink_vial', 'slot:2': 'warm_loaf', quick_active: 0, region_name: "The Blacksmith's Reckoning", region_show: 1 });
   await page.waitForTimeout(800);
   const box = await page.evaluate(() => { const r = document.querySelector('[data-testid=viewport]')?.getBoundingClientRect(); return r ? { x: r.x, y: r.y, width: r.width, height: r.height } : null; });

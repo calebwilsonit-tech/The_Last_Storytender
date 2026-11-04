@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "lore_words_sign_5",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A weather report, optimistic to a fault: 'Today is SUNNY. The wind is CALM. The air is WARM. Nothing could possibly go wrong.'[/i]"
+    }
+  ]
+}

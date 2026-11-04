@@ -980,7 +980,7 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "visible": "{boss_name} != \"\"",
+            "visible": "{boss_on} = 1",
             "style": {
               "fill": "#f6ecd2",
               "border": "#3b2a1c",
@@ -1007,7 +1007,7 @@
                 "type": "panel",
                 "children": [
                   {
-                    "id": "hud.quick1.plate",
+                    "id": "hud.quick1.plate1",
                     "name": "Plate",
                     "type": "panel",
                     "children": [],
@@ -1025,7 +1025,30 @@
                       "border": "#3b2a1c",
                       "borderWidth": 3,
                       "radius": 10
-                    }
+                    },
+                    "visible": "{slot:1}"
+                  },
+                  {
+                    "id": "hud.quick1.plate2",
+                    "name": "Plate",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 0,
+                    "w": 180,
+                    "h": 110,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2e6",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3,
+                      "radius": 10
+                    },
+                    "visible": "{slot:2}"
                   },
                   {
                     "id": "hud.quick1.big.clarity_tonic",
@@ -1581,7 +1604,7 @@
                 "type": "panel",
                 "children": [
                   {
-                    "id": "hud.quick2.plate",
+                    "id": "hud.quick2.plate1",
                     "name": "Plate",
                     "type": "panel",
                     "children": [],
@@ -1599,7 +1622,30 @@
                       "border": "#3b2a1c",
                       "borderWidth": 3,
                       "radius": 10
-                    }
+                    },
+                    "visible": "{slot:1}"
+                  },
+                  {
+                    "id": "hud.quick2.plate2",
+                    "name": "Plate",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 0,
+                    "w": 180,
+                    "h": 110,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2e6",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3,
+                      "radius": 10
+                    },
+                    "visible": "{slot:2}"
                   },
                   {
                     "id": "hud.quick2.big.clarity_tonic",
@@ -12548,6 +12594,3926 @@
       },
       "modal": true,
       "back": "auto",
+      "dim": 0.6
+    },
+    {
+      "id": "storytender-proofread",
+      "name": "Vault Trial: Proofread",
+      "root": {
+        "id": "pf.root",
+        "name": "Root",
+        "type": "panel",
+        "children": [
+          {
+            "id": "pf.stage",
+            "name": "Stage",
+            "type": "panel",
+            "children": [
+              {
+                "id": "pf.panel",
+                "name": "pf.panel",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "pf.title",
+                    "name": "pf.title",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 16,
+                    "w": 500,
+                    "h": 59,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Proofread",
+                    "style": {
+                      "fontSize": 44,
+                      "color": "#1b1722"
+                    }
+                  },
+                  {
+                    "id": "pf.stars",
+                    "name": "pf.stars",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 840,
+                    "y": 22,
+                    "w": 80,
+                    "h": 46,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "★",
+                    "style": {
+                      "fontSize": 34,
+                      "color": "#a97d2f",
+                      "align": "right"
+                    }
+                  },
+                  {
+                    "id": "pf.rule",
+                    "name": "pf.rule",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 80,
+                    "w": 888,
+                    "h": 2,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#1b172273"
+                    }
+                  },
+                  {
+                    "id": "pf.help",
+                    "name": "pf.help",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 94,
+                    "w": 888,
+                    "h": 30,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Find the wrong word in the sentence. Pick it.",
+                    "style": {
+                      "fontSize": 22,
+                      "color": "#1b1722cc",
+                      "italic": true
+                    }
+                  },
+                  {
+                    "id": "pf.word0",
+                    "name": "pf.word0",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.word0.base",
+                        "name": "pf.word0.base",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word0.t0",
+                            "name": "pf.word0.t0",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w0}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_0} = 1 && {pf_solved} = 0 && {pf_x0} = 0"
+                      },
+                      {
+                        "id": "pf.word0.found",
+                        "name": "pf.word0.found",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word0.t1",
+                            "name": "pf.word0.t1",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w0}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#bfe3b4",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_0} = 1 && {pf_solved} = 1 && {pf_bad} = 0"
+                      },
+                      {
+                        "id": "pf.word0.fine",
+                        "name": "pf.word0.fine",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word0.t2",
+                            "name": "pf.word0.t2",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w0}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_0} = 1 && {pf_solved} = 1 && {pf_bad} != 0 && {pf_x0} = 0"
+                      },
+                      {
+                        "id": "pf.word0.no",
+                        "name": "pf.word0.no",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word0.t3",
+                            "name": "pf.word0.t3",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w0}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#e6c2bd",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_0} = 1 && {pf_x0} = 1"
+                      },
+                      {
+                        "id": "pf.word0.right",
+                        "name": "The wrong word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_0} = 1 && {pf_bad} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_solved",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "All fixed."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "pf.word0.other",
+                        "name": "A fine word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_0} = 1 && {pf_bad} != 0 && {pf_x0} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_x0",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_tries",
+                                "op": "set",
+                                "value": "{pf_tries} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "That one is fine."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 150,
+                    "w": 212,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {}
+                  },
+                  {
+                    "id": "pf.word1",
+                    "name": "pf.word1",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.word1.base",
+                        "name": "pf.word1.base",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word1.t0",
+                            "name": "pf.word1.t0",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w1}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_1} = 1 && {pf_solved} = 0 && {pf_x1} = 0"
+                      },
+                      {
+                        "id": "pf.word1.found",
+                        "name": "pf.word1.found",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word1.t1",
+                            "name": "pf.word1.t1",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w1}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#bfe3b4",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_1} = 1 && {pf_solved} = 1 && {pf_bad} = 1"
+                      },
+                      {
+                        "id": "pf.word1.fine",
+                        "name": "pf.word1.fine",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word1.t2",
+                            "name": "pf.word1.t2",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w1}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_1} = 1 && {pf_solved} = 1 && {pf_bad} != 1 && {pf_x1} = 0"
+                      },
+                      {
+                        "id": "pf.word1.no",
+                        "name": "pf.word1.no",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word1.t3",
+                            "name": "pf.word1.t3",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w1}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#e6c2bd",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_1} = 1 && {pf_x1} = 1"
+                      },
+                      {
+                        "id": "pf.word1.right",
+                        "name": "The wrong word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_1} = 1 && {pf_bad} = 1 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_solved",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "All fixed."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "pf.word1.other",
+                        "name": "A fine word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_1} = 1 && {pf_bad} != 1 && {pf_x1} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_x1",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_tries",
+                                "op": "set",
+                                "value": "{pf_tries} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "That one is fine."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 260,
+                    "y": 150,
+                    "w": 212,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {}
+                  },
+                  {
+                    "id": "pf.word2",
+                    "name": "pf.word2",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.word2.base",
+                        "name": "pf.word2.base",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word2.t0",
+                            "name": "pf.word2.t0",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w2}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_2} = 1 && {pf_solved} = 0 && {pf_x2} = 0"
+                      },
+                      {
+                        "id": "pf.word2.found",
+                        "name": "pf.word2.found",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word2.t1",
+                            "name": "pf.word2.t1",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w2}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#bfe3b4",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_2} = 1 && {pf_solved} = 1 && {pf_bad} = 2"
+                      },
+                      {
+                        "id": "pf.word2.fine",
+                        "name": "pf.word2.fine",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word2.t2",
+                            "name": "pf.word2.t2",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w2}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_2} = 1 && {pf_solved} = 1 && {pf_bad} != 2 && {pf_x2} = 0"
+                      },
+                      {
+                        "id": "pf.word2.no",
+                        "name": "pf.word2.no",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word2.t3",
+                            "name": "pf.word2.t3",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w2}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#e6c2bd",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_2} = 1 && {pf_x2} = 1"
+                      },
+                      {
+                        "id": "pf.word2.right",
+                        "name": "The wrong word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_2} = 1 && {pf_bad} = 2 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_solved",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "All fixed."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "pf.word2.other",
+                        "name": "A fine word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_2} = 1 && {pf_bad} != 2 && {pf_x2} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_x2",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_tries",
+                                "op": "set",
+                                "value": "{pf_tries} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "That one is fine."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 484,
+                    "y": 150,
+                    "w": 212,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {}
+                  },
+                  {
+                    "id": "pf.word3",
+                    "name": "pf.word3",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.word3.base",
+                        "name": "pf.word3.base",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word3.t0",
+                            "name": "pf.word3.t0",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w3}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_3} = 1 && {pf_solved} = 0 && {pf_x3} = 0"
+                      },
+                      {
+                        "id": "pf.word3.found",
+                        "name": "pf.word3.found",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word3.t1",
+                            "name": "pf.word3.t1",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w3}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#bfe3b4",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_3} = 1 && {pf_solved} = 1 && {pf_bad} = 3"
+                      },
+                      {
+                        "id": "pf.word3.fine",
+                        "name": "pf.word3.fine",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word3.t2",
+                            "name": "pf.word3.t2",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w3}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_3} = 1 && {pf_solved} = 1 && {pf_bad} != 3 && {pf_x3} = 0"
+                      },
+                      {
+                        "id": "pf.word3.no",
+                        "name": "pf.word3.no",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word3.t3",
+                            "name": "pf.word3.t3",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w3}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#e6c2bd",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_3} = 1 && {pf_x3} = 1"
+                      },
+                      {
+                        "id": "pf.word3.right",
+                        "name": "The wrong word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_3} = 1 && {pf_bad} = 3 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_solved",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "All fixed."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "pf.word3.other",
+                        "name": "A fine word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_3} = 1 && {pf_bad} != 3 && {pf_x3} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_x3",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_tries",
+                                "op": "set",
+                                "value": "{pf_tries} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "That one is fine."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 708,
+                    "y": 150,
+                    "w": 212,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {}
+                  },
+                  {
+                    "id": "pf.word4",
+                    "name": "pf.word4",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.word4.base",
+                        "name": "pf.word4.base",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word4.t0",
+                            "name": "pf.word4.t0",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w4}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_4} = 1 && {pf_solved} = 0 && {pf_x4} = 0"
+                      },
+                      {
+                        "id": "pf.word4.found",
+                        "name": "pf.word4.found",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word4.t1",
+                            "name": "pf.word4.t1",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w4}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#bfe3b4",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_4} = 1 && {pf_solved} = 1 && {pf_bad} = 4"
+                      },
+                      {
+                        "id": "pf.word4.fine",
+                        "name": "pf.word4.fine",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word4.t2",
+                            "name": "pf.word4.t2",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w4}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_4} = 1 && {pf_solved} = 1 && {pf_bad} != 4 && {pf_x4} = 0"
+                      },
+                      {
+                        "id": "pf.word4.no",
+                        "name": "pf.word4.no",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word4.t3",
+                            "name": "pf.word4.t3",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w4}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#e6c2bd",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_4} = 1 && {pf_x4} = 1"
+                      },
+                      {
+                        "id": "pf.word4.right",
+                        "name": "The wrong word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_4} = 1 && {pf_bad} = 4 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_solved",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "All fixed."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "pf.word4.other",
+                        "name": "A fine word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_4} = 1 && {pf_bad} != 4 && {pf_x4} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_x4",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_tries",
+                                "op": "set",
+                                "value": "{pf_tries} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "That one is fine."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 234,
+                    "w": 212,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {}
+                  },
+                  {
+                    "id": "pf.word5",
+                    "name": "pf.word5",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.word5.base",
+                        "name": "pf.word5.base",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word5.t0",
+                            "name": "pf.word5.t0",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w5}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_5} = 1 && {pf_solved} = 0 && {pf_x5} = 0"
+                      },
+                      {
+                        "id": "pf.word5.found",
+                        "name": "pf.word5.found",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word5.t1",
+                            "name": "pf.word5.t1",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w5}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#bfe3b4",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_5} = 1 && {pf_solved} = 1 && {pf_bad} = 5"
+                      },
+                      {
+                        "id": "pf.word5.fine",
+                        "name": "pf.word5.fine",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word5.t2",
+                            "name": "pf.word5.t2",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w5}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_5} = 1 && {pf_solved} = 1 && {pf_bad} != 5 && {pf_x5} = 0"
+                      },
+                      {
+                        "id": "pf.word5.no",
+                        "name": "pf.word5.no",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word5.t3",
+                            "name": "pf.word5.t3",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w5}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#e6c2bd",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_5} = 1 && {pf_x5} = 1"
+                      },
+                      {
+                        "id": "pf.word5.right",
+                        "name": "The wrong word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_5} = 1 && {pf_bad} = 5 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_solved",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "All fixed."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "pf.word5.other",
+                        "name": "A fine word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_5} = 1 && {pf_bad} != 5 && {pf_x5} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_x5",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_tries",
+                                "op": "set",
+                                "value": "{pf_tries} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "That one is fine."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 260,
+                    "y": 234,
+                    "w": 212,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {}
+                  },
+                  {
+                    "id": "pf.word6",
+                    "name": "pf.word6",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.word6.base",
+                        "name": "pf.word6.base",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word6.t0",
+                            "name": "pf.word6.t0",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w6}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_6} = 1 && {pf_solved} = 0 && {pf_x6} = 0"
+                      },
+                      {
+                        "id": "pf.word6.found",
+                        "name": "pf.word6.found",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word6.t1",
+                            "name": "pf.word6.t1",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w6}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#bfe3b4",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_6} = 1 && {pf_solved} = 1 && {pf_bad} = 6"
+                      },
+                      {
+                        "id": "pf.word6.fine",
+                        "name": "pf.word6.fine",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word6.t2",
+                            "name": "pf.word6.t2",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w6}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_6} = 1 && {pf_solved} = 1 && {pf_bad} != 6 && {pf_x6} = 0"
+                      },
+                      {
+                        "id": "pf.word6.no",
+                        "name": "pf.word6.no",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word6.t3",
+                            "name": "pf.word6.t3",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w6}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#e6c2bd",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_6} = 1 && {pf_x6} = 1"
+                      },
+                      {
+                        "id": "pf.word6.right",
+                        "name": "The wrong word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_6} = 1 && {pf_bad} = 6 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_solved",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "All fixed."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "pf.word6.other",
+                        "name": "A fine word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_6} = 1 && {pf_bad} != 6 && {pf_x6} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_x6",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_tries",
+                                "op": "set",
+                                "value": "{pf_tries} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "That one is fine."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 484,
+                    "y": 234,
+                    "w": 212,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {}
+                  },
+                  {
+                    "id": "pf.word7",
+                    "name": "pf.word7",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.word7.base",
+                        "name": "pf.word7.base",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word7.t0",
+                            "name": "pf.word7.t0",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w7}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_7} = 1 && {pf_solved} = 0 && {pf_x7} = 0"
+                      },
+                      {
+                        "id": "pf.word7.found",
+                        "name": "pf.word7.found",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word7.t1",
+                            "name": "pf.word7.t1",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w7}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#bfe3b4",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_7} = 1 && {pf_solved} = 1 && {pf_bad} = 7"
+                      },
+                      {
+                        "id": "pf.word7.fine",
+                        "name": "pf.word7.fine",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word7.t2",
+                            "name": "pf.word7.t2",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w7}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_7} = 1 && {pf_solved} = 1 && {pf_bad} != 7 && {pf_x7} = 0"
+                      },
+                      {
+                        "id": "pf.word7.no",
+                        "name": "pf.word7.no",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word7.t3",
+                            "name": "pf.word7.t3",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w7}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#e6c2bd",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_7} = 1 && {pf_x7} = 1"
+                      },
+                      {
+                        "id": "pf.word7.right",
+                        "name": "The wrong word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_7} = 1 && {pf_bad} = 7 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_solved",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "All fixed."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "pf.word7.other",
+                        "name": "A fine word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_7} = 1 && {pf_bad} != 7 && {pf_x7} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_x7",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_tries",
+                                "op": "set",
+                                "value": "{pf_tries} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "That one is fine."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 708,
+                    "y": 234,
+                    "w": 212,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {}
+                  },
+                  {
+                    "id": "pf.word8",
+                    "name": "pf.word8",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.word8.base",
+                        "name": "pf.word8.base",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word8.t0",
+                            "name": "pf.word8.t0",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w8}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_8} = 1 && {pf_solved} = 0 && {pf_x8} = 0"
+                      },
+                      {
+                        "id": "pf.word8.found",
+                        "name": "pf.word8.found",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word8.t1",
+                            "name": "pf.word8.t1",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w8}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#bfe3b4",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_8} = 1 && {pf_solved} = 1 && {pf_bad} = 8"
+                      },
+                      {
+                        "id": "pf.word8.fine",
+                        "name": "pf.word8.fine",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word8.t2",
+                            "name": "pf.word8.t2",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w8}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_8} = 1 && {pf_solved} = 1 && {pf_bad} != 8 && {pf_x8} = 0"
+                      },
+                      {
+                        "id": "pf.word8.no",
+                        "name": "pf.word8.no",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word8.t3",
+                            "name": "pf.word8.t3",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w8}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#e6c2bd",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_8} = 1 && {pf_x8} = 1"
+                      },
+                      {
+                        "id": "pf.word8.right",
+                        "name": "The wrong word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_8} = 1 && {pf_bad} = 8 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_solved",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "All fixed."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "pf.word8.other",
+                        "name": "A fine word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_8} = 1 && {pf_bad} != 8 && {pf_x8} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_x8",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_tries",
+                                "op": "set",
+                                "value": "{pf_tries} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "That one is fine."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 318,
+                    "w": 212,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {}
+                  },
+                  {
+                    "id": "pf.word9",
+                    "name": "pf.word9",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.word9.base",
+                        "name": "pf.word9.base",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word9.t0",
+                            "name": "pf.word9.t0",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w9}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_9} = 1 && {pf_solved} = 0 && {pf_x9} = 0"
+                      },
+                      {
+                        "id": "pf.word9.found",
+                        "name": "pf.word9.found",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word9.t1",
+                            "name": "pf.word9.t1",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w9}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#bfe3b4",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_9} = 1 && {pf_solved} = 1 && {pf_bad} = 9"
+                      },
+                      {
+                        "id": "pf.word9.fine",
+                        "name": "pf.word9.fine",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word9.t2",
+                            "name": "pf.word9.t2",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w9}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_9} = 1 && {pf_solved} = 1 && {pf_bad} != 9 && {pf_x9} = 0"
+                      },
+                      {
+                        "id": "pf.word9.no",
+                        "name": "pf.word9.no",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word9.t3",
+                            "name": "pf.word9.t3",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w9}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#e6c2bd",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_9} = 1 && {pf_x9} = 1"
+                      },
+                      {
+                        "id": "pf.word9.right",
+                        "name": "The wrong word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_9} = 1 && {pf_bad} = 9 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_solved",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "All fixed."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "pf.word9.other",
+                        "name": "A fine word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_9} = 1 && {pf_bad} != 9 && {pf_x9} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_x9",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_tries",
+                                "op": "set",
+                                "value": "{pf_tries} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "That one is fine."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 260,
+                    "y": 318,
+                    "w": 212,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {}
+                  },
+                  {
+                    "id": "pf.word10",
+                    "name": "pf.word10",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.word10.base",
+                        "name": "pf.word10.base",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word10.t0",
+                            "name": "pf.word10.t0",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w10}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_10} = 1 && {pf_solved} = 0 && {pf_x10} = 0"
+                      },
+                      {
+                        "id": "pf.word10.found",
+                        "name": "pf.word10.found",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word10.t1",
+                            "name": "pf.word10.t1",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w10}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#bfe3b4",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_10} = 1 && {pf_solved} = 1 && {pf_bad} = 10"
+                      },
+                      {
+                        "id": "pf.word10.fine",
+                        "name": "pf.word10.fine",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word10.t2",
+                            "name": "pf.word10.t2",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w10}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_10} = 1 && {pf_solved} = 1 && {pf_bad} != 10 && {pf_x10} = 0"
+                      },
+                      {
+                        "id": "pf.word10.no",
+                        "name": "pf.word10.no",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word10.t3",
+                            "name": "pf.word10.t3",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w10}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#e6c2bd",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_10} = 1 && {pf_x10} = 1"
+                      },
+                      {
+                        "id": "pf.word10.right",
+                        "name": "The wrong word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_10} = 1 && {pf_bad} = 10 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_solved",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "All fixed."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "pf.word10.other",
+                        "name": "A fine word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_10} = 1 && {pf_bad} != 10 && {pf_x10} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_x10",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_tries",
+                                "op": "set",
+                                "value": "{pf_tries} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "That one is fine."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 484,
+                    "y": 318,
+                    "w": 212,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {}
+                  },
+                  {
+                    "id": "pf.word11",
+                    "name": "pf.word11",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.word11.base",
+                        "name": "pf.word11.base",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word11.t0",
+                            "name": "pf.word11.t0",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w11}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_11} = 1 && {pf_solved} = 0 && {pf_x11} = 0"
+                      },
+                      {
+                        "id": "pf.word11.found",
+                        "name": "pf.word11.found",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word11.t1",
+                            "name": "pf.word11.t1",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w11}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#bfe3b4",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_11} = 1 && {pf_solved} = 1 && {pf_bad} = 11"
+                      },
+                      {
+                        "id": "pf.word11.fine",
+                        "name": "pf.word11.fine",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word11.t2",
+                            "name": "pf.word11.t2",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w11}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f6efd8",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_11} = 1 && {pf_solved} = 1 && {pf_bad} != 11 && {pf_x11} = 0"
+                      },
+                      {
+                        "id": "pf.word11.no",
+                        "name": "pf.word11.no",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "pf.word11.t3",
+                            "name": "pf.word11.t3",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 12,
+                            "w": 212,
+                            "h": 41,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "{pf_w11}",
+                            "style": {
+                              "fontSize": 30,
+                              "color": "#1b1722",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#e6c2bd",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 8
+                        },
+                        "visible": "{pf_has_11} = 1 && {pf_x11} = 1"
+                      },
+                      {
+                        "id": "pf.word11.right",
+                        "name": "The wrong word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_11} = 1 && {pf_bad} = 11 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_solved",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "All fixed."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "pf.word11.other",
+                        "name": "A fine word",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 212,
+                        "h": 64,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#00000000"
+                        },
+                        "visible": "{pf_has_11} = 1 && {pf_bad} != 11 && {pf_x11} = 0 && {pf_solved} = 0 && {pf_tries} > 0",
+                        "states": {
+                          "hover": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#fff6dc66",
+                            "border": "#f2b84b",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_x11",
+                                "op": "set",
+                                "value": "1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_tries",
+                                "op": "set",
+                                "value": "{pf_tries} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "pf_msg",
+                                "op": "set",
+                                "value": "That one is fine."
+                              }
+                            }
+                          ],
+                          "hover": [],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 708,
+                    "y": 318,
+                    "w": 212,
+                    "h": 64,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {}
+                  },
+                  {
+                    "id": "pf.tries",
+                    "name": "pf.tries",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 400,
+                    "w": 300,
+                    "h": 30,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Tries left: {pf_tries}",
+                    "style": {
+                      "fontSize": 22,
+                      "color": "#1b1722b3"
+                    }
+                  },
+                  {
+                    "id": "pf.msg",
+                    "name": "pf.msg",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 340,
+                    "y": 400,
+                    "w": 584,
+                    "h": 32,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "{pf_msg}",
+                    "style": {
+                      "fontSize": 24,
+                      "color": "#a8402f",
+                      "align": "right"
+                    }
+                  },
+                  {
+                    "id": "pf.last",
+                    "name": "pf.last",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 340,
+                    "y": 428,
+                    "w": 584,
+                    "h": 27,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "That was the last try.",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#a8402f",
+                      "align": "right",
+                      "italic": true
+                    },
+                    "visible": "{pf_tries} <= 0 && {pf_solved} = 0"
+                  },
+                  {
+                    "id": "pf.done",
+                    "name": "The sentence is fixed",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.done.t",
+                        "name": "pf.done.t",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 10,
+                        "w": 240,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "The sentence is fixed",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722",
+                          "align": "center"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 684,
+                    "y": 456,
+                    "w": 240,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2e8cc",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3
+                    },
+                    "visible": "{pf_solved} = 1",
+                    "states": {
+                      "hover": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      },
+                      "focus": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "pf_open",
+                            "op": "set",
+                            "value": "0"
+                          }
+                        },
+                        {
+                          "type": "uiScreen",
+                          "params": {
+                            "op": "close",
+                            "screen": "storytender-proofread"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "pf.giveup",
+                    "name": "Leave it",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "pf.giveup.t",
+                        "name": "pf.giveup.t",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 10,
+                        "w": 240,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Leave it",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722",
+                          "align": "center"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 684,
+                    "y": 456,
+                    "w": 240,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2e8cc",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3
+                    },
+                    "visible": "{pf_solved} = 0",
+                    "states": {
+                      "hover": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      },
+                      "focus": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "pf_open",
+                            "op": "set",
+                            "value": "0"
+                          }
+                        },
+                        {
+                          "type": "uiScreen",
+                          "params": {
+                            "op": "close",
+                            "screen": "storytender-proofread"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    }
+                  }
+                ],
+                "anchor": "tl",
+                "x": 160,
+                "y": 90,
+                "w": 960,
+                "h": 540,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#f6ecd2",
+                  "border": "#3b2a1c",
+                  "borderWidth": 4,
+                  "radius": 14,
+                  "shadow": true
+                }
+              }
+            ],
+            "anchor": "c",
+            "w": 1280,
+            "h": 720,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {}
+          }
+        ],
+        "anchor": "fill",
+        "layout": "free",
+        "padding": 0,
+        "style": {}
+      },
+      "modal": true,
+      "back": "nothing",
       "dim": 0.6
     },
     {
