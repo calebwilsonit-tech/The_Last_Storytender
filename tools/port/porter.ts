@@ -233,12 +233,12 @@ function buildMap(scene: string, snap: Snap): TileMap {
     }
     if (kind === '#') map.setFlag(x, y, FLAG.PIT);
   }
+  // Outside the land (the gaps and the margin all round) no tile is set, so the renderer draws nothing there and the scene's dark
+  // background shows (V-01); the cells still block, so nobody can walk off the land. (Tile 0 is "no tile": the engine does not build it,
+  // and the world map leaves it transparent.)
   for (let y = 0; y < h + 4; y++)
     for (let x = 0; x < w + 4; x++)
-      if (!snap.floor.cells[`${x},${y}`]) {
-        map.set(x, y, paperTile, 0);
-        map.setFlag(x, y, FLAG.BLOCK);
-      }
+      if (!snap.floor.cells[`${x},${y}`]) map.setFlag(x, y, FLAG.BLOCK);
   return map;
 }
 

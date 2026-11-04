@@ -73,6 +73,8 @@ const line = (text: string, style = 'action', who = ''): Line => ({ who, text, s
 const near = (g: [number, number], c: [number, number], d = 1.2): boolean => Math.abs(g[0] - c[0]) <= d && Math.abs(g[1] - c[1]) <= d;
 const cellKey = (c: [number, number]): string => `${c[0]},${c[1]}`;
 const PX = 35.8; // ground pixels per cell, for the game's interaction ranges
+/** A solid box that blocks the Storytender and the Errors (layer 16, like every collider the port makes). */
+const COLLIDER = (w: number, d: number, height: number): object => ({ w, d, height, solid: true, trigger: false, layer: 16, mask: 65535, enabled: true, inside: [] });
 
 const PORTAL_NEEDS: Record<string, string> = { weighing: 'memory_done', proof: 'has_quill' };
 const PORTAL_NEED_TEXT: Record<string, string> = {
@@ -185,10 +187,32 @@ export function decorateOverworld(e: EntityData, node: { class: string; props: R
     c.collider = { w: 0.6, d: 0.6, height: 1.4, solid: true, trigger: false, layer: 16, mask: 65535, enabled: true, inside: [] };
     return;
   }
+  // the gates, bars and stones of the overworld's puzzle sites and its way up: they block (M-02, M-03). A bar or gate spans three cells along
+  // its axis (props.axis = [dx, dy]; [0, 1] runs along y), a stone is a small block.
+  const alongY = Number((node.props.axis as number[] | undefined)?.[1] ?? 0) !== 0;
+  if (node.class === 'Redactor') {
+    // the lantern lifts it (Redactor.script.ts); not saved, so it is back whenever the scene is loaded (FLOW_SPEC 3: "not saved")
+    w.attach(c, 'script_Redactor', { flag: '', remember: false, said: constText(w, 'REDACTOR_OPEN') });
+    c.collider = alongY ? COLLIDER(0.7, 3, 2) : COLLIDER(3, 0.7, 2);
+    e.tags.push('redactor');
+    return;
+  }
+  if (node.class === 'StoryGate') {
+    // a site's gate stays shut until the site is solved (puzzle sites, S-06 will open it); until then it is a wall
+    c.collider = alongY ? COLLIDER(0.7, 3, 2) : COLLIDER(3, 0.7, 2);
+    e.tags.push('gate');
+    return;
+  }
+  if (node.class === 'SentenceStone') {
+    c.collider = COLLIDER(0.8, 0.8, 1);
+    e.tags.push('stone');
+    return;
+  }
   if (node.class !== 'Prop') return;
   switch (kind) {
     case 4: {
-      // signs: the tutorial sign, the town sign, the lore stones
+      // signs: the tutorial sign, the town sign, the lore stones, the signs beside the puzzle sites (all of them block)
+      c.collider = COLLIDER(0.8, 0.8, 1.2);
       if (near(cell, [19, 53], 0.6)) talk('tutorial_sign');
       else if (near(cell, [87, 55], 0.6)) talk('town_sign');
       else {

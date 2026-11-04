@@ -32,7 +32,8 @@ SPRITES = os.path.join(PROJECT, 'assets', 'sprites')
 PIC = os.path.join(REPO, 'art', 'incoming2', 'tiles')
 NEW = {'overworld_town': 'cobble', 'forge_memory': 'slate', 'proof_memory': 'slate', 'weighing_memory': 'slate', 'pip_page': 'parchment', 'maud_wood': 'planks'}
 KEEP = {'overworld_plains': 'meadow_1', 'scissor_mat': 'moss'}   # the porter's own tops stay; faces and stairs are made from them
-OUTLINED = {'cobble', 'slate', 'flagstone', 'planks', 'parchment'}
+# every floor gets the back-ledge line (V-02): the Ludo floors' tops are redrawn with it, the porter's own tops (KEEP) get copies that have it
+OUTLINED = {'cobble', 'slate', 'flagstone', 'planks', 'parchment', 'meadow', 'meadow_1', 'grass', 'moss', 'dirt'}
 VARIANTS = ['', 'nw', 'ne', 'nwne']                              # the back ledges a top has outlined (bit 0: upper left, bit 1: upper right)
 NAME = re.compile(r'^(?P<k>.+) (?P<x>\d+),(?P<y>\d+)$')
 
@@ -106,7 +107,7 @@ def make_new_floor(floor):
     """Sprites of a hard floor: tops with their ledge variants, the faces of each tile, the stairs. Returns, by (i, j) and ledge variant, the frame names
     and mean colours of the tops, the names of the faces and the stairArt names."""
     tiles = TOPS.tiles_of(picture_of(floor))
-    dark = np.mean([LEDGES.dark_of(t) for t in tiles.values()], axis=0)
+    dark = LEDGES.INK                                   # the same near-black ink brown on every floor
     tops = {}
     for (i, j), t in tiles.items():
         for v in range(len(VARIANTS) if floor in OUTLINED else 1):
@@ -133,14 +134,37 @@ def make_kept_faces(kname, floor, entries):
     return {e['id']: (f't_{kname}_faces#{idx[(e["id"], "left")]}', f't_{kname}_faces#{idx[(e["id"], "right")]}') for e in entries}, stairs
 
 
+def make_kept_tops(kname, entries):
+    """The ledge variants of the tops the porter made: for each tile of the floor (a dict with its id and art), the three outlined copies of its
+    picture. Returns {(tile id, variant 1..3): (frame name, mean colour)}."""
+    tops, origin = {}, (32, 31)
+    for e in entries:
+        rgba, d = SPRITE_IO.read_sprite(SPRITES, e['art'])
+        origin = (d['origin']['x'], d['origin']['y'])
+        for v in range(1, len(VARIANTS)):
+            tops[(e['id'], v)] = LEDGES.outline_edges(Image.fromarray(rgba), bool(v & 1), bool(v & 2))
+    idx, rgba = pack(f't_{kname}_tops', tops, origin)
+    return {k: (f't_{kname}_tops#{i}', mean_colour(rgba[k])) for k, i in idx.items()}
+
+
 # ---------------------------------------------------------------- the project
+def lower_behind(m, x, y, h):
+    """Whether the cell at (x, y) is lower ground than height h as seen from the cell in front of it: lower floor, no tile at all (the void round the
+    land) or beyond the map's edge."""
+    if x < 0 or y < 0:
+        return True
+    if m['tiles'][y][x] == 0:
+        return True
+    return m['heights'][y][x] < h and not m['slopes'][y][x]
+
+
 def variant_of(m, x, y, outlined):
-    """Which ledge variant the top of a cell takes: a line on the edge that has lower ground behind it."""
+    """Which ledge variant the top of a cell takes: a line on the edge that has lower ground (or the void, or the map's edge) behind it."""
     if not outlined or m['slopes'][y][x]:
         return 0
     h = m['heights'][y][x]
-    nw = x > 0 and m['heights'][y][x - 1] < h and not m['slopes'][y][x - 1]
-    ne = y > 0 and m['heights'][y - 1][x] < h and not m['slopes'][y - 1][x]
+    nw = lower_behind(m, x - 1, y, h)
+    ne = lower_behind(m, x, y - 1, h)
     return int(nw) | int(ne) << 1
 
 
@@ -170,8 +194,22 @@ def main():
                 t['leftArt'], t['rightArt'] = faces[e['id']]
                 t['stairArt'] = stairs
                 t['faceLevels'] = 1
+    # the same floors' tops with a back-ledge line: a copy of each tile (nw, ne, nwne) with the outlined picture; the cells that need one are pointed at it below
+    kept_ids = {}
+    next_kept = max(by_id) + 1
+    for k, floor in KEEP.items():
+        if k not in groups:
+            continue
+        tops = make_kept_tops(k, groups[k])
+        for e in groups[k]:
+            base = by_id[e['id']]
+            for v in range(1, len(VARIANTS)):
+                art, colour = tops[(e['id'], v)]
+                tileset.append(dict(base, id=next_kept, name=f'{k} {e["gx"]},{e["gy"]} {VARIANTS[v]}', art=art, top=colour))
+                kept_ids[(e['id'], v)] = next_kept
+                next_kept += 1
     # the floors that get new tops: new tiles (by x, y and ledge variant) in place of the porter's
-    next_id = max(by_id) + 1
+    next_id = next_kept
     new_ids, drop = {}, set()
     for k, floor in NEW.items():
         if k not in groups:
@@ -192,6 +230,7 @@ def main():
                     next_id += 1
     project['tileset'] = [t for t in tileset if t['id'] not in drop]
     owner = {e['id']: k for k, es in groups.items() if k in NEW for e in es}
+    kept_owner = {e['id'] for k, es in groups.items() if k in KEEP for e in es}
     for scene in project['scenes']:
         sp = os.path.join(PROJECT, scene)
         data = json.load(open(sp, encoding='utf8'))
@@ -201,6 +240,10 @@ def main():
                 k = owner.get(tid)
                 if k:
                     row[x] = new_ids[(k, x % TOPS.PERIOD, y % TOPS.PERIOD, variant_of(m, x, y, NEW[k] in OUTLINED))]
+                elif tid in kept_owner:
+                    v = variant_of(m, x, y, True)
+                    if v:
+                        row[x] = kept_ids[(tid, v)]
         json.dump(data, open(sp, 'w', encoding='utf8', newline='\n'), separators=(',', ':'), ensure_ascii=False)
         open(sp, 'a', newline='\n').write('\n')
     json.dump(project, open(path, 'w', encoding='utf8', newline='\n'), indent=2, ensure_ascii=False)

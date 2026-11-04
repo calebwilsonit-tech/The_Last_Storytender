@@ -55,7 +55,8 @@ const placeAt = (x, y) =>
     const b = p.get('body');
     if (b) { b.vx = 0; b.vy = 0; b.vz = 0; }
   }, [x, y]);
-const face = (x, y) => page.evaluate(([x, y]) => { const p = window.__play.sim.world.withTag('player')[0].get('transform'); p.facing = (Math.round((Math.atan2(y - p.y, x - p.x) / Math.PI) * 4) + 8) % 8; }, [x, y]);
+// her facing is a direction on the screen (0 right, 2 down); grid +x runs down-right and +y down-left, so the way to (x, y) is turned onto the screen first
+const face = (x, y) => page.evaluate(([x, y]) => { const p = window.__play.sim.world.withTag('player')[0].get('transform'); p.facing = (Math.round((Math.atan2((x - p.x + (y - p.y)) / 2, x - p.x - (y - p.y)) / Math.PI) * 4) + 8) % 8; }, [x, y]);
 const tagged = (tag) => page.evaluate((tag) => window.__play.sim.world.withTag(tag).map((e) => ({ id: e.id, name: e.name, ...e.get('transform'), open: e.get('collider') ? !e.get('collider').enabled : null, visible: e.get('sprite')?.visible !== false })), tag);
 const press = async (key, ms = 90) => { await page.keyboard.down(key); await page.waitForTimeout(ms); await page.keyboard.up(key); await page.waitForTimeout(160); };
 const readAll = async () => {

@@ -41,7 +41,10 @@ export default defineScript({
       let rate = 1 / Number(me.settings.riseTime);
       if (p && v.lantern_on) {
         const d = me.distanceTo(p);
-        let off = Math.abs(Math.atan2(me.y - p.y, me.x - p.x) - (p.facing * Math.PI) / 4);
+        const bx = me.x - p.x;
+        const by = me.y - p.y;
+        // her facing is a direction on the screen; the way to this is turned onto the screen first (see Redactor.script.ts)
+        let off = Math.abs(Math.atan2((bx + by) / 2, bx - by) - (p.facing * Math.PI) / 4) % (2 * Math.PI);
         if (off > Math.PI) off = 2 * Math.PI - off;
         if (d <= 175 / K + 1 && (d < 0.8 || off <= 0.8)) rate *= 2.5;
       }

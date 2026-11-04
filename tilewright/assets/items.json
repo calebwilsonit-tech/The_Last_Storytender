@@ -43,7 +43,6 @@
       "color": 4889178,
       "max": 0,
       "use": {
-        "heal": 0,
         "setVariable": "used_clarity_tonic",
         "setValue": 1,
         "consume": true,
@@ -85,7 +84,6 @@
       "color": 4889178,
       "max": 0,
       "use": {
-        "heal": 0,
         "setVariable": "used_ghost_pepper_ink",
         "setValue": 1,
         "consume": true,
@@ -127,7 +125,6 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "heal": 0,
         "setVariable": "used_herbal_tea",
         "setValue": 1,
         "consume": true,
@@ -141,7 +138,6 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "heal": 0,
         "setVariable": "used_honey_biscuit",
         "setValue": 1,
         "consume": true,
@@ -218,7 +214,6 @@
       "color": 4881096,
       "max": 0,
       "use": {
-        "heal": 0,
         "setVariable": "used_memory_jar",
         "setValue": 1,
         "consume": true,
@@ -260,7 +255,6 @@
       "color": 10115784,
       "max": 0,
       "use": {
-        "heal": 0,
         "setVariable": "used_phoenix_draught",
         "setValue": 1,
         "consume": true,
@@ -295,7 +289,6 @@
       "color": 4889178,
       "max": 0,
       "use": {
-        "heal": 0,
         "setVariable": "used_reader_digest",
         "setValue": 1,
         "consume": true,
@@ -337,7 +330,6 @@
       "color": 10115784,
       "max": 0,
       "use": {
-        "heal": 0,
         "setVariable": "used_time_in_a_bottle",
         "setValue": 1,
         "consume": true,
@@ -400,7 +392,6 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "heal": 0,
         "setVariable": "used_eraser_crumbs",
         "setValue": 1,
         "consume": true,
@@ -457,8 +448,6 @@
       "max": 0,
       "use": {
         "heal": 100,
-        "setVariable": "",
-        "setValue": 1,
         "consume": true,
         "message": ""
       }
@@ -471,8 +460,6 @@
       "max": 0,
       "use": {
         "heal": 45,
-        "setVariable": "",
-        "setValue": 1,
         "consume": true,
         "message": ""
       }
@@ -484,7 +471,6 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "heal": 0,
         "setVariable": "light",
         "setValue": 100,
         "consume": true,
@@ -540,7 +526,6 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "heal": 0,
         "setVariable": "used_sticky_note",
         "setValue": 1,
         "consume": true,
@@ -576,8 +561,6 @@
       "max": 0,
       "use": {
         "heal": 60,
-        "setVariable": "",
-        "setValue": 1,
         "consume": true,
         "message": ""
       }

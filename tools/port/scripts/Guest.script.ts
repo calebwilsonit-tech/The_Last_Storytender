@@ -44,7 +44,10 @@ export default defineScript({
     // in the lantern's beam: it follows
     if (p && game.vars.lantern_on) {
       const d = me.distanceTo(p);
-      let off = Math.abs(Math.atan2(me.y - p.y, me.x - p.x) - (p.facing * Math.PI) / 4);
+      const bx = me.x - p.x;
+      const by = me.y - p.y;
+      // her facing is a direction on the screen; the way to this is turned onto the screen first (see Redactor.script.ts)
+      let off = Math.abs(Math.atan2((bx + by) / 2, bx - by) - (p.facing * Math.PI) / 4) % (2 * Math.PI);
       if (off > Math.PI) off = 2 * Math.PI - off;
       if (d <= 175 / K + 0.6 && (d < 0.8 || off <= 0.8)) { s.mode = 'follow'; s.lit = 0.5; }
     }

@@ -148,8 +148,9 @@ export default defineScript({
 
     // ---- the lantern's beam: within reach and in front of the Storytender
     const pf = (p.facing * Math.PI) / 4;
-    const toMe = Math.atan2(-dy, -dx);
-    let off = Math.abs(toMe - pf);
+    // her facing is a direction on the screen; the way to this is turned onto the screen first (see Redactor.script.ts)
+    const toMe = Math.atan2((-dx - dy) / 2, -dx + dy);
+    let off = Math.abs(toMe - pf) % (2 * Math.PI);
     if (off > Math.PI) off = 2 * Math.PI - off;
     const beam = lanternOn && dist <= BEAM_RANGE + 0.5 && (dist < 0.6 || off <= BEAM_HALF + Math.atan2(0.5, Math.max(dist, 0.1)));
     const slow = beam ? 0.5 : 1;

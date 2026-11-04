@@ -2,17 +2,20 @@
 ground drops away. (The front edges are outlined on the cliff faces, ludo_sides.py.)
 
 A 64 x 32 floor tile has two back edges, the upper-left one (it borders the cell up and to the left, x - 1) and the upper-right one (the cell up
-and to the right, y - 1). A tile that has a drop behind it on one side, or both, gets the line on that edge only; tiles in the open floor
-and tiles with ground of the same height behind them stay as they are, so a flat meadow is not drawn as a grid. The line is one pixel, in a
-dark shade of the tile's own floor, so it belongs to the ground it is on.
+and to the right, y - 1). A tile that has a drop (or nothing at all) behind it on one side, or both, gets the line on that edge only; tiles in the
+open floor and tiles with ground of the same height behind them stay as they are, so a flat meadow is not drawn as a grid. The line is three pixels
+thick: two of a near-black ink brown (INK) and, just inside them, one of the ground's own colour made lighter, so it reads on every floor.
 
-    python3 -I tools/art/ludo_ledges.py edge <tile.png> <out.png> <nw|ne|both> [r,g,b]   outline one tile (the dark is worked out from the tile if not given)
+    python3 -I tools/art/ludo_ledges.py edge <tile.png> <out.png> <nw|ne|both> [r,g,b]   outline one tile (INK if no colour is given)
 In code: outline_edges(tile, nw, ne, dark=None) -> a new RGBA image. Pillow and numpy only."""
 import sys
 import numpy as np
 from PIL import Image
 
-STRENGTH = 0.8   # how far the line goes from the ground's own colour toward its dark
+STRENGTH = 1.0   # how far the line goes from the ground's own colour toward the ink (all the way)
+INK = (0x2b, 0x1d, 0x12)   # the near-black ink brown of the line, the same on every floor
+THICK = 2        # pixels of ink (a lighter highlight pixel follows them inside)
+LIGHTEN = 0.35   # how far the highlight goes from the ground's own colour toward white
 
 
 def dark_of(tile):
@@ -24,18 +27,21 @@ def dark_of(tile):
 
 
 def outline_edges(tile, nw, ne, dark=None, strength=STRENGTH):
-    """The tile with a one pixel line on its upper-left edge (nw), its upper-right edge (ne), or both."""
+    """The tile with a three pixel line on its upper-left edge (nw), its upper-right edge (ne), or both: THICK pixels of ink along the rim, then one
+    lighter pixel inside them. `dark` is the ink (default INK)."""
     a = np.asarray(tile.convert('RGBA')).copy()
     h, w = a.shape[:2]
     inside = a[..., 3] > 0
-    above = np.zeros_like(inside)
-    above[1:] = inside[:-1]
-    top = inside & ~above                              # the topmost pixel of every column: both upper edges
+    # how many pixels of the tile lie above each pixel in its column: 0 for the topmost pixel of a column (the rim), 1 for the next, ...
+    depth = np.cumsum(inside, axis=0) - 1
     cols = np.arange(w)[None, :]
-    rim = top & (((cols < w // 2) & nw) | ((cols >= w // 2) & ne))
-    d = dark_of(tile) if dark is None else np.array(dark, np.float32)
+    side = ((cols < w // 2) & nw) | ((cols >= w // 2) & ne)
+    ink = inside & side & (depth < THICK)
+    light = inside & side & (depth == THICK)
+    d = np.array(INK if dark is None else dark, np.float32)
     for c in range(3):
-        a[..., c] = np.where(rim, a[..., c] * (1 - strength) + d[c] * strength, a[..., c])
+        a[..., c] = np.where(ink, a[..., c] * (1 - strength) + d[c] * strength, a[..., c])
+        a[..., c] = np.where(light, a[..., c] * (1 - LIGHTEN) + 255 * LIGHTEN, a[..., c])
     return Image.fromarray(a, 'RGBA')
 
 

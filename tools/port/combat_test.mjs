@@ -156,7 +156,7 @@ try {
     await page.waitForTimeout(120);
     const b = await byId(b1.id);
     if (b) {
-      await page.evaluate(([x, y]) => { const p = window.__play.sim.world.withTag('player')[0].get('transform'); p.facing = Math.round(((Math.atan2(y - p.y, x - p.x) / Math.PI) * 4 + 8)) % 8; }, [b.x, b.y]);
+      await page.evaluate(([x, y]) => { const p = window.__play.sim.world.withTag('player')[0].get('transform'); p.facing = Math.round(((Math.atan2((x - p.x + (y - p.y)) / 2, x - p.x - (y - p.y)) / Math.PI) * 4 + 8)) % 8; }, [b.x, b.y]);
       friend = b.friendly;
     }
   }
@@ -177,7 +177,7 @@ try {
     await page.waitForTimeout(300);
     const m = await byId(m1.id);
     if (!m) burned = true;
-    else await page.evaluate(([x, y]) => { const p = window.__play.sim.world.withTag('player')[0].get('transform'); p.facing = Math.round(((Math.atan2(y - p.y, x - p.x) / Math.PI) * 4 + 8)) % 8; }, [m.x, m.y]);
+    else await page.evaluate(([x, y]) => { const p = window.__play.sim.world.withTag('player')[0].get('transform'); p.facing = Math.round(((Math.atan2((x - p.x + (y - p.y)) / 2, x - p.x - (y - p.y)) / Math.PI) * 4 + 8)) % 8; }, [m.x, m.y]);
   }
   await page.keyboard.up('KeyQ');
   check('the lantern burns a Mite away', burned);

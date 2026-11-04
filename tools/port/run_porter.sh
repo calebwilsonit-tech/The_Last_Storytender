@@ -8,14 +8,16 @@ REPO="$(cd "$(dirname "$0")/../.." && pwd)"
 TILEWRIGHT="${TILEWRIGHT:-/home/user/calebwilsonit-tech/tilewrite}"
 GODOT="${GODOT:-godot}"
 WORK="${WORK:-$REPO/.port_work}"
+# a virtual screen where there is one (Linux); on Windows or macOS the captures open a real window
+screen() { if command -v xvfb-run >/dev/null 2>&1; then xvfb-run -a -s "-screen 0 1280x720x24" "$@"; else "$@"; fi; }
 mkdir -p "$WORK"
 if [ -z "${SKIP_CAPTURE:-}" ]; then
   "$GODOT" --headless --path "$REPO" -s tools/port/snapshot.gd -- "$WORK/snap" 2>&1 | grep '^snapshot' || true
   rm -rf "${WORK:?}/art" "${WORK:?}/tiles" "${WORK:?}/art_q" "${WORK:?}/tiles_q"
-  xvfb-run -a -s "-screen 0 1280x720x24" "$GODOT" --rendering-driver opengl3 --path "$REPO" -s tools/port/capture_art.gd -- "$WORK/art" 2>&1 | grep '^art' || true
-  xvfb-run -a -s "-screen 0 1280x720x24" "$GODOT" --rendering-driver opengl3 --path "$REPO" -s tools/port/capture_tiles.gd -- "$WORK/tiles" 2>&1 | grep '^tiles' || true
+  screen "$GODOT" --rendering-driver opengl3 --path "$REPO" -s tools/port/capture_art.gd -- "$WORK/art" 2>&1 | grep '^art' || true
+  screen "$GODOT" --rendering-driver opengl3 --path "$REPO" -s tools/port/capture_tiles.gd -- "$WORK/tiles" 2>&1 | grep '^tiles' || true
   "$GODOT" --headless --path "$REPO" -s tools/port/dump_data.gd -- "$WORK/data" 2>&1 | grep '^data' || true
-  xvfb-run -a -s "-screen 0 1280x720x24" "$GODOT" --rendering-driver opengl3 --path "$REPO" -s tools/port/capture_icons.gd -- "$WORK/icons" 2>&1 | grep '^icons' || true
+  screen "$GODOT" --rendering-driver opengl3 --path "$REPO" -s tools/port/capture_icons.gd -- "$WORK/icons" 2>&1 | grep '^icons' || true
   python3 "$REPO/tools/port/quantize.py" "$WORK/art" "$WORK/art_q" && cp "$WORK/art/index.json" "$WORK/art_q/"
   python3 "$REPO/tools/port/quantize.py" "$WORK/tiles" "$WORK/tiles_q" && cp "$WORK/tiles/index.json" "$WORK/tiles_q/"
 fi
