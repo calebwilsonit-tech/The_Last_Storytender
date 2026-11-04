@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "name": "plaque_1",
+  "start": "n3",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]ERRATA: 'The ending is UNWRITTEN. Anyone who tells you otherwise is guessing.'[/i]"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A black bar covers it. Whatever is written there needs light to matter.[/i]"
+    },
+    {
+      "id": "n3",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "plaque_seen_1",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n1",
+      "else": "n2"
+    }
+  ]
+}

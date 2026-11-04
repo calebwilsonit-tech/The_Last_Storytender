@@ -15,6 +15,12 @@ const HEARING = [1, 1.35, 0.8, 1, 1, 1.2];
 const CHASE = [86, 150, 40, 70, 62, 70].map((p) => p / K);
 /** Seconds of lantern light that proofread a kind (0: the light does something else). */
 const PROOF = [2.2, 0, 3.0, 1.8, 0, 0];
+const INTRO: Record<number, string> = {
+  2: 'A Run-on drags itself across the page, leaving a sticky trail behind it. Shine the Lantern on it until it learns when to stop.',
+  3: 'A Dangling Modifier hangs from nothing, flinging words from a distance. Keep moving, and light it until it clings to something else.',
+  4: 'A Censor stands with a black bar across its front. The Quill will not pierce it. Light the bar until it fades, or go around behind.',
+  5: 'Three dots blink in and out around you. Light pins them in place, and then they can be cut.',
+};
 const BEAM_RANGE = 175 / K;
 const BEAM_HALF = 0.63;
 
@@ -114,13 +120,18 @@ export default defineScript({
     }
     const out = !me.settings.unlock || !!v[String(me.settings.unlock)];
     if (me.visible !== out) me.visible = out;
+    // the first of each new kind she meets says what it is (main.gd _introduce_enemy)
+    if (out && !s.gone && kind >= 2 && !v[`met_enemy_${kind}`] && game.player && me.distanceTo(game.player) < 22) {
+      v[`met_enemy_${kind}`] = 1;
+      game.say(INTRO[kind]!);
+    }
     const touch = me.get('damageOnTouch');
     if (!out) return;
     const hp = me.get('state:health') as { hp: number; dead?: boolean } | undefined;
 
     // ---- beaten: renown, Mnemosynth crystals to pick up (1 from a Mite, 2 from the rest), a drop roll, and gone for now
     if (hp && (hp.dead || hp.hp <= 0)) {
-      v.renown = Number(v.renown ?? 0) + RENOWN[kind]!;
+      v.renown = Number(v.renown ?? 0) + Math.round(RENOWN[kind]! * (1 + Number(v.stat_renown ?? 0)));
       dropCrystals(me, game, kind === 1 ? 1 : 2);
       rollDrops(game, String(me.settings.drops));
       s.gone = true;
@@ -476,7 +487,7 @@ function rollDrops(game: ScriptGame, table: string): void {
     const [item, chance, lo, hi] = part.split(',').map((x) => x.trim());
     if (!item) continue;
     // Fortune: +0.5% a point on every drop chance
-    if (game.random() * 100 < Number(chance) + 0.5 * Number(game.vars.attr_luck ?? 0)) {
+    if (game.random() * 100 < Number(chance) + 100 * Number(game.vars.stat_luck ?? 0)) {
       const a = Number(lo);
       const b = Number(hi);
       game.giveItem(item, b <= a ? a : game.randomInt(a, b));

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "name": "take_locket",
+  "start": "n5",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "set",
+      "variable": "echo_third",
+      "op": "set",
+      "value": 1,
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "Found: the Locket of Second Thoughts. You can keep three Echoes.",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A locket on a thin chain. Inside, three tiny portraits of the same person, none of them quite agreeing.[/i]"
+    },
+    {
+      "id": "n4",
+      "type": "end"
+    },
+    {
+      "id": "n5",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "echo_third",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n4",
+      "else": "n1"
+    }
+  ]
+}

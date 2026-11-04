@@ -17,7 +17,7 @@ export default defineScript({
     if (!p || me.distanceTo(p) > Number(me.settings.radius) || Math.abs(p.h - me.h) > 0.7) return;
     const v = game.vars;
     // Fortune: +0.25% Mnemosynth found a point
-    v.mnemosynth = Number(v.mnemosynth ?? 0) + Number(me.settings.mnemo) * (1 + 0.0025 * Number(v.attr_luck ?? 0));
+    v.mnemosynth = Number(v.mnemosynth ?? 0) + Number(me.settings.mnemo) * (1 + Number(v.stat_mnemo ?? 0));
     v.light = Math.min(100, Number(v.light ?? 100) + Number(me.settings.light));
     if (me.settings.flag) v[me.settings.flag] = 1;
     game.do('sound', { name: 'crystal', volume: 1 });

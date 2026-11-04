@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "name": "weighing_enter",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]A counting-house that has weighed every word ever spoken in it and found each one a little short. The scales are still swinging.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "weighing_entered",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}

@@ -7,7 +7,7 @@
  */
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { buildScreens, mapNamesFrom, uiTheme, type MapConstants } from './screens';
+import { buildScreens, equipmentOf, mapNamesFrom, uiTheme, wornBy, type ItemRow, type MapConstants } from './screens';
 
 const repo = process.argv[2] ?? '.';
 const out = join(repo, 'tilewright');
@@ -48,9 +48,11 @@ const old = JSON.parse(read(join(out, 'assets', 'screens.json'))) as { schemaVer
 const palette = /"palette":\s*"(\d+):#00000000"/.exec(JSON.stringify(old))?.[1];
 if (!palette) throw new Error('could not find the map paper tile in the old screens.json');
 const itemIds = readdirSync(join(out, 'assets', 'sprites')).filter((f) => f.startsWith('icon_')).map((f) => f.slice(5).replace('.sprite.json', ''));
-const usable = (JSON.parse(read(join(out, 'assets', 'items.json'))) as { items: { id: string; use?: unknown }[] }).items.filter((it) => it.use).map((it) => it.id);
+const itemList = (JSON.parse(read(join(out, 'assets', 'items.json'))) as { items: ItemRow[] }).items;
+const usable = itemList.filter((it) => it.use && !wornBy(it)).map((it) => it.id);
+const equipment = equipmentOf(itemList);
 
-writeFileSync(join(out, 'assets', 'screens.json'), JSON.stringify(buildScreens(itemIds, old.schemaVersion, Number(palette), usable, mapNamesFrom(constants)), null, 2) + '\n');
+writeFileSync(join(out, 'assets', 'screens.json'), JSON.stringify(buildScreens(itemIds, old.schemaVersion, Number(palette), usable, mapNamesFrom(constants), equipment), null, 2) + '\n');
 writeFileSync(join(out, 'assets', 'ui.json'), JSON.stringify(uiTheme(old.schemaVersion), null, 2) + '\n');
 
 // the strike pose is the swing: no pale diamond on the ground (the engine's melee attack draws one unless showSwing is off)

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "name": "take_reward_proof",
+  "start": "n7",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "give",
+      "item": "censors_monocle",
+      "amount": 1,
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "side_proof_done",
+      "op": "set",
+      "value": 1,
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "set",
+      "variable": "renown",
+      "op": "add",
+      "value": 15,
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "Received: Censor's Monocle",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Approved for release, the stamp says. It is the first approval you have ever seen that did not feel like a verdict.[/i]"
+    },
+    {
+      "id": "n6",
+      "type": "end"
+    },
+    {
+      "id": "n7",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "side_proof_done",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n6",
+      "else": "n1"
+    }
+  ]
+}

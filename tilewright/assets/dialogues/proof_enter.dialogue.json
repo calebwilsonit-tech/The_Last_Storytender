@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "name": "proof_enter",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]Proofs, galleys, red pencil. Every wall has a mark on it, and every mark is a question.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "proof_entered",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}

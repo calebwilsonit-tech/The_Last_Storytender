@@ -311,15 +311,21 @@ function card(itemIds: string[]): W {
   });
 }
 
-function slot(id: string, label: string, x: number, y: number, worn: string): W {
+function slot(id: string, label: string, x: number, y: number, worn: string, equipment: { id: string; name: string; slot: string }[] = []): W {
+  const mine = equipment.filter((e) => `worn_${e.slot}` === worn);
   return box(id, x, y, 150, 98, { fill: '#e6d9b366', border: '#3b2a1c80', borderWidth: 2 }, [
     text(`${id}.label`, label, 8, 4, 17, C.ink, { w: 140, style: { opacity: 0.7 } }),
     text(`${id}.empty`, 'empty', 50, 44, 18, C.ink, { w: 90, visible: `!{${worn}}`, style: { opacity: 0.35 } }),
-    text(`${id}.worn`, `{${worn}}`, 8, 72, 14, C.ink, { w: 140, visible: `{${worn}}` }),
-  ]);
+    // what is worn: its picture and its name (one of each for every item that fits this slot)
+    ...mine.flatMap((e) => [
+      w('image', `${id}.pic.${e.id}`, { name: `Worn ${e.name}`, ...at(50, 24, 50, 50), sprite: `icon_${e.id}`, visible: `{${worn}} = ${e.id}`, style: {} }),
+      text(`${id}.name.${e.id}`, e.name, 4, 74, 13, C.ink, { w: 142, visible: `{${worn}} = ${e.id}`, style: { align: 'center' } }),
+    ]),
+    text(`${id}.take`, 'click to take off', 4, 4, 11, C.ink, { w: 142, visible: `{${worn}}`, style: { align: 'right', opacity: 0.5 } }),
+  ], { name: label, states: { hover: { border: C.inkBrown, borderWidth: 4 } }, on: { click: [setVar(worn, '')], hover: [], change: [] } });
 }
 
-function binder(itemIds: string[]): Screen {
+function binder(itemIds: string[], equipment: { id: string; name: string; slot: string }[] = []): Screen {
   const pages = [box('binder.page.l', 84, 64, 530, 592, { fill: C.paperLight, border: C.leatherEdge, borderWidth: 2 }), box('binder.page.r', 666, 64, 530, 592, { fill: C.paperLight, border: C.leatherEdge, borderWidth: 2 })];
   for (const p of pages) for (let y = 54, i = 0; y < 584; y += 28, i++) p.children.push(rule(`${p.id}.line${i}`, 12, y, 506, '#738cb221', 1));
   const rings = [150, 360, 570].flatMap((ry, i) => [box(`binder.ring.bar${i}`, 616, ry - 8, 48, 16, { fill: '#2a2a30' }), box(`binder.ring${i}`, 625, ry - 15, 30, 30, { border: '#9aa0ad', borderWidth: 5, radius: 15 })]);
@@ -335,13 +341,14 @@ function binder(itemIds: string[]): Screen {
     rule('binder.l.rule', 108, 118, 392, '#1b172280'),
     box('binder.plinth', 198, 452, 140, 32, { fill: '#0000001f', radius: 16 }),
     doll('binder.doll', 112, 140, 2.6),
-    slot('binder.slot.binding', 'Binding', 442, 150, 'worn_binding'),
-    slot('binder.slot.amulet', 'Amulet', 442, 262, 'worn_amulet'),
+    slot('binder.slot.binding', 'Binding', 442, 150, 'worn_binding', equipment),
+    slot('binder.slot.amulet', 'Amulet', 442, 262, 'worn_amulet', equipment),
     text('binder.tools', 'Tools', 442, 368, 22, C.ink, { w: 150 }),
     rule('binder.tools.rule', 442, 398, 150, '#1b172266', 1),
     text('binder.tool.lantern', 'Lantern', 442, 404 - 26, 19, C.cyanDeep, { w: 150, visible: '' }),
     ...weapon,
-    ...stats.map((s, i) => text(`binder.stat${i}`, s, 108, 520 + i * 20, 17, C.ink, { w: 420, h: 22, style: { opacity: 0.9 } })),
+    // what she is wearing and has bought does (Storytender.script.ts writes the lines)
+    ...stats.map((_, i) => text(`binder.stat${i}`, `{st${i}}`, 108, 520 + i * 20, 17, C.ink, { w: 400, h: 22, style: { opacity: 0.9 } })),
     text('binder.difficulty.story', 'Difficulty:  Story', 372, 520, 17, C.ink, { w: 230, visible: '{difficulty} = story', style: { opacity: 0.7 } }),
     text('binder.difficulty.normal', 'Difficulty:  Normal', 372, 520, 17, C.ink, { w: 230, visible: '{difficulty} = normal', style: { opacity: 0.7 } }),
   ];
@@ -873,10 +880,20 @@ export function uiTheme(schemaVersion: number): object {
   };
 }
 
-export function buildScreens(itemIds: string[], schemaVersion: number, paperTile: number, usable: string[] = itemIds, names: MapNames = { regions: [], posts: [], doors: [] }): object {
+/** An item as items.json holds it (what the screens need to know about it). */
+export interface ItemRow {
+  id: string;
+  name?: string;
+  use?: { setVariable?: string };
+}
+/** The slot an item is worn in ('binding' or 'amulet'), or '' for an item that is not worn. */
+export const wornBy = (it: ItemRow): string => /^worn_(binding|amulet)$/.exec(it.use?.setVariable ?? '')?.[1] ?? '';
+export const equipmentOf = (items: ItemRow[]): { id: string; name: string; slot: string }[] => items.filter((it) => wornBy(it)).map((it) => ({ id: it.id, name: it.name ?? it.id, slot: wornBy(it) }));
+
+export function buildScreens(itemIds: string[], schemaVersion: number, paperTile: number, usable: string[] = itemIds, names: MapNames = { regions: [], posts: [], doors: [] }, equipment: { id: string; name: string; slot: string }[] = []): object {
   return {
     schemaVersion,
-    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), settings(), binder(itemIds), indexScreen(), proofreadScreen(), endingScreen(), bookScreen(), map(paperTile, names)],
+    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), settings(), binder(itemIds, equipment), indexScreen(), proofreadScreen(), endingScreen(), bookScreen(), map(paperTile, names)],
     prefabs: [
       { name: 'Lamp', widget: lamp() },
       { name: 'Here', widget: here() },

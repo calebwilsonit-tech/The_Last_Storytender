@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "name": "take_reward_weighing",
+  "start": "n7",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "give",
+      "item": "hourglass_of_drafts",
+      "amount": 1,
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "set",
+      "variable": "side_weighing_done",
+      "op": "set",
+      "value": 1,
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "set",
+      "variable": "renown",
+      "op": "add",
+      "value": 15,
+      "next": "n4"
+    },
+    {
+      "id": "n4",
+      "type": "line",
+      "speaker": "",
+      "text": "Received: Hourglass of Drafts",
+      "next": "n5"
+    },
+    {
+      "id": "n5",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The scales settle at last. Whatever you weighed, it was worth the weight.[/i]"
+    },
+    {
+      "id": "n6",
+      "type": "end"
+    },
+    {
+      "id": "n7",
+      "type": "branch",
+      "if": {
+        "kind": "variable",
+        "name": "side_weighing_done",
+        "op": ">=",
+        "value": 1
+      },
+      "then": "n6",
+      "else": "n1"
+    }
+  ]
+}

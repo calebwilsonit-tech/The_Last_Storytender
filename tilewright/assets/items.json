@@ -6,7 +6,14 @@
       "name": "The Author's Pen",
       "description": "It still remembers how it all began.",
       "color": 14721056,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "authors_pen",
+        "consume": false,
+        "message": "The Author's Pen is worn"
+      }
     },
     {
       "id": "blank_page",
@@ -20,21 +27,42 @@
       "name": "Bookworm Charm",
       "description": "He eats the boring parts for you.",
       "color": 4889178,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "bookworm_charm",
+        "consume": false,
+        "message": "Bookworm Charm is worn"
+      }
     },
     {
       "id": "cartographer_compass",
       "name": "Cartographer's Compass",
       "description": "Always points to the next interesting thing.",
       "color": 4881096,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "cartographer_compass",
+        "consume": false,
+        "message": "Cartographer's Compass is worn"
+      }
     },
     {
       "id": "censors_monocle",
       "name": "Censor's Monocle",
       "description": "Confiscated, then polished.",
       "color": 10115784,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "censors_monocle",
+        "consume": false,
+        "message": "Censor's Monocle is worn"
+      }
     },
     {
       "id": "clarity_tonic",
@@ -55,7 +83,14 @@
       "name": "Cloth Binding",
       "description": "Plain, sturdy, quietly hopeful.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_binding",
+        "setValue": "cloth_binding",
+        "consume": false,
+        "message": "Cloth Binding is worn"
+      }
     },
     {
       "id": "clover_press",
@@ -69,14 +104,28 @@
       "name": "Dust Jacket",
       "description": "Slides off easily. So do you.",
       "color": 4889178,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_binding",
+        "setValue": "dust_jacket",
+        "consume": false,
+        "message": "Dust Jacket is worn"
+      }
     },
     {
       "id": "eternal_bookmark",
       "name": "The Eternal Bookmark",
       "description": "Marks the place where you decided to keep going.",
       "color": 14721056,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "eternal_bookmark",
+        "consume": false,
+        "message": "The Eternal Bookmark is worn"
+      }
     },
     {
       "id": "ghost_pepper_ink",
@@ -97,7 +146,14 @@
       "name": "Ghostwriter's Glove",
       "description": "It wrote this item description.",
       "color": 4881096,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "ghostwriter_glove",
+        "consume": false,
+        "message": "Ghostwriter's Glove is worn"
+      }
     },
     {
       "id": "glue_stub",
@@ -118,7 +174,14 @@
       "name": "The Golden Ratio",
       "description": "Perfectly proportioned. Perfectly smug.",
       "color": 14721056,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "golden_ratio",
+        "consume": false,
+        "message": "The Golden Ratio is worn"
+      }
     },
     {
       "id": "herbal_tea",
@@ -153,14 +216,28 @@
       "name": "Hourglass of Drafts",
       "description": "Every grain is a version you did not publish.",
       "color": 10115784,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "hourglass_of_drafts",
+        "consume": false,
+        "message": "Hourglass of Drafts is worn"
+      }
     },
     {
       "id": "illuminated_binding",
       "name": "Illuminated Binding",
       "description": "Every margin glows with someone's patience.",
       "color": 14721056,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_binding",
+        "setValue": "illuminated_binding",
+        "consume": false,
+        "message": "Illuminated Binding is worn"
+      }
     },
     {
       "id": "ink_blot",
@@ -174,14 +251,28 @@
       "name": "Lamplighter's Match",
       "description": "Never goes out. Never asks for credit.",
       "color": 4881096,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "lamplighter_match",
+        "consume": false,
+        "message": "Lamplighter's Match is worn"
+      }
     },
     {
       "id": "library_binding",
       "name": "Library Binding",
       "description": "Reinforced to survive a thousand borrowers.",
       "color": 4881096,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_binding",
+        "setValue": "library_binding",
+        "consume": false,
+        "message": "Library Binding is worn"
+      }
     },
     {
       "id": "loose_thread",
@@ -195,14 +286,28 @@
       "name": "Lucky Clover",
       "description": "Four leaves. Someone got to the fifth and stopped.",
       "color": 4881096,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "lucky_clover",
+        "consume": false,
+        "message": "Lucky Clover is worn"
+      }
     },
     {
       "id": "margin_doodle",
       "name": "Margin Doodle",
       "description": "A small sword, drawn with enthusiasm.",
       "color": 4889178,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "margin_doodle",
+        "consume": false,
+        "message": "Margin Doodle is worn"
+      }
     },
     {
       "id": "marginalia_dust",
@@ -230,14 +335,28 @@
       "name": "Midnight Inkwell",
       "description": "Never empties while you are still writing.",
       "color": 10115784,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "midnight_inkwell",
+        "consume": false,
+        "message": "Midnight Inkwell is worn"
+      }
     },
     {
       "id": "paper_clip",
       "name": "Paper Clip",
       "description": "Holds it all together, barely.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "paper_clip",
+        "consume": false,
+        "message": "Paper Clip is worn"
+      }
     },
     {
       "id": "paper_scrap",
@@ -307,21 +426,42 @@
       "name": "Reading Glasses",
       "description": "Now you can see the small print. And the big threats.",
       "color": 4889178,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "reading_glasses",
+        "consume": false,
+        "message": "Reading Glasses is worn"
+      }
     },
     {
       "id": "rubber_band",
       "name": "Rubber Band",
       "description": "Snaps back. Mostly.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "rubber_band",
+        "consume": false,
+        "message": "Rubber Band is worn"
+      }
     },
     {
       "id": "silver_ribbon",
       "name": "Silver Ribbon",
       "description": "Tied around the last page of a love letter.",
       "color": 4881096,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "silver_ribbon",
+        "consume": false,
+        "message": "Silver Ribbon is worn"
+      }
     },
     {
       "id": "silver_thread",
@@ -349,7 +489,14 @@
       "name": "Tin Bell",
       "description": "Rings when trouble is polite enough to knock.",
       "color": 4889178,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "tin_bell",
+        "consume": false,
+        "message": "Tin Bell is worn"
+      }
     },
     {
       "id": "unwritten_word",
@@ -363,7 +510,14 @@
       "name": "Vellum Binding",
       "description": "Older than the story it holds.",
       "color": 10115784,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_binding",
+        "setValue": "vellum_binding",
+        "consume": false,
+        "message": "Vellum Binding is worn"
+      }
     },
     {
       "id": "void_pearl",
@@ -391,7 +545,14 @@
       "name": "Bookmark Charm",
       "description": "Your ink slowly refills on its own (0.8 per second).\nWherever you stopped, it keeps your place.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "bookmark_charm",
+        "consume": false,
+        "message": "Bookmark Charm is worn"
+      }
     },
     {
       "id": "eraser_crumbs",
@@ -412,42 +573,84 @@
       "name": "The First Edition",
       "description": "-10% damage taken, +10% Quill damage, a little ink regeneration and extra grace after a hit.\nEvery story starts as someone's first try. This one got it nearly right.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "first_edition",
+        "consume": false,
+        "message": "The First Edition is worn"
+      }
     },
     {
       "id": "footnote",
       "name": "The Footnote",
       "description": "Your Quill reaches 20% further.\nSmall, numbered, and surprisingly far-reaching.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "footnote",
+        "consume": false,
+        "message": "The Footnote is worn"
+      }
     },
     {
       "id": "gilded_binding",
       "name": "Gilded Binding",
       "description": "A collector's binding. -15% damage taken, +10% speed, faster dash, +15% Quill damage.\nToo nice to read. You read it anyway.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_binding",
+        "setValue": "gilded_binding",
+        "consume": false,
+        "message": "Gilded Binding is worn"
+      }
     },
     {
       "id": "hardcover_binding",
       "name": "Hardcover Binding",
       "description": "Heavy plates cut from book covers. -30% damage taken, but slower.\nYou can judge it by its cover. Everyone does.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_binding",
+        "setValue": "hardcover_binding",
+        "consume": false,
+        "message": "Hardcover Binding is worn"
+      }
     },
     {
       "id": "highlighter",
       "name": "The Highlighter",
       "description": "The Lantern burns 35% slower.\nIt makes the important parts glow, and the rest less important.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "highlighter",
+        "consume": false,
+        "message": "The Highlighter is worn"
+      }
     },
     {
       "id": "index_tab",
       "name": "Index Tab",
       "description": "Your dash recovers 20% faster.\nAlways one flick from the page you need.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "index_tab",
+        "consume": false,
+        "message": "Index Tab is worn"
+      }
     },
     {
       "id": "ink_flask",
@@ -496,42 +699,84 @@
       "name": "Leatherbound Binding",
       "description": "Fine leather, gold edges. -20% damage taken and +10% Quill damage.\nIt smells like an old library and a good decision.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_binding",
+        "setValue": "leatherbound_binding",
+        "consume": false,
+        "message": "Leatherbound Binding is worn"
+      }
     },
     {
       "id": "margin_note",
       "name": "Margin Note",
       "description": "-10% damage taken.\n'Be careful here.'  (Underlined twice.)",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "margin_note",
+        "consume": false,
+        "message": "Margin Note is worn"
+      }
     },
     {
       "id": "oxford_comma",
       "name": "The Oxford Comma",
       "description": "A pause before you take the next hit: a little extra grace after being struck.\nA small pause, and all the difference.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "oxford_comma",
+        "consume": false,
+        "message": "The Oxford Comma is worn"
+      }
     },
     {
       "id": "paperback_binding",
       "name": "Paperback Binding",
       "description": "Cheap, light and quick. +20% speed, but -5% protection.\nRead it until the spine cracks.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_binding",
+        "setValue": "paperback_binding",
+        "consume": false,
+        "message": "Paperback Binding is worn"
+      }
     },
     {
       "id": "red_pen",
       "name": "The Red Pen",
       "description": "+25% Quill damage.\nStrike it out. Strike it all out.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "red_pen",
+        "consume": false,
+        "message": "The Red Pen is worn"
+      }
     },
     {
       "id": "softcover_binding",
       "name": "Softcover Binding",
       "description": "Light, flexible leather. +12% speed, faster dash, -10% damage taken.\nDog-eared. Loved.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_binding",
+        "setValue": "softcover_binding",
+        "consume": false,
+        "message": "Softcover Binding is worn"
+      }
     },
     {
       "id": "sticky_note",
@@ -552,7 +797,14 @@
       "name": "The Tailor's Thimble",
       "description": "A small, dented thimble. -8% damage taken and a faster dash.\nMade to push the needle through, so the sewing could keep going.",
       "color": 9076848,
-      "max": 0
+      "max": 0,
+      "use": {
+        "heal": 0,
+        "setVariable": "worn_amulet",
+        "setValue": "thimble",
+        "consume": false,
+        "message": "The Tailor's Thimble is worn"
+      }
     },
     {
       "id": "torn_page",

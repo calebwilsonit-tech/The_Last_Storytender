@@ -6,7 +6,7 @@
  *
  * Bundled and run by run_porter.sh. Inputs come from environment variables: SNAP, ART, TILES, OUT.
  */
-import { buildScreens, mapNamesFrom, uiTheme, type MapConstants, type MapNames } from './screens';
+import { buildScreens, equipmentOf, mapNamesFrom, uiTheme, wornBy, type ItemRow, type MapConstants, type MapNames } from './screens';
 import { decorateForge, forgeExtras, forgeRows, writeForgePrefabs, writeForgeTalk } from './forge';
 import { decoratePip, pipExtras, pipGapCells, pipMap, writePipTalk, type PipMap } from './pip';
 import { decorateMaud, maudExtras, maudGaps, maudMap, writeMaudTalk, type MaudMap } from './maud';
@@ -20,6 +20,7 @@ import { decorateOverworld, writeOverworldTalk, type World } from './overworld';
 import { bridgeCells, siteExtras } from './sites';
 import { decorateScissor, scissorExtras, writeScissorTalk } from './scissor';
 import { writeCutscenes } from './cutscenes';
+import { decorateSide, sideExtras, sideMap, writeSideTalk, type SideMap } from './side';
 
 const SNAP = process.env.SNAP!;
 const ART = process.env.ART!;
@@ -219,10 +220,10 @@ function buildMap(scene: string, snap: Snap): TileMap {
   // (the map is a little bigger than the land, so the paper shows all round it)
   const map = new TileMap(w + 4, h + 4);
   // in Pip's memory the gaps a sentence can fill are floor under a cover (PitCover), not pits
-  const gaps = scene === 'pip' ? pipGapCells((pipMapCache ??= pipMap(join(HERE, '..', '..')))) : scene === 'maud' ? new Set(maudGaps((maudMapCache ??= maudMap(join(HERE, '..', '..')))).keys()) : scene === 'overworld' && world ? bridgeCells(world.map.SITES) : new Set<string>();
+  const gaps = scene === 'pip' ? pipGapCells((pipMapCache ??= pipMap(join(HERE, '..', '..')))) : scene === 'maud' ? new Set(maudGaps((maudMapCache ??= maudMap(join(HERE, '..', '..')))).keys()) : scene === 'overworld' && world ? bridgeCells(world.map.SITES) : scene === 'weighing' ? new Set((sideCache.weighing ??= sideMap(join(HERE, '..', '..'), 'weighing')).pan.map(([x, y]) => `${x},${y}`)) : new Set<string>();
   for (const [x, y] of keys) {
     const gap = gaps.has(`${x},${y}`);
-    const floorKind = scene === 'maud' ? 'w' : 'p';
+    const floorKind = scene === 'maud' ? 'w' : scene === 'weighing' ? 'm' : 'p';
     const kind = gap && kinds.has(`${scene}|${floorKind}`) ? floorKind : snap.floor.cells[`${x},${y}`]!;
     const k = kinds.get(`${scene}|${kind}`)!;
     const vs = k.variants[(x + y) % 2]!;
@@ -482,6 +483,7 @@ function forgeSwordArt(): string {
 }
 
 let world: World | null = null;
+const sideCache: Partial<Record<'weighing' | 'proof', SideMap>> = {};
 function loadWorld(): World | null {
   if (!DATA) return null;
   const read = (k: string) => JSON.parse(readFileSync(join(DATA, `${k}.json`), 'utf8'));
@@ -524,6 +526,16 @@ const PLACE_AUDIO: Record<string, [string, string]> = {
   weighing: ['music_forge', 'step_stone'],
 };
 
+/** What each binding and amulet does (item_catalog.gd fx), for Storytender.script.ts. */
+function equipFxJson(): string {
+  if (!DATA) return '';
+  const read = (k: string) => JSON.parse(readFileSync(join(DATA, `${k}.json`), 'utf8'));
+  const all = { ...read('catalog').constants.ITEMS, ...read('items').constants.ITEMS } as Record<string, { type?: string; fx?: Record<string, number> }>;
+  const out: Record<string, Record<string, number>> = {};
+  for (const [id, d] of Object.entries(all)) if ((d.type === 'binding' || d.type === 'amulet') && d.fx) out[id] = d.fx;
+  return JSON.stringify(out);
+}
+
 function storytenderKit(p: EntityData, scene: string): void {
   const c = p.components;
   Object.assign(c.playerController as object, { speed: 4.2, runMultiplier: 1, jumpSpeed: 0 });
@@ -534,7 +546,8 @@ function storytenderKit(p: EntityData, scene: string): void {
   attach(c, 'light', { radius: 1.2, intensity: 0.35, color: 'cool', shadows: true, flicker: 0.15, mode: 'always' });
   attach(c, 'echoRecorder', { seconds: 9, capacity: 0, capacityVariable: '', ending: 'hold', ghostAlpha: 0.55 });
   attach(c, 'script_Director', { music: PLACE_AUDIO[scene]?.[0] ?? 'music_overworld', step: PLACE_AUDIO[scene]?.[1] ?? 'step_grass' });
-  attach(c, 'script_Storytender', { speed: 4.2, lanternRadius: 4.9, echoesHere: scene === 'forge' ? 1 : 0, ...placeSettings(scene) });
+  attach(c, 'script_Storytender', { speed: 4.2, lanternRadius: 4.9, echoesHere: scene === 'forge' ? 1 : 0, equipFx: equipFxJson(), ...placeSettings(scene) });
+  if (scene === 'proof') (c.script_Storytender as { lanternRadius: number }).lanternRadius = 4.9 * 1.7; // side_proof.gd: lantern_power 1.7 in the dark
 }
 
 function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
@@ -597,6 +610,12 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
       decoratePip(e, n.class, Number(n.props.kind ?? -1), m.rows[gy]?.[gx] ?? '', [gx, gy], world, n.props);
     }
     if (scene === 'scissor' && world) decorateScissor(e, n.class, Number(n.props.kind ?? -1), world);
+    if ((scene === 'weighing' || scene === 'proof') && world) {
+      const m = (sideCache[scene] ??= sideMap(join(HERE, '..', '..'), scene));
+      const gx = Math.round(n.grid[0]);
+      const gy = Math.round(n.grid[1]);
+      decorateSide(e, scene, n.class, Number(n.props.kind ?? -1), m.rows[gy]?.[gx] ?? '', [gx, gy], world);
+    }
     if (scene === 'maud' && world) {
       const m = (maudMapCache ??= maudMap(join(HERE, '..', '..')));
       const gx = Math.round(n.grid[0]);
@@ -647,6 +666,10 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
     entities.push(e);
   }
   if (scene === 'overworld') entities.push(...prologueErrors(levelOf, () => `e${i++}`));
+  if ((scene === 'weighing' || scene === 'proof') && world) {
+    const m = (sideCache[scene] ??= sideMap(join(HERE, '..', '..'), scene));
+    entities.push(...sideExtras(scene, m, levelOf, { hole: flatArt('hole', [22, 18, 30], 64, 32, true, 255, [10, 8, 14]), plank: flatArt('plank', [150, 104, 60], 64, 32, true, 255, [70, 44, 24]) }, () => `e${i++}`));
+  }
   if (scene === 'scissor' && world) {
     // the cells of the arena, each with a cover; the clippings she can strike; the little copies he wakes
     const hole = flatArt('hole', [22, 18, 30], 64, 32, true, 255, [10, 8, 14]);
@@ -795,7 +818,11 @@ function writeData(): { items: number; dialogues: number } {
     const desc = [d.desc, d.flavor].filter((x) => typeof x === 'string' && x).join('\n');
     // every usable item sets use_<id>; Storytender.script.ts does the rest (ink, lantern, sleep, renown, Mnemosynth, the thrown crumbs) and
     // takes the item itself, so an item that would do nothing right now is not used up (level_base.gd use_item)
-    const use = d.type === 'consumable' || d.use || HEAL[id]
+    // a binding or an amulet is worn by using it (the binder sets worn_binding / worn_amulet; Storytender.script.ts adds what it does)
+    const slot = d.type === 'binding' ? 'binding' : d.type === 'amulet' ? 'amulet' : '';
+    const use = slot
+      ? { heal: 0, setVariable: `worn_${slot}`, setValue: id, consume: false, message: `${String(d.name ?? id)} is worn` }
+      : d.type === 'consumable' || d.use || HEAL[id]
       ? { heal: 0, setVariable: `use_${id}`, setValue: 1, consume: false, message: '' }
       : undefined;
     return { id, name: String(d.name ?? id), description: desc, color: parseInt(col, 16), max: 0, ...(use ? { use } : {}) };
@@ -840,6 +867,7 @@ function main(): void {
     writePipTalk(world);
     writeScissorTalk(world);
     writeCutscenes(OUT, CURRENT_SCHEMA_VERSION, world);
+    writeSideTalk(world);
     writeMaudTalk(world);
   }
   writeForgePrefabs(OUT, CURRENT_SCHEMA_VERSION, flatArt('pool', [138, 20, 20], 192, 96), flatArt('bolt', [70, 12, 16], 18, 18));
@@ -863,9 +891,11 @@ function main(): void {
   writeInput();
   const data = writeData();
   // the game's own HUD, title, pause, binder and map screens (the quick slots show the items that can be used)
-  const usableItems = (JSON.parse(readFileSync(join(OUT, 'assets/items.json'), 'utf8')) as { items: { id: string; use?: unknown }[] }).items.filter((it) => it.use).map((it) => it.id);
+  const itemList = (JSON.parse(readFileSync(join(OUT, 'assets/items.json'), 'utf8')) as { items: ItemRow[] }).items;
+  const usableItems = itemList.filter((it) => it.use && !wornBy(it)).map((it) => it.id);
+  const equipment = equipmentOf(itemList);
   const itemIds = readdirSync(spriteDir).filter((f) => f.startsWith('icon_')).map((f) => f.slice(5).replace('.sprite.json', ''));
-  writeFileSync(join(OUT, 'assets/screens.json'), JSON.stringify(buildScreens(itemIds, CURRENT_SCHEMA_VERSION, paperTile, usableItems, mapNames()), null, 2) + '\n');
+  writeFileSync(join(OUT, 'assets/screens.json'), JSON.stringify(buildScreens(itemIds, CURRENT_SCHEMA_VERSION, paperTile, usableItems, mapNames(), equipment), null, 2) + '\n');
   // the engine's own menus (settings, controls, saves, the conversation box) in the game's colours: parchment, ink and gold
   writeFileSync(join(OUT, 'assets/ui.json'), JSON.stringify(uiTheme(CURRENT_SCHEMA_VERSION), null, 2) + '\n');
   console.log(`items ${data.items}, dialogues ${data.dialogues}`);

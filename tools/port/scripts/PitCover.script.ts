@@ -9,7 +9,12 @@ export default defineScript({
     lookOff: { value: '', label: 'Picture of the gap' },
   },
   update(me, game) {
-    const on = !!game.vars[me.settings.flag];
+    // it does not close under her feet (a bridge that lets go while she is on it)
+    const p = game.player;
+    const under = !!p && Math.floor(p.x) === Math.floor(me.x) && Math.floor(p.y) === Math.floor(me.y);
+    if (under && me.state.on) me.state.on = true;
+    else me.state.on = !!game.vars[me.settings.flag];
+    const on = me.state.on as boolean;
     const col = me.get('collider');
     if (col && col.enabled === on) me.set('collider', { ...col, enabled: !on });
     const look = on ? me.settings.lookOn : me.settings.lookOff;

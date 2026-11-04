@@ -26,6 +26,11 @@ export default defineScript({
     if (off > Math.PI) off = 2 * Math.PI - off;
     const lit = !!game.vars.lantern_on && dist <= 175 / K + 1.3 && (dist < 0.8 || off <= 0.63 + Math.atan2(1.3, Math.max(dist, 0.1)));
     const s = me.state;
+    // the first black bar she comes near explains itself (main.gd _hint_redactor, 150 px)
+    if (dist < 150 / K && !game.vars.redactor_hinted && me.settings.remember !== true) {
+      game.vars.redactor_hinted = 1;
+      game.say('A black bar hangs across the way. Something is written underneath it. Light makes things matter: hold Q, or the right mouse button.');
+    }
     s.progress = lit ? Math.min(1, s.progress + game.dt / 1.4) : Math.max(0, s.progress - game.dt * 0.4);
     me.alpha = 1 - s.progress * 0.7;
     if (s.progress >= 1) {

@@ -33,8 +33,8 @@ export default defineScript({
     const died = game.eventsOf('died').some((e) => ((e.tags as string[]) ?? []).includes('player'));
     const solve = (text: string): void => {
       v[flag] = 1;
-      v.renown = Number(v.renown ?? 0) + 4;
-      game.say(text);
+      v.renown = Number(v.renown ?? 0) + Number(d.bonus ?? 4);
+      game.say(d.text ? String(d.text) : text);
     };
     const done = !!v[flag];
     switch (String(me.settings.type)) {
