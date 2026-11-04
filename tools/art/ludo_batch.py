@@ -18,7 +18,7 @@ from PIL import Image
 
 BASE = 'https://api.ludo.ai/api/'
 KEY = os.environ.get('LUDO_KEY') or open(os.environ['LUDO_KEY_FILE']).read().strip()
-PATHS = {'style': 'assets/image/style', 'image': 'assets/image', 'edit': 'assets/image/edit',
+PATHS = {'animate': 'assets/sprite/animate', 'style': 'assets/image/style', 'image': 'assets/image', 'edit': 'assets/image/edit',
          'pose': 'assets/sprite/pose', 'rotate': 'assets/sprite/rotate', 'rmbg': 'assets/image/remove-background'}
 
 
@@ -118,4 +118,5 @@ def main():
     print('credits charged this run:', round(total, 2))
 
 
-main()
+if __name__ == "__main__":
+    main()

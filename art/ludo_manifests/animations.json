@@ -1,0 +1,266 @@
+[
+ {
+  "out": "art/incoming2/anim/err_bare_attack",
+  "image": "art/incoming2/errors/err_bare_idle.png",
+  "motion": "rearing up and slamming both paws down",
+  "model": "forge",
+  "duration": 1.5,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/err_censor_idle",
+  "image": "art/incoming2/errors/err_censor_idle.png",
+  "motion": "idle breathing, slightly shifting weight",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/err_censor_attack",
+  "image": "art/incoming2/errors/err_censor_idle.png",
+  "motion": "swinging the club down hard",
+  "model": "forge",
+  "duration": 1.5,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/err_dangler_idle",
+  "image": "art/incoming2/errors/err_dangler_idle.png",
+  "motion": "swinging gently on its thread",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/err_dangler_attack",
+  "image": "art/incoming2/errors/err_dangler_idle.png",
+  "motion": "dropping and lunging, bouncing on its thread",
+  "model": "forge",
+  "duration": 1.5,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/err_ellipsis_idle",
+  "image": "art/incoming2/errors/err_ellipsis_idle.png",
+  "motion": "slowly pulsing, the three dots bobbing",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/err_ellipsis_attack",
+  "image": "art/incoming2/errors/err_ellipsis_idle.png",
+  "motion": "flaring up and lunging forward",
+  "model": "forge",
+  "duration": 1.5,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/err_mite_idle",
+  "image": "art/incoming2/errors/err_mite_idle.png",
+  "motion": "idle, legs twitching, bobbing slightly",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/err_mite_attack",
+  "image": "art/incoming2/errors/err_mite_idle.png",
+  "motion": "scuttling forward, legs lashing",
+  "model": "forge",
+  "duration": 1.5,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/err_runon_idle",
+  "image": "art/incoming2/errors/err_runon_idle.png",
+  "motion": "slowly writhing, undulating",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/err_runon_attack",
+  "image": "art/incoming2/errors/err_runon_idle.png",
+  "motion": "lunging forward, body stretching",
+  "model": "forge",
+  "duration": 1.5,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/boss_cold_idle",
+  "image": "art/incoming2/bosses/boss_cold_idle.png",
+  "motion": "idle breathing, frost shimmering",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/boss_critic_idle",
+  "image": "art/incoming2/bosses/boss_critic_idle.png",
+  "motion": "idle, paper armor rustling",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/boss_spoiler_idle",
+  "image": "art/incoming2/bosses/boss_spoiler_idle.png",
+  "motion": "pages fluttering, letters floating up",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/boss_scissor_idle",
+  "image": "art/incoming2/bosses/boss_scissor_idle.png",
+  "motion": "idle, shears slowly opening and closing",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/boss_cold_attack",
+  "image": "art/incoming2/bosses/boss_cold_idle.png",
+  "motion": "slamming a fist down, ice shards bursting",
+  "model": "forge",
+  "duration": 1.5,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/boss_critic_attack",
+  "image": "art/incoming2/bosses/boss_critic_idle.png",
+  "motion": "lunging with both fists in a furious attack",
+  "model": "forge",
+  "duration": 1.5,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/boss_spoiler_attack",
+  "image": "art/incoming2/bosses/boss_spoiler_idle.png",
+  "motion": "pages flapping wildly, letters bursting out",
+  "model": "forge",
+  "duration": 1.5,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/boss_scissor_attack",
+  "image": "art/incoming2/bosses/boss_scissor_idle.png",
+  "motion": "slashing both shears in a wide cut",
+  "model": "forge",
+  "duration": 1.5,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/garrick_S_idle",
+  "image": "art/incoming2/characters/garrick_S.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/garrick_SE_idle",
+  "image": "art/incoming2/characters/garrick_SE.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/garrick_NE_idle",
+  "image": "art/incoming2/characters/garrick_NE.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/garrick_N_idle",
+  "image": "art/incoming2/characters/garrick_N.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/pip_S_idle",
+  "image": "art/incoming2/characters/pip_S.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/pip_SE_idle",
+  "image": "art/incoming2/characters/pip_SE.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/pip_NE_idle",
+  "image": "art/incoming2/characters/pip_NE.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/pip_N_idle",
+  "image": "art/incoming2/characters/pip_N.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/maud_S_idle",
+  "image": "art/incoming2/characters/maud_S.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/maud_SE_idle",
+  "image": "art/incoming2/characters/maud_SE.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/maud_NE_idle",
+  "image": "art/incoming2/characters/maud_NE.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/maud_N_idle",
+  "image": "art/incoming2/characters/maud_N.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/guest_standing_idle",
+  "image": "art/incoming2/characters/guest_standing.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ },
+ {
+  "out": "art/incoming2/anim/figure_memory_idle",
+  "image": "art/incoming2/characters/figure_memory.png",
+  "motion": "floating, gently pulsing",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ }
+]

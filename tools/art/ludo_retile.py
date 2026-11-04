@@ -21,6 +21,7 @@ from PIL import Image
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else '.')
 sys.argv = [sys.argv[0], REPO]
+import sprite_io as SPRITE_IO  # noqa: E402
 import ludo_ledges as LEDGES   # noqa: E402
 import ludo_sides as SIDES     # noqa: E402
 import ludo_stairs as STAIRS   # noqa: E402
@@ -38,44 +39,13 @@ NAME = re.compile(r'^(?P<k>.+) (?P<x>\d+),(?P<y>\d+)$')
 
 # ---------------------------------------------------------------- sprites
 def read_sprite(name):
-    d = json.load(open(os.path.join(SPRITES, name + '.sprite.json'), encoding='utf8'))
-    pal = [tuple(int(c[i:i + 2], 16) for i in (1, 3, 5, 7)) for c in d['palette']]
-    flat = []
-    for run in d['frames'][0]['cels']['l1'].split():
-        n, i = run.split('x')
-        flat += [pal[int(i)]] * int(n)
-    return np.array(flat, np.uint8).reshape(d['height'], d['width'], 4)
+    return SPRITE_IO.read_sprite(SPRITES, name)[0]
 
 
 def write_sheet(name, frames, origin):
-    """One sprite file of several frames (RGBA arrays of one size, at most 255 colours in all; transparent pixels are palette entry 0). A tile names a
-    frame as "<sprite>#<n>"; a floor's tops, faces and stairs are three sprites, not a hundred (the engine draws the map again every time a sprite the map
-    uses is loaded, so a hundred sprites per floor is minutes of loading)."""
-    h, w = frames[0].shape[:2]
-    pal, index, cels = ['#00000000'], {}, []
-    for rgba in frames:
-        runs, last, n = [], None, 0
-        for p in rgba.reshape(-1, 4):
-            if p[3] == 0:
-                i = 0
-            else:
-                p = tuple(int(v) for v in p)
-                i = index.get(p)
-                if i is None:
-                    i = index[p] = len(pal)
-                    pal.append('#%02x%02x%02x%02x' % p)
-            if i == last:
-                n += 1
-            else:
-                if last is not None:
-                    runs.append(f'{n}x{last}')
-                last, n = i, 1
-        runs.append(f'{n}x{last}')
-        cels.append(' '.join(runs))
-    assert len(pal) <= 256, (name, len(pal))
-    sprite = {'schemaVersion': 1, 'name': name, 'width': w, 'height': h, 'palette': pal, 'layers': [{'id': 'l1', 'name': 'Layer 1', 'visible': True}],
-              'frames': [{'duration': 100, 'cels': {'l1': c}} for c in cels], 'origin': {'x': origin[0], 'y': origin[1]}, 'clips': [], 'procedural': None}
-    json.dump(sprite, open(os.path.join(SPRITES, name + '.sprite.json'), 'w', encoding='utf8'), indent=2)
+    """One sprite file of several frames. A tile names a frame as "<sprite>#<n>"; a floor's tops, faces and stairs are three sprites, not a hundred (the
+    engine draws the map again every time a sprite the map uses is loaded, so a hundred sprites per floor is minutes of loading)."""
+    SPRITE_IO.write_sheet(SPRITES, name, frames, origin)
 
 
 def quantized(images, colors=250):

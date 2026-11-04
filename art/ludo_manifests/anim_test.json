@@ -1,0 +1,4 @@
+[
+ {"out": "art/incoming2/anim/test/err_bare_idle_forge", "image": "art/incoming2/errors/err_bare_idle.png", "motion": "idle breathing, a gentle sway", "model": "forge", "duration": 2, "frames": 9},
+ {"out": "art/incoming2/anim/test/err_bare_idle_hydra", "image": "art/incoming2/errors/err_bare_idle.png", "motion": "idle breathing, a gentle sway", "model": "hydra", "duration": 3, "frames": 16}
+]

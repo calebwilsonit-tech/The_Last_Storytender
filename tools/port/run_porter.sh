@@ -41,3 +41,5 @@ NODE_PATH="$TILEWRIGHT/node_modules" "$TILEWRIGHT/node_modules/.bin/esbuild" "$R
 SNAP="$WORK/snap" ART="$WORK/art_q" TILES="$TILES_DIR" POSES="$WORK/art" PEOPLE="$WORK/people" ERRORS="$WORK/errors" OBJECTS="$WORK/objects" DATA="$WORK/data" ICONS="$WORK/icons" HERE="$REPO/tools/port" OUT="$REPO/tilewright" node "$WORK/porter.mjs"
 # the Ludo.ai floors' new tops, their cliff faces and their stairs in the finished project (tools/art/ludo_retile.py; the engine's tile stairArt); NO_LUDO=1 skips it
 if [ -z "${NO_LUDO:-}" ] && [ -d "$REPO/art/incoming2/tiles" ]; then python3 -I "$REPO/tools/art/ludo_retile.py" "$REPO"; fi
+# the Ludo.ai animations (art/incoming2/anim, tools/art/ludo_animate.py) in place of the still Errors, bosses and villagers: tools/art/ludo_reanimate.py; NO_LUDO=1 skips it
+if [ -z "${NO_LUDO:-}" ] && [ -d "$REPO/art/incoming2/anim" ]; then python3 -I "$REPO/tools/art/ludo_reanimate.py" "$REPO"; fi

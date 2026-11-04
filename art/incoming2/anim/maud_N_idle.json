@@ -1,0 +1,14 @@
+{
+ "num_frames": 9,
+ "num_cols": 3,
+ "num_rows": 3,
+ "credits": 3,
+ "job": {
+  "out": "art/incoming2/anim/maud_N_idle",
+  "image": "art/incoming2/characters/maud_N.png",
+  "motion": "idle breathing, a gentle sway",
+  "model": "forge",
+  "duration": 2,
+  "frames": 9
+ }
+}
