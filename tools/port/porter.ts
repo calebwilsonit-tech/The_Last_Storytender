@@ -642,6 +642,7 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
     if (e.components.sentenceStone && OBJECTS && existsSync(join(OBJECTS, 'sign_wide.png'))) {
       const feet = JSON.parse(readFileSync(join(OBJECTS, 'objects.json'), 'utf8')) as Record<string, [number, number]>;
       Object.assign(e.components.sprite as object, { asset: spriteFor(join(OBJECTS, 'sign_wide.png'), 'obj_sign_wide', feet.sign_wide), height: 1.6 });
+      attach(e.components, 'script_StoneLabel', {});
     }
     // a Mnemosynth crystal in a memory: walked into
     if (scene !== 'overworld' && n.class === 'Prop' && Number(n.props.kind) === 3) attach(e.components, 'script_Collect', { flag: `got_${scene}_C_${Math.round(n.grid[0])}_${Math.round(n.grid[1])}`, mnemo: 5, light: 12, radius: 1.2 });
@@ -657,6 +658,8 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
     if (world && scene === 'overworld') decorateOverworld(e, n, [Math.round(n.grid[0]), Math.round(n.grid[1])], world);
     if (n.class === 'Npc') dressPerson(e);
     if (n.class === 'Critic' || n.class === 'Spoiler' || n.class === 'ScissorMan') dressBoss(e, n.class);
+    // a doorway or exit is tall and stands in the middle of a cell: it is drawn behind whoever stands beside or just behind it (V-06)
+    if (n.class === 'Prop' && Number(n.props.kind) === 8) (e.components.sprite as { sortOffset: number }).sortOffset = -1.2;
     if (n.class === 'Prop' && scene === 'overworld') dressObject(e, Number(n.props.kind ?? -1), [Math.round(n.grid[0]), Math.round(n.grid[1])], SCENES[scene]!.file);
     const cell = `${Math.round(n.grid[0])},${Math.round(n.grid[1])}`;
     if (blocked.has(cell) && !taken.has(cell)) {

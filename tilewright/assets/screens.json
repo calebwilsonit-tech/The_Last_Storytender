@@ -2633,7 +2633,107 @@
                       "hover": [],
                       "change": []
                     },
-                    "visible": "{host.hasSave} + {saved_run} > 0",
+                    "visible": "{host.hasSave}",
+                    "enabled": ""
+                  },
+                  {
+                    "id": "title.continue.now",
+                    "name": "Continue",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "title.continue.now.label",
+                        "name": "title.continue.now.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 20,
+                        "y": 13,
+                        "w": 400,
+                        "h": 41,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Continue",
+                        "style": {
+                          "fontSize": 30,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "title.continue.now.dot",
+                        "name": "Chosen dot",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": -24,
+                        "y": 26,
+                        "w": 12,
+                        "h": 12,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "radius": 6,
+                          "opacity": 0
+                        }
+                      }
+                    ],
+                    "wMode": "fill",
+                    "hMode": "fixed",
+                    "h": 64,
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2",
+                      "border": "#3b2a1c",
+                      "borderWidth": 2,
+                      "radius": 0,
+                      "shadow": true,
+                      "color": "#1b1722"
+                    },
+                    "states": {
+                      "hover": {
+                        "border": "#3b2a1c",
+                        "borderWidth": 4,
+                        "fill": "#fff6dc"
+                      },
+                      "focus": {
+                        "border": "#3b2a1c",
+                        "borderWidth": 4,
+                        "fill": "#fff6dc"
+                      },
+                      "disabled": {
+                        "opacity": 0.55
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "loadGame",
+                          "params": {
+                            "slot": "latest"
+                          }
+                        },
+                        {
+                          "type": "music",
+                          "params": {
+                            "name": "music_overworld"
+                          }
+                        },
+                        {
+                          "type": "uiScreen",
+                          "params": {
+                            "op": "close",
+                            "screen": "role:title"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    },
+                    "visible": "{saved_run} = 1 && !{host.hasSave}",
                     "enabled": ""
                   },
                   {
@@ -2721,7 +2821,95 @@
                       "hover": [],
                       "change": []
                     },
-                    "visible": "{host.hasSave} + {saved_run} > 0",
+                    "visible": "{host.hasSave}",
+                    "enabled": ""
+                  },
+                  {
+                    "id": "title.new.now",
+                    "name": "New Game",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "title.new.now.label",
+                        "name": "title.new.now.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 20,
+                        "y": 13,
+                        "w": 400,
+                        "h": 41,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "New Game",
+                        "style": {
+                          "fontSize": 30,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "title.new.now.dot",
+                        "name": "Chosen dot",
+                        "type": "panel",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": -24,
+                        "y": 26,
+                        "w": 12,
+                        "h": 12,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "radius": 6,
+                          "opacity": 0
+                        }
+                      }
+                    ],
+                    "wMode": "fill",
+                    "hMode": "fixed",
+                    "h": 64,
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2",
+                      "border": "#3b2a1c",
+                      "borderWidth": 2,
+                      "radius": 0,
+                      "shadow": true,
+                      "color": "#1b1722"
+                    },
+                    "states": {
+                      "hover": {
+                        "border": "#3b2a1c",
+                        "borderWidth": 4,
+                        "fill": "#fff6dc"
+                      },
+                      "focus": {
+                        "border": "#3b2a1c",
+                        "borderWidth": 4,
+                        "fill": "#fff6dc"
+                      },
+                      "disabled": {
+                        "opacity": 0.55
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "uiScreen",
+                          "params": {
+                            "op": "open",
+                            "screen": "Title: Begin again"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    },
+                    "visible": "{saved_run} = 1 && !{host.hasSave}",
                     "enabled": ""
                   },
                   {
@@ -2809,7 +2997,7 @@
                       "hover": [],
                       "change": []
                     },
-                    "visible": "{host.hasSave} + {saved_run} = 0",
+                    "visible": "!{host.hasSave} && {saved_run} != 1",
                     "enabled": ""
                   },
                   {

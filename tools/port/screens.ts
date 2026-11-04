@@ -143,12 +143,15 @@ function titleArt(id: string, header: W[]): W[] {
 
 function title(): Screen {
   // "Save and return to title" writes the save a moment after the title opens, so the list of saves the title looked at can be too early:
-  // saved_run (set by that button) says there is one now
-  const has = '{host.hasSave} + {saved_run} > 0';
+  // saved_run (set by that button) says there is one now. The game's own variables do not exist yet while the title is up (nothing has run), so
+  // each test below is one that is simply false when saved_run is not there.
+  const saved = '{saved_run} = 1 && !{host.hasSave}';
   const items: Item[] = [
-    { id: 'title.continue', label: 'Continue', click: [act('loadGame', { slot: 'latest' }), act('music', { name: 'music_overworld' }), close('role:title')], visible: has },
-    { id: 'title.new.save', label: 'New Game', click: [open(BEGIN)], visible: has },
-    { id: 'title.new', label: 'New Game', click: [open(DIFFICULTY)], visible: '{host.hasSave} + {saved_run} = 0' },
+    { id: 'title.continue', label: 'Continue', click: [act('loadGame', { slot: 'latest' }), act('music', { name: 'music_overworld' }), close('role:title')], visible: '{host.hasSave}' },
+    { id: 'title.continue.now', label: 'Continue', click: [act('loadGame', { slot: 'latest' }), act('music', { name: 'music_overworld' }), close('role:title')], visible: saved },
+    { id: 'title.new.save', label: 'New Game', click: [open(BEGIN)], visible: '{host.hasSave}' },
+    { id: 'title.new.now', label: 'New Game', click: [open(BEGIN)], visible: saved },
+    { id: 'title.new', label: 'New Game', click: [open(DIFFICULTY)], visible: '!{host.hasSave} && {saved_run} != 1' },
     { id: 'title.settings', label: 'Settings', click: [open('role:settings')] },
     { id: 'title.quit', label: 'Quit', click: [act('quitGame')], visible: '{host.quit}' },
   ];

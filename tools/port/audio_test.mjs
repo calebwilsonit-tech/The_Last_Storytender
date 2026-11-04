@@ -30,10 +30,7 @@ await page.getByTestId('btn-play').click();
 await page.waitForFunction(() => window.__play !== undefined && window.__play.sim, null, { timeout: 60000 });
 await page.waitForTimeout(2500);
 const stack = () => page.evaluate(() => window.__play.sim.runtime.ui.stack.join(','));
-for (let i = 0; i < 2 && /Title/.test(await stack()); i++) {
-  await page.keyboard.press('KeyE');
-  await page.waitForTimeout(700);
-}
+const atStart = await stack();
 await page.evaluate(() => {
   window.__msgs = [];
   window.__play.sim.events.on('message', (e) => window.__msgs.push(String(e.text ?? '')));
@@ -92,13 +89,11 @@ try {
   };
   let a = await audio();
   check('the sound files are loaded (32 sounds, 12 pieces of music)', a.n >= 44, `${a.n} loaded`);
-  // back to the title (the editor starts without it), then a new game: the book follows
-  await press('KeyP'); await page.waitForTimeout(700);
-  await clickText('Save and return to title'); await page.waitForTimeout(1200);
-  check('the title has its own music', /Title/.test(await stack()) && (await audio()).music === 'music_title', `${await stack()} | ${(await audio()).music}`);
-  await clickText('New Game'); await page.waitForTimeout(600);
-  await clickText('Yes, begin again'); await page.waitForTimeout(600);
-  await press('KeyE'); await page.waitForTimeout(900); // (the first choice on the difficulty screen is Story)
+  // the game starts at its title, with its own music; a new game opens the book
+  // (a browser keeps sound locked until the first click or key, so the title's music may not have started yet at the very start: it does from the first press on)
+  check('the game starts at its title', /Title/.test(atStart), `${atStart} | music "${(await audio()).music}"`);
+  await press('KeyE'); await page.waitForTimeout(700);
+  await press('KeyE'); await page.waitForTimeout(900); // New Game, then the first choice on the difficulty screen (Story)
   a = await audio();
   check('the storybook plays its own music', /Storybook/.test(await stack()) && a.music === 'music_storybook', `${await stack()} | ${a.music}`);
   await shotAs('cut_book.png');

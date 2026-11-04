@@ -49,6 +49,9 @@ for (const mode of (process.env.MODES ?? 'normal,test').split(',')) {
   const w = await g.firstWindow();
   const errs = []; w.on('pageerror', (e) => errs.push(e.message)); w.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });
   await w.waitForTimeout(30000);
+  // the frame rate of the exported game at its title (2.5 s of animation frames)
+  const fps = await w.evaluate(() => new Promise((res) => { let n = 0; const t0 = performance.now(); const f = () => { n++; if (performance.now() - t0 < 2500) requestAnimationFrame(f); else res(Math.round((n / 2.5) * 10) / 10); }; requestAnimationFrame(f); }));
+  console.log(mode, 'frames per second at the title:', fps);
   await w.screenshot({ path: path.join(outDir, `game_${mode}.png`) });
   console.log(mode, 'title:', await w.title(), '| text:', (await w.evaluate(() => document.body.innerText)).replace(/\s+/g, ' ').slice(0, 160), '| errors:', errs.slice(0, 3).join(' / ').slice(0, 300));
   await g.close();

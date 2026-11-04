@@ -82,5 +82,7 @@ export default defineScript({
     const fmt = s.underline ? 'underline' : s.bold && !s.sliding ? 'bold' : 'plain';
     const tb = me.get('textBlock');
     if (tb && tb.format !== fmt) me.set('textBlock', { ...tb, format: fmt });
+    // the picture already has the word on it: the engine's own copy of it is not shown (V-01); only how it is formatted, in a small tag
+    me.set('label', { text: fmt === 'plain' ? '' : fmt, color: 0xfff2c0, size: 11, bold: false, italic: false, underline: false, lift: 0.05 });
   },
 });

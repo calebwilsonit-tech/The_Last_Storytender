@@ -100,6 +100,14 @@ export default defineScript({
     if (game.eventsOf('sentence-changed').length > 0) play('stone_rewrite');
     if (v.lantern_on && !s.lamp) play('lantern_on');
     s.lamp = !!v.lantern_on;
+    // the title's music is asked for again every second until a game is begun (the sound files may still have been loading when the scene started)
+    if (!(v.difficulty_locked || v.book_seen || s.moved)) {
+      s.again = (s.again ?? 0) + game.dt;
+      if (s.again > 1) {
+        s.again = 0;
+        game.do('music', { name: 'music_title' });
+      }
+    }
     // ---- the music: the place's, and a boss's while it fights, once a game is begun
     if (v.difficulty_locked || v.book_seen || s.moved) {
       const want = BOSS_MUSIC[String(v.boss_name ?? '')] ?? String(me.settings.music);
