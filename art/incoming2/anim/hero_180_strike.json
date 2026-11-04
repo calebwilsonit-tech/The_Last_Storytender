@@ -1,0 +1,14 @@
+{
+ "num_frames": 16,
+ "num_cols": 4,
+ "num_rows": 4,
+ "credits": 9,
+ "job": {
+  "out": "art/incoming2/anim/hero_180_strike",
+  "image": "art/incoming2/characters/hero_views/hero_180.png",
+  "motion": "slashing with a long feather quill held in the right hand, a quick wide swing, then returning to standing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ }
+}

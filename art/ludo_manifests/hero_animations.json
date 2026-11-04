@@ -1,0 +1,114 @@
+[
+ {
+  "out": "art/incoming2/anim/hero_180_walk",
+  "image": "art/incoming2/characters/hero_views/hero_180.png",
+  "motion": "walking away from the camera, legs stepping alternately, arms swinging, body bobbing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_180_strike",
+  "image": "art/incoming2/characters/hero_views/hero_180.png",
+  "motion": "slashing with a long feather quill held in the right hand, a quick wide swing, then returning to standing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_090_walk",
+  "image": "art/incoming2/characters/hero_views/hero_090.png",
+  "motion": "walking to the right, legs stepping alternately, arms swinging, body bobbing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_090_strike",
+  "image": "art/incoming2/characters/hero_views/hero_090.png",
+  "motion": "slashing with a long feather quill held in the right hand, a quick wide swing, then returning to standing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_m090_walk",
+  "image": "art/incoming2/characters/hero_views/hero_m090.png",
+  "motion": "walking to the left, legs stepping alternately, arms swinging, body bobbing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_m090_strike",
+  "image": "art/incoming2/characters/hero_views/hero_m090.png",
+  "motion": "slashing with a long feather quill held in the right hand, a quick wide swing, then returning to standing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_045_walk",
+  "image": "art/incoming2/characters/hero_views/hero_045.png",
+  "motion": "walking toward the front right, legs stepping alternately, arms swinging, body bobbing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_045_strike",
+  "image": "art/incoming2/characters/hero_views/hero_045.png",
+  "motion": "slashing with a long feather quill held in the right hand, a quick wide swing, then returning to standing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_m045_walk",
+  "image": "art/incoming2/characters/hero_views/hero_m045.png",
+  "motion": "walking toward the front left, legs stepping alternately, arms swinging, body bobbing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_m045_strike",
+  "image": "art/incoming2/characters/hero_views/hero_m045.png",
+  "motion": "slashing with a long feather quill held in the right hand, a quick wide swing, then returning to standing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_135_walk",
+  "image": "art/incoming2/characters/hero_views/hero_135.png",
+  "motion": "walking toward the back right, legs stepping alternately, arms swinging, body bobbing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_135_strike",
+  "image": "art/incoming2/characters/hero_views/hero_135.png",
+  "motion": "slashing with a long feather quill held in the right hand, a quick wide swing, then returning to standing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_m135_walk",
+  "image": "art/incoming2/characters/hero_views/hero_m135.png",
+  "motion": "walking toward the back left, legs stepping alternately, arms swinging, body bobbing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_m135_strike",
+  "image": "art/incoming2/characters/hero_views/hero_m135.png",
+  "motion": "slashing with a long feather quill held in the right hand, a quick wide swing, then returning to standing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ }
+]

@@ -10,5 +10,81 @@
     "radius": 4,
     "scale": 1
   },
-  "widgets": []
+  "widgets": [
+    {
+      "id": "hearts",
+      "kind": "hearts",
+      "anchor": "default",
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "visible": true,
+      "label": "",
+      "variable": "",
+      "max": 10,
+      "maxVariable": "",
+      "color": "#6aa8ff",
+      "text": ""
+    },
+    {
+      "id": "lightbar",
+      "kind": "lightbar",
+      "anchor": "default",
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "visible": true,
+      "label": "",
+      "variable": "",
+      "max": 10,
+      "maxVariable": "",
+      "color": "#6aa8ff",
+      "text": ""
+    },
+    {
+      "id": "slots",
+      "kind": "slots",
+      "anchor": "default",
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "visible": true,
+      "label": "",
+      "variable": "",
+      "max": 10,
+      "maxVariable": "",
+      "color": "#6aa8ff",
+      "text": ""
+    },
+    {
+      "id": "bosses",
+      "kind": "bosses",
+      "anchor": "default",
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "visible": true,
+      "label": "",
+      "variable": "",
+      "max": 10,
+      "maxVariable": "",
+      "color": "#6aa8ff",
+      "text": ""
+    },
+    {
+      "id": "toasts",
+      "kind": "toasts",
+      "anchor": "default",
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "visible": true,
+      "label": "",
+      "variable": "",
+      "max": 10,
+      "maxVariable": "",
+      "color": "#6aa8ff",
+      "text": ""
+    }
+  ]
 }

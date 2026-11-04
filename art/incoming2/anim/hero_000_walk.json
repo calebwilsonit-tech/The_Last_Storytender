@@ -1,0 +1,14 @@
+{
+ "num_frames": 16,
+ "num_cols": 4,
+ "num_rows": 4,
+ "credits": 9,
+ "job": {
+  "out": "art/incoming2/anim/hero_test/h_000_walk_hydra",
+  "image": "art/incoming2/characters/hero_views/hero_000.png",
+  "motion": "walking toward the camera, legs stepping alternately, arms swinging, body bobbing",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ }
+}

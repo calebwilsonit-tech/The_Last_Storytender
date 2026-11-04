@@ -43,3 +43,5 @@ SNAP="$WORK/snap" ART="$WORK/art_q" TILES="$TILES_DIR" POSES="$WORK/art" PEOPLE=
 if [ -z "${NO_LUDO:-}" ] && [ -d "$REPO/art/incoming2/tiles" ]; then python3 -I "$REPO/tools/art/ludo_retile.py" "$REPO"; fi
 # the Ludo.ai animations (art/incoming2/anim, tools/art/ludo_animate.py) in place of the still Errors, bosses and villagers: tools/art/ludo_reanimate.py; NO_LUDO=1 skips it
 if [ -z "${NO_LUDO:-}" ] && [ -d "$REPO/art/incoming2/anim" ]; then python3 -I "$REPO/tools/art/ludo_reanimate.py" "$REPO"; fi
+# the Storytender from the Ludo.ai hero views and their animations (tools/art/ludo_hero.py): true front, back, side and corner views, a walk and a quill strike for each; NO_LUDO=1 skips it
+if [ -z "${NO_LUDO:-}" ] && [ -d "$REPO/art/incoming2/characters/hero_views" ]; then python3 -I "$REPO/tools/art/ludo_hero.py" "$REPO"; fi
