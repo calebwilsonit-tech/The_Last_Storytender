@@ -471,7 +471,8 @@ function rollDrops(game: ScriptGame, table: string): void {
   for (const part of table.split(';')) {
     const [item, chance, lo, hi] = part.split(',').map((x) => x.trim());
     if (!item) continue;
-    if (game.random() * 100 < Number(chance)) {
+    // Fortune: +0.5% a point on every drop chance
+    if (game.random() * 100 < Number(chance) + 0.5 * Number(game.vars.attr_luck ?? 0)) {
       const a = Number(lo);
       const b = Number(hi);
       game.giveItem(item, b <= a ? a : game.randomInt(a, b));

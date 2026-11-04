@@ -143,6 +143,11 @@ try {
   let back = null;
   for (let i = 0; i < 10 && !back; i++) { await page.waitForTimeout(200); back = await byId(m0.id); }
   check('resting brings the Mite back', !!back, back ? `hp ${back.hp}` : 'still gone');
+  // resting at a post opens the Index a moment later (the first time with its explanation): leave it
+  await page.waitForTimeout(2200);
+  const leave = await page.evaluate(() => { const n = [...document.querySelectorAll('*')].filter((n) => n.children.length === 0 && (n.textContent ?? '').trim() === 'Leave the Index').find((n) => n.getBoundingClientRect().width > 0); const r = n?.getBoundingClientRect(); return r ? { x: r.x + r.width / 2, y: r.y + r.height / 2 } : null; });
+  if (leave) await page.mouse.click(leave.x, leave.y);
+  await page.waitForTimeout(500);
   const after = await vars();
   check('the quill beats a Mite', gone && Number(after.renown) > Number(before.renown ?? 0), `renown ${before.renown} -> ${after.renown}, mnemosynth ${before.mnemosynth} -> ${after.mnemosynth}`);
 

@@ -3,6 +3,8 @@
 // forge memory, Garrick's lesson (strike the dummy, dash, hold the lantern) is followed here, and so are the effects
 // of the items she uses (level_base.gd use_item).
 const K = 35.8; // the game's ground pixels per cell
+const ATTR_VARS = ['attr_ink', 'attr_grit', 'attr_pen', 'attr_wit', 'attr_foot', 'attr_luck', 'attr_points', 'free_points', 'b_ink_1', 'b_grit_1', 'b_pen_1', 'b_pen_2', 'b_wit_1', 'b_wit_2', 'b_foot_1', 'b_foot_2', 'b_luck_1', 'b_luck_2'];
+const INDEX_FIRST = 'Every lantern post keeps a page of the Index: a bench to mend things on, a stall run by a voice, and a map of everywhere you have been.';
 /** What each usable item does (item_catalog.gd "use"); `none` is the toast when it would do nothing right now. */
 const USES: Record<string, { ink?: number; lantern?: number; sleep?: number; radius?: number; renown?: number; mnemo?: number; msg: string; none?: string }> = {
   ink_vial: { ink: 45, msg: 'Ink restored', none: 'Your ink is already full' },
@@ -33,18 +35,45 @@ export default defineScript({
   start(me, game) {
     if (game.vars.light === undefined) game.vars.light = 100;
     for (const v of ['mnemosynth', 'renown', 'saved_run']) if (game.vars[v] === undefined) game.vars[v] = 0;
+    for (const v of ATTR_VARS) if (game.vars[v] === undefined) game.vars[v] = 0;
+    if (game.vars.level === undefined) game.vars.level = 1;
+    if (game.vars.attr_cost === undefined) game.vars.attr_cost = 20;
+    if (game.vars.index_pick === undefined) game.vars.index_pick = 'ink';
     me.state.off = 99;
     me.state.lesson = { hits: 0, dashed: false, lit: 0 };
   },
   update(me, game) {
     const v = game.vars;
-    // rank, from renown (game_state.gd RANK_STEPS)
-    const steps = [0, 40, 100, 180, 280, 400, 560, 760, 1000, 1300, 1650];
-    const renown = Number(v.renown ?? 0);
-    const rank = steps.filter((x) => renown >= x).length;
-    if (v.rank !== rank) {
-      v.rank = rank;
-      v.rank_next = steps[Math.min(rank, steps.length - 1)]!;
+    // what the points bought at a lantern post (Revise Your Draft) do, and what she does when she rests
+    const stat = (k: string): number => Number(v[`attr_${k}`] ?? 0);
+    const dt = game.dt;
+    v.level = 1 + ['ink', 'grit', 'pen', 'wit', 'foot', 'luck'].reduce((n, k) => n + stat(k), 0);
+    const ink = me.get('health') as { max: number } | undefined;
+    const maxInk = 100 + 2 * stat('ink'); // Inkwell: +2 maximum ink a point
+    if (ink && ink.max !== maxInk) me.set('health', { ...ink, max: maxInk });
+    const hurt = me.get('state:health') as { hp: number; dead?: boolean } | undefined;
+    if (hurt && !hurt.dead && hurt.hp > 0) {
+      let hp = hurt.hp;
+      // Thick Paper: -0.5% damage taken a point (what a blow took is given back at once)
+      for (const e of game.eventsOf('damaged')) if (e.entity === me.id) hp += Number(e.amount ?? 0) * 0.005 * stat('grit');
+      // Wit: +0.025 ink a second a point
+      hp += 0.025 * stat('wit') * dt;
+      hp = Math.min(maxInk, hp);
+      if (hp !== hurt.hp) me.set('state:health', { ...hurt, hp });
+    }
+    // resting at a post: the lantern is full again, and the first time the Index is explained and fifteen points are given (main.gd _rest)
+    if (game.eventsOf('rested').length > 0) {
+      v.light = 100;
+      if (!v.index_seen) {
+        v.index_seen = 1;
+        v.free_points = 15;
+        game.say(INDEX_FIRST);
+        me.state.indexAt = game.time + 1.6;
+      } else me.state.indexAt = game.time + 0.25;
+    }
+    if (me.state.indexAt && game.time >= me.state.indexAt) {
+      me.state.indexAt = 0;
+      game.do('uiScreen', { op: 'open', screen: 'storytender-index' });
     }
     // the name of the region, shown in the corner for a few seconds when it changes (hud.gd set_region)
     if (me.state.rows === undefined) {
@@ -72,7 +101,7 @@ export default defineScript({
     const held = game.input.down('lantern') && Number(v.light) > 0;
     // lantern fuel: drains 24 a second while shining, comes back 14 a second after 0.9 s off (player.gd)
     if (held) {
-      v.light = Math.max(0, Number(v.light) - 24 * game.dt);
+      v.light = Math.max(0, Number(v.light) - 24 * (1 - 0.005 * stat('wit')) * game.dt); // Wit: -0.5% burn a point
       me.state.off = 0;
     } else {
       me.state.off += game.dt;
@@ -87,6 +116,7 @@ export default defineScript({
       let s = Number(me.settings.speed);
       if (held) s *= 0.72;
       if (game.input.down('sneak')) s *= 0.55;
+      s *= 1 + 0.003 * stat('foot'); // Footwork: +0.3% speed a point
       s *= Number(v.puddle_slow ?? 1); // a Run-on's ink trail (0.55)
       if (Number(v.slow_until ?? 0) > game.time) s *= 0.55; // a slowing word of the Critic
       if (pc.speed !== s) me.set('playerController', { ...pc, speed: s });
@@ -94,8 +124,15 @@ export default defineScript({
     // the quill: the pencil stub hits for 0.55 of the quill's 2 until Garrick hands it over
     const melee = me.get('meleeAttack');
     if (melee) {
-      const dmg = v.has_quill || v.has_sword ? 2 : 1.1;
-      if (melee.damage !== dmg) me.set('meleeAttack', { ...melee, damage: dmg });
+      // Penmanship: +1% damage and +0.25% reach a point
+      const dmg = (v.has_quill || v.has_sword ? 2 : 1.1) * (1 + 0.01 * stat('pen'));
+      const range = 2.1 * (1 + 0.0025 * stat('pen'));
+      if (melee.damage !== dmg || melee.range !== range) me.set('meleeAttack', { ...melee, damage: dmg, range });
+    }
+    const dodge = me.get('dodge');
+    if (dodge) {
+      const cooldown = 0.75 * (1 - 0.005 * stat('foot')); // Footwork: -0.5% dash cooldown a point
+      if (dodge.cooldown !== cooldown) me.set('dodge', { ...dodge, cooldown });
     }
     // echoes: two once the forge memory is done, three with the Locket (echo_third)
     const echo = me.get('echoRecorder');

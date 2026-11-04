@@ -589,6 +589,96 @@ function quickSlots(usable: string[]): W {
   return w('panel', 'hud.quick', { name: 'Quick slots', anchor: 'br', x: 0, y: 0, w: 180, h: 110, wMode: 'fixed', hMode: 'fixed', layout: 'free', padding: 0, style: {}, children: kids });
 }
 
+// ---------------------------------------------------------------- the Index at a lantern post: Revise Your Draft (index_hub.gd, game_state.gd)
+
+/** The attributes (game_state.gd ATTRS): key, name, what a point does, and how the bonus so far reads (b1 / b2 are worked out when a point is bought). */
+const ATTRS: { key: string; name: string; each: string; now: string; b1: string; b2?: string }[] = [
+  { key: 'ink', name: 'Inkwell', each: '+2 maximum ink', now: '+{b_ink_1} maximum ink', b1: '{attr_ink} * 2' },
+  { key: 'grit', name: 'Thick Paper', each: '-0.5% damage taken', now: '{b_grit_1}% less damage taken', b1: '{attr_grit} * 0.5' },
+  { key: 'pen', name: 'Penmanship', each: '+1% Quill damage, +0.25% reach', now: '+{b_pen_1}% Quill damage, +{b_pen_2}% reach', b1: '{attr_pen}', b2: '{attr_pen} * 0.25' },
+  { key: 'wit', name: 'Wit', each: '+0.025 ink regen/s, -0.5% Lantern burn, and an extra try in Vault Trials every 20 points', now: '+{b_wit_1} ink regen/s, -{b_wit_2}% Lantern burn', b1: 'round({attr_wit} * 2.5) / 100', b2: '{attr_wit} * 0.5' },
+  { key: 'foot', name: 'Footwork', each: '+0.3% speed, -0.5% dash cooldown', now: '+{b_foot_1}% speed, -{b_foot_2}% dash cooldown', b1: 'round({attr_foot} * 30) / 100', b2: '{attr_foot} * 0.5' },
+  { key: 'luck', name: 'Fortune', each: '+0.5% drop chances, +0.25% Mnemosynth found', now: '+{b_luck_1}% drop chances, +{b_luck_2}% Mnemosynth', b1: '{attr_luck} * 0.5', b2: 'round({attr_luck} * 25) / 100' },
+];
+export const INDEX = 'storytender-index';
+
+function indexScreen(): Screen {
+  const PX = 140;
+  const PY = 50;
+  const PW = 1000;
+  const PH = 620;
+  // what happens after a point is bought: the totals, the level, the next price and the bonus lines; then it is saved
+  const after = (a: (typeof ATTRS)[number]): Act[] => [
+    setVar(`attr_${a.key}`, `{attr_${a.key}} + 1`),
+    setVar('attr_points', '{attr_points} + 1'),
+    setVar('level', '{attr_points} + 1'),
+    setVar('attr_cost', 'floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})'),
+    setVar(`b_${a.key}_1`, a.b1),
+    ...(a.b2 ? [setVar(`b_${a.key}_2`, a.b2)] : []),
+    act('saveGame', { slot: 'autosave' }),
+  ];
+  const rows = ATTRS.map((a, i) => {
+    const y = 108 + i * 64;
+    const room = `{attr_${a.key}} < 100`;
+    const plus = (id: string, visible: string, pay: Act[]): W =>
+      box(id, 392, 4, 52, 46, { fill: C.gold, border: C.inkBrown, borderWidth: 3, radius: 4 }, [text(`${id}.t`, '+', 0, 0, 36, C.ink, { w: 52, h: 44, style: { bold: true, align: 'center' } })], {
+        name: `Raise ${a.name}`,
+        visible,
+        states: { hover: { fill: '#ffd36e', borderWidth: 5 }, focus: { fill: '#ffd36e', borderWidth: 5 } },
+        on: { click: [...pay, ...after(a)], hover: [setVar('index_pick', a.key)], change: [] },
+      });
+    return box(`idx.row.${a.key}`, 36, y, 450, 54, { fill: '#f2e8cc', border: '#3b2a1c80', borderWidth: 2 }, [
+      text(`idx.row.${a.key}.name`, a.name, 14, 10, 26, C.ink, { w: 170 }),
+      box(`idx.row.${a.key}.bar`, 186, 20, 140, 14, { fill: '#1b172220' }, [
+        w('bar', `idx.row.${a.key}.fill`, { name: `${a.name} points`, ...at(0, 0, 140, 14), value: `attr_${a.key}`, max: '100', style: { fill: '#00000000', color: C.goldDark, border: '#00000000', borderWidth: 0 } }),
+      ]),
+      text(`idx.row.${a.key}.n`, `{attr_${a.key}}`, 336, 12, 24, C.ink, { w: 52, style: { align: 'right' } }),
+      // a dim plus when nothing can be bought, and the real one on top when something can
+      box(`idx.row.${a.key}.off`, 392, 4, 52, 46, { fill: '#3b2a1c26', border: '#3b2a1c59', borderWidth: 2, radius: 4 }, [text(`idx.row.${a.key}.off.t`, '+', 0, 0, 36, '#3b2a1c66', { w: 52, h: 44, style: { align: 'center' } })], { name: 'Cannot raise yet' }),
+      plus(`idx.row.${a.key}.free`, `{free_points} > 0 && ${room}`, [setVar('free_points', '{free_points} - 1')]),
+      plus(`idx.row.${a.key}.pay`, `{free_points} = 0 && {mnemosynth} >= {attr_cost} && ${room}`, [setVar('mnemosynth', '{mnemosynth} - {attr_cost}')]),
+    ], {
+      name: a.name,
+      states: { hover: { border: C.inkBrown, borderWidth: 4 } },
+      on: { click: [setVar('index_pick', a.key)], hover: [setVar('index_pick', a.key)], change: [] },
+    });
+  });
+  const detail = (a: (typeof ATTRS)[number]): W =>
+    box(`idx.detail.${a.key}`, 530, 100, 440, 130, {}, [
+      text(`idx.detail.${a.key}.name`, a.name, 0, 0, 36, C.ink, { w: 440 }),
+      text(`idx.detail.${a.key}.each`, `Each point: ${a.each}.`, 0, 46, 21, '#1b1722e6', { w: 440, h: 84 }),
+    ], { name: a.name, visible: `{index_pick} = ${a.key}` });
+  const now = (a: (typeof ATTRS)[number]): W => text(`idx.now.${a.key}`, a.now, 530, 410, 20, '#1b1722d9', { w: 440, h: 60, visible: `{index_pick} = ${a.key}` });
+  const panel = box('idx.panel', PX, PY, PW, PH, { fill: C.paperLight, border: C.inkBrown, borderWidth: 4, radius: 14, shadow: true }, [
+    text('idx.title', 'Revise Your Draft', 36, 14, 44, C.ink, { w: 600 }),
+    rule('idx.title.rule', 36, 76, PW - 72, '#1b172273'),
+    text('idx.purse', '◆ {mnemosynth} Mnemosynth', PW - 330, 30, 22, C.goldDark, { w: 290, style: { bold: true, align: 'right' } }),
+    ...rows,
+    ...ATTRS.map(detail),
+    text('idx.level', 'Level {level}', 530, 240, 40, C.ink, { w: 440 }),
+    text('idx.free', 'Free points left: {free_points}', 530, 292, 24, '#3f7a3a', { w: 440, visible: '{free_points} > 0' }),
+    text('idx.cost.ok', 'Next point costs {attr_cost} Mnemosynth', 530, 292, 24, '#3f7a3a', { w: 440, visible: '{free_points} = 0 && {mnemosynth} >= {attr_cost}' }),
+    text('idx.cost.no', 'Next point costs {attr_cost} Mnemosynth', 530, 292, 24, '#a8402f', { w: 440, visible: '{free_points} = 0 && {mnemosynth} < {attr_cost}' }),
+    text('idx.have', 'You have {mnemosynth}', 530, 326, 20, '#1b172299', { w: 440, style: { italic: true } }),
+    text('idx.bonus', 'Current bonus from points:', 530, 380, 20, C.inkBrown, { w: 440, style: { italic: true } }),
+    ...ATTRS.map(now),
+    text('idx.none', 'None yet.', 530, 410, 19, '#1b1722d9', { w: 440, visible: '{attr_points} = 0' }),
+    box('idx.map', 36, PH - 78, 220, 50, { fill: '#f2e8cc', border: C.inkBrown, borderWidth: 3 }, [text('idx.map.t', 'The Map', 0, 8, 26, C.ink, { w: 220, style: { align: 'center' } })], {
+      name: 'The Map',
+      states: { hover: { fill: '#fff6dc', borderWidth: 5 }, focus: { fill: '#fff6dc', borderWidth: 5 } },
+      on: { click: [open('role:travel')], hover: [], change: [] },
+    }),
+    box('idx.leave', 270, PH - 78, 260, 50, { fill: '#f2e8cc', border: C.inkBrown, borderWidth: 3 }, [text('idx.leave.t', 'Leave the Index', 0, 8, 26, C.ink, { w: 260, style: { align: 'center' } })], {
+      name: 'Leave the Index',
+      states: { hover: { fill: '#fff6dc', borderWidth: 5 }, focus: { fill: '#fff6dc', borderWidth: 5 } },
+      on: { click: [close(INDEX)], hover: [], change: [] },
+    }),
+    text('idx.keeps', 'The lantern will keep your place.', 560, PH - 66, 19, '#1b172280', { w: 410, style: { italic: true, align: 'right' } }),
+  ]);
+  const kids = [panel, legend('idx.legend', [['W A S D', 'Move'], ['E', 'Raise'], ['Esc', 'Leave']])];
+  return screen('Revise Your Draft', stage('idx', kids), { id: INDEX, dim: 0.6 });
+}
+
 /** The Margin Gate: two posts and an arch, small, beside the renown count (it opens at 220). */
 function gateIcon(id: string, x: number, y: number): W {
   const ink = C.inkBrown;
@@ -634,6 +724,7 @@ function hud(usable: string[]): Screen {
     inkBottle(),
     lanternGauge(),
     text('hud.mnemo', '◆ {mnemosynth}', 104, 54, 28, '#7a5410', { w: 200, style: { bold: true } }),
+    text('hud.level', 'Lv {level}', 226, 60, 20, C.inkBrown, { w: 90, style: { bold: true } }),
     gateIcon('hud.gate', 104, 92),
     text('hud.renown', `Renown {renown} / ${GATE_RENOWN}`, 134, 92, 18, C.inkBrown, { w: 180, style: { bold: true } }),
     w('bar', 'hud.renown.bar', { name: 'Renown', ...at(134, 116, 176, 9), value: 'renown', max: String(GATE_RENOWN), style: { fill: '#3b2a1c40', color: C.gold, border: C.inkBrown, borderWidth: 2 } }),
@@ -659,7 +750,7 @@ export function uiTheme(schemaVersion: number): object {
 export function buildScreens(itemIds: string[], schemaVersion: number, paperTile: number, usable: string[] = itemIds, names: MapNames = { regions: [], posts: [], doors: [] }): object {
   return {
     schemaVersion,
-    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), settings(), binder(itemIds), map(paperTile, names)],
+    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), settings(), binder(itemIds), indexScreen(), map(paperTile, names)],
     prefabs: [
       { name: 'Lamp', widget: lamp() },
       { name: 'Here', widget: here() },

@@ -706,6 +706,25 @@
                 }
               },
               {
+                "id": "hud.level",
+                "name": "hud.level",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 226,
+                "y": 60,
+                "w": 90,
+                "h": 27,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "Lv {level}",
+                "style": {
+                  "fontSize": 20,
+                  "color": "#3b2a1c",
+                  "bold": true
+                }
+              },
+              {
                 "id": "hud.gate",
                 "name": "Margin Gate",
                 "type": "panel",
@@ -9055,6 +9074,3481 @@
       "back": "auto",
       "dim": 0.62,
       "role": "inventory"
+    },
+    {
+      "id": "storytender-index",
+      "name": "Revise Your Draft",
+      "root": {
+        "id": "idx.root",
+        "name": "Root",
+        "type": "panel",
+        "children": [
+          {
+            "id": "idx.stage",
+            "name": "Stage",
+            "type": "panel",
+            "children": [
+              {
+                "id": "idx.panel",
+                "name": "idx.panel",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "idx.title",
+                    "name": "idx.title",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 14,
+                    "w": 600,
+                    "h": 59,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Revise Your Draft",
+                    "style": {
+                      "fontSize": 44,
+                      "color": "#1b1722"
+                    }
+                  },
+                  {
+                    "id": "idx.title.rule",
+                    "name": "idx.title.rule",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 76,
+                    "w": 928,
+                    "h": 2,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#1b172273"
+                    }
+                  },
+                  {
+                    "id": "idx.purse",
+                    "name": "idx.purse",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 670,
+                    "y": 30,
+                    "w": 290,
+                    "h": 30,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "◆ {mnemosynth} Mnemosynth",
+                    "style": {
+                      "fontSize": 22,
+                      "color": "#a97d2f",
+                      "bold": true,
+                      "align": "right"
+                    }
+                  },
+                  {
+                    "id": "idx.row.ink",
+                    "name": "Inkwell",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.row.ink.name",
+                        "name": "idx.row.ink.name",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 14,
+                        "y": 10,
+                        "w": 170,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Inkwell",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "idx.row.ink.bar",
+                        "name": "idx.row.ink.bar",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.ink.fill",
+                            "name": "Inkwell points",
+                            "type": "bar",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 140,
+                            "h": 14,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "value": "attr_ink",
+                            "max": "100",
+                            "style": {
+                              "fill": "#00000000",
+                              "color": "#a97d2f",
+                              "border": "#00000000",
+                              "borderWidth": 0
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 186,
+                        "y": 20,
+                        "w": 140,
+                        "h": 14,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#1b172220"
+                        }
+                      },
+                      {
+                        "id": "idx.row.ink.n",
+                        "name": "idx.row.ink.n",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 336,
+                        "y": 12,
+                        "w": 52,
+                        "h": 32,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "{attr_ink}",
+                        "style": {
+                          "fontSize": 24,
+                          "color": "#1b1722",
+                          "align": "right"
+                        }
+                      },
+                      {
+                        "id": "idx.row.ink.off",
+                        "name": "Cannot raise yet",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.ink.off.t",
+                            "name": "idx.row.ink.off.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#3b2a1c66",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#3b2a1c26",
+                          "border": "#3b2a1c59",
+                          "borderWidth": 2,
+                          "radius": 4
+                        }
+                      },
+                      {
+                        "id": "idx.row.ink.free",
+                        "name": "Raise Inkwell",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.ink.free.t",
+                            "name": "idx.row.ink.free.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#1b1722",
+                              "bold": true,
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 4
+                        },
+                        "visible": "{free_points} > 0 && {attr_ink} < 100",
+                        "states": {
+                          "hover": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "free_points",
+                                "op": "set",
+                                "value": "{free_points} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_ink",
+                                "op": "set",
+                                "value": "{attr_ink} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_points",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "level",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_cost",
+                                "op": "set",
+                                "value": "floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_ink_1",
+                                "op": "set",
+                                "value": "{attr_ink} * 2"
+                              }
+                            },
+                            {
+                              "type": "saveGame",
+                              "params": {
+                                "slot": "autosave"
+                              }
+                            }
+                          ],
+                          "hover": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "index_pick",
+                                "op": "set",
+                                "value": "ink"
+                              }
+                            }
+                          ],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "idx.row.ink.pay",
+                        "name": "Raise Inkwell",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.ink.pay.t",
+                            "name": "idx.row.ink.pay.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#1b1722",
+                              "bold": true,
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 4
+                        },
+                        "visible": "{free_points} = 0 && {mnemosynth} >= {attr_cost} && {attr_ink} < 100",
+                        "states": {
+                          "hover": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "mnemosynth",
+                                "op": "set",
+                                "value": "{mnemosynth} - {attr_cost}"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_ink",
+                                "op": "set",
+                                "value": "{attr_ink} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_points",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "level",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_cost",
+                                "op": "set",
+                                "value": "floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_ink_1",
+                                "op": "set",
+                                "value": "{attr_ink} * 2"
+                              }
+                            },
+                            {
+                              "type": "saveGame",
+                              "params": {
+                                "slot": "autosave"
+                              }
+                            }
+                          ],
+                          "hover": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "index_pick",
+                                "op": "set",
+                                "value": "ink"
+                              }
+                            }
+                          ],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 108,
+                    "w": 450,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2e8cc",
+                      "border": "#3b2a1c80",
+                      "borderWidth": 2
+                    },
+                    "states": {
+                      "hover": {
+                        "border": "#3b2a1c",
+                        "borderWidth": 4
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "index_pick",
+                            "op": "set",
+                            "value": "ink"
+                          }
+                        }
+                      ],
+                      "hover": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "index_pick",
+                            "op": "set",
+                            "value": "ink"
+                          }
+                        }
+                      ],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "idx.row.grit",
+                    "name": "Thick Paper",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.row.grit.name",
+                        "name": "idx.row.grit.name",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 14,
+                        "y": 10,
+                        "w": 170,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Thick Paper",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "idx.row.grit.bar",
+                        "name": "idx.row.grit.bar",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.grit.fill",
+                            "name": "Thick Paper points",
+                            "type": "bar",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 140,
+                            "h": 14,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "value": "attr_grit",
+                            "max": "100",
+                            "style": {
+                              "fill": "#00000000",
+                              "color": "#a97d2f",
+                              "border": "#00000000",
+                              "borderWidth": 0
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 186,
+                        "y": 20,
+                        "w": 140,
+                        "h": 14,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#1b172220"
+                        }
+                      },
+                      {
+                        "id": "idx.row.grit.n",
+                        "name": "idx.row.grit.n",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 336,
+                        "y": 12,
+                        "w": 52,
+                        "h": 32,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "{attr_grit}",
+                        "style": {
+                          "fontSize": 24,
+                          "color": "#1b1722",
+                          "align": "right"
+                        }
+                      },
+                      {
+                        "id": "idx.row.grit.off",
+                        "name": "Cannot raise yet",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.grit.off.t",
+                            "name": "idx.row.grit.off.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#3b2a1c66",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#3b2a1c26",
+                          "border": "#3b2a1c59",
+                          "borderWidth": 2,
+                          "radius": 4
+                        }
+                      },
+                      {
+                        "id": "idx.row.grit.free",
+                        "name": "Raise Thick Paper",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.grit.free.t",
+                            "name": "idx.row.grit.free.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#1b1722",
+                              "bold": true,
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 4
+                        },
+                        "visible": "{free_points} > 0 && {attr_grit} < 100",
+                        "states": {
+                          "hover": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "free_points",
+                                "op": "set",
+                                "value": "{free_points} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_grit",
+                                "op": "set",
+                                "value": "{attr_grit} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_points",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "level",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_cost",
+                                "op": "set",
+                                "value": "floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_grit_1",
+                                "op": "set",
+                                "value": "{attr_grit} * 0.5"
+                              }
+                            },
+                            {
+                              "type": "saveGame",
+                              "params": {
+                                "slot": "autosave"
+                              }
+                            }
+                          ],
+                          "hover": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "index_pick",
+                                "op": "set",
+                                "value": "grit"
+                              }
+                            }
+                          ],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "idx.row.grit.pay",
+                        "name": "Raise Thick Paper",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.grit.pay.t",
+                            "name": "idx.row.grit.pay.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#1b1722",
+                              "bold": true,
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 4
+                        },
+                        "visible": "{free_points} = 0 && {mnemosynth} >= {attr_cost} && {attr_grit} < 100",
+                        "states": {
+                          "hover": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "mnemosynth",
+                                "op": "set",
+                                "value": "{mnemosynth} - {attr_cost}"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_grit",
+                                "op": "set",
+                                "value": "{attr_grit} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_points",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "level",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_cost",
+                                "op": "set",
+                                "value": "floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_grit_1",
+                                "op": "set",
+                                "value": "{attr_grit} * 0.5"
+                              }
+                            },
+                            {
+                              "type": "saveGame",
+                              "params": {
+                                "slot": "autosave"
+                              }
+                            }
+                          ],
+                          "hover": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "index_pick",
+                                "op": "set",
+                                "value": "grit"
+                              }
+                            }
+                          ],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 172,
+                    "w": 450,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2e8cc",
+                      "border": "#3b2a1c80",
+                      "borderWidth": 2
+                    },
+                    "states": {
+                      "hover": {
+                        "border": "#3b2a1c",
+                        "borderWidth": 4
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "index_pick",
+                            "op": "set",
+                            "value": "grit"
+                          }
+                        }
+                      ],
+                      "hover": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "index_pick",
+                            "op": "set",
+                            "value": "grit"
+                          }
+                        }
+                      ],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "idx.row.pen",
+                    "name": "Penmanship",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.row.pen.name",
+                        "name": "idx.row.pen.name",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 14,
+                        "y": 10,
+                        "w": 170,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Penmanship",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "idx.row.pen.bar",
+                        "name": "idx.row.pen.bar",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.pen.fill",
+                            "name": "Penmanship points",
+                            "type": "bar",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 140,
+                            "h": 14,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "value": "attr_pen",
+                            "max": "100",
+                            "style": {
+                              "fill": "#00000000",
+                              "color": "#a97d2f",
+                              "border": "#00000000",
+                              "borderWidth": 0
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 186,
+                        "y": 20,
+                        "w": 140,
+                        "h": 14,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#1b172220"
+                        }
+                      },
+                      {
+                        "id": "idx.row.pen.n",
+                        "name": "idx.row.pen.n",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 336,
+                        "y": 12,
+                        "w": 52,
+                        "h": 32,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "{attr_pen}",
+                        "style": {
+                          "fontSize": 24,
+                          "color": "#1b1722",
+                          "align": "right"
+                        }
+                      },
+                      {
+                        "id": "idx.row.pen.off",
+                        "name": "Cannot raise yet",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.pen.off.t",
+                            "name": "idx.row.pen.off.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#3b2a1c66",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#3b2a1c26",
+                          "border": "#3b2a1c59",
+                          "borderWidth": 2,
+                          "radius": 4
+                        }
+                      },
+                      {
+                        "id": "idx.row.pen.free",
+                        "name": "Raise Penmanship",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.pen.free.t",
+                            "name": "idx.row.pen.free.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#1b1722",
+                              "bold": true,
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 4
+                        },
+                        "visible": "{free_points} > 0 && {attr_pen} < 100",
+                        "states": {
+                          "hover": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "free_points",
+                                "op": "set",
+                                "value": "{free_points} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_pen",
+                                "op": "set",
+                                "value": "{attr_pen} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_points",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "level",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_cost",
+                                "op": "set",
+                                "value": "floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_pen_1",
+                                "op": "set",
+                                "value": "{attr_pen}"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_pen_2",
+                                "op": "set",
+                                "value": "{attr_pen} * 0.25"
+                              }
+                            },
+                            {
+                              "type": "saveGame",
+                              "params": {
+                                "slot": "autosave"
+                              }
+                            }
+                          ],
+                          "hover": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "index_pick",
+                                "op": "set",
+                                "value": "pen"
+                              }
+                            }
+                          ],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "idx.row.pen.pay",
+                        "name": "Raise Penmanship",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.pen.pay.t",
+                            "name": "idx.row.pen.pay.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#1b1722",
+                              "bold": true,
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 4
+                        },
+                        "visible": "{free_points} = 0 && {mnemosynth} >= {attr_cost} && {attr_pen} < 100",
+                        "states": {
+                          "hover": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "mnemosynth",
+                                "op": "set",
+                                "value": "{mnemosynth} - {attr_cost}"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_pen",
+                                "op": "set",
+                                "value": "{attr_pen} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_points",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "level",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_cost",
+                                "op": "set",
+                                "value": "floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_pen_1",
+                                "op": "set",
+                                "value": "{attr_pen}"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_pen_2",
+                                "op": "set",
+                                "value": "{attr_pen} * 0.25"
+                              }
+                            },
+                            {
+                              "type": "saveGame",
+                              "params": {
+                                "slot": "autosave"
+                              }
+                            }
+                          ],
+                          "hover": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "index_pick",
+                                "op": "set",
+                                "value": "pen"
+                              }
+                            }
+                          ],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 236,
+                    "w": 450,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2e8cc",
+                      "border": "#3b2a1c80",
+                      "borderWidth": 2
+                    },
+                    "states": {
+                      "hover": {
+                        "border": "#3b2a1c",
+                        "borderWidth": 4
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "index_pick",
+                            "op": "set",
+                            "value": "pen"
+                          }
+                        }
+                      ],
+                      "hover": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "index_pick",
+                            "op": "set",
+                            "value": "pen"
+                          }
+                        }
+                      ],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "idx.row.wit",
+                    "name": "Wit",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.row.wit.name",
+                        "name": "idx.row.wit.name",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 14,
+                        "y": 10,
+                        "w": 170,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Wit",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "idx.row.wit.bar",
+                        "name": "idx.row.wit.bar",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.wit.fill",
+                            "name": "Wit points",
+                            "type": "bar",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 140,
+                            "h": 14,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "value": "attr_wit",
+                            "max": "100",
+                            "style": {
+                              "fill": "#00000000",
+                              "color": "#a97d2f",
+                              "border": "#00000000",
+                              "borderWidth": 0
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 186,
+                        "y": 20,
+                        "w": 140,
+                        "h": 14,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#1b172220"
+                        }
+                      },
+                      {
+                        "id": "idx.row.wit.n",
+                        "name": "idx.row.wit.n",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 336,
+                        "y": 12,
+                        "w": 52,
+                        "h": 32,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "{attr_wit}",
+                        "style": {
+                          "fontSize": 24,
+                          "color": "#1b1722",
+                          "align": "right"
+                        }
+                      },
+                      {
+                        "id": "idx.row.wit.off",
+                        "name": "Cannot raise yet",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.wit.off.t",
+                            "name": "idx.row.wit.off.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#3b2a1c66",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#3b2a1c26",
+                          "border": "#3b2a1c59",
+                          "borderWidth": 2,
+                          "radius": 4
+                        }
+                      },
+                      {
+                        "id": "idx.row.wit.free",
+                        "name": "Raise Wit",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.wit.free.t",
+                            "name": "idx.row.wit.free.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#1b1722",
+                              "bold": true,
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 4
+                        },
+                        "visible": "{free_points} > 0 && {attr_wit} < 100",
+                        "states": {
+                          "hover": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "free_points",
+                                "op": "set",
+                                "value": "{free_points} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_wit",
+                                "op": "set",
+                                "value": "{attr_wit} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_points",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "level",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_cost",
+                                "op": "set",
+                                "value": "floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_wit_1",
+                                "op": "set",
+                                "value": "round({attr_wit} * 2.5) / 100"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_wit_2",
+                                "op": "set",
+                                "value": "{attr_wit} * 0.5"
+                              }
+                            },
+                            {
+                              "type": "saveGame",
+                              "params": {
+                                "slot": "autosave"
+                              }
+                            }
+                          ],
+                          "hover": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "index_pick",
+                                "op": "set",
+                                "value": "wit"
+                              }
+                            }
+                          ],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "idx.row.wit.pay",
+                        "name": "Raise Wit",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.wit.pay.t",
+                            "name": "idx.row.wit.pay.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#1b1722",
+                              "bold": true,
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 4
+                        },
+                        "visible": "{free_points} = 0 && {mnemosynth} >= {attr_cost} && {attr_wit} < 100",
+                        "states": {
+                          "hover": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "mnemosynth",
+                                "op": "set",
+                                "value": "{mnemosynth} - {attr_cost}"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_wit",
+                                "op": "set",
+                                "value": "{attr_wit} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_points",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "level",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_cost",
+                                "op": "set",
+                                "value": "floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_wit_1",
+                                "op": "set",
+                                "value": "round({attr_wit} * 2.5) / 100"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_wit_2",
+                                "op": "set",
+                                "value": "{attr_wit} * 0.5"
+                              }
+                            },
+                            {
+                              "type": "saveGame",
+                              "params": {
+                                "slot": "autosave"
+                              }
+                            }
+                          ],
+                          "hover": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "index_pick",
+                                "op": "set",
+                                "value": "wit"
+                              }
+                            }
+                          ],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 300,
+                    "w": 450,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2e8cc",
+                      "border": "#3b2a1c80",
+                      "borderWidth": 2
+                    },
+                    "states": {
+                      "hover": {
+                        "border": "#3b2a1c",
+                        "borderWidth": 4
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "index_pick",
+                            "op": "set",
+                            "value": "wit"
+                          }
+                        }
+                      ],
+                      "hover": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "index_pick",
+                            "op": "set",
+                            "value": "wit"
+                          }
+                        }
+                      ],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "idx.row.foot",
+                    "name": "Footwork",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.row.foot.name",
+                        "name": "idx.row.foot.name",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 14,
+                        "y": 10,
+                        "w": 170,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Footwork",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "idx.row.foot.bar",
+                        "name": "idx.row.foot.bar",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.foot.fill",
+                            "name": "Footwork points",
+                            "type": "bar",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 140,
+                            "h": 14,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "value": "attr_foot",
+                            "max": "100",
+                            "style": {
+                              "fill": "#00000000",
+                              "color": "#a97d2f",
+                              "border": "#00000000",
+                              "borderWidth": 0
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 186,
+                        "y": 20,
+                        "w": 140,
+                        "h": 14,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#1b172220"
+                        }
+                      },
+                      {
+                        "id": "idx.row.foot.n",
+                        "name": "idx.row.foot.n",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 336,
+                        "y": 12,
+                        "w": 52,
+                        "h": 32,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "{attr_foot}",
+                        "style": {
+                          "fontSize": 24,
+                          "color": "#1b1722",
+                          "align": "right"
+                        }
+                      },
+                      {
+                        "id": "idx.row.foot.off",
+                        "name": "Cannot raise yet",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.foot.off.t",
+                            "name": "idx.row.foot.off.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#3b2a1c66",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#3b2a1c26",
+                          "border": "#3b2a1c59",
+                          "borderWidth": 2,
+                          "radius": 4
+                        }
+                      },
+                      {
+                        "id": "idx.row.foot.free",
+                        "name": "Raise Footwork",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.foot.free.t",
+                            "name": "idx.row.foot.free.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#1b1722",
+                              "bold": true,
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 4
+                        },
+                        "visible": "{free_points} > 0 && {attr_foot} < 100",
+                        "states": {
+                          "hover": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "free_points",
+                                "op": "set",
+                                "value": "{free_points} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_foot",
+                                "op": "set",
+                                "value": "{attr_foot} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_points",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "level",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_cost",
+                                "op": "set",
+                                "value": "floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_foot_1",
+                                "op": "set",
+                                "value": "round({attr_foot} * 30) / 100"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_foot_2",
+                                "op": "set",
+                                "value": "{attr_foot} * 0.5"
+                              }
+                            },
+                            {
+                              "type": "saveGame",
+                              "params": {
+                                "slot": "autosave"
+                              }
+                            }
+                          ],
+                          "hover": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "index_pick",
+                                "op": "set",
+                                "value": "foot"
+                              }
+                            }
+                          ],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "idx.row.foot.pay",
+                        "name": "Raise Footwork",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.foot.pay.t",
+                            "name": "idx.row.foot.pay.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#1b1722",
+                              "bold": true,
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 4
+                        },
+                        "visible": "{free_points} = 0 && {mnemosynth} >= {attr_cost} && {attr_foot} < 100",
+                        "states": {
+                          "hover": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "mnemosynth",
+                                "op": "set",
+                                "value": "{mnemosynth} - {attr_cost}"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_foot",
+                                "op": "set",
+                                "value": "{attr_foot} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_points",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "level",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_cost",
+                                "op": "set",
+                                "value": "floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_foot_1",
+                                "op": "set",
+                                "value": "round({attr_foot} * 30) / 100"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_foot_2",
+                                "op": "set",
+                                "value": "{attr_foot} * 0.5"
+                              }
+                            },
+                            {
+                              "type": "saveGame",
+                              "params": {
+                                "slot": "autosave"
+                              }
+                            }
+                          ],
+                          "hover": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "index_pick",
+                                "op": "set",
+                                "value": "foot"
+                              }
+                            }
+                          ],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 364,
+                    "w": 450,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2e8cc",
+                      "border": "#3b2a1c80",
+                      "borderWidth": 2
+                    },
+                    "states": {
+                      "hover": {
+                        "border": "#3b2a1c",
+                        "borderWidth": 4
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "index_pick",
+                            "op": "set",
+                            "value": "foot"
+                          }
+                        }
+                      ],
+                      "hover": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "index_pick",
+                            "op": "set",
+                            "value": "foot"
+                          }
+                        }
+                      ],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "idx.row.luck",
+                    "name": "Fortune",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.row.luck.name",
+                        "name": "idx.row.luck.name",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 14,
+                        "y": 10,
+                        "w": 170,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Fortune",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "idx.row.luck.bar",
+                        "name": "idx.row.luck.bar",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.luck.fill",
+                            "name": "Fortune points",
+                            "type": "bar",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 140,
+                            "h": 14,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "value": "attr_luck",
+                            "max": "100",
+                            "style": {
+                              "fill": "#00000000",
+                              "color": "#a97d2f",
+                              "border": "#00000000",
+                              "borderWidth": 0
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 186,
+                        "y": 20,
+                        "w": 140,
+                        "h": 14,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#1b172220"
+                        }
+                      },
+                      {
+                        "id": "idx.row.luck.n",
+                        "name": "idx.row.luck.n",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 336,
+                        "y": 12,
+                        "w": 52,
+                        "h": 32,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "{attr_luck}",
+                        "style": {
+                          "fontSize": 24,
+                          "color": "#1b1722",
+                          "align": "right"
+                        }
+                      },
+                      {
+                        "id": "idx.row.luck.off",
+                        "name": "Cannot raise yet",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.luck.off.t",
+                            "name": "idx.row.luck.off.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#3b2a1c66",
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#3b2a1c26",
+                          "border": "#3b2a1c59",
+                          "borderWidth": 2,
+                          "radius": 4
+                        }
+                      },
+                      {
+                        "id": "idx.row.luck.free",
+                        "name": "Raise Fortune",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.luck.free.t",
+                            "name": "idx.row.luck.free.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#1b1722",
+                              "bold": true,
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 4
+                        },
+                        "visible": "{free_points} > 0 && {attr_luck} < 100",
+                        "states": {
+                          "hover": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "free_points",
+                                "op": "set",
+                                "value": "{free_points} - 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_luck",
+                                "op": "set",
+                                "value": "{attr_luck} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_points",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "level",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_cost",
+                                "op": "set",
+                                "value": "floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_luck_1",
+                                "op": "set",
+                                "value": "{attr_luck} * 0.5"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_luck_2",
+                                "op": "set",
+                                "value": "round({attr_luck} * 25) / 100"
+                              }
+                            },
+                            {
+                              "type": "saveGame",
+                              "params": {
+                                "slot": "autosave"
+                              }
+                            }
+                          ],
+                          "hover": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "index_pick",
+                                "op": "set",
+                                "value": "luck"
+                              }
+                            }
+                          ],
+                          "change": []
+                        }
+                      },
+                      {
+                        "id": "idx.row.luck.pay",
+                        "name": "Raise Fortune",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "idx.row.luck.pay.t",
+                            "name": "idx.row.luck.pay.t",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 0,
+                            "w": 52,
+                            "h": 44,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "+",
+                            "style": {
+                              "fontSize": 36,
+                              "color": "#1b1722",
+                              "bold": true,
+                              "align": "center"
+                            }
+                          }
+                        ],
+                        "anchor": "tl",
+                        "x": 392,
+                        "y": 4,
+                        "w": 52,
+                        "h": 46,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {
+                          "fill": "#f2b84b",
+                          "border": "#3b2a1c",
+                          "borderWidth": 3,
+                          "radius": 4
+                        },
+                        "visible": "{free_points} = 0 && {mnemosynth} >= {attr_cost} && {attr_luck} < 100",
+                        "states": {
+                          "hover": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          },
+                          "focus": {
+                            "fill": "#ffd36e",
+                            "borderWidth": 5
+                          }
+                        },
+                        "on": {
+                          "click": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "mnemosynth",
+                                "op": "set",
+                                "value": "{mnemosynth} - {attr_cost}"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_luck",
+                                "op": "set",
+                                "value": "{attr_luck} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_points",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "level",
+                                "op": "set",
+                                "value": "{attr_points} + 1"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "attr_cost",
+                                "op": "set",
+                                "value": "floor(20 + 4 * {attr_points} + 0.08 * {attr_points} * {attr_points})"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_luck_1",
+                                "op": "set",
+                                "value": "{attr_luck} * 0.5"
+                              }
+                            },
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "b_luck_2",
+                                "op": "set",
+                                "value": "round({attr_luck} * 25) / 100"
+                              }
+                            },
+                            {
+                              "type": "saveGame",
+                              "params": {
+                                "slot": "autosave"
+                              }
+                            }
+                          ],
+                          "hover": [
+                            {
+                              "type": "setVariable",
+                              "params": {
+                                "name": "index_pick",
+                                "op": "set",
+                                "value": "luck"
+                              }
+                            }
+                          ],
+                          "change": []
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 428,
+                    "w": 450,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2e8cc",
+                      "border": "#3b2a1c80",
+                      "borderWidth": 2
+                    },
+                    "states": {
+                      "hover": {
+                        "border": "#3b2a1c",
+                        "borderWidth": 4
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "index_pick",
+                            "op": "set",
+                            "value": "luck"
+                          }
+                        }
+                      ],
+                      "hover": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "index_pick",
+                            "op": "set",
+                            "value": "luck"
+                          }
+                        }
+                      ],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "idx.detail.ink",
+                    "name": "Inkwell",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.detail.ink.name",
+                        "name": "idx.detail.ink.name",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 440,
+                        "h": 49,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Inkwell",
+                        "style": {
+                          "fontSize": 36,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "idx.detail.ink.each",
+                        "name": "idx.detail.ink.each",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 46,
+                        "w": 440,
+                        "h": 84,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Each point: +2 maximum ink.",
+                        "style": {
+                          "fontSize": 21,
+                          "color": "#1b1722e6"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 100,
+                    "w": 440,
+                    "h": 130,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {},
+                    "visible": "{index_pick} = ink"
+                  },
+                  {
+                    "id": "idx.detail.grit",
+                    "name": "Thick Paper",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.detail.grit.name",
+                        "name": "idx.detail.grit.name",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 440,
+                        "h": 49,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Thick Paper",
+                        "style": {
+                          "fontSize": 36,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "idx.detail.grit.each",
+                        "name": "idx.detail.grit.each",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 46,
+                        "w": 440,
+                        "h": 84,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Each point: -0.5% damage taken.",
+                        "style": {
+                          "fontSize": 21,
+                          "color": "#1b1722e6"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 100,
+                    "w": 440,
+                    "h": 130,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {},
+                    "visible": "{index_pick} = grit"
+                  },
+                  {
+                    "id": "idx.detail.pen",
+                    "name": "Penmanship",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.detail.pen.name",
+                        "name": "idx.detail.pen.name",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 440,
+                        "h": 49,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Penmanship",
+                        "style": {
+                          "fontSize": 36,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "idx.detail.pen.each",
+                        "name": "idx.detail.pen.each",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 46,
+                        "w": 440,
+                        "h": 84,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Each point: +1% Quill damage, +0.25% reach.",
+                        "style": {
+                          "fontSize": 21,
+                          "color": "#1b1722e6"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 100,
+                    "w": 440,
+                    "h": 130,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {},
+                    "visible": "{index_pick} = pen"
+                  },
+                  {
+                    "id": "idx.detail.wit",
+                    "name": "Wit",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.detail.wit.name",
+                        "name": "idx.detail.wit.name",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 440,
+                        "h": 49,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Wit",
+                        "style": {
+                          "fontSize": 36,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "idx.detail.wit.each",
+                        "name": "idx.detail.wit.each",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 46,
+                        "w": 440,
+                        "h": 84,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Each point: +0.025 ink regen/s, -0.5% Lantern burn, and an extra try in Vault Trials every 20 points.",
+                        "style": {
+                          "fontSize": 21,
+                          "color": "#1b1722e6"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 100,
+                    "w": 440,
+                    "h": 130,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {},
+                    "visible": "{index_pick} = wit"
+                  },
+                  {
+                    "id": "idx.detail.foot",
+                    "name": "Footwork",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.detail.foot.name",
+                        "name": "idx.detail.foot.name",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 440,
+                        "h": 49,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Footwork",
+                        "style": {
+                          "fontSize": 36,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "idx.detail.foot.each",
+                        "name": "idx.detail.foot.each",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 46,
+                        "w": 440,
+                        "h": 84,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Each point: +0.3% speed, -0.5% dash cooldown.",
+                        "style": {
+                          "fontSize": 21,
+                          "color": "#1b1722e6"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 100,
+                    "w": 440,
+                    "h": 130,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {},
+                    "visible": "{index_pick} = foot"
+                  },
+                  {
+                    "id": "idx.detail.luck",
+                    "name": "Fortune",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.detail.luck.name",
+                        "name": "idx.detail.luck.name",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 0,
+                        "w": 440,
+                        "h": 49,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Fortune",
+                        "style": {
+                          "fontSize": 36,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "idx.detail.luck.each",
+                        "name": "idx.detail.luck.each",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 46,
+                        "w": 440,
+                        "h": 84,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Each point: +0.5% drop chances, +0.25% Mnemosynth found.",
+                        "style": {
+                          "fontSize": 21,
+                          "color": "#1b1722e6"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 100,
+                    "w": 440,
+                    "h": 130,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {},
+                    "visible": "{index_pick} = luck"
+                  },
+                  {
+                    "id": "idx.level",
+                    "name": "idx.level",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 240,
+                    "w": 440,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Level {level}",
+                    "style": {
+                      "fontSize": 40,
+                      "color": "#1b1722"
+                    }
+                  },
+                  {
+                    "id": "idx.free",
+                    "name": "idx.free",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 292,
+                    "w": 440,
+                    "h": 32,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Free points left: {free_points}",
+                    "style": {
+                      "fontSize": 24,
+                      "color": "#3f7a3a"
+                    },
+                    "visible": "{free_points} > 0"
+                  },
+                  {
+                    "id": "idx.cost.ok",
+                    "name": "idx.cost.ok",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 292,
+                    "w": 440,
+                    "h": 32,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Next point costs {attr_cost} Mnemosynth",
+                    "style": {
+                      "fontSize": 24,
+                      "color": "#3f7a3a"
+                    },
+                    "visible": "{free_points} = 0 && {mnemosynth} >= {attr_cost}"
+                  },
+                  {
+                    "id": "idx.cost.no",
+                    "name": "idx.cost.no",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 292,
+                    "w": 440,
+                    "h": 32,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Next point costs {attr_cost} Mnemosynth",
+                    "style": {
+                      "fontSize": 24,
+                      "color": "#a8402f"
+                    },
+                    "visible": "{free_points} = 0 && {mnemosynth} < {attr_cost}"
+                  },
+                  {
+                    "id": "idx.have",
+                    "name": "idx.have",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 326,
+                    "w": 440,
+                    "h": 27,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "You have {mnemosynth}",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#1b172299",
+                      "italic": true
+                    }
+                  },
+                  {
+                    "id": "idx.bonus",
+                    "name": "idx.bonus",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 380,
+                    "w": 440,
+                    "h": 27,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Current bonus from points:",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#3b2a1c",
+                      "italic": true
+                    }
+                  },
+                  {
+                    "id": "idx.now.ink",
+                    "name": "idx.now.ink",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 410,
+                    "w": 440,
+                    "h": 60,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "+{b_ink_1} maximum ink",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#1b1722d9"
+                    },
+                    "visible": "{index_pick} = ink"
+                  },
+                  {
+                    "id": "idx.now.grit",
+                    "name": "idx.now.grit",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 410,
+                    "w": 440,
+                    "h": 60,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "{b_grit_1}% less damage taken",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#1b1722d9"
+                    },
+                    "visible": "{index_pick} = grit"
+                  },
+                  {
+                    "id": "idx.now.pen",
+                    "name": "idx.now.pen",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 410,
+                    "w": 440,
+                    "h": 60,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "+{b_pen_1}% Quill damage, +{b_pen_2}% reach",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#1b1722d9"
+                    },
+                    "visible": "{index_pick} = pen"
+                  },
+                  {
+                    "id": "idx.now.wit",
+                    "name": "idx.now.wit",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 410,
+                    "w": 440,
+                    "h": 60,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "+{b_wit_1} ink regen/s, -{b_wit_2}% Lantern burn",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#1b1722d9"
+                    },
+                    "visible": "{index_pick} = wit"
+                  },
+                  {
+                    "id": "idx.now.foot",
+                    "name": "idx.now.foot",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 410,
+                    "w": 440,
+                    "h": 60,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "+{b_foot_1}% speed, -{b_foot_2}% dash cooldown",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#1b1722d9"
+                    },
+                    "visible": "{index_pick} = foot"
+                  },
+                  {
+                    "id": "idx.now.luck",
+                    "name": "idx.now.luck",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 410,
+                    "w": 440,
+                    "h": 60,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "+{b_luck_1}% drop chances, +{b_luck_2}% Mnemosynth",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#1b1722d9"
+                    },
+                    "visible": "{index_pick} = luck"
+                  },
+                  {
+                    "id": "idx.none",
+                    "name": "idx.none",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 530,
+                    "y": 410,
+                    "w": 440,
+                    "h": 26,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "None yet.",
+                    "style": {
+                      "fontSize": 19,
+                      "color": "#1b1722d9"
+                    },
+                    "visible": "{attr_points} = 0"
+                  },
+                  {
+                    "id": "idx.map",
+                    "name": "The Map",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.map.t",
+                        "name": "idx.map.t",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 8,
+                        "w": 220,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "The Map",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722",
+                          "align": "center"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 36,
+                    "y": 542,
+                    "w": 220,
+                    "h": 50,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2e8cc",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3
+                    },
+                    "states": {
+                      "hover": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      },
+                      "focus": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "uiScreen",
+                          "params": {
+                            "op": "open",
+                            "screen": "role:travel"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "idx.leave",
+                    "name": "Leave the Index",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "idx.leave.t",
+                        "name": "idx.leave.t",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 8,
+                        "w": 260,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Leave the Index",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722",
+                          "align": "center"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 270,
+                    "y": 542,
+                    "w": 260,
+                    "h": 50,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2e8cc",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3
+                    },
+                    "states": {
+                      "hover": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      },
+                      "focus": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "uiScreen",
+                          "params": {
+                            "op": "close",
+                            "screen": "storytender-index"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "idx.keeps",
+                    "name": "idx.keeps",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 560,
+                    "y": 554,
+                    "w": 410,
+                    "h": 26,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "The lantern will keep your place.",
+                    "style": {
+                      "fontSize": 19,
+                      "color": "#1b172280",
+                      "italic": true,
+                      "align": "right"
+                    }
+                  }
+                ],
+                "anchor": "tl",
+                "x": 140,
+                "y": 50,
+                "w": 1000,
+                "h": 620,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#f6ecd2",
+                  "border": "#3b2a1c",
+                  "borderWidth": 4,
+                  "radius": 14,
+                  "shadow": true
+                }
+              },
+              {
+                "id": "idx.legend",
+                "name": "Legend",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "idx.legend.cap0",
+                    "name": "idx.legend.cap0",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "W A S D",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#f4ecd8",
+                      "radius": 5,
+                      "bold": true
+                    },
+                    "padding": 4
+                  },
+                  {
+                    "id": "idx.legend.label0",
+                    "name": "idx.legend.label0",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "Move",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#f4ecd8"
+                    }
+                  },
+                  {
+                    "id": "idx.legend.cap1",
+                    "name": "idx.legend.cap1",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "E",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#f4ecd8",
+                      "radius": 5,
+                      "bold": true
+                    },
+                    "padding": 4
+                  },
+                  {
+                    "id": "idx.legend.label1",
+                    "name": "idx.legend.label1",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "Raise",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#f4ecd8"
+                    }
+                  },
+                  {
+                    "id": "idx.legend.cap2",
+                    "name": "idx.legend.cap2",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "Esc",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#f4ecd8",
+                      "radius": 5,
+                      "bold": true
+                    },
+                    "padding": 4
+                  },
+                  {
+                    "id": "idx.legend.label2",
+                    "name": "idx.legend.label2",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "auto",
+                    "hMode": "auto",
+                    "text": "Leave",
+                    "style": {
+                      "fontSize": 20,
+                      "color": "#f4ecd8"
+                    }
+                  }
+                ],
+                "anchor": "b",
+                "x": 0,
+                "y": 14,
+                "wMode": "auto",
+                "hMode": "fixed",
+                "h": 36,
+                "layout": "row",
+                "align": "center",
+                "gap": 10,
+                "padding": 6,
+                "style": {
+                  "fill": "#16171fd1",
+                  "radius": 18
+                }
+              }
+            ],
+            "anchor": "c",
+            "w": 1280,
+            "h": 720,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {}
+          }
+        ],
+        "anchor": "fill",
+        "layout": "free",
+        "padding": 0,
+        "style": {}
+      },
+      "modal": true,
+      "back": "auto",
+      "dim": 0.6
     },
     {
       "id": "storytender-map",

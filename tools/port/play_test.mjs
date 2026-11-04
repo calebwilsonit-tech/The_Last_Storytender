@@ -150,6 +150,13 @@ try {
   const v6 = await vars();
   check('light a lantern post', Object.keys(v6).some((k) => k.startsWith('lit:')), Object.keys(v6).filter((k) => k.startsWith('lit:')).join(','));
   await readAll();
+  // resting at a post opens the Index (Revise Your Draft) a moment later: leave it
+  await page.waitForTimeout(2500);
+  const idxOpen = /Revise/.test(await page.evaluate(() => window.__play.sim.runtime.ui.stack.join(',')));
+  const leave = await page.evaluate(() => { const n = [...document.querySelectorAll('*')].filter((n) => n.children.length === 0 && (n.textContent ?? '').trim() === 'Leave the Index').find((n) => n.getBoundingClientRect().width > 0); const r = n?.getBoundingClientRect(); return r ? { x: r.x + r.width / 2, y: r.y + r.height / 2 } : null; });
+  if (leave) await page.mouse.click(leave.x, leave.y);
+  await page.waitForTimeout(600);
+  check('lighting the post opens the Index, which can be left', idxOpen && !/Revise/.test(await page.evaluate(() => window.__play.sim.runtime.ui.stack.join(','))), `open ${idxOpen}`);
 
   // 7. strike the training dummy (93,58) with the quill (J)
   await placeAt(93.5, 59.3);
