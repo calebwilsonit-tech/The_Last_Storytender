@@ -15,6 +15,7 @@ export default defineScript({
   },
   update(me, game) {
     const v = game.vars;
+    if (v.cutscene_on) return;
     const s = me.state;
     const p = game.player;
     if (!p) return;
@@ -33,7 +34,7 @@ export default defineScript({
     if (hp && health && hp.hp > health.max) { me.set('state:health', { ...hp, hp: health.max }); hp = me.get('state:health'); }
     if (hp && health) { v.boss_name = 'The Cold Shoulder'; v.boss_hp = hp.hp; v.boss_max = health.max; }
     if (hp && (hp.dead || hp.hp <= 0)) {
-      if (!s.endAsked) { s.endAsked = true; v.boss_name = ''; game.startDialogue('maud_end'); }
+      if (!s.endAsked) { s.endAsked = true; v.boss_name = ''; v.play_k_maud_end = 1; }
       return;
     }
     // turning its shoulder towards her: slower in the lantern's warmth, slower still while it rests

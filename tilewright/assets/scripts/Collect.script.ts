@@ -20,6 +20,7 @@ export default defineScript({
     v.mnemosynth = Number(v.mnemosynth ?? 0) + Number(me.settings.mnemo) * (1 + 0.0025 * Number(v.attr_luck ?? 0));
     v.light = Math.min(100, Number(v.light ?? 100) + Number(me.settings.light));
     if (me.settings.flag) v[me.settings.flag] = 1;
+    game.do('sound', { name: 'crystal', volume: 1 });
     me.destroy();
   },
 });

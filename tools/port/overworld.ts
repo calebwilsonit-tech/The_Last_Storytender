@@ -111,7 +111,7 @@ function people(w: World): void {
   {
     const t = new Talk('garrick');
     const restoredTalk = t.when({ name: 'lesson_done' }, t.lines(fn(w, 'garrick_restored'), w.keyed), t.when({ name: 'has_quill' }, t.lines(fnAt(w, 'garrick_lesson_hint', 1), w.keyed), t.seq(t.lines(fn(w, 'garrick_lesson_start'), w.keyed), t.set('has_quill', 1), t.lines([line("Received: Garrick's Quill", 'sign')], w.keyed))));
-    const restoring = t.seq(t.lines(fn(w, 'garrick_restoration'), w.keyed), t.set('restored_garrick', 1), t.set('mnemosynth', 25, 'add'), t.set('renown', 35, 'add'), t.lines([line('Restored: Garrick', 'sign')], w.keyed));
+    const restoring = t.seq(t.set('play_k_garrick', 1)); // the cutscene (Director.script.ts) plays the words and pays the rewards
     const ghost = t.when({ name: 'met_garrick' }, t.lines(fn(w, 'garrick_ghost_repeat'), w.keyed), t.seq(t.lines(fn(w, 'garrick_ghost'), w.keyed), t.set('met_garrick', 1)));
     const start = t.when({ name: 'restored_garrick' }, restoredTalk, t.when({ name: 'memory_done' }, restoring, ghost));
     w.write('garrick', t.data(start[0]));
@@ -119,14 +119,14 @@ function people(w: World): void {
   // Pip
   {
     const t = new Talk('pip');
-    const restoring = t.seq(t.lines(fn(w, 'pip_restoration'), w.keyed), t.set('restored_pip', 1), t.set('mnemosynth', 30, 'add'), t.set('renown', 35, 'add'), t.lines([line('Restored: Pip', 'sign')], w.keyed));
+    const restoring = t.seq(t.set('play_k_pip', 1)); // the cutscene (Director.script.ts) plays the words and pays the rewards
     const start = t.when({ name: 'restored_pip' }, t.lines(fn(w, 'pip_restored'), w.keyed), t.when({ name: 'pip_memory_done' }, restoring, t.lines(fn(w, 'pip_ghost'), w.keyed)));
     w.write('pip', t.data(start[0]));
   }
   // Maud
   {
     const t = new Talk('maud');
-    const restoring = t.seq(t.lines(fn(w, 'maud_restoration'), w.keyed), t.set('restored_maud', 1), t.set('mnemosynth', 30, 'add'), t.set('renown', 35, 'add'), t.give('warm_loaf', 3), t.lines([line('Restored: Maud', 'sign')], w.keyed));
+    const restoring = t.seq(t.set('play_k_maud', 1)); // the cutscene (Director.script.ts) plays the words and pays the rewards
     const start = t.when({ name: 'restored_maud' }, t.lines(fn(w, 'maud_restored'), w.keyed), t.when({ name: 'maud_memory_done' }, restoring, t.lines(fn(w, 'maud_ghost'), w.keyed)));
     w.write('maud', t.data(start[0]));
   }
@@ -153,7 +153,7 @@ function people(w: World): void {
   {
     const t = new Talk('margin_gate');
     const renown = t.lines([line("The ribbon on the Margin Gate stays tied. A small tag hangs from it: 'Not enough people know your name yet.'"), line('Renown {renown} / 220. Beat Errors, open chests, solve riddles, light posts, explore: any of it counts. The page remembers what you do.')], w.keyed);
-    const start = t.when({ name: 'town_published' }, t.when({ name: 'renown', op: '>=', value: 220 }, t.seq(t.lines(fn(w, 'gate_open'), w.keyed), t.set('gate_opened', 1), t.set('ending_go', 1)), renown), t.lines(fn(w, 'gate_locked'), w.keyed));
+    const start = t.when({ name: 'town_published' }, t.when({ name: 'renown', op: '>=', value: 220 }, t.set('play_k_ending', 1), renown), t.lines(fn(w, 'gate_locked'), w.keyed));
     w.write('margin_gate', t.data(start[0]));
   }
 }
@@ -176,7 +176,7 @@ export function writeOverworldTalk(w: World): void {
   // the tear in the square: stepping in takes her to the Cutting Room (Rift.script.ts shows it once the three are restored)
   {
     const t = new Talk('rift_enter');
-    w.write('rift_enter', t.data(t.seq(t.lines(fn(w, 'scissor_rift_enter'), w.keyed), t.set('go_scissor', 1))[0]));
+    w.write('rift_enter', t.data(t.set('play_k_rift', 1)[0]));
   }
   // the two riddle stones: a word trial opens from a short conversation (Trial.script.ts runs it when start_<id> is set)
   for (const [id, r] of Object.entries(w.map.RIDDLES)) {
@@ -294,6 +294,7 @@ export function decorateOverworld(e: EntityData, node: { class: string; props: R
       gate('go_maud', 'scenes/maud.scene.json');
       return;
     case 17: // the Margin Gate
+      e.tags.push('margin-gate');
       talk('margin_gate', 120);
       return;
     case 3: // a Mnemosynth crystal

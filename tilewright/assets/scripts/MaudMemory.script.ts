@@ -32,7 +32,7 @@ export default defineScript({
     const [x0, y0, x1, y1] = String(me.settings.area).split(',').map(Number) as [number, number, number, number];
     const inHall = p.x >= x0 && p.x <= x1 + 1 && p.y >= y0 && p.y <= y1 + 1;
     if (!inHall || v.maud_finale) return;
-    if (!v.table_seen) { v.table_seen = 1; game.startDialogue('maud_table'); return; }
+    if (!v.table_seen) { v.table_seen = 1; v.play_k_maud_table = 1; return; }
     if (!v.table_awake) return;
     // all six seated: the Cold Shoulder comes, in the middle of the hall
     if (v.cold_spawn && !s.cold) {
@@ -48,7 +48,7 @@ export default defineScript({
     }
     const seated = game.findAll('tag:guest').filter((g) => g.hasTag('seated')).length;
     v.guests_seated = seated;
-    if (seated >= 6 && !v.table_full) { v.table_full = 1; game.startDialogue('maud_reckon'); }
+    if (seated >= 6 && !v.table_full) { v.table_full = 1; v.play_k_maud_reckon = 1; }
     // the cold waves
     const DIRS: [string, number, number][] = [['WEST', 1, 0], ['EAST', -1, 0], ['NORTH', 0, 1], ['SOUTH', 0, -1]];
     if (!s.wave) {

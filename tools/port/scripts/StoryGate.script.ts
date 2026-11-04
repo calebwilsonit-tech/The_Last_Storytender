@@ -19,6 +19,7 @@ export default defineScript({
     const p = game.player;
     if (want && !s.open) {
       s.open = true;
+      if (game.time > 1) game.do('sound', { name: 'gate_open', volume: 1 });
       if (me.settings.said && !s.saidIt) {
         s.saidIt = true;
         game.say(String(me.settings.said));

@@ -2249,6 +2249,92 @@
             "layout": "free",
             "padding": 0,
             "style": {}
+          },
+          {
+            "id": "hud.bar.t",
+            "name": "Letterbox",
+            "type": "panel",
+            "children": [],
+            "anchor": "t",
+            "x": 0,
+            "y": 0,
+            "w": 4000,
+            "h": 96,
+            "wMode": "fill",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {
+              "fill": "#000000"
+            },
+            "visible": "{letterbox} = 1",
+            "anim": [
+              {
+                "on": "show",
+                "kind": "slide",
+                "ms": 600,
+                "dir": "down"
+              },
+              {
+                "on": "hide",
+                "kind": "slide",
+                "ms": 800,
+                "dir": "up"
+              }
+            ]
+          },
+          {
+            "id": "hud.bar.b",
+            "name": "Letterbox",
+            "type": "panel",
+            "children": [],
+            "anchor": "b",
+            "x": 0,
+            "y": 0,
+            "w": 4000,
+            "h": 96,
+            "wMode": "fill",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {
+              "fill": "#000000"
+            },
+            "visible": "{letterbox} = 1",
+            "anim": [
+              {
+                "on": "show",
+                "kind": "slide",
+                "ms": 600,
+                "dir": "up"
+              },
+              {
+                "on": "hide",
+                "kind": "slide",
+                "ms": 800,
+                "dir": "down"
+              }
+            ]
+          },
+          {
+            "id": "hud.skip",
+            "name": "hud.skip",
+            "type": "text",
+            "children": [],
+            "anchor": "br",
+            "x": -24,
+            "y": -30,
+            "w": 120,
+            "h": 27,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "text": "P  skip",
+            "style": {
+              "fontSize": 20,
+              "color": "#f4ecd8",
+              "align": "right"
+            },
+            "visible": "{cutscene_on} = 1"
           }
         ],
         "anchor": "fill",
@@ -2528,6 +2614,12 @@
                           "type": "loadGame",
                           "params": {
                             "slot": "latest"
+                          }
+                        },
+                        {
+                          "type": "music",
+                          "params": {
+                            "name": "music_overworld"
                           }
                         },
                         {
@@ -3727,6 +3819,27 @@
                             "op": "close",
                             "screen": "role:title"
                           }
+                        },
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "book_page",
+                            "op": "set",
+                            "value": "0"
+                          }
+                        },
+                        {
+                          "type": "music",
+                          "params": {
+                            "name": "music_storybook"
+                          }
+                        },
+                        {
+                          "type": "uiScreen",
+                          "params": {
+                            "op": "open",
+                            "screen": "storytender-storybook"
+                          }
                         }
                       ],
                       "hover": [],
@@ -3863,6 +3976,27 @@
                           "params": {
                             "op": "close",
                             "screen": "role:title"
+                          }
+                        },
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "book_page",
+                            "op": "set",
+                            "value": "0"
+                          }
+                        },
+                        {
+                          "type": "music",
+                          "params": {
+                            "name": "music_storybook"
+                          }
+                        },
+                        {
+                          "type": "uiScreen",
+                          "params": {
+                            "op": "open",
+                            "screen": "storytender-storybook"
                           }
                         }
                       ],
@@ -4558,6 +4692,12 @@
                             "name": "saved_run",
                             "op": "set",
                             "value": "1"
+                          }
+                        },
+                        {
+                          "type": "music",
+                          "params": {
+                            "name": "music_title"
                           }
                         },
                         {
@@ -16721,6 +16861,12 @@
                 "on": {
                   "click": [
                     {
+                      "type": "music",
+                      "params": {
+                        "name": "music_overworld"
+                      }
+                    },
+                    {
                       "type": "uiScreen",
                       "params": {
                         "op": "close",
@@ -16799,6 +16945,12 @@
                       }
                     },
                     {
+                      "type": "music",
+                      "params": {
+                        "name": "music_title"
+                      }
+                    },
+                    {
                       "type": "uiScreen",
                       "params": {
                         "op": "close",
@@ -16834,6 +16986,719 @@
                   "fontSize": 18,
                   "color": "#3b2a1c99",
                   "align": "center"
+                }
+              }
+            ],
+            "anchor": "c",
+            "w": 1280,
+            "h": 720,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {}
+          }
+        ],
+        "anchor": "fill",
+        "layout": "free",
+        "padding": 0,
+        "style": {
+          "fill": "#e8d6ad"
+        }
+      },
+      "modal": true,
+      "back": "nothing",
+      "dim": 1
+    },
+    {
+      "id": "storytender-storybook",
+      "name": "Storybook",
+      "root": {
+        "id": "book.root",
+        "name": "Root",
+        "type": "panel",
+        "children": [
+          {
+            "id": "book.stage",
+            "name": "Stage",
+            "type": "panel",
+            "children": [
+              {
+                "id": "book.panel",
+                "name": "book.panel",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "book.head",
+                    "name": "book.head",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 60,
+                    "y": 24,
+                    "w": 900,
+                    "h": 49,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "The Last Storytender",
+                    "style": {
+                      "fontSize": 36,
+                      "color": "#3b2a1c",
+                      "align": "center",
+                      "bold": true
+                    }
+                  },
+                  {
+                    "id": "book.rule",
+                    "name": "book.rule",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 60,
+                    "y": 80,
+                    "w": 900,
+                    "h": 2,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#1b172273"
+                    }
+                  },
+                  {
+                    "id": "book.text0",
+                    "name": "book.text0",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 90,
+                    "y": 110,
+                    "w": 840,
+                    "h": 380,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Every world begins as someone's idea, written in a hurry, mostly in pencil.",
+                    "style": {
+                      "fontSize": 30,
+                      "color": "#1b1722",
+                      "italic": true
+                    },
+                    "visible": "{book_page} = 0"
+                  },
+                  {
+                    "id": "book.text1",
+                    "name": "book.text1",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 90,
+                    "y": 110,
+                    "w": 840,
+                    "h": 380,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Writing a world is the easy part. Keeping it is harder. For that there have always been Storytenders: small, patient people who live in the margins and look after whatever the author forgot.\n\nThey mend plot holes. They remember the minor characters. They read the unfinished parts aloud, so those parts know somebody is listening.",
+                    "style": {
+                      "fontSize": 30,
+                      "color": "#1b1722",
+                      "italic": true
+                    },
+                    "visible": "{book_page} = 1"
+                  },
+                  {
+                    "id": "book.text2",
+                    "name": "book.text2",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 90,
+                    "y": 110,
+                    "w": 840,
+                    "h": 380,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Once there were thousands. Then the Editors arrived, with red pens and very large scissors and a firm belief that less is more. Behind them came the Redaction: a white that eats everything, and is awfully tidy about it.",
+                    "style": {
+                      "fontSize": 30,
+                      "color": "#1b1722",
+                      "italic": true
+                    },
+                    "visible": "{book_page} = 2"
+                  },
+                  {
+                    "id": "book.text3",
+                    "name": "book.text3",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 90,
+                    "y": 110,
+                    "w": 840,
+                    "h": 380,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Now there is one left. Well. One doodle. In the margin of page forty-one, somebody sketched a small figure holding a lantern, and was then called to dinner.\n\nNobody finished the drawing. Nobody gave it a job.",
+                    "style": {
+                      "fontSize": 30,
+                      "color": "#1b1722",
+                      "italic": true
+                    },
+                    "visible": "{book_page} = 3"
+                  },
+                  {
+                    "id": "book.text4",
+                    "name": "book.text4",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 90,
+                    "y": 110,
+                    "w": 840,
+                    "h": 380,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "That is where you come in. You are not part of the main plot, which is exactly why the Redaction cannot quite see you.\n\nAnd you love this flawed, half-finished world. Somebody ought to.",
+                    "style": {
+                      "fontSize": 30,
+                      "color": "#1b1722",
+                      "italic": true
+                    },
+                    "visible": "{book_page} = 4"
+                  },
+                  {
+                    "id": "book.text5",
+                    "name": "book.text5",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 90,
+                    "y": 110,
+                    "w": 840,
+                    "h": 380,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "So.\n\nTurn the page.",
+                    "style": {
+                      "fontSize": 30,
+                      "color": "#1b1722",
+                      "italic": true
+                    },
+                    "visible": "{book_page} = 5"
+                  },
+                  {
+                    "id": "book.turn0",
+                    "name": "Turn the page",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "book.turn0.t",
+                        "name": "book.turn0.t",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 10,
+                        "w": 260,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Turn the page",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722",
+                          "align": "center"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 380,
+                    "y": 510,
+                    "w": 260,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3
+                    },
+                    "visible": "{book_page} = 0",
+                    "states": {
+                      "hover": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      },
+                      "focus": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "book_page",
+                            "op": "set",
+                            "value": "1"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "book.turn1",
+                    "name": "Turn the page",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "book.turn1.t",
+                        "name": "book.turn1.t",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 10,
+                        "w": 260,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Turn the page",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722",
+                          "align": "center"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 380,
+                    "y": 510,
+                    "w": 260,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3
+                    },
+                    "visible": "{book_page} = 1",
+                    "states": {
+                      "hover": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      },
+                      "focus": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "book_page",
+                            "op": "set",
+                            "value": "2"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "book.turn2",
+                    "name": "Turn the page",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "book.turn2.t",
+                        "name": "book.turn2.t",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 10,
+                        "w": 260,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Turn the page",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722",
+                          "align": "center"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 380,
+                    "y": 510,
+                    "w": 260,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3
+                    },
+                    "visible": "{book_page} = 2",
+                    "states": {
+                      "hover": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      },
+                      "focus": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "book_page",
+                            "op": "set",
+                            "value": "3"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "book.turn3",
+                    "name": "Turn the page",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "book.turn3.t",
+                        "name": "book.turn3.t",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 10,
+                        "w": 260,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Turn the page",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722",
+                          "align": "center"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 380,
+                    "y": 510,
+                    "w": 260,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3
+                    },
+                    "visible": "{book_page} = 3",
+                    "states": {
+                      "hover": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      },
+                      "focus": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "book_page",
+                            "op": "set",
+                            "value": "4"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "book.turn4",
+                    "name": "Turn the page",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "book.turn4.t",
+                        "name": "book.turn4.t",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 10,
+                        "w": 260,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Turn the page",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722",
+                          "align": "center"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 380,
+                    "y": 510,
+                    "w": 260,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3
+                    },
+                    "visible": "{book_page} = 4",
+                    "states": {
+                      "hover": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      },
+                      "focus": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "book_page",
+                            "op": "set",
+                            "value": "5"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "book.turn5",
+                    "name": "Begin",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "book.turn5.t",
+                        "name": "book.turn5.t",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 10,
+                        "w": 260,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Begin",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722",
+                          "align": "center"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 380,
+                    "y": 510,
+                    "w": 260,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3
+                    },
+                    "visible": "{book_page} = 5",
+                    "states": {
+                      "hover": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      },
+                      "focus": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "book_seen",
+                            "op": "set",
+                            "value": "1"
+                          }
+                        },
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "play_k_wake",
+                            "op": "set",
+                            "value": "1"
+                          }
+                        },
+                        {
+                          "type": "music",
+                          "params": {
+                            "name": "music_overworld"
+                          }
+                        },
+                        {
+                          "type": "uiScreen",
+                          "params": {
+                            "op": "close",
+                            "screen": "storytender-storybook"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    }
+                  },
+                  {
+                    "id": "book.skip",
+                    "name": "Skip",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "book.skip.t",
+                        "name": "book.skip.t",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 0,
+                        "y": 10,
+                        "w": 150,
+                        "h": 35,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Skip",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "#1b1722",
+                          "align": "center"
+                        }
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 830,
+                    "y": 510,
+                    "w": 150,
+                    "h": 54,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3
+                    },
+                    "visible": "{book_page} < 5",
+                    "states": {
+                      "hover": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      },
+                      "focus": {
+                        "fill": "#fff6dc",
+                        "borderWidth": 5
+                      }
+                    },
+                    "on": {
+                      "click": [
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "book_seen",
+                            "op": "set",
+                            "value": "1"
+                          }
+                        },
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "play_k_wake",
+                            "op": "set",
+                            "value": "1"
+                          }
+                        },
+                        {
+                          "type": "music",
+                          "params": {
+                            "name": "music_overworld"
+                          }
+                        },
+                        {
+                          "type": "uiScreen",
+                          "params": {
+                            "op": "close",
+                            "screen": "storytender-storybook"
+                          }
+                        }
+                      ],
+                      "hover": [],
+                      "change": []
+                    }
+                  }
+                ],
+                "anchor": "tl",
+                "x": 130,
+                "y": 60,
+                "w": 1020,
+                "h": 600,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#f6ecd2",
+                  "border": "#1e140c",
+                  "borderWidth": 6,
+                  "radius": 8,
+                  "shadow": true
                 }
               }
             ],

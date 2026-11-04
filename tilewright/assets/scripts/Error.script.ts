@@ -53,6 +53,7 @@ export default defineScript({
   },
   update(me, game) {
     const v = game.vars;
+    if (v.cutscene_on) return; // a cutscene is playing: everyone stands still
     const s = me.state;
     const kind = Number(me.settings.kind);
     const dt = game.dt;
@@ -423,6 +424,7 @@ function burn(me: ScriptEntity, amount: number): void {
 
 /** Seen it: chase, and raise the alarm for the Errors within 170 px. */
 function enterChase(me: ScriptEntity, game: ScriptGame): void {
+  game.do('sound', { name: 'enemy_alert', volume: 1 });
   me.state.mode = 'chase';
   me.state.lost = 0;
   alarm(me, game);

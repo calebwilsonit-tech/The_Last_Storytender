@@ -34,6 +34,16 @@ for (let i = 0; i < 2 && /Title/.test(await stack()); i++) {
   await page.keyboard.press('KeyE');
   await page.waitForTimeout(700);
 }
+// a new game opens the storybook, then the waking-up scene: turn the book's pages and skip the scene
+for (let i = 0; i < 12 && /Storybook/.test(await stack()); i++) {
+  await page.keyboard.press('KeyE');
+  await page.waitForTimeout(350);
+}
+await page.waitForTimeout(600);
+if (await page.evaluate(() => !!window.__play.sim.runtime.cutscene)) {
+  await page.keyboard.press('KeyP');
+  await page.waitForTimeout(900);
+}
 await page.evaluate(() => {
   window.__msgs = [];
   window.__play.sim.events.on('message', (e) => window.__msgs.push(String(e.text ?? '')));
@@ -64,13 +74,23 @@ const tagged = (tag) => page.evaluate((tag) => window.__play.sim.world.withTag(t
 const press = async (key, ms = 90) => { await page.keyboard.down(key); await page.waitForTimeout(ms); await page.keyboard.up(key); await page.waitForTimeout(160); };
 const hold = async (key, ms) => { await page.keyboard.down(key); await page.waitForTimeout(ms); await page.keyboard.up(key); await page.waitForTimeout(200); };
 const readAll = async () => {
+  // everything that is being said, and every cutscene that follows it (a conversation can end in a scene, a tick later)
   const seen = [];
-  for (let i = 0; i < 40; i++) {
+  let idle = 0;
+  for (let i = 0; i < 160; i++) {
+    const cs = await page.evaluate(() => !!window.__play.sim.runtime.cutscene);
     const v = await dialogue();
-    if (!v) break;
-    seen.push(v.kind === 'line' ? v.text : `[choice] ${v.prompt}`);
-    await press('KeyE');
-    await page.waitForTimeout(150);
+    if (!v && !cs) {
+      if (++idle >= 3) break;
+      await page.waitForTimeout(200);
+      continue;
+    }
+    idle = 0;
+    if (v) {
+      seen.push(v.kind === 'line' ? v.text : `[choice] ${v.prompt}`);
+      await press('KeyE');
+      await page.waitForTimeout(150);
+    } else await page.waitForTimeout(250);
   }
   return seen;
 };

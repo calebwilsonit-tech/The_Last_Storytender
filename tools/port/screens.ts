@@ -146,7 +146,7 @@ function title(): Screen {
   // saved_run (set by that button) says there is one now
   const has = '{host.hasSave} + {saved_run} > 0';
   const items: Item[] = [
-    { id: 'title.continue', label: 'Continue', click: [act('loadGame', { slot: 'latest' }), close('role:title')], visible: has },
+    { id: 'title.continue', label: 'Continue', click: [act('loadGame', { slot: 'latest' }), act('music', { name: 'music_overworld' }), close('role:title')], visible: has },
     { id: 'title.new.save', label: 'New Game', click: [open(BEGIN)], visible: has },
     { id: 'title.new', label: 'New Game', click: [open(DIFFICULTY)], visible: '{host.hasSave} + {saved_run} = 0' },
     { id: 'title.settings', label: 'Settings', click: [open('role:settings')] },
@@ -171,7 +171,7 @@ function difficulty(): Screen {
   ];
   // the engine's own difficulty setting only knows easy / normal / hard and scales the damage she takes; the game's Story and Normal are the variable
   // `difficulty` (the enemy scripts read it), so the engine's stays on normal (a save refuses any other word)
-  const pick = (v: string): Act[] => [act('setSetting', { name: 'difficulty', value: 'normal' }), setVar('difficulty', v), setVar('difficulty_locked', '1'), close(DIFFICULTY), close('role:title')];
+  const pick = (v: string): Act[] => [act('setSetting', { name: 'difficulty', value: 'normal' }), setVar('difficulty', v), setVar('difficulty_locked', '1'), close(DIFFICULTY), close('role:title'), setVar('book_page', '0'), act('music', { name: 'music_storybook' }), open(BOOK)];
   const items: Item[] = [
     { id: 'diff.story', label: 'Story', desc: 'Gentler. Enemies hit softer; crumpling costs nothing.', click: pick('story') },
     { id: 'diff.normal', label: 'Normal', desc: 'The intended game. Crumpling costs Mnemosynth and restarts the room.', click: pick('normal') },
@@ -191,7 +191,7 @@ function pause(): Screen {
     { id: 'pause.restart', label: 'Restart this dungeon', click: [open(RESTART)], visible: '{dungeon_menu}' },
     { id: 'pause.map', label: 'Map', click: [open('role:travel')] },
     { id: 'pause.settings', label: 'Settings', click: [open('role:settings')] },
-    { id: 'pause.title', label: 'Save and return to title', click: [act('saveGame', { slot: 'autosave' }), setVar('saved_run', '1'), close('role:pause'), open('role:title')] },
+    { id: 'pause.title', label: 'Save and return to title', click: [act('saveGame', { slot: 'autosave' }), setVar('saved_run', '1'), act('music', { name: 'music_title' }), close('role:pause'), open('role:title')] },
     { id: 'pause.quit', label: 'Quit game', click: [act('saveGame', { slot: 'autosave' }), act('quitGame')], visible: '{host.quit}' },
   ];
   const kids = [
@@ -759,11 +759,46 @@ function endingScreen(): Screen {
     rule('end.rule', 420, 290, 440, C.gold, 4),
     text('end.body', 'Thistledown is written in, and the Margin Gate stands open. Whatever lies beyond it will have to wait for the next chapter.', 300, 318, 28, C.inkBrown, { w: 680, h: 110, style: { align: 'center' } }),
     text('end.thanks', 'Thank you for playing.', 0, 440, 40, C.ink, { w: 1280, style: { align: 'center' } }),
-    btn('end.keep', 'Keep exploring', 520, [close(ENDING)]),
-    btn('end.title.go', 'Return to the title', 600, [act('saveGame', { slot: 'autosave' }), setVar('saved_run', '1'), close(ENDING), open('role:title')]),
+    btn('end.keep', 'Keep exploring', 520, [act('music', { name: 'music_overworld' }), close(ENDING)]),
+    btn('end.title.go', 'Return to the title', 600, [act('saveGame', { slot: 'autosave' }), setVar('saved_run', '1'), act('music', { name: 'music_title' }), close(ENDING), open('role:title')]),
     text('end.credits', 'Made with Tilewright', 0, 684, 18, '#3b2a1c99', { w: 1280, style: { align: 'center' } }),
   ];
   return screen('End of the Prologue', stage('end', kids, C.paper), { id: ENDING, back: 'nothing', dim: 1 });
+}
+
+// ---------------------------------------------------------------- the opening storybook (intro_book.gd)
+
+export const BOOK = 'storytender-storybook';
+/** The six spreads of the book that opens a new game (intro_book.gd SPREADS). */
+const SPREADS = [
+  'Every world begins as someone\'s idea, written in a hurry, mostly in pencil.',
+  'Writing a world is the easy part. Keeping it is harder. For that there have always been Storytenders: small, patient people who live in the margins and look after whatever the author forgot.\n\nThey mend plot holes. They remember the minor characters. They read the unfinished parts aloud, so those parts know somebody is listening.',
+  'Once there were thousands. Then the Editors arrived, with red pens and very large scissors and a firm belief that less is more. Behind them came the Redaction: a white that eats everything, and is awfully tidy about it.',
+  'Now there is one left. Well. One doodle. In the margin of page forty-one, somebody sketched a small figure holding a lantern, and was then called to dinner.\n\nNobody finished the drawing. Nobody gave it a job.',
+  'That is where you come in. You are not part of the main plot, which is exactly why the Redaction cannot quite see you.\n\nAnd you love this flawed, half-finished world. Somebody ought to.',
+  'So.\n\nTurn the page.',
+];
+
+/** The book on a desk: a page of its words at a time, turned with a button; skipping goes straight to waking up. */
+function bookScreen(): Screen {
+  const done: Act[] = [setVar('book_seen', '1'), setVar('play_k_wake', '1'), act('music', { name: 'music_overworld' }), close(BOOK)];
+  const btn = (id: string, label: string, x: number, w2: number, visible: string, click: Act[]): W =>
+    box(id, x, 510, w2, 54, { fill: C.paperLight, border: C.inkBrown, borderWidth: 3 }, [text(`${id}.t`, label, 0, 10, 26, C.ink, { w: w2, style: { align: 'center' } })], {
+      name: label,
+      visible,
+      states: { hover: { fill: '#fff6dc', borderWidth: 5 }, focus: { fill: '#fff6dc', borderWidth: 5 } },
+      on: { click, hover: [], change: [] },
+    });
+  const pages = SPREADS.map((t, i) => text(`book.text${i}`, t, 90, 110, 30, C.ink, { w: 840, h: 380, visible: `{book_page} = ${i}`, style: { italic: true } }));
+  const turn = (i: number): W => btn(`book.turn${i}`, i < SPREADS.length - 1 ? 'Turn the page' : 'Begin', 380, 260, `{book_page} = ${i}`, i < SPREADS.length - 1 ? [setVar('book_page', `${i + 1}`)] : done);
+  const panel = box('book.panel', 130, 60, 1020, 600, { fill: C.paperLight, border: C.leatherEdge, borderWidth: 6, radius: 8, shadow: true }, [
+    text('book.head', 'The Last Storytender', 60, 24, 36, C.inkBrown, { w: 900, style: { align: 'center', bold: true } }),
+    rule('book.rule', 60, 80, 900, '#1b172273'),
+    ...pages,
+    ...Array.from({ length: SPREADS.length }, (_, i) => turn(i)),
+    btn('book.skip', 'Skip', 830, 150, '{book_page} < 5', done),
+  ]);
+  return screen('Storybook', stage('book', [panel], C.paper), { id: BOOK, back: 'nothing', dim: 1 });
 }
 
 /** The Margin Gate: two posts and an arch, small, beside the renown count (it opens at 220). */
@@ -821,7 +856,9 @@ function hud(usable: string[]): Screen {
   ], { name: 'Region', anchor: 'tr', x: -16, y: 14, visible: '{region_show}', anim: [{ on: 'show', kind: 'fade', ms: 600, dir: 'down' }, { on: 'hide', kind: 'fade', ms: 900, dir: 'up' }] });
   // what the Scissor-Man's clipboard holds (Scissor.script.ts), above the boss bar
   const clip = box('hud.clip', 0, 0, 340, 44, { fill: '#f6ecd2f0', border: C.inkBrown, borderWidth: 3, radius: 10 }, [text('hud.clip.t', 'Clipboard: {clip_text}   V: paste', 0, 8, 22, C.inkBrown, { w: 340, style: { align: 'center', bold: true } })], { name: 'Clipboard', anchor: 'b', x: 0, y: -110, visible: '{clip_held} = 1' });
-  const root = w('panel', 'hud.root', { name: 'Root', anchor: 'fill', layout: 'free', padding: 0, style: {}, children: [topLeft, region, bossBar(), clip, quickSlots(usable)] });
+  const bars = ['t', 'b'].map((a) => box(`hud.bar.${a}`, 0, 0, 4000, 96, { fill: '#000000' }, [], { name: 'Letterbox', anchor: a, wMode: 'fill', visible: '{letterbox} = 1', anim: [{ on: 'show', kind: 'slide', ms: 600, dir: a === 't' ? 'down' : 'up' }, { on: 'hide', kind: 'slide', ms: 800, dir: a === 't' ? 'up' : 'down' }] }));
+  const skip = text('hud.skip', 'P  skip', 0, 0, 20, '#f4ecd8', { w: 120, anchor: 'br', x: -24, y: -30, visible: '{cutscene_on} = 1', style: { align: 'right' } });
+  const root = w('panel', 'hud.root', { name: 'Root', anchor: 'fill', layout: 'free', padding: 0, style: {}, children: [topLeft, region, bossBar(), clip, quickSlots(usable), ...bars, skip] });
   return { ...screen('HUD', root, { id: 'storytender-hud', role: 'hud', modal: false, back: 'pass' }), opensOnStart: true } as Screen;
 }
 
@@ -839,7 +876,7 @@ export function uiTheme(schemaVersion: number): object {
 export function buildScreens(itemIds: string[], schemaVersion: number, paperTile: number, usable: string[] = itemIds, names: MapNames = { regions: [], posts: [], doors: [] }): object {
   return {
     schemaVersion,
-    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), settings(), binder(itemIds), indexScreen(), proofreadScreen(), endingScreen(), map(paperTile, names)],
+    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), settings(), binder(itemIds), indexScreen(), proofreadScreen(), endingScreen(), bookScreen(), map(paperTile, names)],
     prefabs: [
       { name: 'Lamp', widget: lamp() },
       { name: 'Here', widget: here() },

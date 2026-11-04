@@ -1,108 +1,43 @@
 {
   "schemaVersion": 1,
   "name": "maud",
-  "start": "n16",
+  "start": "n7",
   "nodes": [
     {
       "id": "n1",
-      "type": "line",
-      "speaker": "Lorem Ipsum",
-      "text": "Consectetur...",
-      "next": "n2"
+      "type": "set",
+      "variable": "play_k_maud",
+      "op": "set",
+      "value": 1
     },
     {
       "id": "n2",
       "type": "line",
       "speaker": "Maud",
-      "text": "...Oh. The oven's warm.",
+      "text": "Don't tell the Narrator I gave you the heel. It's the best part.",
       "next": "n3"
     },
     {
       "id": "n3",
       "type": "line",
       "speaker": "Maud",
-      "text": "I had a whole table of people in my head just now. All of them talking at once. I'd forgotten how loud it was. How good.",
-      "next": "n4"
+      "text": "Come by at dinner. There's always a chair now."
     },
     {
       "id": "n4",
       "type": "line",
-      "speaker": "Maud",
-      "text": "Here. Take these. A loaf is for carrying to someone who needs it. That's the only rule I've ever had.",
+      "speaker": "Lorem Ipsum",
+      "text": "Consectetur... adipiscing...",
       "next": "n5"
     },
     {
       "id": "n5",
       "type": "line",
       "speaker": "",
-      "text": "[i]She is already kneading something. The smell of bread spreads out across the square like a held breath let go.[/i]",
-      "next": "n6"
-    },
-    {
-      "id": "n6",
-      "type": "set",
-      "variable": "restored_maud",
-      "op": "set",
-      "value": 1,
-      "next": "n7"
-    },
-    {
-      "id": "n7",
-      "type": "set",
-      "variable": "mnemosynth",
-      "op": "add",
-      "value": 30,
-      "next": "n8"
-    },
-    {
-      "id": "n8",
-      "type": "set",
-      "variable": "renown",
-      "op": "add",
-      "value": 35,
-      "next": "n9"
-    },
-    {
-      "id": "n9",
-      "type": "give",
-      "item": "warm_loaf",
-      "amount": 3,
-      "next": "n10"
-    },
-    {
-      "id": "n10",
-      "type": "line",
-      "speaker": "",
-      "text": "Restored: Maud"
-    },
-    {
-      "id": "n11",
-      "type": "line",
-      "speaker": "Maud",
-      "text": "Don't tell the Narrator I gave you the heel. It's the best part.",
-      "next": "n12"
-    },
-    {
-      "id": "n12",
-      "type": "line",
-      "speaker": "Maud",
-      "text": "Come by at dinner. There's always a chair now."
-    },
-    {
-      "id": "n13",
-      "type": "line",
-      "speaker": "Lorem Ipsum",
-      "text": "Consectetur... adipiscing...",
-      "next": "n14"
-    },
-    {
-      "id": "n14",
-      "type": "line",
-      "speaker": "",
       "text": "[i]She is standing next to a cold oven, hands curled around nothing, as if holding a loaf that was never there.[/i]"
     },
     {
-      "id": "n15",
+      "id": "n6",
       "type": "branch",
       "if": {
         "kind": "variable",
@@ -111,10 +46,10 @@
         "value": 1
       },
       "then": "n1",
-      "else": "n13"
+      "else": "n4"
     },
     {
-      "id": "n16",
+      "id": "n7",
       "type": "branch",
       "if": {
         "kind": "variable",
@@ -122,8 +57,8 @@
         "op": ">=",
         "value": 1
       },
-      "then": "n11",
-      "else": "n15"
+      "then": "n2",
+      "else": "n6"
     }
   ]
 }

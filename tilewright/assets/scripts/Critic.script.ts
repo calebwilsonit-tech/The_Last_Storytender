@@ -29,6 +29,7 @@ export default defineScript({
     const s = me.state;
     const p = game.player;
     if (!p) return;
+    if (v.cutscene_on) return;
     const mult = v.difficulty === 'story' ? 0.6 : 1;
     s.t += game.dt;
     if (v.critic_down) {
@@ -48,7 +49,7 @@ export default defineScript({
     // stepping into the hall wakes it: its words first (critic_intro sets critic_awake at the end)
     if (inside && !v.critic_seen) {
       v.critic_seen = 1;
-      game.startDialogue('critic_intro');
+      v.play_k_critic_intro = 1;
       return;
     }
     const layers = 3 - (Number(v.shard_1 ?? 0) + Number(v.shard_2 ?? 0) + Number(v.shard_3 ?? 0));
@@ -99,7 +100,7 @@ export default defineScript({
     if (!v.critic_reckoning) {
       if (!s.reckonAsked) {
         s.reckonAsked = true;
-        game.startDialogue('critic_reckon');
+        v.play_k_critic_reckon = 1;
       }
       return;
     }
@@ -109,7 +110,7 @@ export default defineScript({
       if (!s.endAsked) {
         s.endAsked = true;
         v.boss_name = '';
-        game.startDialogue('critic_end');
+        v.play_k_critic_end = 1;
       }
       return;
     }

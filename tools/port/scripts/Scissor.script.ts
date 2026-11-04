@@ -58,6 +58,7 @@ export default defineScript({
     const p = game.player;
     const dt = game.dt;
     if (!p) return;
+    if (v.cutscene_on) return;
     if (s.finale) {
       finale(me, game);
       return;
@@ -147,6 +148,7 @@ export default defineScript({
         s.held = -1;
         v.clip_held = 0;
         v.clip_text = '';
+        game.do('sound', { name: 'paste', volume: 1 });
       }
     }
     // ---- the fight begins when she walks up the room
@@ -154,7 +156,7 @@ export default defineScript({
       if (Math.floor(p.y) <= 13) {
         s.started = true;
         v.boss_name = 'The Scissor-Man';
-        game.startDialogue('scissor_boss_intro');
+        v.play_k_scissor_intro = 1;
       }
       draw(me, game, target);
       return;
@@ -193,6 +195,7 @@ export default defineScript({
       s.sweep += dt;
       if (s.sweep >= 0.45 && !s.cutDone) {
         s.cutDone = true;
+        game.do('sound', { name: 'snip', volume: 1 });
         resolve(me, game, story);
       }
       if (s.sweep >= 0.9) {
@@ -283,6 +286,7 @@ function resolve(me: ScriptEntity, game: ScriptGame, story: boolean): void {
   }
   if (jammed) {
     s.jam = story ? 7 : 5.5;
+    game.do('sound', { name: 'clang', volume: 1 });
     s.lines = [];
     s.sweep = -1;
     game.say('The shears are caught in the patch. Now!');
@@ -349,7 +353,7 @@ function finale(me: ScriptEntity, game: ScriptGame): void {
   }
   if (s.ft > 1.4 && !s.said) {
     s.said = true;
-    game.startDialogue('scissor_finale');
+    v.play_k_scissor_finale = 1;
   }
   if (v.scissor_finale_done && !s.paid) {
     s.paid = true;

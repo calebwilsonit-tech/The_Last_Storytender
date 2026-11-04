@@ -23,6 +23,7 @@ export default defineScript({
   },
   update(me, game) {
     const v = game.vars;
+    if (v.cutscene_on) return;
     const s = me.state;
     const p = game.player;
     if (!p) return;
@@ -44,7 +45,7 @@ export default defineScript({
     const inside = p.x >= 30 && p.x <= 42 && p.y <= 6;
     if (inside && v.door_H && !v.spoiler_seen) {
       v.spoiler_seen = 1;
-      game.startDialogue('spoiler_intro');
+      v.play_k_spoiler_intro = 1;
       return;
     }
     let health = me.get('health');
@@ -76,11 +77,11 @@ export default defineScript({
       } else s.hp = hp.hp;
     }
     if (rewrites >= 5 && !reck) {
-      if (!s.reckonAsked) { s.reckonAsked = true; game.startDialogue('spoiler_reckon'); }
+      if (!s.reckonAsked) { s.reckonAsked = true; v.play_k_spoiler_reckon = 1; }
       return;
     }
     if (reck && hp && (hp.dead || hp.hp <= 0)) {
-      if (!s.endAsked) { s.endAsked = true; v.boss_name = ''; game.startDialogue('spoiler_end'); }
+      if (!s.endAsked) { s.endAsked = true; v.boss_name = ''; v.play_k_spoiler_end = 1; }
       return;
     }
     const fan = (n: number, speed: number, spread = 1.15, base = Math.atan2(p.y - me.y, p.x - me.x), full = false): void => {

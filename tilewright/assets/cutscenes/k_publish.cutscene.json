@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "name": "k_publish",
+  "skippable": true,
+  "steps": [
+    {
+      "id": "s1",
+      "async": false,
+      "type": "setVariable",
+      "name": "letterbox",
+      "value": 1
+    },
+    {
+      "id": "s2",
+      "async": false,
+      "type": "setVariable",
+      "name": "cutscene_on",
+      "value": 1
+    },
+    {
+      "id": "s3",
+      "async": false,
+      "type": "sound",
+      "name": "publish"
+    },
+    {
+      "id": "s4",
+      "async": false,
+      "type": "cameraTo",
+      "target": "tag:rift",
+      "seconds": 1.4,
+      "zoom": 1.2
+    },
+    {
+      "id": "s5",
+      "async": false,
+      "type": "message",
+      "text": "The Prologue is written. Whatever comes next, it has somewhere to begin."
+    },
+    {
+      "id": "s6",
+      "async": false,
+      "type": "wait",
+      "seconds": 1.5
+    },
+    {
+      "id": "s7",
+      "async": false,
+      "type": "shake",
+      "amount": 4,
+      "seconds": 1.2
+    },
+    {
+      "id": "s8",
+      "async": false,
+      "type": "fade",
+      "to": 0.85,
+      "seconds": 1.4,
+      "color": 16777215
+    },
+    {
+      "id": "s9",
+      "async": false,
+      "type": "wait",
+      "seconds": 0.5
+    },
+    {
+      "id": "s10",
+      "async": false,
+      "type": "fade",
+      "to": 0,
+      "seconds": 1.6,
+      "color": 16777215
+    },
+    {
+      "id": "s11",
+      "async": false,
+      "type": "cameraReset",
+      "seconds": 1.2
+    },
+    {
+      "id": "s12",
+      "async": false,
+      "type": "setVariable",
+      "name": "letterbox",
+      "value": 0
+    },
+    {
+      "id": "s13",
+      "async": false,
+      "type": "setVariable",
+      "name": "cutscene_on",
+      "value": 0
+    },
+    {
+      "id": "s14",
+      "async": false,
+      "type": "setVariable",
+      "name": "ended_k_publish",
+      "value": 1
+    }
+  ]
+}

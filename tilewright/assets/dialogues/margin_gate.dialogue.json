@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "margin_gate",
-  "start": "n10",
+  "start": "n7",
   "nodes": [
     {
       "id": "n1",
@@ -18,35 +18,13 @@
     },
     {
       "id": "n3",
-      "type": "line",
-      "speaker": "",
-      "text": "[i]The ribbon unties itself. The pages part like a curtain, and beyond them is white, and a faint sound like someone, far away, turning a page.[/i]",
-      "next": "n4"
-    },
-    {
-      "id": "n4",
-      "type": "line",
-      "speaker": "",
-      "text": "[i]There is nothing there yet. But there will be.[/i]",
-      "next": "n5"
-    },
-    {
-      "id": "n5",
       "type": "set",
-      "variable": "gate_opened",
-      "op": "set",
-      "value": 1,
-      "next": "n6"
-    },
-    {
-      "id": "n6",
-      "type": "set",
-      "variable": "ending_go",
+      "variable": "play_k_ending",
       "op": "set",
       "value": 1
     },
     {
-      "id": "n7",
+      "id": "n4",
       "type": "branch",
       "if": {
         "kind": "variable",
@@ -58,20 +36,20 @@
       "else": "n1"
     },
     {
-      "id": "n8",
+      "id": "n5",
       "type": "line",
       "speaker": "",
       "text": "[i]The Margin Gate is shut, a wall of pages bound with ribbon. Its lock is shaped like a full stop.[/i]",
-      "next": "n9"
+      "next": "n6"
     },
     {
-      "id": "n9",
+      "id": "n6",
       "type": "line",
       "speaker": "",
       "text": "[i]Whatever lies beyond cannot be opened until the Prologue is finished: Thistledown still has an Editor.[/i]"
     },
     {
-      "id": "n10",
+      "id": "n7",
       "type": "branch",
       "if": {
         "kind": "variable",
@@ -79,8 +57,8 @@
         "op": ">=",
         "value": 1
       },
-      "then": "n7",
-      "else": "n8"
+      "then": "n4",
+      "else": "n5"
     }
   ]
 }

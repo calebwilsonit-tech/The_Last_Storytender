@@ -220,6 +220,7 @@ function useItem(me: ScriptEntity, game: ScriptGame, id: string): void {
     return;
   }
   game.do('takeItem', { item: id, amount: 1 });
+  game.do('sound', { name: u.ink ? 'heal' : 'item_use', volume: 1 });
   game.say(msg);
 }
 

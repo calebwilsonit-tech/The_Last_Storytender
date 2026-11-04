@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "name": "k_garrick",
+  "skippable": true,
+  "steps": [
+    {
+      "id": "s1",
+      "async": false,
+      "type": "setVariable",
+      "name": "letterbox",
+      "value": 1
+    },
+    {
+      "id": "s2",
+      "async": false,
+      "type": "setVariable",
+      "name": "cutscene_on",
+      "value": 1
+    },
+    {
+      "id": "s3",
+      "async": false,
+      "type": "cameraTo",
+      "target": "tag:garrick",
+      "seconds": 1.2,
+      "zoom": 1.45
+    },
+    {
+      "id": "s4",
+      "async": false,
+      "type": "wait",
+      "seconds": 0.3
+    },
+    {
+      "id": "s5",
+      "async": false,
+      "type": "dialogue",
+      "dialogue": "garrick_restoration"
+    },
+    {
+      "id": "s6",
+      "async": false,
+      "type": "wait",
+      "seconds": 0.3
+    },
+    {
+      "id": "s7",
+      "async": false,
+      "type": "cameraReset",
+      "seconds": 0.9
+    },
+    {
+      "id": "s8",
+      "async": false,
+      "type": "shake",
+      "amount": 3,
+      "seconds": 0.5
+    },
+    {
+      "id": "s9",
+      "async": false,
+      "type": "setVariable",
+      "name": "letterbox",
+      "value": 0
+    },
+    {
+      "id": "s10",
+      "async": false,
+      "type": "setVariable",
+      "name": "cutscene_on",
+      "value": 0
+    },
+    {
+      "id": "s11",
+      "async": false,
+      "type": "setVariable",
+      "name": "ended_k_garrick",
+      "value": 1
+    }
+  ]
+}

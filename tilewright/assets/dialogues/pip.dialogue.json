@@ -1,108 +1,43 @@
 {
   "schemaVersion": 1,
   "name": "pip",
-  "start": "n16",
+  "start": "n7",
   "nodes": [
     {
       "id": "n1",
-      "type": "line",
-      "speaker": "Lorem Ipsum",
-      "text": "Dolor... sit... ",
-      "next": "n2"
+      "type": "set",
+      "variable": "play_k_pip",
+      "op": "set",
+      "value": 1
     },
     {
       "id": "n2",
       "type": "line",
       "speaker": "Pip",
-      "text": "...Who are you?",
+      "text": "I found a word in the sky. It said 'Once'. Do you think it's a good one?",
       "next": "n3"
     },
     {
       "id": "n3",
       "type": "line",
       "speaker": "Pip",
-      "text": "Oh. You're the doodle from the page.",
-      "next": "n4"
+      "text": "I'm not going to read ahead. Not this time. I'm going to find out the slow way."
     },
     {
       "id": "n4",
       "type": "line",
-      "speaker": "Pip",
-      "text": "I was reading a book and then I wasn't. It was scary. But I think I finished a chapter.",
+      "speaker": "Lorem Ipsum",
+      "text": "Dolor sit... amet? Amet.",
       "next": "n5"
     },
     {
       "id": "n5",
       "type": "line",
-      "speaker": "Pip",
-      "text": "Mister Garrick says you can swing a quill. Will you show me how to hold one? I want to write the next page myself.",
-      "next": "n6"
-    },
-    {
-      "id": "n6",
-      "type": "line",
-      "speaker": "",
-      "text": "[i]He is smiling at the sky, where the underside of the next page is very faintly beginning to show text. It is not an ending. It is a sentence that starts with \"Once.\"[/i]",
-      "next": "n7"
-    },
-    {
-      "id": "n7",
-      "type": "set",
-      "variable": "restored_pip",
-      "op": "set",
-      "value": 1,
-      "next": "n8"
-    },
-    {
-      "id": "n8",
-      "type": "set",
-      "variable": "mnemosynth",
-      "op": "add",
-      "value": 30,
-      "next": "n9"
-    },
-    {
-      "id": "n9",
-      "type": "set",
-      "variable": "renown",
-      "op": "add",
-      "value": 35,
-      "next": "n10"
-    },
-    {
-      "id": "n10",
-      "type": "line",
-      "speaker": "",
-      "text": "Restored: Pip"
-    },
-    {
-      "id": "n11",
-      "type": "line",
-      "speaker": "Pip",
-      "text": "I found a word in the sky. It said 'Once'. Do you think it's a good one?",
-      "next": "n12"
-    },
-    {
-      "id": "n12",
-      "type": "line",
-      "speaker": "Pip",
-      "text": "I'm not going to read ahead. Not this time. I'm going to find out the slow way."
-    },
-    {
-      "id": "n13",
-      "type": "line",
-      "speaker": "Lorem Ipsum",
-      "text": "Dolor sit... amet? Amet.",
-      "next": "n14"
-    },
-    {
-      "id": "n14",
-      "type": "line",
       "speaker": "",
       "text": "[i]A storybook lies open at his feet. Whatever he was reading, he has been standing here since.[/i]"
     },
     {
-      "id": "n15",
+      "id": "n6",
       "type": "branch",
       "if": {
         "kind": "variable",
@@ -111,10 +46,10 @@
         "value": 1
       },
       "then": "n1",
-      "else": "n13"
+      "else": "n4"
     },
     {
-      "id": "n16",
+      "id": "n7",
       "type": "branch",
       "if": {
         "kind": "variable",
@@ -122,8 +57,8 @@
         "op": ">=",
         "value": 1
       },
-      "then": "n11",
-      "else": "n15"
+      "then": "n2",
+      "else": "n6"
     }
   ]
 }

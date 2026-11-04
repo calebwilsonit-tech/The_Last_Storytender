@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "name": "k_wake",
+  "skippable": true,
+  "steps": [
+    {
+      "id": "s1",
+      "async": false,
+      "type": "setVariable",
+      "name": "cutscene_on",
+      "value": 1
+    },
+    {
+      "id": "s2",
+      "async": false,
+      "type": "message",
+      "text": "Page forty-one. The pencil lines are still wet."
+    },
+    {
+      "id": "s3",
+      "async": false,
+      "type": "wait",
+      "seconds": 3
+    },
+    {
+      "id": "s4",
+      "async": false,
+      "type": "message",
+      "text": "Walk with W A S D. Speak or take with E."
+    },
+    {
+      "id": "s5",
+      "async": false,
+      "type": "wait",
+      "seconds": 3
+    },
+    {
+      "id": "s6",
+      "async": false,
+      "type": "message",
+      "text": "Strike with J, dash with Shift, shine the lantern by holding Q."
+    },
+    {
+      "id": "s7",
+      "async": false,
+      "type": "wait",
+      "seconds": 3
+    },
+    {
+      "id": "s8",
+      "async": false,
+      "type": "message",
+      "text": "Once, there was a world that someone forgot to finish."
+    },
+    {
+      "id": "s9",
+      "async": false,
+      "type": "wait",
+      "seconds": 3.4
+    },
+    {
+      "id": "s10",
+      "async": false,
+      "type": "message",
+      "text": "And in its margins, a small drawing woke up."
+    },
+    {
+      "id": "s11",
+      "async": false,
+      "type": "wait",
+      "seconds": 3.4
+    },
+    {
+      "id": "s12",
+      "async": false,
+      "type": "setVariable",
+      "name": "letterbox",
+      "value": 0
+    },
+    {
+      "id": "s13",
+      "async": false,
+      "type": "setVariable",
+      "name": "cutscene_on",
+      "value": 0
+    },
+    {
+      "id": "s14",
+      "async": false,
+      "type": "setVariable",
+      "name": "ended_k_wake",
+      "value": 1
+    }
+  ]
+}

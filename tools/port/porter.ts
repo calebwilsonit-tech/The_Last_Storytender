@@ -18,7 +18,8 @@ import '@tilewright/bundled-plugins';
 import { importPng } from '@tw-editor/renderer/studio/assets';
 import { decorateOverworld, writeOverworldTalk, type World } from './overworld';
 import { bridgeCells, siteExtras } from './sites';
-import { decorateScissor, makeClipping, scissorExtras, writeScissorTalk } from './scissor';
+import { decorateScissor, scissorExtras, writeScissorTalk } from './scissor';
+import { writeCutscenes } from './cutscenes';
 
 const SNAP = process.env.SNAP!;
 const ART = process.env.ART!;
@@ -512,6 +513,17 @@ function mapNames(): MapNames {
   return mapNamesFrom((JSON.parse(readFileSync(join(DATA, 'prologue_map.json'), 'utf8')) as { constants: MapConstants }).constants);
 }
 
+/** The music and the sound of her steps in each place. */
+const PLACE_AUDIO: Record<string, [string, string]> = {
+  overworld: ['music_overworld', 'step_grass'],
+  forge: ['music_forge', 'step_stone'],
+  pip: ['music_pip', 'step_wood'],
+  maud: ['music_maud', 'step_wood'],
+  scissor: ['music_scissor', 'step_wood'],
+  proof: ['music_forge', 'step_stone'],
+  weighing: ['music_forge', 'step_stone'],
+};
+
 function storytenderKit(p: EntityData, scene: string): void {
   const c = p.components;
   Object.assign(c.playerController as object, { speed: 4.2, runMultiplier: 1, jumpSpeed: 0 });
@@ -521,6 +533,7 @@ function storytenderKit(p: EntityData, scene: string): void {
   attach(c, 'dodge', { speed: 14.5, seconds: 0.2, cooldown: 0.75, invulnerable: true });
   attach(c, 'light', { radius: 1.2, intensity: 0.35, color: 'cool', shadows: true, flicker: 0.15, mode: 'always' });
   attach(c, 'echoRecorder', { seconds: 9, capacity: 0, capacityVariable: '', ending: 'hold', ghostAlpha: 0.55 });
+  attach(c, 'script_Director', { music: PLACE_AUDIO[scene]?.[0] ?? 'music_overworld', step: PLACE_AUDIO[scene]?.[1] ?? 'step_grass' });
   attach(c, 'script_Storytender', { speed: 4.2, lanternRadius: 4.9, echoesHere: scene === 'forge' ? 1 : 0, ...placeSettings(scene) });
 }
 
@@ -826,6 +839,7 @@ function main(): void {
     writeForgeTalk(world);
     writePipTalk(world);
     writeScissorTalk(world);
+    writeCutscenes(OUT, CURRENT_SCHEMA_VERSION, world);
     writeMaudTalk(world);
   }
   writeForgePrefabs(OUT, CURRENT_SCHEMA_VERSION, flatArt('pool', [138, 20, 20], 192, 96), flatArt('bolt', [70, 12, 16], 18, 18));

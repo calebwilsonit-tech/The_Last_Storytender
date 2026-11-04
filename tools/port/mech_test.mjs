@@ -34,6 +34,16 @@ for (let i = 0; i < 2 && /Title/.test(await stack()); i++) {
   await page.keyboard.press('KeyE');
   await page.waitForTimeout(700);
 }
+// a new game opens the storybook, then the waking-up scene: turn the book's pages and skip the scene
+for (let i = 0; i < 12 && /Storybook/.test(await stack()); i++) {
+  await page.keyboard.press('KeyE');
+  await page.waitForTimeout(350);
+}
+await page.waitForTimeout(600);
+if (await page.evaluate(() => !!window.__play.sim.runtime.cutscene)) {
+  await page.keyboard.press('KeyP');
+  await page.waitForTimeout(900);
+}
 await page.evaluate(() => {
   window.__msgs = [];
   window.__play.sim.events.on('message', (e) => window.__msgs.push(String(e.text ?? '')));

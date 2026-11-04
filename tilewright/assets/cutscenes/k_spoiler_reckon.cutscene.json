@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "name": "k_spoiler_reckon",
+  "skippable": true,
+  "steps": [
+    {
+      "id": "s1",
+      "async": false,
+      "type": "setVariable",
+      "name": "letterbox",
+      "value": 1
+    },
+    {
+      "id": "s2",
+      "async": false,
+      "type": "setVariable",
+      "name": "cutscene_on",
+      "value": 1
+    },
+    {
+      "id": "s3",
+      "async": false,
+      "type": "cameraTo",
+      "target": "tag:boss",
+      "seconds": 1.4,
+      "zoom": 1.3
+    },
+    {
+      "id": "s4",
+      "async": false,
+      "type": "wait",
+      "seconds": 0.3
+    },
+    {
+      "id": "s5",
+      "async": false,
+      "type": "dialogue",
+      "dialogue": "spoiler_reckon"
+    },
+    {
+      "id": "s6",
+      "async": false,
+      "type": "wait",
+      "seconds": 0.3
+    },
+    {
+      "id": "s7",
+      "async": false,
+      "type": "cameraReset",
+      "seconds": 0.9
+    },
+    {
+      "id": "s8",
+      "async": false,
+      "type": "setVariable",
+      "name": "letterbox",
+      "value": 0
+    },
+    {
+      "id": "s9",
+      "async": false,
+      "type": "setVariable",
+      "name": "cutscene_on",
+      "value": 0
+    },
+    {
+      "id": "s10",
+      "async": false,
+      "type": "setVariable",
+      "name": "ended_k_spoiler_reckon",
+      "value": 1
+    }
+  ]
+}
