@@ -68,6 +68,8 @@ export function writeCutscenes(out: string, schemaVersion: number, w: World): nu
     { type: 'wait', seconds: 0.4 },
     { type: 'cameraReset', seconds: 0.1 },
   ];
+  // after the end card is closed the world comes back out of the white (a fade lasts until the scene changes, and the card does not change it)
+  list.k_unfade = [{ type: 'fade', to: 0, seconds: 1.2, color: 0xf6f3ea }];
   // the bosses: the camera to them for their words
   for (const [name, dialogue, zoom] of [
     ['k_critic_intro', 'critic_intro', 1.3],
@@ -85,7 +87,7 @@ export function writeCutscenes(out: string, schemaVersion: number, w: World): nu
   for (const [name, steps] of Object.entries(list)) {
     // the first steps put the black bars up and everyone still; the last take them away and say it is over. A skip runs the steps that are left,
     // so this is how the Director finds out a scene has ended even when it ended in a tick the scripts did not run (a conversation open).
-    const bars = name === 'k_wake' ? [] : [{ type: 'setVariable', name: 'letterbox', value: 1 }];
+    const bars = name === 'k_wake' || name === 'k_unfade' ? [] : [{ type: 'setVariable', name: 'letterbox', value: 1 }];
     const framed = [...bars, { type: 'setVariable', name: 'cutscene_on', value: 1 }, ...steps, { type: 'setVariable', name: 'letterbox', value: 0 }, { type: 'setVariable', name: 'cutscene_on', value: 0 }, { type: 'setVariable', name: `ended_${name}`, value: 1 }];
     const data = { schemaVersion, name, skippable: true, steps: framed.map((s, i) => ({ id: `s${i + 1}`, async: false, ...s })) };
     writeFileSync(join(dir, `${name}.cutscene.json`), JSON.stringify(data, null, 2) + '\n');

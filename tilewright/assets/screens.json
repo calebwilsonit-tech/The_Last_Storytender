@@ -18395,6 +18395,14 @@
                       }
                     },
                     {
+                      "type": "setVariable",
+                      "params": {
+                        "name": "play_k_unfade",
+                        "op": "set",
+                        "value": "1"
+                      }
+                    },
+                    {
                       "type": "uiScreen",
                       "params": {
                         "op": "close",
@@ -18476,6 +18484,14 @@
                       "type": "music",
                       "params": {
                         "name": "music_title"
+                      }
+                    },
+                    {
+                      "type": "setVariable",
+                      "params": {
+                        "name": "play_k_unfade",
+                        "op": "set",
+                        "value": "1"
                       }
                     },
                     {

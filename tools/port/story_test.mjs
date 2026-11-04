@@ -161,7 +161,7 @@ try {
   await page.waitForTimeout(2600);
   const keep = await page.evaluate(() => { const n = [...document.querySelectorAll('*')].filter((n) => n.children.length === 0 && (n.textContent ?? '').trim() === 'Keep exploring').find((n) => n.getBoundingClientRect().width > 0); const r = n?.getBoundingClientRect(); return r ? { x: r.x + r.width / 2, y: r.y + r.height / 2 } : null; });
   if (keep) await page.mouse.click(keep.x, keep.y);
-  await page.waitForTimeout(800);
+  await page.waitForTimeout(2200); // (the world comes back out of the white for a moment)
   // 8. the binder: use an Ink Vial
   await page.evaluate(() => { const h = window.__play.sim.world.withTag('player')[0].get('state:health'); h.hp = 40; });
   await setV({ 'item:ink_vial': 2 });

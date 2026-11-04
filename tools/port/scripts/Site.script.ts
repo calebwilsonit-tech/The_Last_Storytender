@@ -22,7 +22,11 @@ export default defineScript({
     s.waveT = 0;
     s.cells = {};
     s.shown = false;
-    if (me.settings.type === 'arena' && !game.vars[`site_${me.settings.id}`]) game.vars[`arena_${me.settings.id}_open`] = 1;
+    if (me.settings.type === 'arena' && !game.vars[`site_${me.settings.id}`]) {
+      // a fight left half-way (walked out, saved, loaded) is not kept: the gate is open and every wave sleeps again
+      game.vars[`arena_${me.settings.id}_open`] = 1;
+      for (let n = 0; n < Number(s.d.waves); n++) game.vars[`arena_${me.settings.id}_w${n}`] = 0;
+    }
   },
   update(me, game) {
     const v = game.vars;

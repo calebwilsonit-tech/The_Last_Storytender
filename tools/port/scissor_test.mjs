@@ -182,7 +182,8 @@ try {
     let jammed = false;
     for (let i = 0; i < 40 && !jammed; i++) { await page.waitForTimeout(250); jammed = (await msgs()).some((m) => /caught in the patch/i.test(m)); }
     check('a patch on his line jams his shears', jammed, '');
-    // hurt him while he is jammed
+    // hurt him while he is jammed (he is still sliding to the end of his line for the first moment)
+    await page.waitForTimeout(1000);
     const b2 = await boss();
     await placeAt(b2.x + 0.9, b2.y + 0.2);
     await face(b2.x, b2.y);

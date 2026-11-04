@@ -29,9 +29,10 @@ const OUTCOMES: Record<string, Outcome> = {
   k_scissor_intro: {},
   k_scissor_finale: { set: { scissor_finale_done: 1 } },
   k_wake: { set: { woke_up: 1 } },
+  k_unfade: {},
 };
 /** Scenes with no black bars (the waking up is just the page, and some words). */
-const NO_BARS = new Set(['k_wake']);
+const NO_BARS = new Set(['k_wake', 'k_unfade']);
 /** The music of each boss while it is awake (its name is what the boss scripts put in boss_name). */
 const BOSS_MUSIC: Record<string, string> = { 'The Critic': 'music_boss_critic', 'The Spoiler': 'music_boss_spoiler', 'The Cold Shoulder': 'music_boss_cold', 'The Scissor-Man': 'music_boss_scissor' };
 export default defineScript({

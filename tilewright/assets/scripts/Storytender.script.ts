@@ -48,6 +48,7 @@ export default defineScript({
     if (game.vars.attr_cost === undefined) game.vars.attr_cost = 20;
     if (game.vars.index_pick === undefined) game.vars.index_pick = 'ink';
     me.state.off = 99;
+    me.state.start = { x: me.x, y: me.y }; // where a memory or side room puts her back when she crumples with no post of its own rested at
     me.state.lesson = { hits: 0, dashed: false, lit: 0 };
   },
   update(me, game) {
@@ -83,8 +84,12 @@ export default defineScript({
     const hurt = me.get('state:health') as { hp: number; dead?: boolean } | undefined;
     // falls: 8 in Story, 15 in Normal, and never the last of her ink (player.gd)
     const fall = Math.max(0, Math.min(v.difficulty === 'story' ? 8 : 15, (hurt?.hp ?? 100) - 1));
-    const h0 = ink as { max: number; invulnerableSeconds?: number; fallDamage?: number } | undefined;
-    if (h0 && (h0.max !== maxInk || h0.invulnerableSeconds !== grace || h0.fallDamage !== fall)) me.set('health', { ...h0, max: maxInk, invulnerableSeconds: grace, fallDamage: fall });
+    const h0 = ink as { max: number; invulnerableSeconds?: number; fallDamage?: number; onDeath?: string } | undefined;
+    // in a memory or a side room the engine would carry her to the last post she rested at, which is out on the overworld (a checkpoint belongs to one
+    // scene): there she stays down, and this script stands her up again inside (below)
+    const dungeon = !me.settings.regions;
+    const dies = dungeon ? 'stay' : h0?.onDeath;
+    if (h0 && (h0.max !== maxInk || h0.invulnerableSeconds !== grace || h0.fallDamage !== fall || h0.onDeath !== dies)) me.set('health', { ...h0, max: maxInk, invulnerableSeconds: grace, fallDamage: fall, onDeath: dies });
     if (hurt && !hurt.dead && hurt.hp > 0) {
       let hp = hurt.hp;
       // Thick Paper: -0.5% damage taken a point (what a blow took is given back at once)
@@ -145,7 +150,12 @@ export default defineScript({
       game.say(CRUMPLED);
       // Story: back with 100 ink; Normal: 50 ink, and a seventh of what she carried is left where she fell, as crystals of 5
       const hs2 = me.get('state:health') as { hp: number } | undefined;
-      if (hs2) me.set('state:health', { ...hs2, hp: Math.min(maxInk, story ? 100 : 50) });
+      if (hs2) me.set('state:health', { ...hs2, hp: Math.min(maxInk, story ? 100 : 50), ...(dungeon ? { dead: false, iframes: 1.5, knock: null, trail: [] } : {}) });
+      // a dungeon's own last post, else where she came in
+      if (dungeon) {
+        const at = (me.state.post as { x: number; y: number } | undefined) ?? (me.state.start as { x: number; y: number });
+        me.moveTo(at.x, at.y);
+      }
       if (!story) {
         const lost = Math.floor((Number(v.mnemosynth ?? 0) * 0.15) / 5) * 5;
         if (lost > 0) {
@@ -159,7 +169,11 @@ export default defineScript({
       // with no post rested at she wakes at the start; one that fell in the town wakes in the town's square instead
       if (!v.rested_once && me.settings.regions && me.state.rows[Math.floor(prev.y)]?.[Math.floor(prev.x)] === 't') me.moveTo(TOWN[0]!, TOWN[1]!);
     }
-    if (game.eventsOf('rested').length > 0) v.rested_once = 1;
+    for (const e of game.eventsOf('rested')) {
+      v.rested_once = 1;
+      const post = game.findAll('tag:lantern-post').find((x) => x.id === e.entity);
+      if (post) me.state.post = { x: post.x, y: post.y + 1 }; // she wakes one cell in front of it, as the engine does
+    }
     me.state.prev = { x: me.x, y: me.y };
     // only things that can be used belong in the quick slots (a picked-up scrap is not one)
     for (const k of ['slot:1', 'slot:2']) if (v[k] && !USES[String(v[k])] && v[k] !== 'eraser_crumbs') v[k] = '';

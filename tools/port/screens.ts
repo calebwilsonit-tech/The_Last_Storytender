@@ -769,8 +769,8 @@ function endingScreen(): Screen {
     rule('end.rule', 420, 290, 440, C.gold, 4),
     text('end.body', 'Thistledown is written in, and the Margin Gate stands open. Whatever lies beyond it will have to wait for the next chapter.', 300, 318, 28, C.inkBrown, { w: 680, h: 110, style: { align: 'center' } }),
     text('end.thanks', 'Thank you for playing.', 0, 440, 40, C.ink, { w: 1280, style: { align: 'center' } }),
-    btn('end.keep', 'Keep exploring', 520, [act('music', { name: 'music_overworld' }), close(ENDING)]),
-    btn('end.title.go', 'Return to the title', 600, [act('saveGame', { slot: 'autosave' }), setVar('saved_run', '1'), act('music', { name: 'music_title' }), close(ENDING), open('role:title')]),
+    btn('end.keep', 'Keep exploring', 520, [act('music', { name: 'music_overworld' }), setVar('play_k_unfade', '1'), close(ENDING)]),
+    btn('end.title.go', 'Return to the title', 600, [act('saveGame', { slot: 'autosave' }), setVar('saved_run', '1'), act('music', { name: 'music_title' }), setVar('play_k_unfade', '1'), close(ENDING), open('role:title')]),
     text('end.credits', 'Made with Tilewright', 0, 684, 18, '#3b2a1c99', { w: 1280, style: { align: 'center' } }),
   ];
   return screen('End of the Prologue', stage('end', kids, C.paper), { id: ENDING, back: 'nothing', dim: 1 });
