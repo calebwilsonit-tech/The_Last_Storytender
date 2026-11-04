@@ -154,7 +154,8 @@ try {
   // 7. strike the training dummy (93,58) with the quill (J)
   await placeAt(93.5, 59.3);
   await page.waitForTimeout(400);
-  await press('KeyW', 120);
+  // W and D together walk straight along -y (the view is isometric), which is where the dummy stands
+  await page.keyboard.down('KeyW'); await page.keyboard.down('KeyD'); await page.waitForTimeout(120); await page.keyboard.up('KeyD'); await page.keyboard.up('KeyW'); await page.waitForTimeout(160);
   const hits0 = await page.evaluate(() => window.__play.sim.world.withTag('dummy')[0]?.get('state:health')?.hp ?? null);
   for (let i = 0; i < 3; i++) await press('KeyJ', 80);
   await page.waitForTimeout(500);

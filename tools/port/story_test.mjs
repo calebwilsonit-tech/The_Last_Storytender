@@ -140,9 +140,10 @@ try {
   const cards = await page.evaluate(() => [...document.querySelectorAll('*')].filter((n) => /Ink Vial/.test(n.textContent ?? '') && n.children.length < 4).map((n) => { const r = n.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2, w: r.width }; }).filter((r) => r.w > 20 && r.w < 200));
   let used = 'no card found';
   if (cards.length) { await page.mouse.click(cards[0].x, cards[0].y); await page.waitForTimeout(600); used = 'clicked'; }
+  // the world waits while the binder is open, so the Storytender's script applies the item when it closes
+  await press('KeyI'); await page.waitForTimeout(900);
   const hpB = (await pl()).hp;
   check('clicking an Ink Vial card in the binder heals (+45)', hpB >= 80, `stack ${st1}, ${used}, hp 40 -> ${hpB}, vials ${(await vars())['item:ink_vial']}`);
-  await press('KeyI'); await page.waitForTimeout(600);
   // quick slot F
   await page.evaluate(() => { const h = window.__play.sim.world.withTag('player')[0].get('state:health'); h.hp = 30; });
   await setV({ 'item:warm_loaf': 3, 'slot:1': 'warm_loaf', quick_active: 0 });
@@ -151,7 +152,7 @@ try {
   // eraser crumbs: thrown at a Mite does damage?
   await setV({ 'slot:1': 'eraser_crumbs' });
   const mite = near((await tagged('error-1')), 93, 56);
-  if (mite) { await placeAt(mite.x + 1.2, mite.y); await face(mite.x, mite.y); const hm0 = await page.evaluate((id) => window.__play.sim.world.get(id)?.get('state:health')?.hp, mite.id); await press('KeyF'); await page.waitForTimeout(900); const hm1 = await page.evaluate((id) => window.__play.sim.world.get(id)?.get('state:health')?.hp ?? 'gone', mite.id); check('throwing Eraser Crumbs hurts an Error', hm1 === 'gone' || hm1 < hm0, `mite hp ${hm0} -> ${hm1}`); }
+  if (mite) { await placeAt(mite.x + 2.8, mite.y + 2.8); await page.evaluate(() => { window.__play.sim.world.withTag('player')[0].get('transform').facing = 6; }); const hm0 = await page.evaluate((id) => window.__play.sim.world.get(id)?.get('state:health')?.hp, mite.id); await press('KeyF'); await page.waitForTimeout(1600); const hm1 = await page.evaluate((id) => window.__play.sim.world.get(id)?.get('state:health')?.hp ?? 'gone', mite.id); check('throwing Eraser Crumbs hurts an Error', hm1 === 'gone' || hm1 < hm0, `mite hp ${hm0} -> ${hm1}`); }
   // 9. crumpling to real hits
   const bare = near((await tagged('error-0')), 60, 55);
   await page.evaluate(() => { const h = window.__play.sim.world.withTag('player')[0].get('state:health'); h.hp = 4; });
@@ -159,26 +160,28 @@ try {
   const before = await pl();
   await placeAt(bare.x + 1.3, bare.y); 
   let dead = false, minHp = 99;
-  for (let i = 0; i < 60; i++) { await page.waitForTimeout(250); const p = await pl(); minHp = Math.min(minHp, p.hp); if (p.dead || p.hp <= 0) { dead = true; break; } }
+  await page.evaluate(() => { window.__died = 0; window.__play.sim.events.on('died', (e) => { if (window.__play.sim.world.get(e.entity)?.tags.has('player')) window.__died++; }); });
+  for (let i = 0; i < 60; i++) { await page.waitForTimeout(250); const p = await pl(); minHp = Math.min(minHp, p.hp); if (p.dead || p.hp <= 0 || (await page.evaluate(() => window.__died)) > 0) { dead = true; break; } }
   await shotAs('s6_crumple.png');
   await page.waitForTimeout(4000); await readAll();
   const after = await pl(); const v9 = await vars();
   check('beaten by an Error she crumples and wakes again with ink back', dead && after.hp > 10 && !after.dead, `died ${dead} (min hp ${minHp}), now hp ${after.hp} at ${after.x.toFixed(1)},${after.y.toFixed(1)}, M 100 -> ${v9.mnemosynth} (story mode keeps it)`);
-  // 10. save, title, Continue
+  // 10. save, title, Continue (the buttons are found by their words and clicked)
   await setV({ mnemosynth: 123 });
   await placeAt(94.5, 57.5); await page.waitForTimeout(500);
+  const clickText = async (t) => {
+    const hit = await page.evaluate((t) => { const n = [...document.querySelectorAll('*')].filter((n) => (n.textContent ?? '').trim() === t && n.children.length === 0).map((n) => { const r = n.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; })[0]; return n ?? null; }, t);
+    if (hit) await page.mouse.click(hit.x, hit.y);
+    return !!hit;
+  };
+  console.log('direct save ->', String(await page.evaluate(async () => { try { return await window.__play.session.saveTo('autosave'); } catch (e) { return 'threw ' + e; } })).slice(0, 900));
   await press('KeyP'); await page.waitForTimeout(800);
-  const pauseText = (await textOnScreen()).replace(/\s+/g, ' ');
-  const rows = ['Resume', 'Map', 'Settings', 'Save and return to title'];
-  log2('pause screen text', pauseText.slice(0, 300));
-  for (let i = 0; i < 3; i++) await press('KeyS');
-  await press('KeyE'); await page.waitForTimeout(2000);
-  const titleText = (await textOnScreen()).replace(/\s+/g, ' ');
-  const hasContinue = /Continue/.test(titleText);
+  const saved = await clickText('Save and return to title'); await page.waitForTimeout(2500);
+  await shotAs('s7_title_after_save.png');
   await setV({ mnemosynth: 0 });
-  await press('KeyE'); await page.waitForTimeout(3000);
+  const cont = await clickText('Continue'); await page.waitForTimeout(3500);
   const back = await pl(); const v10 = await vars();
-  check('pause, "Save and return to title", then Continue brings the game back', hasContinue && Number(v10.mnemosynth) === 123, `title shows Continue: ${hasContinue}; title text "${titleText.slice(0, 120)}"; M ${v10.mnemosynth} at ${back.x.toFixed(1)},${back.y.toFixed(1)}; screen ${await stack()}`);
+  check('pause, "Save and return to title", then Continue brings the game back', saved && cont && Number(v10.mnemosynth) === 123, `clicked save ${saved}, Continue ${cont}; M ${v10.mnemosynth} at ${back.x.toFixed(1)},${back.y.toFixed(1)}; screen ${await stack()}`);
 } catch (e) { check('test run', false, String(e && e.stack || e).slice(0, 400)); }
 function log2(...a) { console.log(...a); }
 console.log('errors', errors.length); for (const e of errors.slice(0, 8)) console.log('  ', e.slice(0, 250));

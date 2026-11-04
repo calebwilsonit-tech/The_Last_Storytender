@@ -431,6 +431,14 @@ function writePipPrefabs(): void {
   errorKit(mite, 1, '');
   write('SpoilerMite', { name: 'Error Mite', tags: mite.tags, components: mite.components, children: [] });
 }
+/** What a used item leaves in the world: the thrown Eraser Crumbs (Storytender.script.ts moves it along its arc and rubs things out). */
+function writeItemPrefabs(): void {
+  const icon = sprites.get(join(ICONS ?? '', 'icon_eraser_crumbs.png')) ?? (ICONS && existsSync(join(ICONS, 'icon_eraser_crumbs.png')) ? spriteFor(join(ICONS, 'icon_eraser_crumbs.png'), 'icon_eraser_crumbs') : '');
+  const sprite = icon ? { shape: 'box', color: 0xf4f0e6, w: 0.45, d: 0.45, height: 0.55, sortOffset: 0, visible: true, asset: icon } : { shape: 'box', color: 0xf4f0e6, w: 0.3, d: 0.3, height: 0.3, sortOffset: 0, visible: true };
+  const prefab = { schemaVersion: CURRENT_SCHEMA_VERSION, name: 'EraserBomb', root: { name: 'Eraser Crumbs', tags: ['eraser-bomb'], components: { sprite }, children: [] } };
+  mkdirSync(join(OUT, 'assets/prefabs'), { recursive: true });
+  writeFileSync(join(OUT, 'assets/prefabs/EraserBomb.prefab.json'), JSON.stringify(prefab, null, 2) + '\n');
+}
 let forgeAnvil: { x: number; y: number; h: number } | null = null;
 
 /** A plain flat picture: a diamond on the floor (a pool) or a round blot (a word in flight). */
@@ -703,10 +711,10 @@ function writeData(): { items: number; dialogues: number } {
     const rar = String(d.rarity ?? 'common');
     const col = (cat.RARITY_COLORS[rar] ?? '#ccccccff').slice(1, 7);
     const desc = [d.desc, d.flavor].filter((x) => typeof x === 'string' && x).join('\n');
-    const use = d.type === 'consumable' || d.use
-      ? HEAL[id] ? { heal: HEAL[id], consume: true, message: '' }
-      : id === 'lantern_oil' ? { setVariable: 'light', setValue: 100, consume: true, message: 'The Lantern burns bright' }
-      : { setVariable: `used_${id}`, setValue: 1, consume: true, message: '' }
+    // every usable item sets use_<id>; Storytender.script.ts does the rest (ink, lantern, sleep, renown, Mnemosynth, the thrown crumbs) and
+    // takes the item itself, so an item that would do nothing right now is not used up (level_base.gd use_item)
+    const use = d.type === 'consumable' || d.use || HEAL[id]
+      ? { heal: 0, setVariable: `use_${id}`, setValue: 1, consume: false, message: '' }
       : undefined;
     return { id, name: String(d.name ?? id), description: desc, color: parseInt(col, 16), max: 0, ...(use ? { use } : {}) };
   });
@@ -752,6 +760,7 @@ function main(): void {
   }
   writeForgePrefabs(OUT, CURRENT_SCHEMA_VERSION, flatArt('pool', [138, 20, 20], 192, 96), flatArt('bolt', [70, 12, 16], 18, 18));
   writePipPrefabs();
+  writeItemPrefabs();
   if (existsSync(join(HERE, 'scripts'))) {
     mkdirSync(join(OUT, 'assets/scripts'), { recursive: true });
     for (const f of readdirSync(join(HERE, 'scripts'))) writeFileSync(join(OUT, 'assets/scripts', f), readFileSync(join(HERE, 'scripts', f)));

@@ -43,9 +43,10 @@
       "color": 4889178,
       "max": 0,
       "use": {
-        "setVariable": "used_clarity_tonic",
+        "heal": 0,
+        "setVariable": "use_clarity_tonic",
         "setValue": 1,
-        "consume": true,
+        "consume": false,
         "message": ""
       }
     },
@@ -84,9 +85,10 @@
       "color": 4889178,
       "max": 0,
       "use": {
-        "setVariable": "used_ghost_pepper_ink",
+        "heal": 0,
+        "setVariable": "use_ghost_pepper_ink",
         "setValue": 1,
-        "consume": true,
+        "consume": false,
         "message": ""
       }
     },
@@ -125,9 +127,10 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "setVariable": "used_herbal_tea",
+        "heal": 0,
+        "setVariable": "use_herbal_tea",
         "setValue": 1,
-        "consume": true,
+        "consume": false,
         "message": ""
       }
     },
@@ -138,9 +141,10 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "setVariable": "used_honey_biscuit",
+        "heal": 0,
+        "setVariable": "use_honey_biscuit",
         "setValue": 1,
-        "consume": true,
+        "consume": false,
         "message": ""
       }
     },
@@ -214,9 +218,10 @@
       "color": 4881096,
       "max": 0,
       "use": {
-        "setVariable": "used_memory_jar",
+        "heal": 0,
+        "setVariable": "use_memory_jar",
         "setValue": 1,
-        "consume": true,
+        "consume": false,
         "message": ""
       }
     },
@@ -255,9 +260,10 @@
       "color": 10115784,
       "max": 0,
       "use": {
-        "setVariable": "used_phoenix_draught",
+        "heal": 0,
+        "setVariable": "use_phoenix_draught",
         "setValue": 1,
-        "consume": true,
+        "consume": false,
         "message": ""
       }
     },
@@ -289,9 +295,10 @@
       "color": 4889178,
       "max": 0,
       "use": {
-        "setVariable": "used_reader_digest",
+        "heal": 0,
+        "setVariable": "use_reader_digest",
         "setValue": 1,
-        "consume": true,
+        "consume": false,
         "message": ""
       }
     },
@@ -330,9 +337,10 @@
       "color": 10115784,
       "max": 0,
       "use": {
-        "setVariable": "used_time_in_a_bottle",
+        "heal": 0,
+        "setVariable": "use_time_in_a_bottle",
         "setValue": 1,
-        "consume": true,
+        "consume": false,
         "message": ""
       }
     },
@@ -392,9 +400,10 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "setVariable": "used_eraser_crumbs",
+        "heal": 0,
+        "setVariable": "use_eraser_crumbs",
         "setValue": 1,
-        "consume": true,
+        "consume": false,
         "message": ""
       }
     },
@@ -447,8 +456,10 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "heal": 100,
-        "consume": true,
+        "heal": 0,
+        "setVariable": "use_ink_flask",
+        "setValue": 1,
+        "consume": false,
         "message": ""
       }
     },
@@ -459,8 +470,10 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "heal": 45,
-        "consume": true,
+        "heal": 0,
+        "setVariable": "use_ink_vial",
+        "setValue": 1,
+        "consume": false,
         "message": ""
       }
     },
@@ -471,10 +484,11 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "setVariable": "light",
-        "setValue": 100,
-        "consume": true,
-        "message": "The Lantern burns bright"
+        "heal": 0,
+        "setVariable": "use_lantern_oil",
+        "setValue": 1,
+        "consume": false,
+        "message": ""
       }
     },
     {
@@ -526,9 +540,10 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "setVariable": "used_sticky_note",
+        "heal": 0,
+        "setVariable": "use_sticky_note",
         "setValue": 1,
-        "consume": true,
+        "consume": false,
         "message": ""
       }
     },
@@ -560,8 +575,10 @@
       "color": 9076848,
       "max": 0,
       "use": {
-        "heal": 60,
-        "consume": true,
+        "heal": 0,
+        "setVariable": "use_warm_loaf",
+        "setValue": 1,
+        "consume": false,
         "message": ""
       }
     }

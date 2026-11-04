@@ -67,6 +67,24 @@ export default defineScript({
       if (me.visible) me.visible = false;
       return;
     }
+    // dozing (Ghost Pepper Ink, Sticky Note and Time in a Bottle tag it "sleep:<seconds>"): it does nothing until the time is up, and a hit wakes it
+    for (const t of [...me.tags]) if (t.startsWith('sleep:')) { me.tags.delete(t); s.sleepT = Number(t.slice(6)); s.sleepHp = (me.get('state:health') as { hp: number } | undefined)?.hp ?? -1; }
+    if (s.sleepT > 0) {
+      const hs = me.get('state:health') as { hp: number } | undefined;
+      s.sleepT -= dt;
+      if (hs && s.sleepHp >= 0 && hs.hp < s.sleepHp) s.sleepT = 0;
+      else {
+        s.mode = 'idle';
+        s.alert = 0;
+        const touchZ = me.get('damageOnTouch');
+        if (touchZ && touchZ.amount !== 0) me.set('damageOnTouch', { ...touchZ, amount: 0 });
+        const rg = me.get('rangedAttack');
+        if (rg && rg.target !== 'nothing') me.set('rangedAttack', { ...rg, target: 'nothing' });
+        const body = me.get('body');
+        if (body && (body.vx || body.vy)) me.set('body', { ...body, vx: 0, vy: 0 });
+        return;
+      }
+    }
     // asleep (a sentence said so): it does nothing, and a hit wakes it (and does double, as it did not see it coming)
     if (me.settings.sleepWhen && !v[String(me.settings.sleepWhen)]) s.woke = false;
     if (me.settings.sleepWhen && v[String(me.settings.sleepWhen)] && !s.woke) {

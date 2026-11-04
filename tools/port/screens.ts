@@ -142,10 +142,13 @@ function titleArt(id: string, header: W[]): W[] {
 }
 
 function title(): Screen {
+  // "Save and return to title" writes the save a moment after the title opens, so the list of saves the title looked at can be too early:
+  // saved_run (set by that button) says there is one now
+  const has = '{host.hasSave} + {saved_run} > 0';
   const items: Item[] = [
-    { id: 'title.continue', label: 'Continue', click: [act('loadGame', { slot: 'latest' }), close('role:title')], visible: '{host.hasSave}' },
-    { id: 'title.new.save', label: 'New Game', click: [open(BEGIN)], visible: '{host.hasSave}' },
-    { id: 'title.new', label: 'New Game', click: [open(DIFFICULTY)], visible: '!{host.hasSave}' },
+    { id: 'title.continue', label: 'Continue', click: [act('loadGame', { slot: 'latest' }), close('role:title')], visible: has },
+    { id: 'title.new.save', label: 'New Game', click: [open(BEGIN)], visible: has },
+    { id: 'title.new', label: 'New Game', click: [open(DIFFICULTY)], visible: '{host.hasSave} + {saved_run} = 0' },
     { id: 'title.settings', label: 'Settings', click: [open('role:settings')] },
     { id: 'title.quit', label: 'Quit', click: [act('quitGame')], visible: '{host.quit}' },
   ];
@@ -166,7 +169,9 @@ function difficulty(): Screen {
     text('diff.head', 'How should the story treat you?', 770, 205, 28, C.ink, { w: 480 }),
     text('diff.sub', 'This is fixed for the save you are about to begin.', 770, 246, 18, C.inkBrown, { w: 480 }),
   ];
-  const pick = (v: string): Act[] => [act('setSetting', { name: 'difficulty', value: v }), setVar('difficulty', v), setVar('difficulty_locked', '1'), close(DIFFICULTY), close('role:title')];
+  // the engine's own difficulty setting only knows easy / normal / hard and scales the damage she takes; the game's Story and Normal are the variable
+  // `difficulty` (the enemy scripts read it), so the engine's stays on normal (a save refuses any other word)
+  const pick = (v: string): Act[] => [act('setSetting', { name: 'difficulty', value: 'normal' }), setVar('difficulty', v), setVar('difficulty_locked', '1'), close(DIFFICULTY), close('role:title')];
   const items: Item[] = [
     { id: 'diff.story', label: 'Story', desc: 'Gentler. Enemies hit softer; crumpling costs nothing.', click: pick('story') },
     { id: 'diff.normal', label: 'Normal', desc: 'The intended game. Crumpling costs Mnemosynth and restarts the room.', click: pick('normal') },
@@ -186,8 +191,8 @@ function pause(): Screen {
     { id: 'pause.restart', label: 'Restart this dungeon', click: [open(RESTART)], visible: '{dungeon_menu}' },
     { id: 'pause.map', label: 'Map', click: [open('role:travel')] },
     { id: 'pause.settings', label: 'Settings', click: [open('role:settings')] },
-    { id: 'pause.title', label: 'Save and return to title', click: [act('saveGame', { slot: 'auto' }), close('role:pause'), open('role:title')] },
-    { id: 'pause.quit', label: 'Quit game', click: [act('saveGame', { slot: 'auto' }), act('quitGame')], visible: '{host.quit}' },
+    { id: 'pause.title', label: 'Save and return to title', click: [act('saveGame', { slot: 'autosave' }), setVar('saved_run', '1'), close('role:pause'), open('role:title')] },
+    { id: 'pause.quit', label: 'Quit game', click: [act('saveGame', { slot: 'autosave' }), act('quitGame')], visible: '{host.quit}' },
   ];
   const kids = [
     text('pause.head', 'Paused', 450, 128, 56, C.paperLight),
@@ -233,7 +238,6 @@ function settings(): Screen {
   const slider = (id: string, value: string, min: number, max: number, step: number): W =>
     w('slider', `set.${id}.slider`, { name: `${id} slider`, ...at(300, 6, 260, 28), value, min, max: String(max), step });
   const tick = (id: string, value: string): W => w('toggle', `set.${id}.box`, { name: `${id} tick box`, ...at(520, 4, 40, 32), value, text: '' });
-  const pick = (id: string, value: string, options: string): W => w('dropdown', `set.${id}.choice`, { name: `${id} choice`, ...at(340, 4, 220, 32), value, options });
   const controls = box(
     'set.controls',
     24,
@@ -260,7 +264,10 @@ function settings(): Screen {
       row('sfx', 204, 'Effects', 0, slider('sfx', 'settings.sfx', 0, 1, 0.1)),
       row('voice', 246, 'Voices', 1, slider('voice', 'settings.voice', 0, 1, 0.1)),
       ...section('set.s2', 296, 'PLAY', C.red),
-      row('difficulty', 336, 'Difficulty', 0, pick('difficulty', 'settings.difficulty', 'story, normal')),
+      row('difficulty', 336, 'Difficulty', 0, box('set.difficulty.value', 340, 4, 220, 32, {}, [
+        text('set.difficulty.story', 'Story  (fixed for this save)', 0, 4, 20, C.inkBrown, { w: 220, visible: '{difficulty} = story' }),
+        text('set.difficulty.normal', 'Normal  (fixed for this save)', 0, 4, 20, C.inkBrown, { w: 220, visible: '{difficulty} != story' }),
+      ])),
       row('shake', 378, 'Screen shake and hit freeze', 1, tick('shake', 'settings.screenShake')),
       row('zoom', 420, 'Camera zoom', 0, slider('zoom', 'settings.cameraZoom', 0.75, 1.5, 0.25)),
       ...section('set.s3', 470, 'SCREEN', C.goldDark),
@@ -525,7 +532,7 @@ const HP_MAX = '{@Player.health.max}';
 function inkBottle(): W {
   const outline = '#261a14';
   const glass = '#bfd9e640';
-  const ink = '#0f0d24';
+  const ink = '#1d2466';
   const slices = 17; // the ink is drawn as 17 rows of 4 px, each shown while health is above its share
   const rows = Array.from({ length: slices }, (_, i) =>
     box(`hud.ink.row${i}`, 8, 102 - (i + 1) * 4, 54, 4, { fill: ink }, [], { name: 'Ink', visible: `${HP} / ${HP_MAX} > ${(i / slices).toFixed(3)}` }),
@@ -570,27 +577,71 @@ function quickSlots(usable: string[]): W {
   for (const [n, other] of [[1, 2], [2, 1]] as const) {
     const on = n === 1 ? `!${active}` : `${active} = 1`;
     const group = box(`hud.quick${n}`, 0, 0, 180, 110, {}, [
-      ...icons(`slot:${n}`, `hud.quick${n}.big`, 68, 20, 64),
-      text(`hud.quick${n}.label`, `F   ×{item:{slot:${n}}}`, 38, 70, 20, C.inkBrown, { w: 120, visible: `{slot:${n}}` }),
-      ...icons(`slot:${other}`, `hud.quick${n}.small`, 0, 36, 52).map((x) => ({ ...x, style: { opacity: 0.6 } })),
-      text(`hud.quick${n}.count2`, `×{item:{slot:${other}}}`, 6, 82, 16, C.inkBrown, { w: 60, visible: `{slot:${other}}` }),
-      text(`hud.quick${n}.hint`, 'G  swap', 0, 0, 16, C.inkBrown, { w: 100, visible: `{slot:${other}}` }),
+      box(`hud.quick${n}.plate`, 0, 0, 180, 110, { fill: '#f6ecd2e6', border: C.inkBrown, borderWidth: 3, radius: 10 }, [], { name: 'Plate' }),
+      ...icons(`slot:${n}`, `hud.quick${n}.big`, 104, 10, 64),
+      text(`hud.quick${n}.label`, `F   ×{item:{slot:${n}}}`, 84, 76, 22, C.inkBrown, { w: 94, style: { bold: true, align: 'center' } }),
+      ...icons(`slot:${other}`, `hud.quick${n}.small`, 16, 38, 44).map((x) => ({ ...x, style: { opacity: 0.6 } })),
+      text(`hud.quick${n}.count2`, `×{item:{slot:${other}}}`, 14, 84, 17, C.inkBrown, { w: 56, style: { align: 'center' }, visible: `{slot:${other}}` }),
+      text(`hud.quick${n}.hint`, 'G  swap', 14, 10, 16, C.inkBrown, { w: 70, visible: `{slot:${other}}` }),
     ], { name: `Quick slot ${n} active`, visible: on });
     kids.push(group);
   }
   return w('panel', 'hud.quick', { name: 'Quick slots', anchor: 'br', x: 0, y: 0, w: 180, h: 110, wMode: 'fixed', hMode: 'fixed', layout: 'free', padding: 0, style: {}, children: kids });
 }
 
+/** The Margin Gate: two posts and an arch, small, beside the renown count (it opens at 220). */
+function gateIcon(id: string, x: number, y: number): W {
+  const ink = C.inkBrown;
+  return box(id, x, y, 22, 24, {}, [
+    box(`${id}.l`, 1, 8, 5, 16, { fill: ink }),
+    box(`${id}.r`, 16, 8, 5, 16, { fill: ink }),
+    box(`${id}.top`, 0, 3, 22, 6, { fill: ink, radius: 3 }),
+    box(`${id}.in`, 6, 10, 10, 14, { fill: C.gold, opacity: 0.8 }),
+  ], { name: 'Margin Gate' });
+}
+
+/** The renown needed for the Margin Gate (main.gd: the gate opens at 220). */
+const GATE_RENOWN = 220;
+
+/** The bar across the top while a boss is awake: its name and what is left of it (the boss scripts set boss_name, boss_hp and boss_max). */
+function bossBar(): W {
+  const shown = '{boss_name} != ""';
+  const bar = w('bar', 'hud.boss.bar', { name: 'Boss health', ...at(20, 40, 380, 16), value: 'boss_hp', max: '{boss_max}', style: { fill: '#2a1418', color: C.red, border: C.leatherEdge, borderWidth: 3 } });
+  return w('panel', 'hud.boss', {
+    name: 'Boss',
+    anchor: 'b',
+    x: 0,
+    y: -22,
+    w: 420,
+    h: 74,
+    wMode: 'fixed',
+    hMode: 'fixed',
+    layout: 'free',
+    padding: 0,
+    visible: shown,
+    style: { fill: C.paperLight, border: C.inkBrown, borderWidth: 3, radius: 8 },
+    anim: [{ on: 'show', kind: 'fade', ms: 400, dir: 'down' }],
+    children: [text('hud.boss.name', '{boss_name}', 20, 6, 24, C.inkBrown, { w: 380, style: { bold: true, align: 'center' } }), bar],
+  });
+}
+
 function hud(usable: string[]): Screen {
-  // pinned to the corners of the window, as the Godot HUD is: the bottle and gauges top left, the place top right, the quick slots bottom right
-  const topLeft = box('hud.tl', 0, 0, 460, 130, {}, [
+  // pinned to the corners of the window, as the Godot HUD is: the bottle and gauges top left, the place top right, the quick slots bottom right.
+  // Everything sits on a parchment plate, so it reads against the dark page edge as well as the grass.
+  const plate = box('hud.plate', 6, 6, 316, 134, { fill: '#f6ecd2f0', border: C.inkBrown, borderWidth: 3, radius: 10 }, [], { name: 'Plate' });
+  const topLeft = box('hud.tl', 0, 0, 340, 146, {}, [
+    plate,
     inkBottle(),
     lanternGauge(),
-    text('hud.mnemo', '◆ {mnemosynth}', 104, 52, 26, '#b58a37', { w: 120 }),
-    text('hud.rank', 'Rank {rank}   {renown} / {rank_next}', 180, 62, 17, '#3b2a1cd9', { w: 260 }),
+    text('hud.mnemo', '◆ {mnemosynth}', 104, 54, 28, '#7a5410', { w: 200, style: { bold: true } }),
+    gateIcon('hud.gate', 104, 92),
+    text('hud.renown', `Renown {renown} / ${GATE_RENOWN}`, 134, 92, 18, C.inkBrown, { w: 180, style: { bold: true } }),
+    w('bar', 'hud.renown.bar', { name: 'Renown', ...at(134, 116, 176, 9), value: 'renown', max: String(GATE_RENOWN), style: { fill: '#3b2a1c40', color: C.gold, border: C.inkBrown, borderWidth: 2 } }),
   ], { name: 'Top left' });
-  const region = w('text', 'hud.region', { name: 'Region', anchor: 'tr', x: 40, y: 14, w: 600, h: 40, wMode: 'fixed', hMode: 'fixed', text: '{region_name}', visible: '{region_show}', style: { fontSize: 30, color: C.inkBrown, align: 'right' }, anim: [{ on: 'show', kind: 'fade', ms: 600, dir: 'down' }, { on: 'hide', kind: 'fade', ms: 900, dir: 'up' }] });
-  const root = w('panel', 'hud.root', { name: 'Root', anchor: 'fill', layout: 'free', padding: 0, style: {}, children: [topLeft, region, quickSlots(usable)] });
+  const region = box('hud.region', 0, 0, 360, 46, { fill: '#f6ecd2f0', border: C.inkBrown, borderWidth: 3, radius: 10 }, [
+    text('hud.region.text', '{region_name}', 12, 6, 26, C.inkBrown, { w: 336, style: { align: 'center', bold: true } }),
+  ], { name: 'Region', anchor: 'tr', x: -16, y: 14, visible: '{region_show}', anim: [{ on: 'show', kind: 'fade', ms: 600, dir: 'down' }, { on: 'hide', kind: 'fade', ms: 900, dir: 'up' }] });
+  const root = w('panel', 'hud.root', { name: 'Root', anchor: 'fill', layout: 'free', padding: 0, style: {}, children: [topLeft, region, bossBar(), quickSlots(usable)] });
   return { ...screen('HUD', root, { id: 'storytender-hud', role: 'hud', modal: false, back: 'pass' }), opensOnStart: true } as Screen;
 }
 

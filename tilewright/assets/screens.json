@@ -15,6 +15,27 @@
             "type": "panel",
             "children": [
               {
+                "id": "hud.plate",
+                "name": "Plate",
+                "type": "panel",
+                "children": [],
+                "anchor": "tl",
+                "x": 6,
+                "y": 6,
+                "w": 316,
+                "h": 134,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#f6ecd2f0",
+                  "border": "#3b2a1c",
+                  "borderWidth": 3,
+                  "radius": 10
+                }
+              },
+              {
                 "id": "hud.bottle",
                 "name": "Ink bottle",
                 "type": "panel",
@@ -34,7 +55,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.000"
                   },
@@ -53,7 +74,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.059"
                   },
@@ -72,7 +93,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.118"
                   },
@@ -91,7 +112,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.176"
                   },
@@ -110,7 +131,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.235"
                   },
@@ -129,7 +150,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.294"
                   },
@@ -148,7 +169,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.353"
                   },
@@ -167,7 +188,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.412"
                   },
@@ -186,7 +207,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.471"
                   },
@@ -205,7 +226,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.529"
                   },
@@ -224,7 +245,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.588"
                   },
@@ -243,7 +264,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.647"
                   },
@@ -262,7 +283,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.706"
                   },
@@ -281,7 +302,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.765"
                   },
@@ -300,7 +321,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.824"
                   },
@@ -319,7 +340,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.882"
                   },
@@ -338,7 +359,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24"
+                      "fill": "#1d2466"
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} > 0.941"
                   },
@@ -493,7 +514,7 @@
                     "layout": "free",
                     "padding": 0,
                     "style": {
-                      "fill": "#0f0d24",
+                      "fill": "#1d2466",
                       "radius": 3
                     },
                     "visible": "{@Player.state:health.hp} / {@Player.health.max} < 0.25",
@@ -672,41 +693,155 @@
                 "children": [],
                 "anchor": "tl",
                 "x": 104,
-                "y": 52,
-                "w": 120,
-                "h": 35,
+                "y": 54,
+                "w": 200,
+                "h": 38,
                 "wMode": "fixed",
                 "hMode": "fixed",
                 "text": "◆ {mnemosynth}",
                 "style": {
-                  "fontSize": 26,
-                  "color": "#b58a37"
+                  "fontSize": 28,
+                  "color": "#7a5410",
+                  "bold": true
                 }
               },
               {
-                "id": "hud.rank",
-                "name": "hud.rank",
+                "id": "hud.gate",
+                "name": "Margin Gate",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "hud.gate.l",
+                    "name": "hud.gate.l",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 1,
+                    "y": 8,
+                    "w": 5,
+                    "h": 16,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c"
+                    }
+                  },
+                  {
+                    "id": "hud.gate.r",
+                    "name": "hud.gate.r",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 16,
+                    "y": 8,
+                    "w": 5,
+                    "h": 16,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c"
+                    }
+                  },
+                  {
+                    "id": "hud.gate.top",
+                    "name": "hud.gate.top",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 3,
+                    "w": 22,
+                    "h": 6,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c",
+                      "radius": 3
+                    }
+                  },
+                  {
+                    "id": "hud.gate.in",
+                    "name": "hud.gate.in",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 6,
+                    "y": 10,
+                    "w": 10,
+                    "h": 14,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f2b84b",
+                      "opacity": 0.8
+                    }
+                  }
+                ],
+                "anchor": "tl",
+                "x": 104,
+                "y": 92,
+                "w": 22,
+                "h": 24,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {}
+              },
+              {
+                "id": "hud.renown",
+                "name": "hud.renown",
                 "type": "text",
                 "children": [],
                 "anchor": "tl",
-                "x": 180,
-                "y": 62,
-                "w": 260,
-                "h": 23,
+                "x": 134,
+                "y": 92,
+                "w": 180,
+                "h": 24,
                 "wMode": "fixed",
                 "hMode": "fixed",
-                "text": "Rank {rank}   {renown} / {rank_next}",
+                "text": "Renown {renown} / 220",
                 "style": {
-                  "fontSize": 17,
-                  "color": "#3b2a1cd9"
+                  "fontSize": 18,
+                  "color": "#3b2a1c",
+                  "bold": true
+                }
+              },
+              {
+                "id": "hud.renown.bar",
+                "name": "Renown",
+                "type": "bar",
+                "children": [],
+                "anchor": "tl",
+                "x": 134,
+                "y": 116,
+                "w": 176,
+                "h": 9,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "value": "renown",
+                "max": "220",
+                "style": {
+                  "fill": "#3b2a1c40",
+                  "color": "#f2b84b",
+                  "border": "#3b2a1c",
+                  "borderWidth": 2
                 }
               }
             ],
             "anchor": "tl",
             "x": 0,
             "y": 0,
-            "w": 460,
-            "h": 130,
+            "w": 340,
+            "h": 146,
             "wMode": "fixed",
             "hMode": "fixed",
             "layout": "free",
@@ -716,22 +851,45 @@
           {
             "id": "hud.region",
             "name": "Region",
-            "type": "text",
-            "children": [],
+            "type": "panel",
+            "children": [
+              {
+                "id": "hud.region.text",
+                "name": "hud.region.text",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 12,
+                "y": 6,
+                "w": 336,
+                "h": 35,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "{region_name}",
+                "style": {
+                  "fontSize": 26,
+                  "color": "#3b2a1c",
+                  "align": "center",
+                  "bold": true
+                }
+              }
+            ],
             "anchor": "tr",
-            "x": 40,
+            "x": -16,
             "y": 14,
-            "w": 600,
-            "h": 40,
+            "w": 360,
+            "h": 46,
             "wMode": "fixed",
             "hMode": "fixed",
-            "text": "{region_name}",
-            "visible": "{region_show}",
+            "layout": "free",
+            "padding": 0,
             "style": {
-              "fontSize": 30,
-              "color": "#3b2a1c",
-              "align": "right"
+              "fill": "#f6ecd2f0",
+              "border": "#3b2a1c",
+              "borderWidth": 3,
+              "radius": 10
             },
+            "visible": "{region_show}",
             "anim": [
               {
                 "on": "show",
@@ -748,6 +906,78 @@
             ]
           },
           {
+            "id": "hud.boss",
+            "name": "Boss",
+            "type": "panel",
+            "children": [
+              {
+                "id": "hud.boss.name",
+                "name": "hud.boss.name",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 20,
+                "y": 6,
+                "w": 380,
+                "h": 32,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "{boss_name}",
+                "style": {
+                  "fontSize": 24,
+                  "color": "#3b2a1c",
+                  "bold": true,
+                  "align": "center"
+                }
+              },
+              {
+                "id": "hud.boss.bar",
+                "name": "Boss health",
+                "type": "bar",
+                "children": [],
+                "anchor": "tl",
+                "x": 20,
+                "y": 40,
+                "w": 380,
+                "h": 16,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "value": "boss_hp",
+                "max": "{boss_max}",
+                "style": {
+                  "fill": "#2a1418",
+                  "color": "#c0405a",
+                  "border": "#1e140c",
+                  "borderWidth": 3
+                }
+              }
+            ],
+            "anchor": "b",
+            "x": 0,
+            "y": -22,
+            "w": 420,
+            "h": 74,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "visible": "{boss_name} != \"\"",
+            "style": {
+              "fill": "#f6ecd2",
+              "border": "#3b2a1c",
+              "borderWidth": 3,
+              "radius": 8
+            },
+            "anim": [
+              {
+                "on": "show",
+                "kind": "fade",
+                "ms": 400,
+                "dir": "down"
+              }
+            ]
+          },
+          {
             "id": "hud.quick",
             "name": "Quick slots",
             "type": "panel",
@@ -758,13 +988,34 @@
                 "type": "panel",
                 "children": [
                   {
+                    "id": "hud.quick1.plate",
+                    "name": "Plate",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 0,
+                    "w": 180,
+                    "h": 110,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2e6",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3,
+                      "radius": 10
+                    }
+                  },
+                  {
                     "id": "hud.quick1.big.clarity_tonic",
                     "name": "Icon clarity_tonic",
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -779,8 +1030,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -795,8 +1046,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -811,8 +1062,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -827,8 +1078,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -843,8 +1094,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -859,8 +1110,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -875,8 +1126,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -891,8 +1142,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -907,8 +1158,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -923,8 +1174,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -939,8 +1190,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -955,8 +1206,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -971,8 +1222,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -987,18 +1238,19 @@
                     "type": "text",
                     "children": [],
                     "anchor": "tl",
-                    "x": 38,
-                    "y": 70,
-                    "w": 120,
-                    "h": 27,
+                    "x": 84,
+                    "y": 76,
+                    "w": 94,
+                    "h": 30,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "text": "F   ×{item:{slot:1}}",
                     "style": {
-                      "fontSize": 20,
-                      "color": "#3b2a1c"
-                    },
-                    "visible": "{slot:1}"
+                      "fontSize": 22,
+                      "color": "#3b2a1c",
+                      "bold": true,
+                      "align": "center"
+                    }
                   },
                   {
                     "id": "hud.quick1.small.clarity_tonic",
@@ -1006,10 +1258,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_clarity_tonic",
@@ -1024,10 +1276,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_ghost_pepper_ink",
@@ -1042,10 +1294,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_herbal_tea",
@@ -1060,10 +1312,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_honey_biscuit",
@@ -1078,10 +1330,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_memory_jar",
@@ -1096,10 +1348,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_phoenix_draught",
@@ -1114,10 +1366,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_reader_digest",
@@ -1132,10 +1384,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_time_in_a_bottle",
@@ -1150,10 +1402,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_eraser_crumbs",
@@ -1168,10 +1420,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_ink_flask",
@@ -1186,10 +1438,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_ink_vial",
@@ -1204,10 +1456,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_lantern_oil",
@@ -1222,10 +1474,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_sticky_note",
@@ -1240,10 +1492,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_warm_loaf",
@@ -1258,16 +1510,17 @@
                     "type": "text",
                     "children": [],
                     "anchor": "tl",
-                    "x": 6,
-                    "y": 82,
-                    "w": 60,
-                    "h": 22,
+                    "x": 14,
+                    "y": 84,
+                    "w": 56,
+                    "h": 23,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "text": "×{item:{slot:2}}",
                     "style": {
-                      "fontSize": 16,
-                      "color": "#3b2a1c"
+                      "fontSize": 17,
+                      "color": "#3b2a1c",
+                      "align": "center"
                     },
                     "visible": "{slot:2}"
                   },
@@ -1277,9 +1530,9 @@
                     "type": "text",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 0,
-                    "w": 100,
+                    "x": 14,
+                    "y": 10,
+                    "w": 70,
                     "h": 22,
                     "wMode": "fixed",
                     "hMode": "fixed",
@@ -1309,13 +1562,34 @@
                 "type": "panel",
                 "children": [
                   {
+                    "id": "hud.quick2.plate",
+                    "name": "Plate",
+                    "type": "panel",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 0,
+                    "w": 180,
+                    "h": 110,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#f6ecd2e6",
+                      "border": "#3b2a1c",
+                      "borderWidth": 3,
+                      "radius": 10
+                    }
+                  },
+                  {
                     "id": "hud.quick2.big.clarity_tonic",
                     "name": "Icon clarity_tonic",
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1330,8 +1604,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1346,8 +1620,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1362,8 +1636,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1378,8 +1652,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1394,8 +1668,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1410,8 +1684,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1426,8 +1700,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1442,8 +1716,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1458,8 +1732,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1474,8 +1748,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1490,8 +1764,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1506,8 +1780,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1522,8 +1796,8 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 68,
-                    "y": 20,
+                    "x": 104,
+                    "y": 10,
                     "w": 64,
                     "h": 64,
                     "wMode": "fixed",
@@ -1538,18 +1812,19 @@
                     "type": "text",
                     "children": [],
                     "anchor": "tl",
-                    "x": 38,
-                    "y": 70,
-                    "w": 120,
-                    "h": 27,
+                    "x": 84,
+                    "y": 76,
+                    "w": 94,
+                    "h": 30,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "text": "F   ×{item:{slot:2}}",
                     "style": {
-                      "fontSize": 20,
-                      "color": "#3b2a1c"
-                    },
-                    "visible": "{slot:2}"
+                      "fontSize": 22,
+                      "color": "#3b2a1c",
+                      "bold": true,
+                      "align": "center"
+                    }
                   },
                   {
                     "id": "hud.quick2.small.clarity_tonic",
@@ -1557,10 +1832,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_clarity_tonic",
@@ -1575,10 +1850,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_ghost_pepper_ink",
@@ -1593,10 +1868,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_herbal_tea",
@@ -1611,10 +1886,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_honey_biscuit",
@@ -1629,10 +1904,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_memory_jar",
@@ -1647,10 +1922,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_phoenix_draught",
@@ -1665,10 +1940,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_reader_digest",
@@ -1683,10 +1958,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_time_in_a_bottle",
@@ -1701,10 +1976,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_eraser_crumbs",
@@ -1719,10 +1994,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_ink_flask",
@@ -1737,10 +2012,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_ink_vial",
@@ -1755,10 +2030,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_lantern_oil",
@@ -1773,10 +2048,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_sticky_note",
@@ -1791,10 +2066,10 @@
                     "type": "image",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 36,
-                    "w": 52,
-                    "h": 52,
+                    "x": 16,
+                    "y": 38,
+                    "w": 44,
+                    "h": 44,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "sprite": "icon_warm_loaf",
@@ -1809,16 +2084,17 @@
                     "type": "text",
                     "children": [],
                     "anchor": "tl",
-                    "x": 6,
-                    "y": 82,
-                    "w": 60,
-                    "h": 22,
+                    "x": 14,
+                    "y": 84,
+                    "w": 56,
+                    "h": 23,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "text": "×{item:{slot:1}}",
                     "style": {
-                      "fontSize": 16,
-                      "color": "#3b2a1c"
+                      "fontSize": 17,
+                      "color": "#3b2a1c",
+                      "align": "center"
                     },
                     "visible": "{slot:1}"
                   },
@@ -1828,9 +2104,9 @@
                     "type": "text",
                     "children": [],
                     "anchor": "tl",
-                    "x": 0,
-                    "y": 0,
-                    "w": 100,
+                    "x": 14,
+                    "y": 10,
+                    "w": 70,
                     "h": 22,
                     "wMode": "fixed",
                     "hMode": "fixed",
@@ -2157,7 +2433,7 @@
                       "hover": [],
                       "change": []
                     },
-                    "visible": "{host.hasSave}",
+                    "visible": "{host.hasSave} + {saved_run} > 0",
                     "enabled": ""
                   },
                   {
@@ -2245,7 +2521,7 @@
                       "hover": [],
                       "change": []
                     },
-                    "visible": "{host.hasSave}",
+                    "visible": "{host.hasSave} + {saved_run} > 0",
                     "enabled": ""
                   },
                   {
@@ -2333,7 +2609,7 @@
                       "hover": [],
                       "change": []
                     },
-                    "visible": "!{host.hasSave}",
+                    "visible": "{host.hasSave} + {saved_run} = 0",
                     "enabled": ""
                   },
                   {
@@ -3311,7 +3587,7 @@
                           "type": "setSetting",
                           "params": {
                             "name": "difficulty",
-                            "value": "story"
+                            "value": "normal"
                           }
                         },
                         {
@@ -4165,7 +4441,15 @@
                         {
                           "type": "saveGame",
                           "params": {
-                            "slot": "auto"
+                            "slot": "autosave"
+                          }
+                        },
+                        {
+                          "type": "setVariable",
+                          "params": {
+                            "name": "saved_run",
+                            "op": "set",
+                            "value": "1"
                           }
                         },
                         {
@@ -4266,7 +4550,7 @@
                         {
                           "type": "saveGame",
                           "params": {
-                            "slot": "auto"
+                            "slot": "autosave"
                           }
                         },
                         {
@@ -5219,10 +5503,49 @@
                         }
                       },
                       {
-                        "id": "set.difficulty.choice",
-                        "name": "difficulty choice",
-                        "type": "dropdown",
-                        "children": [],
+                        "id": "set.difficulty.value",
+                        "name": "set.difficulty.value",
+                        "type": "panel",
+                        "children": [
+                          {
+                            "id": "set.difficulty.story",
+                            "name": "set.difficulty.story",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 4,
+                            "w": 220,
+                            "h": 27,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "Story  (fixed for this save)",
+                            "style": {
+                              "fontSize": 20,
+                              "color": "#3b2a1c"
+                            },
+                            "visible": "{difficulty} = story"
+                          },
+                          {
+                            "id": "set.difficulty.normal",
+                            "name": "set.difficulty.normal",
+                            "type": "text",
+                            "children": [],
+                            "anchor": "tl",
+                            "x": 0,
+                            "y": 4,
+                            "w": 220,
+                            "h": 27,
+                            "wMode": "fixed",
+                            "hMode": "fixed",
+                            "text": "Normal  (fixed for this save)",
+                            "style": {
+                              "fontSize": 20,
+                              "color": "#3b2a1c"
+                            },
+                            "visible": "{difficulty} != story"
+                          }
+                        ],
                         "anchor": "tl",
                         "x": 340,
                         "y": 4,
@@ -5230,8 +5553,9 @@
                         "h": 32,
                         "wMode": "fixed",
                         "hMode": "fixed",
-                        "value": "settings.difficulty",
-                        "options": "story, normal"
+                        "layout": "free",
+                        "padding": 0,
+                        "style": {}
                       }
                     ],
                     "anchor": "tl",
@@ -9334,17 +9658,17 @@
                       "from": "hand",
                       "hand": [
                         {
-                          "id": "weighing",
-                          "x": 107,
-                          "y": 74,
-                          "label": "The Weighing Room",
-                          "state": ""
-                        },
-                        {
                           "id": "proof",
                           "x": 13,
                           "y": 25,
                           "label": "The Proof Room",
+                          "state": ""
+                        },
+                        {
+                          "id": "weighing",
+                          "x": 107,
+                          "y": 74,
+                          "label": "The Weighing Room",
                           "state": ""
                         }
                       ],

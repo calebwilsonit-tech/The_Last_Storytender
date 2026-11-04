@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "name": "EraserBomb",
+  "root": {
+    "name": "Eraser Crumbs",
+    "tags": [
+      "eraser-bomb"
+    ],
+    "components": {
+      "sprite": {
+        "shape": "box",
+        "color": 16052454,
+        "w": 0.45,
+        "d": 0.45,
+        "height": 0.55,
+        "sortOffset": 0,
+        "visible": true,
+        "asset": "icon_eraser_crumbs"
+      }
+    },
+    "children": []
+  }
+}
