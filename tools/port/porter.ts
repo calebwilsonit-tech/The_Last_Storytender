@@ -18,6 +18,7 @@ import '@tilewright/bundled-plugins';
 import { importPng } from '@tw-editor/renderer/studio/assets';
 import { decorateOverworld, writeOverworldTalk, type World } from './overworld';
 import { bridgeCells, siteExtras } from './sites';
+import { decorateScissor, makeClipping, scissorExtras, writeScissorTalk } from './scissor';
 
 const SNAP = process.env.SNAP!;
 const ART = process.env.ART!;
@@ -349,6 +350,7 @@ function dressBoss(e: EntityData, cls: string): void {
     if (c) Object.assign(c, Object.fromEntries(Object.entries(looks).filter(([, v]) => v)));
   };
   if (cls === 'Critic') set('script_Critic', { lookAttack: look('critic_attack'), lookReckoning: look('critic_reckoning') });
+  if (cls === 'ScissorMan') set('script_Scissor', { lookCut: look('scissor_cut'), lookJam: look('scissor_jammed') });
   if (cls === 'Spoiler') set('script_Spoiler', { lookRead: look('spoiler_read'), lookAttack: look('spoiler_attack') });
 }
 
@@ -581,6 +583,7 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
       const gy = Math.round(n.grid[1]);
       decoratePip(e, n.class, Number(n.props.kind ?? -1), m.rows[gy]?.[gx] ?? '', [gx, gy], world, n.props);
     }
+    if (scene === 'scissor' && world) decorateScissor(e, n.class, Number(n.props.kind ?? -1), world);
     if (scene === 'maud' && world) {
       const m = (maudMapCache ??= maudMap(join(HERE, '..', '..')));
       const gx = Math.round(n.grid[0]);
@@ -621,7 +624,7 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
     }
     if (world && scene === 'overworld') decorateOverworld(e, n, [Math.round(n.grid[0]), Math.round(n.grid[1])], world);
     if (n.class === 'Npc') dressPerson(e);
-    if (n.class === 'Critic' || n.class === 'Spoiler') dressBoss(e, n.class);
+    if (n.class === 'Critic' || n.class === 'Spoiler' || n.class === 'ScissorMan') dressBoss(e, n.class);
     if (n.class === 'Prop' && scene === 'overworld') dressObject(e, Number(n.props.kind ?? -1), [Math.round(n.grid[0]), Math.round(n.grid[1])], SCENES[scene]!.file);
     const cell = `${Math.round(n.grid[0])},${Math.round(n.grid[1])}`;
     if (blocked.has(cell) && !taken.has(cell)) {
@@ -631,6 +634,46 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
     entities.push(e);
   }
   if (scene === 'overworld') entities.push(...prologueErrors(levelOf, () => `e${i++}`));
+  if (scene === 'scissor' && world) {
+    // the cells of the arena, each with a cover; the clippings she can strike; the little copies he wakes
+    const hole = flatArt('hole', [22, 18, 30], 64, 32, true, 255, [10, 8, 14]);
+    const looks = { hole, warn: flatArt('warn', [214, 90, 60], 192, 96, true, 150, [120, 30, 20]), patch: flatArt('patch', [244, 238, 220], 64, 32, true, 255, [120, 100, 70]), ghost: flatArt('ghost', [120, 210, 200], 64, 32, true, 170, [30, 110, 110]) };
+    const mkMinion = (kind: number, x: number, y: number, unlock: string): EntityData => {
+      const asset = errorArt.get(kind);
+      const e: EntityData = { id: `e${i++}`, name: `Error ${['Bare', 'Mite'][kind]}`, tags: [], components: { transform: { x: x + 0.5, y: y + 0.5, h: levelOf(x, y), facing: 2 }, sprite: { shape: 'box', color: 0xcccccc, w: 0.6, d: 0.6, height: 1, sortOffset: 0, visible: true, ...(asset ? { asset } : {}) } } };
+      errorKit(e, kind, unlock);
+      return e;
+    };
+    const arena = Object.keys(snap.floor.cells).map((k) => k.split(',').map(Number) as [number, number]);
+    entities.push(...scissorExtras(arena, levelOf, { hole }, mkMinion, () => `e${i++}`));
+    const boss = entities.find((x) => x.tags.includes('scissor'));
+    if (boss) Object.assign(boss.components.script_Scissor as object, { lookHole: looks.hole, lookWarn: looks.warn, lookPatch: looks.patch, lookGhost: looks.ghost });
+    // the clippings she strikes come back as a prefab whenever he cuts
+    const clip = entities.find((x) => x.tags.includes('clipping'));
+    if (clip) {
+      const piece = { name: 'Clipping', tags: ['clipping', 'spawned'], components: { sprite: clip.components.sprite, health: clip.components.health }, children: [] };
+      mkdirSync(join(OUT, 'assets/prefabs'), { recursive: true });
+      writeFileSync(join(OUT, 'assets/prefabs/ClippingPiece.prefab.json'), JSON.stringify({ schemaVersion: CURRENT_SCHEMA_VERSION, name: 'ClippingPiece', root: piece }, null, 2) + '\n');
+    }
+  }
+  if (scene === 'overworld' && world) {
+    // the tear in the square (Rift.script.ts): hidden until Garrick, Pip and Maud are restored
+    const portal = entities.find((x) => x.tags.includes('prop-8'));
+    const asset = (portal?.components.sprite as { asset?: string } | undefined)?.asset;
+    entities.push({
+      id: `e${i++}`,
+      name: 'Rift',
+      tags: ['rift'],
+      components: {
+        transform: { x: 88.5, y: 53.5, h: levelOf(88, 53), facing: 2 },
+        sprite: { shape: 'box', color: 0xf6f3ea, w: 0.8, d: 0.8, height: 3, sortOffset: 0, visible: false, ...(asset ? { asset } : {}) },
+        collider: { w: 0.9, d: 0.9, height: 2, solid: true, trigger: false, layer: 16, mask: 65535, enabled: false, inside: [] },
+        npcTalk: { dialogue: 'rift_enter', reach: 0.01, facePlayer: false, once: false, hint: true },
+        script_Gateway: { flag: 'go_scissor', scene: 'scenes/scissor.scene.json', spawn: '' },
+        script_Rift: { reach: 110 / 35.8 + 0.4 },
+      },
+    });
+  }
   if (scene === 'overworld' && world) {
     // the puzzle sites (sites.ts): a controller each, the covers of a bridge, the cracks of a causeway, the waves of an arena
     const looks = { hole: flatArt('hole', [22, 18, 30], 64, 32, true, 255, [10, 8, 14]), plank: flatArt('plank', [150, 104, 60], 64, 32, true, 255, [70, 44, 24]), crack: flatArt('crack', [70, 56, 44], 64, 32, true, 230, [26, 20, 14]) };
@@ -688,6 +731,11 @@ function dialogueOf(name: string, lines: Line[]): object {
     text: keyed(l.style === 'action' ? `[i]${l.text}[/i]` : l.text),
     ...(i + 1 < lines.length ? { next: `n${i + 2}` } : {}),
   }));
+  // the end of the Scissor-Man's last words is what lets Scissor.script.ts pay out and send her home
+  if (name === 'scissor_finale' && nodes.length) {
+    (nodes[nodes.length - 1] as { next?: string }).next = 'nEnd';
+    (nodes as object[]).push({ id: 'nEnd', type: 'set', variable: 'scissor_finale_done', op: 'set', value: 1 });
+  }
   return { schemaVersion: CURRENT_SCHEMA_VERSION, name, start: 'n1', nodes: nodes.length ? nodes : [{ id: 'n1', type: 'end' }] };
 }
 
@@ -777,6 +825,7 @@ function main(): void {
     writeOverworldTalk(world);
     writeForgeTalk(world);
     writePipTalk(world);
+    writeScissorTalk(world);
     writeMaudTalk(world);
   }
   writeForgePrefabs(OUT, CURRENT_SCHEMA_VERSION, flatArt('pool', [138, 20, 20], 192, 96), flatArt('bolt', [70, 12, 16], 18, 18));

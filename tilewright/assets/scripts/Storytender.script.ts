@@ -85,7 +85,8 @@ export default defineScript({
       me.state.regionT = 0;
     }
     const letter = me.state.rows[Math.floor(me.y)]?.[Math.floor(me.x)] ?? '';
-    const region = me.state.names[letter] ?? String(me.settings.place || '');
+    let region = me.state.names[letter] ?? String(me.settings.place || '');
+    if (letter === 't' && me.state.names.t) region = v.town_published ? 'Thistledown — Prologue complete' : 'Thistledown (Draft)'; // main.gd _update_region
     if (region && region !== v.region_name) {
       v.region_name = region;
       v.region_show = 1;

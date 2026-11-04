@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "name": "ClippingPiece",
+  "root": {
+    "name": "Clipping",
+    "tags": [
+      "clipping",
+      "spawned"
+    ],
+    "components": {
+      "sprite": {
+        "shape": "box",
+        "color": 13421772,
+        "w": 0.6,
+        "d": 0.6,
+        "height": 1.7,
+        "sortOffset": 0,
+        "visible": true,
+        "asset": "a_scissor_182cdffb41_0"
+      },
+      "health": {
+        "max": 1,
+        "invulnerableSeconds": 0.05,
+        "onDeath": "stay",
+        "fallDamage": 0,
+        "team": "enemy",
+        "showBar": false
+      }
+    },
+    "children": []
+  }
+}

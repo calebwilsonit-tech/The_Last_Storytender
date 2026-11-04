@@ -56,7 +56,15 @@
       "id": "n8",
       "type": "line",
       "speaker": "Wick",
-      "text": "Take this. It's the only thing I ever made that I didn't have to cut anything off to finish."
+      "text": "Take this. It's the only thing I ever made that I didn't have to cut anything off to finish.",
+      "next": "nEnd"
+    },
+    {
+      "id": "nEnd",
+      "type": "set",
+      "variable": "scissor_finale_done",
+      "op": "set",
+      "value": 1
     }
   ]
 }

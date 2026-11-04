@@ -997,6 +997,49 @@
             ]
           },
           {
+            "id": "hud.clip",
+            "name": "Clipboard",
+            "type": "panel",
+            "children": [
+              {
+                "id": "hud.clip.t",
+                "name": "hud.clip.t",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 0,
+                "y": 8,
+                "w": 340,
+                "h": 30,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "Clipboard: {clip_text}   V: paste",
+                "style": {
+                  "fontSize": 22,
+                  "color": "#3b2a1c",
+                  "align": "center",
+                  "bold": true
+                }
+              }
+            ],
+            "anchor": "b",
+            "x": 0,
+            "y": -110,
+            "w": 340,
+            "h": 44,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {
+              "fill": "#f6ecd2f0",
+              "border": "#3b2a1c",
+              "borderWidth": 3,
+              "radius": 10
+            },
+            "visible": "{clip_held} = 1"
+          },
+          {
             "id": "hud.quick",
             "name": "Quick slots",
             "type": "panel",
@@ -16515,6 +16558,305 @@
       "modal": true,
       "back": "nothing",
       "dim": 0.6
+    },
+    {
+      "id": "storytender-ending",
+      "name": "End of the Prologue",
+      "root": {
+        "id": "end.root",
+        "name": "Root",
+        "type": "panel",
+        "children": [
+          {
+            "id": "end.stage",
+            "name": "Stage",
+            "type": "panel",
+            "children": [
+              {
+                "id": "end.small",
+                "name": "end.small",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 0,
+                "y": 120,
+                "w": 1280,
+                "h": 41,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "The Last Storytender",
+                "style": {
+                  "fontSize": 30,
+                  "color": "#3b2a1c",
+                  "align": "center",
+                  "italic": true
+                }
+              },
+              {
+                "id": "end.title",
+                "name": "end.title",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 0,
+                "y": 170,
+                "w": 1280,
+                "h": 113,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "End of the Prologue",
+                "style": {
+                  "fontSize": 84,
+                  "color": "#1b1722",
+                  "align": "center",
+                  "bold": true
+                }
+              },
+              {
+                "id": "end.rule",
+                "name": "end.rule",
+                "type": "panel",
+                "children": [],
+                "anchor": "tl",
+                "x": 420,
+                "y": 290,
+                "w": 440,
+                "h": 4,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#f2b84b"
+                }
+              },
+              {
+                "id": "end.body",
+                "name": "end.body",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 300,
+                "y": 318,
+                "w": 680,
+                "h": 110,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "Thistledown is written in, and the Margin Gate stands open. Whatever lies beyond it will have to wait for the next chapter.",
+                "style": {
+                  "fontSize": 28,
+                  "color": "#3b2a1c",
+                  "align": "center"
+                }
+              },
+              {
+                "id": "end.thanks",
+                "name": "end.thanks",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 0,
+                "y": 440,
+                "w": 1280,
+                "h": 54,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "Thank you for playing.",
+                "style": {
+                  "fontSize": 40,
+                  "color": "#1b1722",
+                  "align": "center"
+                }
+              },
+              {
+                "id": "end.keep",
+                "name": "Keep exploring",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "end.keep.t",
+                    "name": "end.keep.t",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 14,
+                    "w": 520,
+                    "h": 41,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Keep exploring",
+                    "style": {
+                      "fontSize": 30,
+                      "color": "#1b1722",
+                      "align": "center"
+                    }
+                  }
+                ],
+                "anchor": "tl",
+                "x": 380,
+                "y": 520,
+                "w": 520,
+                "h": 64,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#f6ecd2",
+                  "border": "#3b2a1c",
+                  "borderWidth": 3,
+                  "shadow": true
+                },
+                "states": {
+                  "hover": {
+                    "fill": "#fff6dc",
+                    "borderWidth": 5
+                  },
+                  "focus": {
+                    "fill": "#fff6dc",
+                    "borderWidth": 5
+                  }
+                },
+                "on": {
+                  "click": [
+                    {
+                      "type": "uiScreen",
+                      "params": {
+                        "op": "close",
+                        "screen": "storytender-ending"
+                      }
+                    }
+                  ],
+                  "hover": [],
+                  "change": []
+                }
+              },
+              {
+                "id": "end.title.go",
+                "name": "Return to the title",
+                "type": "panel",
+                "children": [
+                  {
+                    "id": "end.title.go.t",
+                    "name": "end.title.go.t",
+                    "type": "text",
+                    "children": [],
+                    "anchor": "tl",
+                    "x": 0,
+                    "y": 14,
+                    "w": 520,
+                    "h": 41,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "text": "Return to the title",
+                    "style": {
+                      "fontSize": 30,
+                      "color": "#1b1722",
+                      "align": "center"
+                    }
+                  }
+                ],
+                "anchor": "tl",
+                "x": 380,
+                "y": 600,
+                "w": 520,
+                "h": 64,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "layout": "free",
+                "padding": 0,
+                "style": {
+                  "fill": "#f6ecd2",
+                  "border": "#3b2a1c",
+                  "borderWidth": 3,
+                  "shadow": true
+                },
+                "states": {
+                  "hover": {
+                    "fill": "#fff6dc",
+                    "borderWidth": 5
+                  },
+                  "focus": {
+                    "fill": "#fff6dc",
+                    "borderWidth": 5
+                  }
+                },
+                "on": {
+                  "click": [
+                    {
+                      "type": "saveGame",
+                      "params": {
+                        "slot": "autosave"
+                      }
+                    },
+                    {
+                      "type": "setVariable",
+                      "params": {
+                        "name": "saved_run",
+                        "op": "set",
+                        "value": "1"
+                      }
+                    },
+                    {
+                      "type": "uiScreen",
+                      "params": {
+                        "op": "close",
+                        "screen": "storytender-ending"
+                      }
+                    },
+                    {
+                      "type": "uiScreen",
+                      "params": {
+                        "op": "open",
+                        "screen": "role:title"
+                      }
+                    }
+                  ],
+                  "hover": [],
+                  "change": []
+                }
+              },
+              {
+                "id": "end.credits",
+                "name": "end.credits",
+                "type": "text",
+                "children": [],
+                "anchor": "tl",
+                "x": 0,
+                "y": 684,
+                "w": 1280,
+                "h": 24,
+                "wMode": "fixed",
+                "hMode": "fixed",
+                "text": "Made with Tilewright",
+                "style": {
+                  "fontSize": 18,
+                  "color": "#3b2a1c99",
+                  "align": "center"
+                }
+              }
+            ],
+            "anchor": "c",
+            "w": 1280,
+            "h": 720,
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "layout": "free",
+            "padding": 0,
+            "style": {}
+          }
+        ],
+        "anchor": "fill",
+        "layout": "free",
+        "padding": 0,
+        "style": {
+          "fill": "#e8d6ad"
+        }
+      },
+      "modal": true,
+      "back": "nothing",
+      "dim": 1
     },
     {
       "id": "storytender-map",

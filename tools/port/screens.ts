@@ -741,6 +741,31 @@ function proofreadScreen(): Screen {
   return screen('Vault Trial: Proofread', stage('pf', [panel]), { id: PROOFREAD, back: 'nothing', dim: 0.6 });
 }
 
+// ---------------------------------------------------------------- the end of the Prologue
+
+export const ENDING = 'storytender-ending';
+
+/** The Margin Gate has opened: the end card. The save is kept, so she can keep exploring, or go back to the title and Continue. */
+function endingScreen(): Screen {
+  const btn = (id: string, label: string, y: number, click: Act[]): W =>
+    box(id, 380, y, 520, 64, { fill: C.paperLight, border: C.inkBrown, borderWidth: 3, shadow: true }, [text(`${id}.t`, label, 0, 14, 30, C.ink, { w: 520, style: { align: 'center' } })], {
+      name: label,
+      states: { hover: { fill: '#fff6dc', borderWidth: 5 }, focus: { fill: '#fff6dc', borderWidth: 5 } },
+      on: { click, hover: [], change: [] },
+    });
+  const kids = [
+    text('end.small', 'The Last Storytender', 0, 120, 30, C.inkBrown, { w: 1280, style: { align: 'center', italic: true } }),
+    text('end.title', 'End of the Prologue', 0, 170, 84, C.ink, { w: 1280, style: { align: 'center', bold: true } }),
+    rule('end.rule', 420, 290, 440, C.gold, 4),
+    text('end.body', 'Thistledown is written in, and the Margin Gate stands open. Whatever lies beyond it will have to wait for the next chapter.', 300, 318, 28, C.inkBrown, { w: 680, h: 110, style: { align: 'center' } }),
+    text('end.thanks', 'Thank you for playing.', 0, 440, 40, C.ink, { w: 1280, style: { align: 'center' } }),
+    btn('end.keep', 'Keep exploring', 520, [close(ENDING)]),
+    btn('end.title.go', 'Return to the title', 600, [act('saveGame', { slot: 'autosave' }), setVar('saved_run', '1'), close(ENDING), open('role:title')]),
+    text('end.credits', 'Made with Tilewright', 0, 684, 18, '#3b2a1c99', { w: 1280, style: { align: 'center' } }),
+  ];
+  return screen('End of the Prologue', stage('end', kids, C.paper), { id: ENDING, back: 'nothing', dim: 1 });
+}
+
 /** The Margin Gate: two posts and an arch, small, beside the renown count (it opens at 220). */
 function gateIcon(id: string, x: number, y: number): W {
   const ink = C.inkBrown;
@@ -794,7 +819,9 @@ function hud(usable: string[]): Screen {
   const region = box('hud.region', 0, 0, 360, 46, { fill: '#f6ecd2f0', border: C.inkBrown, borderWidth: 3, radius: 10 }, [
     text('hud.region.text', '{region_name}', 12, 6, 26, C.inkBrown, { w: 336, style: { align: 'center', bold: true } }),
   ], { name: 'Region', anchor: 'tr', x: -16, y: 14, visible: '{region_show}', anim: [{ on: 'show', kind: 'fade', ms: 600, dir: 'down' }, { on: 'hide', kind: 'fade', ms: 900, dir: 'up' }] });
-  const root = w('panel', 'hud.root', { name: 'Root', anchor: 'fill', layout: 'free', padding: 0, style: {}, children: [topLeft, region, bossBar(), quickSlots(usable)] });
+  // what the Scissor-Man's clipboard holds (Scissor.script.ts), above the boss bar
+  const clip = box('hud.clip', 0, 0, 340, 44, { fill: '#f6ecd2f0', border: C.inkBrown, borderWidth: 3, radius: 10 }, [text('hud.clip.t', 'Clipboard: {clip_text}   V: paste', 0, 8, 22, C.inkBrown, { w: 340, style: { align: 'center', bold: true } })], { name: 'Clipboard', anchor: 'b', x: 0, y: -110, visible: '{clip_held} = 1' });
+  const root = w('panel', 'hud.root', { name: 'Root', anchor: 'fill', layout: 'free', padding: 0, style: {}, children: [topLeft, region, bossBar(), clip, quickSlots(usable)] });
   return { ...screen('HUD', root, { id: 'storytender-hud', role: 'hud', modal: false, back: 'pass' }), opensOnStart: true } as Screen;
 }
 
@@ -812,7 +839,7 @@ export function uiTheme(schemaVersion: number): object {
 export function buildScreens(itemIds: string[], schemaVersion: number, paperTile: number, usable: string[] = itemIds, names: MapNames = { regions: [], posts: [], doors: [] }): object {
   return {
     schemaVersion,
-    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), settings(), binder(itemIds), indexScreen(), proofreadScreen(), map(paperTile, names)],
+    screens: [hud(usable), title(), begin(), difficulty(), pause(), restart(), settings(), binder(itemIds), indexScreen(), proofreadScreen(), endingScreen(), map(paperTile, names)],
     prefabs: [
       { name: 'Lamp', widget: lamp() },
       { name: 'Here', widget: here() },

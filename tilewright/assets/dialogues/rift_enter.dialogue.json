@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "name": "rift_enter",
+  "start": "n1",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]The seam is not dark. It is white, the white of a page with nothing on it. At its edges the paper has been cut so cleanly it hums.[/i]",
+      "next": "n2"
+    },
+    {
+      "id": "n2",
+      "type": "line",
+      "speaker": "",
+      "text": "[i]You hold up the lantern and step through.[/i]",
+      "next": "n3"
+    },
+    {
+      "id": "n3",
+      "type": "set",
+      "variable": "go_scissor",
+      "op": "set",
+      "value": 1
+    }
+  ]
+}

@@ -153,7 +153,7 @@ function people(w: World): void {
   {
     const t = new Talk('margin_gate');
     const renown = t.lines([line("The ribbon on the Margin Gate stays tied. A small tag hangs from it: 'Not enough people know your name yet.'"), line('Renown {renown} / 220. Beat Errors, open chests, solve riddles, light posts, explore: any of it counts. The page remembers what you do.')], w.keyed);
-    const start = t.when({ name: 'town_published' }, t.when({ name: 'renown', op: '>=', value: 220 }, t.lines(fn(w, 'gate_open'), w.keyed), renown), t.lines(fn(w, 'gate_locked'), w.keyed));
+    const start = t.when({ name: 'town_published' }, t.when({ name: 'renown', op: '>=', value: 220 }, t.seq(t.lines(fn(w, 'gate_open'), w.keyed), t.set('gate_opened', 1), t.set('ending_go', 1)), renown), t.lines(fn(w, 'gate_locked'), w.keyed));
     w.write('margin_gate', t.data(start[0]));
   }
 }
@@ -173,6 +173,11 @@ export function writeOverworldTalk(w: World): void {
   sayOnce(w, 'town_sign', fn(w, 'town_sign'));
   const lore = w.story.constants.LORE as Record<string, string>;
   for (const id of Object.keys(w.map.LORE)) sayOnce(w, `lore_${id}`, [line(lore[id] ?? w.map.LORE_TEXT[id] ?? '')]);
+  // the tear in the square: stepping in takes her to the Cutting Room (Rift.script.ts shows it once the three are restored)
+  {
+    const t = new Talk('rift_enter');
+    w.write('rift_enter', t.data(t.seq(t.lines(fn(w, 'scissor_rift_enter'), w.keyed), t.set('go_scissor', 1))[0]));
+  }
   // the two riddle stones: a word trial opens from a short conversation (Trial.script.ts runs it when start_<id> is set)
   for (const [id, r] of Object.entries(w.map.RIDDLES)) {
     const t = new Talk(`riddle_${id}`);

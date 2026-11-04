@@ -124,13 +124,24 @@ try {
   // 6. the rift after all three
   await placeAt(88.5, 55.5); await page.waitForTimeout(3000); await readAll();
   const rift = await page.evaluate(() => window.__play.sim.world.all().filter((e) => { const t = e.get('transform'); return t && Math.hypot(t.x - 88.5, t.y - 53.5) < 1.6 && e.get('sprite')?.visible !== false; }).map((e) => e.name));
-  const r1 = await talkTo(88.5, 54.6, 88.5, 53.5);
+  const r1 = await talkTo(88.2, 52.0, 88.5, 53.5);
+  for (let i = 0; i < 40 && !/scissor/.test(await scene()); i++) await page.waitForTimeout(250);
   check('with all three restored the rift appears and leads to the Cutting Room', /scissor/.test(await scene()), `near (88,53): ${rift.join(', ')} | ${say(r1)}`);
   await shotAs('s4_rift.png');
+  // the Cutting Room has its own test (scissor_test); here she is sent home as if the Scissor-Man were beaten
+  await page.waitForTimeout(1500);
+  await setV({ leave_scissor: 1, scissor_done: 1, town_published: 1 });
+  for (let i = 0; i < 40 && !/overworld/.test(await scene()); i++) await page.waitForTimeout(250);
+  await page.waitForTimeout(1500);
   // 7. the Margin Gate
   await setV({ renown: 300 });
   const gate = await talkTo(124.5, 53.5, 125.5, 53.5);
-  check('the Margin Gate opens for a published town with 220+ renown', /open/i.test(say(gate)) && !/shut|locked/i.test(say(gate)), say(gate));
+  check('the Margin Gate opens for a published town with 220+ renown', /unties itself/i.test(say(gate)), say(gate));
+  // the end card of the Prologue comes up a moment later: keep exploring
+  await page.waitForTimeout(2600);
+  const keep = await page.evaluate(() => { const n = [...document.querySelectorAll('*')].filter((n) => n.children.length === 0 && (n.textContent ?? '').trim() === 'Keep exploring').find((n) => n.getBoundingClientRect().width > 0); const r = n?.getBoundingClientRect(); return r ? { x: r.x + r.width / 2, y: r.y + r.height / 2 } : null; });
+  if (keep) await page.mouse.click(keep.x, keep.y);
+  await page.waitForTimeout(800);
   // 8. the binder: use an Ink Vial
   await page.evaluate(() => { const h = window.__play.sim.world.withTag('player')[0].get('state:health'); h.hp = 40; });
   await setV({ 'item:ink_vial': 2 });
