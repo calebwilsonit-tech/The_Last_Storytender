@@ -30,9 +30,10 @@ const OUTCOMES: Record<string, Outcome> = {
   k_scissor_finale: { set: { scissor_finale_done: 1 } },
   k_wake: { set: { woke_up: 1 } },
   k_unfade: {},
+  k_probe: {},
 };
 /** Scenes with no black bars (the waking up is just the page, and some words). */
-const NO_BARS = new Set(['k_wake', 'k_unfade']);
+const NO_BARS = new Set(['k_wake', 'k_unfade', 'k_probe']);
 /** The music of each boss while it is awake (its name is what the boss scripts put in boss_name). */
 const BOSS_MUSIC: Record<string, string> = { 'The Critic': 'music_boss_critic', 'The Spoiler': 'music_boss_spoiler', 'The Cold Shoulder': 'music_boss_cold', 'The Scissor-Man': 'music_boss_scissor' };
 export default defineScript({
@@ -117,6 +118,19 @@ export default defineScript({
         game.do('music', { name: want });
       }
     }
+    // cutscene_on freezes every Error and boss. If it stays set with no scene playing (one cut short by a scene change, a step that never ran), ask
+    // for an empty scene once a second: the engine refuses while a real one plays, and when it accepts there was none, so the flag is let go
+    if (v.cutscene_on) {
+      s.probeT = (s.probeT ?? 0) + game.dt;
+      if (s.probeT > 1) {
+        s.probeT = 0;
+        if (game.playCutscene('k_probe')) {
+          v.cutscene_on = 0;
+          v.letterbox = 0;
+          s.now = '';
+        }
+      }
+    } else s.probeT = 0;
     // a scene asked for: only when none is playing
     if (!s.now) {
       for (const name of Object.keys(OUTCOMES)) {

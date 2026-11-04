@@ -159,6 +159,38 @@ try {
   await page.waitForTimeout(2800);
   check('"Keep exploring" brings the world back out of the white', (await fade()) < 0.05, `fade ${await fade()}`);
   await shotAs('fix_after_ending.png');
+
+  // ---- 5: a cutscene_on that nothing is playing for does not freeze the Errors for good
+  await page.waitForTimeout(1500);
+  const errs = (await tagged('error')).filter((e) => e.visible);
+  const e0 = errs[0];
+  await placeAt(e0.x + 3.2, e0.y);
+  await setV({ cutscene_on: 1, letterbox: 1 });
+  await page.waitForTimeout(3500);
+  v = await vars();
+  check('a stuck cutscene_on (nothing playing) is let go within a few seconds', Number(v.cutscene_on) === 0 && Number(v.letterbox) === 0, `cutscene_on ${v.cutscene_on}, letterbox ${v.letterbox}`);
+  // ...while a real scene keeps it (the Garrick restoration scene runs a few seconds)
+  await setV({ memory_done: 1, restored_garrick: 0, play_k_garrick: 1 });
+  await page.waitForTimeout(3500);
+  const playing = await page.evaluate(() => window.__play.sim.runtime.cutscene?.name ?? null);
+  v = await vars();
+  check('but a scene that really is playing keeps the bars and the stillness', playing === 'k_garrick' && Number(v.cutscene_on) === 1 && Number(v.letterbox) === 1, `playing ${playing}, cutscene_on ${v.cutscene_on}`);
+  await press('KeyP');
+  await page.waitForTimeout(1200);
+
+  // ---- 4: the crystals she leaves where she crumpled are worth exactly what was lost, even with the Mnemosynth bonus
+  await setV({ attr_luck: 100, mnemosynth: 100, difficulty: 'normal', rested_once: 0 });
+  await page.waitForTimeout(600);
+  await placeAt(75.5, 62.5);
+  await page.waitForTimeout(500);
+  await page.evaluate(() => { window.__play.sim.world.withTag('player')[0].get('state:health').hp = 0; });
+  await page.waitForTimeout(1200);
+  const dropped = (await tagged('dropped')).filter((c) => Math.hypot(c.x - 75.5, c.y - 62.5) < 3);
+  v = await vars();
+  const mAfterDeath = Number(v.mnemosynth);
+  for (const c of dropped) { await placeAt(c.x, c.y); await page.waitForTimeout(500); }
+  v = await vars();
+  check('picking the crystals up returns exactly what was lost (85 + 15), not more', dropped.length === 3 && mAfterDeath === 85 && Number(v.mnemosynth) === 100, `${dropped.length} crystals, M ${mAfterDeath} -> ${v.mnemosynth}`);
 } catch (e) {
   check('test run', false, String((e && e.stack) || e).slice(0, 400));
 }

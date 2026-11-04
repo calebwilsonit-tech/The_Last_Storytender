@@ -8,6 +8,7 @@ export default defineScript({
     mnemo: { value: 5, label: 'Mnemosynth' },
     light: { value: 12, label: 'Lantern light' },
     radius: { value: 0.9, label: 'How close (cells)' },
+    bonus: { value: true, label: 'Counts the Mnemosynth-found bonus (not the crystals she left behind when she crumpled)' },
   },
   start(me, game) {
     if (me.settings.flag && game.vars[me.settings.flag]) me.destroy();
@@ -17,7 +18,7 @@ export default defineScript({
     if (!p || me.distanceTo(p) > Number(me.settings.radius) || Math.abs(p.h - me.h) > 0.7) return;
     const v = game.vars;
     // Fortune: +0.25% Mnemosynth found a point
-    v.mnemosynth = Number(v.mnemosynth ?? 0) + Number(me.settings.mnemo) * (1 + Number(v.stat_mnemo ?? 0));
+    v.mnemosynth = Number(v.mnemosynth ?? 0) + Number(me.settings.mnemo) * (me.settings.bonus === false ? 1 : 1 + Number(v.stat_mnemo ?? 0));
     v.light = Math.min(100, Number(v.light ?? 100) + Number(me.settings.light));
     if (me.settings.flag) v[me.settings.flag] = 1;
     game.do('sound', { name: 'crystal', volume: 1 });

@@ -160,7 +160,12 @@ export default defineScript({
         const lost = Math.floor((Number(v.mnemosynth ?? 0) * 0.15) / 5) * 5;
         if (lost > 0) {
           v.mnemosynth = Number(v.mnemosynth) - lost;
-          for (let i = 0; i < lost / 5; i++) game.spawn('DroppedCrystal', prev.x + (game.random() - 0.5) * 1.4, prev.y + (game.random() - 0.5) * 0.7, me.h);
+          for (let i = 0; i < lost / 5; i++) {
+            const c = game.spawn('DroppedCrystal', prev.x + (game.random() - 0.5) * 1.4, prev.y + (game.random() - 0.5) * 0.7, me.h);
+            // what she lost comes back as it was: no bonus on top, or dying would pay
+            const cs = c?.get('script_Collect');
+            if (c && cs) c.set('script_Collect', { ...cs, bonus: false });
+          }
         }
       }
       // the page resets: the Errors come back (once she is away from them), the echoes go

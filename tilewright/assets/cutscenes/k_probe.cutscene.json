@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "name": "k_probe",
+  "skippable": true,
+  "steps": [
+    {
+      "id": "s1",
+      "async": false,
+      "type": "setVariable",
+      "name": "cutscene_on",
+      "value": 1
+    },
+    {
+      "id": "s2",
+      "async": false,
+      "type": "setVariable",
+      "name": "letterbox",
+      "value": 0
+    },
+    {
+      "id": "s3",
+      "async": false,
+      "type": "setVariable",
+      "name": "cutscene_on",
+      "value": 0
+    },
+    {
+      "id": "s4",
+      "async": false,
+      "type": "setVariable",
+      "name": "ended_k_probe",
+      "value": 1
+    }
+  ]
+}
