@@ -870,6 +870,9 @@ function writeData(): { items: number; dialogues: number } {
 
 // ---------------------------------------------------------------- main
 
+/** The oldest release of Tilewright (see TileWrite docs/releasing.md) that the generated game works with. */
+const ENGINE_MIN = '0.1.0';
+
 function main(): void {
   if (existsSync(join(OUT, 'assets/sprites'))) rmSync(join(OUT, 'assets/sprites'), { recursive: true });
   mkdirSync(spriteDir, { recursive: true });
@@ -928,6 +931,9 @@ function main(): void {
   project.startScene = SCENES.overworld!.file;
   project.title = { enabled: true, subtitle: 'The world is not ending; it is being edited.' };
   (project as ProjectData & { compat?: Record<string, boolean> }).compat = currentFlags();
+  // the oldest Tilewright this game works with: the menus' pad buttons, B to go back, the pop-up prompts and the lantern post setting came with 0.1.0
+  // (raise it when the game starts to use something a later release added)
+  (project as ProjectData & { engine?: string }).engine = ENGINE_MIN;
   writeFileSync(join(OUT, 'project.json'), JSON.stringify(project, null, 2) + '\n');
   writeFileSync(join(OUT, '.gdignore'), '');
   console.log(`tiles ${tileset.length}, sprites ${readdirSync(spriteDir).length}`);
