@@ -546,7 +546,8 @@ function storytenderKit(p: EntityData, scene: string): void {
   attach(c, 'light', { radius: 1.2, intensity: 0.35, color: 'cool', shadows: true, flicker: 0.15, mode: 'always' });
   attach(c, 'echoRecorder', { seconds: 9, capacity: 0, capacityVariable: '', ending: 'hold', ghostAlpha: 0.55 });
   attach(c, 'script_Director', { music: PLACE_AUDIO[scene]?.[0] ?? 'music_overworld', step: PLACE_AUDIO[scene]?.[1] ?? 'step_grass' });
-  attach(c, 'script_Storytender', { speed: 4.2, lanternRadius: 4.9, echoesHere: scene === 'forge' ? 1 : 0, equipFx: equipFxJson(), ...placeSettings(scene) });
+  // Garrick's memory lets her keep two echoes at once (its puzzles are easy; harder ones come later)
+  attach(c, 'script_Storytender', { speed: 4.2, lanternRadius: 4.9, echoesHere: scene === 'forge' ? 2 : 0, equipFx: equipFxJson(), ...placeSettings(scene) });
   if (scene === 'proof') (c.script_Storytender as { lanternRadius: number }).lanternRadius = 4.9 * 1.7; // side_proof.gd: lantern_power 1.7 in the dark
 }
 

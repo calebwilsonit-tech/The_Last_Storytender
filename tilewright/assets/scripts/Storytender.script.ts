@@ -33,7 +33,7 @@ export default defineScript({
     regions: { value: '', label: 'Region map: one letter per cell, rows split by |' },
     regionNames: { value: '', label: 'Region names (JSON: letter -> name)' },
     place: { value: '', label: 'Name of this place (when there is no region map)' },
-    echoesHere: { value: 0, label: 'Echoes she has here before the forge memory is done' },
+    echoesHere: { value: 0, label: 'Echoes she can keep at once here before the forge memory is done (two in the forge memory)' },
     equipFx: { value: '', label: 'What each binding and amulet does (JSON: item -> stat -> amount)' },
   },
   start(me, game) {

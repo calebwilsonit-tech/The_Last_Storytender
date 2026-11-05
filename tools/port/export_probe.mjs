@@ -14,7 +14,7 @@ const { _electron: electron } = createRequire(path.join(TILEWRIGHT, 'package.jso
 fs.mkdirSync(outDir, { recursive: true });
 const base = fs.mkdtempSync(path.join(os.tmpdir(), 'tw-port-'));
 const work = path.join(base, 'work', 'project'); const workRoot = path.join(base, 'work');
-fs.cpSync(projectDir, work, { recursive: true });
+fs.cpSync(projectDir, work, { recursive: true, filter: (f) => path.basename(f) !== 'saves' }); // (a game played from the editor leaves its saves in the project folder: the tests start fresh)
 const app = await electron.launch({
   args: [path.join(TILEWRIGHT, 'packages', 'editor'), `--user-data-dir=${path.join(base, 'ud')}`, '--no-sandbox'],
   env: { ...process.env, TILEWRIGHT_TEST_DIR: workRoot },

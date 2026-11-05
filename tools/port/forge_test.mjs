@@ -14,7 +14,7 @@ const { _electron: electron } = createRequire(path.join(TILEWRIGHT, 'package.jso
 fs.mkdirSync(outDir, { recursive: true });
 const base = fs.mkdtempSync(path.join(os.tmpdir(), 'tw-port-'));
 const work = path.join(base, 'project');
-fs.cpSync(projectDir, work, { recursive: true });
+fs.cpSync(projectDir, work, { recursive: true, filter: (f) => path.basename(f) !== 'saves' }); // (a game played from the editor leaves its saves in the project folder: the tests start fresh)
 const app = await electron.launch({
   args: [path.join(TILEWRIGHT, 'packages', 'editor'), `--user-data-dir=${path.join(base, 'ud')}`, '--no-sandbox'],
   env: { ...process.env, TILEWRIGHT_TEST_DIR: work },
@@ -103,6 +103,9 @@ try {
   await shotAs('f1_arrive.png');
   const intro = await readAll();
   check('the memory greets you and gives you an echo', intro.length > 0 && Number((await vars()).echo_granted) === 1, intro.join(' | ').slice(0, 140));
+
+  const capNow = await page.evaluate(() => window.__play.sim.world.withTag('player')[0].get('echoRecorder')?.capacity);
+  check('in the forge memory she can keep two echoes at once', capNow === 2, `capacity ${capNow}`);
 
   // an echo plate holds its gate open
   const plates = await tagged('plate');
@@ -196,7 +199,7 @@ try {
   await page.waitForTimeout(1000);
   await shotAs('f4_home.png');
   const v4 = await vars();
-  check('taking the sword ends the memory and brings you home', Number(v4.has_sword) === 1 && Number(v4.memory_done) === 1 && /overworld/.test(await scene()), await scene());
+  check('taking the sword ends the memory and brings you home', Number(v4.has_sword) === 1 && Number(v4.memory_done) === 1 && /overworld/.test(await scene()), `${await scene()} ${JSON.stringify(await page.evaluate(() => ({ cs: window.__play.sim.runtime.cutscene?.name ?? null, ui: window.__play.sim.runtime.ui.stack.join(','), dlg: window.__play.sim.runtime.dialogue?.view?.text ?? null, v: ['has_sword', 'memory_done', 'critic_down', 'go_home'].map((k) => window.__play.sim.runtime.vars[k]) })))}`);
 } catch (e) {
   check('test run', false, String(e && e.stack || e).slice(0, 400));
 }
