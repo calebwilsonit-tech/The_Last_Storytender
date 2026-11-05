@@ -49,7 +49,8 @@ const rule = (id: string, x: number, y: number, wd: number, color: string, h = 2
 
 /** The stage: 1280 x 720 in the middle of the window, everything placed on it as in the Godot game. */
 function stage(id: string, children: W[], fill?: string): W {
-  const inner = w('panel', `${id}.stage`, { name: 'Stage', anchor: 'c', w: 1280, h: 720, wMode: 'fixed', hMode: 'fixed', layout: 'free', padding: 0, style: {}, children });
+  // the stage is drawn for a 1280 x 720 window and shrinks or grows to fit the real one (style.fit), so nothing is cut off at any size
+  const inner = w('panel', `${id}.stage`, { name: 'Stage', anchor: 'c', w: 1280, h: 720, wMode: 'fixed', hMode: 'fixed', layout: 'free', padding: 0, style: { fit: 'stage' }, children });
   return w('panel', `${id}.root`, { name: 'Root', anchor: 'fill', layout: 'free', padding: 0, style: fill ? { fill } : {}, children: [inner] });
 }
 
@@ -192,7 +193,7 @@ function pause(): Screen {
     { id: 'pause.resume', label: 'Resume', click: [close('role:pause')] },
     { id: 'pause.travel', label: 'Travel to a lantern', click: [open('role:travel')], visible: '{dungeon_menu}' },
     { id: 'pause.restart', label: 'Restart this dungeon', click: [open(RESTART)], visible: '{dungeon_menu}' },
-    { id: 'pause.map', label: 'Map', click: [open('role:travel')] },
+    { id: 'pause.map', label: 'Map', click: [open('role:travel')], visible: '{dungeon_menu} != 1' }, // (in a memory it is the "Travel to a lantern" above)
     { id: 'pause.settings', label: 'Settings', click: [open('role:settings')] },
     { id: 'pause.title', label: 'Save and return to title', click: [act('saveGame', { slot: 'autosave' }), setVar('saved_run', '1'), act('music', { name: 'music_title' }), close('role:pause'), open('role:title')] },
     { id: 'pause.quit', label: 'Quit game', click: [act('saveGame', { slot: 'autosave' }), act('quitGame')], visible: '{host.quit}' },
@@ -237,14 +238,16 @@ function settings(): Screen {
     rule(`${id}.rule`, 24, y + 33, WIDTH - 48, `${color}59`, 2),
   ];
   const row = (id: string, y: number, label: string, i: number, control: W, extra: Style = {}): W =>
-    box(`set.${id}`, 24, y, WIDTH - 48, 40, { fill: i % 2 ? '#3b2a1c0d' : '#3b2a1c00' }, [text(`set.${id}.label`, label, 12, 6, 22, C.ink, { w: 300, h: 28 }), control], extra);
+    box(`set.${id}`, 24, y, WIDTH - 48, 34, { fill: i % 2 ? '#3b2a1c0d' : '#3b2a1c00' }, [text(`set.${id}.label`, label, 12, 3, 22, C.ink, { w: 300, h: 28 }), control], extra);
   const slider = (id: string, value: string, min: number, max: number, step: number): W =>
-    w('slider', `set.${id}.slider`, { name: `${id} slider`, ...at(300, 6, 260, 28), value, min, max: String(max), step });
-  const tick = (id: string, value: string): W => w('toggle', `set.${id}.box`, { name: `${id} tick box`, ...at(520, 4, 40, 32), value, text: '' });
+    w('slider', `set.${id}.slider`, { name: `${id} slider`, ...at(300, 3, 260, 28), value, min, max: String(max), step });
+  const tick = (id: string, value: string): W => w('toggle', `set.${id}.box`, { name: `${id} tick box`, ...at(520, 1, 40, 32), value, text: '' });
+  /** A pop-up list whose choices come from the game ("choices:resolution": the window sizes that fit this screen). */
+  const pick = (id: string, value: string, source: string): W => w('dropdown', `set.${id}.choice`, { name: `${id} choice`, ...at(300, 2, 260, 30), value, source, options: '' });
   const controls = box(
     'set.controls',
     24,
-    594,
+    604,
     WIDTH - 48,
     40,
     { fill: '#f2b84b40', border: C.inkBrown, borderWidth: 2 },
@@ -261,21 +264,24 @@ function settings(): Screen {
     [
       text('set.head', 'Settings', 24, 10, 46, C.ink, { w: 400 }),
       rule('set.headrule', 24, 66, WIDTH - 48, C.gold, 4),
-      ...section('set.s1', 80, 'SOUND', C.cyanDeep),
-      row('master', 120, 'Master volume', 0, slider('master', 'settings.master', 0, 1, 0.1)),
-      row('music', 162, 'Music', 1, slider('music', 'settings.music', 0, 1, 0.1)),
-      row('sfx', 204, 'Effects', 0, slider('sfx', 'settings.sfx', 0, 1, 0.1)),
-      row('voice', 246, 'Voices', 1, slider('voice', 'settings.voice', 0, 1, 0.1)),
-      ...section('set.s2', 296, 'PLAY', C.red),
-      row('difficulty', 336, 'Difficulty', 0, box('set.difficulty.value', 340, 4, 220, 32, {}, [
-        text('set.difficulty.story', 'Story  (fixed for this save)', 0, 4, 20, C.inkBrown, { w: 220, visible: '{difficulty} = story' }),
-        text('set.difficulty.normal', 'Normal  (fixed for this save)', 0, 4, 20, C.inkBrown, { w: 220, visible: '{difficulty} != story' }),
+      ...section('set.s1', 76, 'SOUND', C.cyanDeep),
+      row('master', 114, 'Master volume', 0, slider('master', 'settings.master', 0, 1, 0.1)),
+      row('music', 150, 'Music', 1, slider('music', 'settings.music', 0, 1, 0.1)),
+      row('sfx', 186, 'Effects', 0, slider('sfx', 'settings.sfx', 0, 1, 0.1)),
+      row('voice', 222, 'Voices', 1, slider('voice', 'settings.voice', 0, 1, 0.1)),
+      ...section('set.s2', 262, 'PLAY', C.red),
+      row('difficulty', 300, 'Difficulty', 0, box('set.difficulty.value', 300, 1, 260, 32, {}, [
+        text('set.difficulty.story', 'Story  (fixed for this save)', 0, 4, 20, C.inkBrown, { w: 260, visible: '{difficulty} = story' }),
+        text('set.difficulty.normal', 'Normal  (fixed for this save)', 0, 4, 20, C.inkBrown, { w: 260, visible: '{difficulty} != story' }),
       ])),
-      row('shake', 378, 'Screen shake and hit freeze', 1, tick('shake', 'settings.screenShake')),
-      row('zoom', 420, 'Camera zoom', 0, slider('zoom', 'settings.cameraZoom', 0.75, 1.5, 0.25)),
-      ...section('set.s3', 470, 'SCREEN', C.goldDark),
-      row('fullscreen', 510, 'Full screen', 0, tick('fullscreen', 'settings.fullscreen'), { visible: '{host.fullscreen}' }),
-      row('fps', 552, 'Show frame rate', 1, tick('fps', 'settings.showFps')),
+      row('shake', 336, 'Screen shake and hit freeze', 1, tick('shake', 'settings.screenShake')),
+      row('zoom', 372, 'Camera zoom', 0, slider('zoom', 'settings.cameraZoom', 0.75, 1.5, 0.25)),
+      ...section('set.s3', 412, 'SCREEN', C.goldDark),
+      row('uiscale', 450, 'Menu and HUD size', 0, slider('uiscale', 'settings.uiScale', 0.75, 1.5, 0.25)),
+      row('fps', 486, 'Show frame rate', 1, tick('fps', 'settings.showFps')),
+      // (only an exported game has a window of its own to resize)
+      row('fullscreen', 522, 'Full screen', 0, tick('fullscreen', 'settings.fullscreen'), { visible: '{host.fullscreen}' }),
+      row('resolution', 558, 'Window size', 1, pick('resolution', 'settings.resolution', 'choices:resolution'), { visible: '{host.resolutions}' }),
       controls,
     ],
   );
@@ -597,7 +603,7 @@ function quickSlots(usable: string[]): W {
     ], { name: `Quick slot ${n} active`, visible: on });
     kids.push(group);
   }
-  return w('panel', 'hud.quick', { name: 'Quick slots', anchor: 'br', x: 0, y: 0, w: 180, h: 110, wMode: 'fixed', hMode: 'fixed', layout: 'free', padding: 0, style: {}, children: kids });
+  return w('panel', 'hud.quick', { name: 'Quick slots', anchor: 'br', x: 0, y: 0, w: 180, h: 110, wMode: 'fixed', hMode: 'fixed', layout: 'free', padding: 0, style: { fit: 'hud' }, children: kids });
 }
 
 // ---------------------------------------------------------------- the Index at a lantern post: Revise Your Draft (index_hub.gd, game_state.gd)
@@ -841,7 +847,7 @@ function bossBar(): W {
     layout: 'free',
     padding: 0,
     visible: shown,
-    style: { fill: C.paperLight, border: C.inkBrown, borderWidth: 3, radius: 8 },
+    style: { fill: C.paperLight, border: C.inkBrown, borderWidth: 3, radius: 8, fit: 'hud' },
     anim: [{ on: 'show', kind: 'fade', ms: 400, dir: 'down' }],
     children: [text('hud.boss.name', '{boss_name}', 20, 6, 24, C.inkBrown, { w: 380, style: { bold: true, align: 'center' } }), bar],
   });
@@ -851,7 +857,7 @@ function hud(usable: string[]): Screen {
   // pinned to the corners of the window, as the Godot HUD is: the bottle and gauges top left, the place top right, the quick slots bottom right.
   // Everything sits on a parchment plate, so it reads against the dark page edge as well as the grass.
   const plate = box('hud.plate', 6, 6, 316, 134, { fill: '#f6ecd2f0', border: C.inkBrown, borderWidth: 3, radius: 10 }, [], { name: 'Plate' });
-  const topLeft = box('hud.tl', 0, 0, 340, 146, {}, [
+  const topLeft = box('hud.tl', 0, 0, 340, 146, { fit: 'hud' }, [
     plate,
     inkBottle(),
     lanternGauge(),
@@ -861,13 +867,13 @@ function hud(usable: string[]): Screen {
     text('hud.renown', `Renown {renown} / ${GATE_RENOWN}`, 134, 92, 18, C.inkBrown, { w: 180, style: { bold: true } }),
     w('bar', 'hud.renown.bar', { name: 'Renown', ...at(134, 116, 176, 9), value: 'renown', max: String(GATE_RENOWN), style: { fill: '#3b2a1c40', color: C.gold, border: C.inkBrown, borderWidth: 2 } }),
   ], { name: 'Top left' });
-  const region = box('hud.region', 0, 0, 360, 46, { fill: '#f6ecd2f0', border: C.inkBrown, borderWidth: 3, radius: 10 }, [
+  const region = box('hud.region', 0, 0, 360, 46, { fill: '#f6ecd2f0', border: C.inkBrown, borderWidth: 3, radius: 10, fit: 'hud' }, [
     text('hud.region.text', '{region_name}', 12, 6, 26, C.inkBrown, { w: 336, style: { align: 'center', bold: true } }),
   ], { name: 'Region', anchor: 'tr', x: -16, y: 14, visible: '{region_show}', anim: [{ on: 'show', kind: 'fade', ms: 600, dir: 'down' }, { on: 'hide', kind: 'fade', ms: 900, dir: 'up' }] });
   // what the Scissor-Man's clipboard holds (Scissor.script.ts), above the boss bar
-  const clip = box('hud.clip', 0, 0, 340, 44, { fill: '#f6ecd2f0', border: C.inkBrown, borderWidth: 3, radius: 10 }, [text('hud.clip.t', 'Clipboard: {clip_text}   V: paste', 0, 8, 22, C.inkBrown, { w: 340, style: { align: 'center', bold: true } })], { name: 'Clipboard', anchor: 'b', x: 0, y: -110, visible: '{clip_held} = 1' });
-  const bars = ['t', 'b'].map((a) => box(`hud.bar.${a}`, 0, 0, 4000, 96, { fill: '#000000' }, [], { name: 'Letterbox', anchor: a, wMode: 'fill', visible: '{letterbox} = 1', anim: [{ on: 'show', kind: 'slide', ms: 600, dir: a === 't' ? 'down' : 'up' }, { on: 'hide', kind: 'slide', ms: 800, dir: a === 't' ? 'up' : 'down' }] }));
-  const skip = text('hud.skip', 'P  skip', 0, 0, 20, '#f4ecd8', { w: 120, anchor: 'br', x: -24, y: -30, visible: '{cutscene_on} = 1', style: { align: 'right' } });
+  const clip = box('hud.clip', 0, 0, 340, 44, { fill: '#f6ecd2f0', border: C.inkBrown, borderWidth: 3, radius: 10, fit: 'hud' }, [text('hud.clip.t', 'Clipboard: {clip_text}   V: paste', 0, 8, 22, C.inkBrown, { w: 340, style: { align: 'center', bold: true } })], { name: 'Clipboard', anchor: 'b', x: 0, y: -110, visible: '{clip_held} = 1' });
+  const bars = ['t', 'b'].map((a) => box(`hud.bar.${a}`, 0, 0, 4000, 96, { fill: '#000000', fit: 'hud' }, [], { name: 'Letterbox', anchor: a, wMode: 'fill', visible: '{letterbox} = 1', anim: [{ on: 'show', kind: 'slide', ms: 600, dir: a === 't' ? 'down' : 'up' }, { on: 'hide', kind: 'slide', ms: 800, dir: a === 't' ? 'up' : 'down' }] }));
+  const skip = text('hud.skip', 'P  skip', 0, 0, 20, '#f4ecd8', { w: 120, anchor: 'br', x: -24, y: -30, visible: '{cutscene_on} = 1', style: { align: 'right', fit: 'hud' } });
   const root = w('panel', 'hud.root', { name: 'Root', anchor: 'fill', layout: 'free', padding: 0, style: {}, children: [topLeft, region, bossBar(), clip, quickSlots(usable), ...bars, skip] });
   return { ...screen('HUD', root, { id: 'storytender-hud', role: 'hud', modal: false, back: 'pass' }), opensOnStart: true } as Screen;
 }

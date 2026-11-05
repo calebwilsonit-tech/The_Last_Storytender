@@ -18,3 +18,6 @@ tools/art/python_path.txt
 # Ludo.ai tries (only the chosen picture of each is kept); contact sheets
 art/incoming2/**/*_s[0-9].png
 art/_cal/
+
+# the sound effects and music are made by tools/audio/make_audio.py (run_porter.sh runs it): build output, not source
+tilewright/assets/audio/

@@ -45,7 +45,6 @@ export function sideMap(repo: string, scene: 'weighing' | 'proof'): SideMap {
 }
 
 export function writeSideTalk(w: World): void {
-  const k = (name: string): string => name;
   const plain = (name: string, lines: Line[], ...sets: [string, number][]): void => {
     const t = new Talk(name);
     w.write(name, t.data(t.seq(t.lines(lines, w.keyed), ...sets.map(([v, n]) => t.set(v, n)))[0]));
@@ -82,7 +81,6 @@ export function writeSideTalk(w: World): void {
     const t = new Talk(`plaque_${i}`);
     w.write(t.name, t.data(t.when({ name: `plaque_seen_${i}` }, t.lines([line(text)], w.keyed), t.lines([line('A black bar covers it. Whatever is written there needs light to matter.')], w.keyed))[0]));
   });
-  void k;
 }
 
 /** What one object of a side room does. `ch` is the map's letter under it. */
@@ -95,9 +93,7 @@ export function decorateSide(e: EntityData, scene: 'weighing' | 'proof', cls: st
     return;
   }
   if (cls === 'StoryGate') {
-    const [ax, ay] = GATE_AXIS[ch] ?? [0, 1];
-    void ax;
-    const along = Number(ay) !== 0 || scene === 'proof';
+    const along = (GATE_AXIS[ch] ?? [0, 1])[1] !== 0 || scene === 'proof'; // a gate spans y (the axis is [0, 1]) or x ([1, 0])
     if (scene === 'weighing' && ch === 'D') w.attach(c, 'script_StoryGate', { needs: 'weights>=3', closeFar: 0, said: '' });
     else if (scene === 'weighing') w.attach(c, 'script_StoryGate', { needs: (ECHO_GATES[ch] ?? []).map((p) => `wplate_${p}`).join('+') || 'never', closeFar: ch === 'A' ? 0 : 2.5, said: 'The scales balance. The way opens.' });
     else w.attach(c, 'script_StoryGate', { needs: 'site_proof', closeFar: 0, said: 'Approved. The gate lifts.' });

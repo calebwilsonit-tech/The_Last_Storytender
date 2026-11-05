@@ -323,14 +323,15 @@ function draw(me: ScriptEntity, game: ScriptGame, ghost: string[]): void {
   const s = me.state;
   const cells = s.cells as Record<string, Cell>;
   const looks = { hole: String(me.settings.lookHole), warn: String(me.settings.lookWarn), patch: String(me.settings.lookPatch), ghost: String(me.settings.lookGhost) };
+  const shown = (s.shown ??= {}) as Record<string, string>;
+  const marked = new Set(ghost);
   for (const [k, c] of Object.entries(cells)) {
+    const want = c.patch > 0 ? 'patch' : marked.has(k) ? 'ghost' : c.cut > 0 ? 'hole' : c.warn ? 'warn' : '';
+    if ((shown[k] ?? '') === want) continue; // nothing changed here: the cover is not touched (most cells, most frames)
     const o = (s.over as Record<string, ScriptEntity>)[k];
     const spr = o?.get('sprite');
     if (!o || !spr) continue;
-    const ok = ghost.includes(k);
-    const want = c.patch > 0 ? 'patch' : ok ? 'ghost' : c.cut > 0 ? 'hole' : c.warn ? 'warn' : '';
-    if (s.shown?.[k] === want) continue;
-    (s.shown ??= {})[k] = want;
+    shown[k] = want;
     o.set('sprite', { ...spr, visible: want !== '', ...(want ? { asset: looks[want as keyof typeof looks] } : {}) });
   }
 }

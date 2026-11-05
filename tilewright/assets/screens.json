@@ -865,7 +865,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "hud"
+            }
           },
           {
             "id": "hud.region",
@@ -906,7 +908,8 @@
               "fill": "#f6ecd2f0",
               "border": "#3b2a1c",
               "borderWidth": 3,
-              "radius": 10
+              "radius": 10,
+              "fit": "hud"
             },
             "visible": "{region_show}",
             "anim": [
@@ -985,7 +988,8 @@
               "fill": "#f6ecd2",
               "border": "#3b2a1c",
               "borderWidth": 3,
-              "radius": 8
+              "radius": 8,
+              "fit": "hud"
             },
             "anim": [
               {
@@ -1035,7 +1039,8 @@
               "fill": "#f6ecd2f0",
               "border": "#3b2a1c",
               "borderWidth": 3,
-              "radius": 10
+              "radius": 10,
+              "fit": "hud"
             },
             "visible": "{clip_held} = 1"
           },
@@ -2248,7 +2253,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "hud"
+            }
           },
           {
             "id": "hud.bar.t",
@@ -2265,7 +2272,8 @@
             "layout": "free",
             "padding": 0,
             "style": {
-              "fill": "#000000"
+              "fill": "#000000",
+              "fit": "hud"
             },
             "visible": "{letterbox} = 1",
             "anim": [
@@ -2298,7 +2306,8 @@
             "layout": "free",
             "padding": 0,
             "style": {
-              "fill": "#000000"
+              "fill": "#000000",
+              "fit": "hud"
             },
             "visible": "{letterbox} = 1",
             "anim": [
@@ -2332,7 +2341,8 @@
             "style": {
               "fontSize": 20,
               "color": "#f4ecd8",
-              "align": "right"
+              "align": "right",
+              "fit": "hud"
             },
             "visible": "{cutscene_on} = 1"
           }
@@ -3195,7 +3205,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "stage"
+            }
           }
         ],
         "anchor": "fill",
@@ -3640,7 +3652,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "stage"
+            }
           }
         ],
         "anchor": "fill",
@@ -4304,7 +4318,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "stage"
+            }
           }
         ],
         "anchor": "fill",
@@ -4703,7 +4719,7 @@
                       "hover": [],
                       "change": []
                     },
-                    "visible": "",
+                    "visible": "{dungeon_menu} != 1",
                     "enabled": ""
                   },
                   {
@@ -5133,7 +5149,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "stage"
+            }
           }
         ],
         "anchor": "fill",
@@ -5521,7 +5539,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "stage"
+            }
           }
         ],
         "anchor": "fill",
@@ -5594,7 +5614,7 @@
                     "children": [],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 84,
+                    "y": 80,
                     "w": 6,
                     "h": 24,
                     "wMode": "fixed",
@@ -5613,7 +5633,7 @@
                     "children": [],
                     "anchor": "tl",
                     "x": 42,
-                    "y": 80,
+                    "y": 76,
                     "w": 300,
                     "h": 32,
                     "wMode": "fixed",
@@ -5632,7 +5652,7 @@
                     "children": [],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 113,
+                    "y": 109,
                     "w": 572,
                     "h": 2,
                     "wMode": "fixed",
@@ -5655,7 +5675,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 12,
-                        "y": 6,
+                        "y": 3,
                         "w": 300,
                         "h": 28,
                         "wMode": "fixed",
@@ -5673,7 +5693,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 300,
-                        "y": 6,
+                        "y": 3,
                         "w": 260,
                         "h": 28,
                         "wMode": "fixed",
@@ -5686,9 +5706,9 @@
                     ],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 120,
+                    "y": 114,
                     "w": 572,
-                    "h": 40,
+                    "h": 34,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "layout": "free",
@@ -5709,7 +5729,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 12,
-                        "y": 6,
+                        "y": 3,
                         "w": 300,
                         "h": 28,
                         "wMode": "fixed",
@@ -5727,7 +5747,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 300,
-                        "y": 6,
+                        "y": 3,
                         "w": 260,
                         "h": 28,
                         "wMode": "fixed",
@@ -5740,9 +5760,9 @@
                     ],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 162,
+                    "y": 150,
                     "w": 572,
-                    "h": 40,
+                    "h": 34,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "layout": "free",
@@ -5763,7 +5783,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 12,
-                        "y": 6,
+                        "y": 3,
                         "w": 300,
                         "h": 28,
                         "wMode": "fixed",
@@ -5781,7 +5801,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 300,
-                        "y": 6,
+                        "y": 3,
                         "w": 260,
                         "h": 28,
                         "wMode": "fixed",
@@ -5794,9 +5814,9 @@
                     ],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 204,
+                    "y": 186,
                     "w": 572,
-                    "h": 40,
+                    "h": 34,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "layout": "free",
@@ -5817,7 +5837,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 12,
-                        "y": 6,
+                        "y": 3,
                         "w": 300,
                         "h": 28,
                         "wMode": "fixed",
@@ -5835,7 +5855,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 300,
-                        "y": 6,
+                        "y": 3,
                         "w": 260,
                         "h": 28,
                         "wMode": "fixed",
@@ -5848,9 +5868,9 @@
                     ],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 246,
+                    "y": 222,
                     "w": 572,
-                    "h": 40,
+                    "h": 34,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "layout": "free",
@@ -5866,7 +5886,7 @@
                     "children": [],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 300,
+                    "y": 266,
                     "w": 6,
                     "h": 24,
                     "wMode": "fixed",
@@ -5885,7 +5905,7 @@
                     "children": [],
                     "anchor": "tl",
                     "x": 42,
-                    "y": 296,
+                    "y": 262,
                     "w": 300,
                     "h": 32,
                     "wMode": "fixed",
@@ -5904,7 +5924,7 @@
                     "children": [],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 329,
+                    "y": 295,
                     "w": 572,
                     "h": 2,
                     "wMode": "fixed",
@@ -5927,7 +5947,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 12,
-                        "y": 6,
+                        "y": 3,
                         "w": 300,
                         "h": 28,
                         "wMode": "fixed",
@@ -5951,7 +5971,7 @@
                             "anchor": "tl",
                             "x": 0,
                             "y": 4,
-                            "w": 220,
+                            "w": 260,
                             "h": 27,
                             "wMode": "fixed",
                             "hMode": "fixed",
@@ -5970,7 +5990,7 @@
                             "anchor": "tl",
                             "x": 0,
                             "y": 4,
-                            "w": 220,
+                            "w": 260,
                             "h": 27,
                             "wMode": "fixed",
                             "hMode": "fixed",
@@ -5983,9 +6003,9 @@
                           }
                         ],
                         "anchor": "tl",
-                        "x": 340,
-                        "y": 4,
-                        "w": 220,
+                        "x": 300,
+                        "y": 1,
+                        "w": 260,
                         "h": 32,
                         "wMode": "fixed",
                         "hMode": "fixed",
@@ -5996,9 +6016,9 @@
                     ],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 336,
+                    "y": 300,
                     "w": 572,
-                    "h": 40,
+                    "h": 34,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "layout": "free",
@@ -6019,7 +6039,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 12,
-                        "y": 6,
+                        "y": 3,
                         "w": 300,
                         "h": 28,
                         "wMode": "fixed",
@@ -6037,7 +6057,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 520,
-                        "y": 4,
+                        "y": 1,
                         "w": 40,
                         "h": 32,
                         "wMode": "fixed",
@@ -6048,9 +6068,9 @@
                     ],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 378,
+                    "y": 336,
                     "w": 572,
-                    "h": 40,
+                    "h": 34,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "layout": "free",
@@ -6071,7 +6091,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 12,
-                        "y": 6,
+                        "y": 3,
                         "w": 300,
                         "h": 28,
                         "wMode": "fixed",
@@ -6089,7 +6109,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 300,
-                        "y": 6,
+                        "y": 3,
                         "w": 260,
                         "h": 28,
                         "wMode": "fixed",
@@ -6102,9 +6122,9 @@
                     ],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 420,
+                    "y": 372,
                     "w": 572,
-                    "h": 40,
+                    "h": 34,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "layout": "free",
@@ -6120,7 +6140,7 @@
                     "children": [],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 474,
+                    "y": 416,
                     "w": 6,
                     "h": 24,
                     "wMode": "fixed",
@@ -6139,7 +6159,7 @@
                     "children": [],
                     "anchor": "tl",
                     "x": 42,
-                    "y": 470,
+                    "y": 412,
                     "w": 300,
                     "h": 32,
                     "wMode": "fixed",
@@ -6158,7 +6178,7 @@
                     "children": [],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 503,
+                    "y": 445,
                     "w": 572,
                     "h": 2,
                     "wMode": "fixed",
@@ -6170,57 +6190,58 @@
                     }
                   },
                   {
-                    "id": "set.fullscreen",
-                    "name": "set.fullscreen",
+                    "id": "set.uiscale",
+                    "name": "set.uiscale",
                     "type": "panel",
                     "children": [
                       {
-                        "id": "set.fullscreen.label",
-                        "name": "set.fullscreen.label",
+                        "id": "set.uiscale.label",
+                        "name": "set.uiscale.label",
                         "type": "text",
                         "children": [],
                         "anchor": "tl",
                         "x": 12,
-                        "y": 6,
+                        "y": 3,
                         "w": 300,
                         "h": 28,
                         "wMode": "fixed",
                         "hMode": "fixed",
-                        "text": "Full screen",
+                        "text": "Menu and HUD size",
                         "style": {
                           "fontSize": 22,
                           "color": "#1b1722"
                         }
                       },
                       {
-                        "id": "set.fullscreen.box",
-                        "name": "fullscreen tick box",
-                        "type": "toggle",
+                        "id": "set.uiscale.slider",
+                        "name": "uiscale slider",
+                        "type": "slider",
                         "children": [],
                         "anchor": "tl",
-                        "x": 520,
-                        "y": 4,
-                        "w": 40,
-                        "h": 32,
+                        "x": 300,
+                        "y": 3,
+                        "w": 260,
+                        "h": 28,
                         "wMode": "fixed",
                         "hMode": "fixed",
-                        "value": "settings.fullscreen",
-                        "text": ""
+                        "value": "settings.uiScale",
+                        "min": 0.75,
+                        "max": "1.5",
+                        "step": 0.25
                       }
                     ],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 510,
+                    "y": 450,
                     "w": 572,
-                    "h": 40,
+                    "h": 34,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "layout": "free",
                     "padding": 0,
                     "style": {
                       "fill": "#3b2a1c00"
-                    },
-                    "visible": "{host.fullscreen}"
+                    }
                   },
                   {
                     "id": "set.fps",
@@ -6234,7 +6255,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 12,
-                        "y": 6,
+                        "y": 3,
                         "w": 300,
                         "h": 28,
                         "wMode": "fixed",
@@ -6252,7 +6273,7 @@
                         "children": [],
                         "anchor": "tl",
                         "x": 520,
-                        "y": 4,
+                        "y": 1,
                         "w": 40,
                         "h": 32,
                         "wMode": "fixed",
@@ -6263,9 +6284,9 @@
                     ],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 552,
+                    "y": 486,
                     "w": 572,
-                    "h": 40,
+                    "h": 34,
                     "wMode": "fixed",
                     "hMode": "fixed",
                     "layout": "free",
@@ -6273,6 +6294,113 @@
                     "style": {
                       "fill": "#3b2a1c0d"
                     }
+                  },
+                  {
+                    "id": "set.fullscreen",
+                    "name": "set.fullscreen",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "set.fullscreen.label",
+                        "name": "set.fullscreen.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 12,
+                        "y": 3,
+                        "w": 300,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Full screen",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "set.fullscreen.box",
+                        "name": "fullscreen tick box",
+                        "type": "toggle",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 520,
+                        "y": 1,
+                        "w": 40,
+                        "h": 32,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "value": "settings.fullscreen",
+                        "text": ""
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 522,
+                    "w": 572,
+                    "h": 34,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c00"
+                    },
+                    "visible": "{host.fullscreen}"
+                  },
+                  {
+                    "id": "set.resolution",
+                    "name": "set.resolution",
+                    "type": "panel",
+                    "children": [
+                      {
+                        "id": "set.resolution.label",
+                        "name": "set.resolution.label",
+                        "type": "text",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 12,
+                        "y": 3,
+                        "w": 300,
+                        "h": 28,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "text": "Window size",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "#1b1722"
+                        }
+                      },
+                      {
+                        "id": "set.resolution.choice",
+                        "name": "resolution choice",
+                        "type": "dropdown",
+                        "children": [],
+                        "anchor": "tl",
+                        "x": 300,
+                        "y": 2,
+                        "w": 260,
+                        "h": 30,
+                        "wMode": "fixed",
+                        "hMode": "fixed",
+                        "value": "settings.resolution",
+                        "source": "choices:resolution",
+                        "options": ""
+                      }
+                    ],
+                    "anchor": "tl",
+                    "x": 24,
+                    "y": 558,
+                    "w": 572,
+                    "h": 34,
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "layout": "free",
+                    "padding": 0,
+                    "style": {
+                      "fill": "#3b2a1c0d"
+                    },
+                    "visible": "{host.resolutions}"
                   },
                   {
                     "id": "set.controls",
@@ -6320,7 +6448,7 @@
                     ],
                     "anchor": "tl",
                     "x": 24,
-                    "y": 594,
+                    "y": 604,
                     "w": 572,
                     "h": 40,
                     "wMode": "fixed",
@@ -6523,7 +6651,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "stage"
+            }
           }
         ],
         "anchor": "fill",
@@ -10819,7 +10949,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "stage"
+            }
           }
         ],
         "anchor": "fill",
@@ -14295,7 +14427,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "stage"
+            }
           }
         ],
         "anchor": "fill",
@@ -18215,7 +18349,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "stage"
+            }
           }
         ],
         "anchor": "fill",
@@ -18540,7 +18676,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "stage"
+            }
           }
         ],
         "anchor": "fill",
@@ -19253,7 +19391,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "stage"
+            }
           }
         ],
         "anchor": "fill",
@@ -20333,7 +20473,9 @@
             "hMode": "fixed",
             "layout": "free",
             "padding": 0,
-            "style": {}
+            "style": {
+              "fit": "stage"
+            }
           }
         ],
         "anchor": "fill",
