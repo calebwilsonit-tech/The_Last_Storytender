@@ -576,9 +576,14 @@ function buildScene(scene: string, snap: Snap, art: ArtEntry[]): SceneData {
         // idle and walk, and the strike while the quill swings (the combat plugin's "attacking")
         const controller = locomotionController({ idle: 'idle', walk: 'walk' });
         controller.states.strike = { clip: 'strike' };
+        // the lantern raised while it is held and she stands still (Storytender.script.ts sets the parameter)
+        controller.states.lantern = { clip: 'lantern' };
         controller.transitions.unshift(
           { from: '*', to: 'strike', when: [{ param: 'attacking', op: '==', value: true }] },
           { from: 'strike', to: 'idle', when: [{ param: 'attacking', op: '==', value: false }], waitForEnd: true },
+          { from: 'idle', to: 'lantern', when: [{ param: 'lantern', op: '==', value: true }, { param: 'speed', op: '<=', value: 0.2 }] },
+          { from: 'lantern', to: 'idle', when: [{ param: 'lantern', op: '==', value: false }] },
+          { from: 'lantern', to: 'walk', when: [{ param: 'speed', op: '>', value: 0.2 }] },
         );
         p.components.animator = makeAnimator({ asset: anim, clip: 'idle', controller });
       } else if (a?.file) (p.components.sprite as Record<string, unknown>).asset = spriteFor(join(ART, a.file), 'storytender', a.feet);

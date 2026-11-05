@@ -204,6 +204,9 @@ export default defineScript({
     const light = me.get('light');
     if (light) me.set('light', { ...light, radius: held ? Number(me.settings.lanternRadius) : 1.2, intensity: held ? 1 : 0.35 });
     v.lantern_on = held ? 1 : 0;
+    // the raised-lantern pose of the animator (a clip in each of the eight directions) plays while it is held
+    const an = me.get('animator');
+    if (an && an.params?.lantern !== held) me.set('animator', { ...an, params: { ...an.params, lantern: held } });
     // speed: x0.72 with the lantern up, x0.55 creeping, x0.55 in ink
     const pc = me.get('playerController');
     if (pc) {

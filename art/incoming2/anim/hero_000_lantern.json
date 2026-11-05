@@ -1,0 +1,14 @@
+{
+ "num_frames": 16,
+ "num_cols": 4,
+ "num_rows": 4,
+ "credits": 9,
+ "job": {
+  "out": "art/incoming2/anim/hero_000_lantern",
+  "image": "art/incoming2/characters/hero_views/hero_000.png",
+  "motion": "lifting a glowing lantern up in one hand and holding it out steady, facing the camera, the lantern light flickering warmly, the body otherwise still",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ }
+}

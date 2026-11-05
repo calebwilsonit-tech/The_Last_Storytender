@@ -1,0 +1,74 @@
+[
+ {
+  "out": "art/incoming2/anim/post_lit_flame",
+  "image": "art/incoming2/objects/post_lit.png",
+  "motion": "the lantern's flame flickering gently and the warm light pulsing softly, the post itself standing perfectly still",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_000_lantern",
+  "image": "art/incoming2/characters/hero_views/hero_000.png",
+  "motion": "lifting a glowing lantern up in one hand and holding it out steady, facing the camera, the lantern light flickering warmly, the body otherwise still",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_045_lantern",
+  "image": "art/incoming2/characters/hero_views/hero_045.png",
+  "motion": "lifting a glowing lantern up in one hand and holding it out steady, turned toward the front right, the lantern light flickering warmly, the body otherwise still",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_090_lantern",
+  "image": "art/incoming2/characters/hero_views/hero_090.png",
+  "motion": "lifting a glowing lantern up in one hand and holding it out steady, facing right, the lantern light flickering warmly, the body otherwise still",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_135_lantern",
+  "image": "art/incoming2/characters/hero_views/hero_135.png",
+  "motion": "lifting a glowing lantern up in one hand and holding it out steady, turned away toward the back right, the lantern light flickering warmly, the body otherwise still",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_180_lantern",
+  "image": "art/incoming2/characters/hero_views/hero_180.png",
+  "motion": "lifting a glowing lantern up in one hand and holding it out steady, facing away from the camera, the lantern light flickering warmly, the body otherwise still",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_m135_lantern",
+  "image": "art/incoming2/characters/hero_views/hero_m135.png",
+  "motion": "lifting a glowing lantern up in one hand and holding it out steady, turned away toward the back left, the lantern light flickering warmly, the body otherwise still",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_m090_lantern",
+  "image": "art/incoming2/characters/hero_views/hero_m090.png",
+  "motion": "lifting a glowing lantern up in one hand and holding it out steady, facing left, the lantern light flickering warmly, the body otherwise still",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ },
+ {
+  "out": "art/incoming2/anim/hero_m045_lantern",
+  "image": "art/incoming2/characters/hero_views/hero_m045.png",
+  "motion": "lifting a glowing lantern up in one hand and holding it out steady, turned toward the front left, the lantern light flickering warmly, the body otherwise still",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ }
+]

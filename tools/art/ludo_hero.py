@@ -31,7 +31,7 @@ VIEWS = os.path.join(REPO, 'art', 'incoming2', 'characters', 'hero_views')
 FRAME, FEET, HEIGHT = (160, 150), (80, 128), 63
 # camera angle of the view -> the engine's facing
 VIEW = {'000': 'S', '045': 'SE', '090': 'E', '135': 'NE', '180': 'N', 'm135': 'NW', 'm090': 'W', 'm045': 'SW'}
-MS = {'idle': 120, 'walk': 90, 'strike': 65}   # a frame's time on screen
+MS = {'idle': 120, 'walk': 90, 'strike': 65, 'lantern': 75}   # a frame's time on screen
 STRIKE_FRAMES = 8                                # at most this many frames of the slash
 
 
@@ -92,7 +92,7 @@ def main():
     if len(walk_se) != 4:   # (the porter's walk has four frames a facing)
         print('hero: already done')
         return
-    frames, clips = [], {'idle': {}, 'walk': {}, 'strike': {}}
+    frames, clips = [], {'idle': {}, 'walk': {}, 'strike': {}, 'lantern': {}}
     durations = []
     for view, facing in VIEW.items():
         still = os.path.join(VIEWS, f'hero_{view}.png')
@@ -101,7 +101,7 @@ def main():
             return
         ref = np.asarray(Image.open(still).convert('RGBA'))
         sets = {'idle': place([ref], ref)}
-        for kind in ('walk', 'strike'):
+        for kind in ('walk', 'strike', 'lantern'):
             fr = frames_of(f'hero_{view}_{kind}')
             if not fr:
                 print('hero: no', kind, 'animation for', view, '(the still view stands in)')
@@ -113,7 +113,8 @@ def main():
             frames += fs
             durations += [MS[kind]] * len(fs)
     frames = quantize(frames)
-    sprite_clips = [{'name': k, 'loop': k != 'strike', 'mirror': False, 'all': clips[k]['S'], 'dirs': clips[k], 'events': []} for k in ('idle', 'walk', 'strike')]
+    sprite_clips = [{'name': k, 'loop': k in ('idle', 'walk'),     # (the quill's slash and the raised lantern play once; the lantern stays up while it is held)
+                     'mirror': False, 'all': clips[k]['S'], 'dirs': clips[k], 'events': []} for k in ('idle', 'walk', 'strike', 'lantern')]
     sprite_io.write_sheet(SPRITES, 'storytender', frames, FEET, durations, sprite_clips)
     print(f'hero: {len(frames)} frames, {sum(len(v) for v in clips["walk"].values())} of them walking, {sum(len(v) for v in clips["strike"].values())} striking')
 

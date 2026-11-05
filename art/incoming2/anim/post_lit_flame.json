@@ -1,0 +1,14 @@
+{
+ "num_frames": 16,
+ "num_cols": 4,
+ "num_rows": 4,
+ "credits": 9,
+ "job": {
+  "out": "art/incoming2/anim/post_lit_flame",
+  "image": "art/incoming2/objects/post_lit.png",
+  "motion": "the lantern's flame flickering gently and the warm light pulsing softly, the post itself standing perfectly still",
+  "model": "hydra",
+  "duration": 3,
+  "frames": 16
+ }
+}

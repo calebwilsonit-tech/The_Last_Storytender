@@ -32,6 +32,7 @@ STATIC_GRAY = np.array([0x9c, 0x9c, 0xa8], np.float32)
 ERRORS = ['bare', 'censor', 'dangler', 'ellipsis', 'mite', 'runon']
 TARGETS = {f'err_{k}_idle': f'err_{k}' for k in ERRORS}
 TARGETS.update({f'err_{k}_attack': f'err_{k}_attack' for k in ERRORS})
+TARGETS['post_lit_flame'] = 'obj_post_lit'   # the lit lantern post's flame
 TARGETS.update({'boss_cold_idle': 'boss_cold_shoulder', 'boss_cold_attack': 'boss_cold_slam', 'boss_critic_idle': 'script_Critic', 'boss_critic_attack': 'boss_critic_attack',
                 'boss_spoiler_idle': 'script_Spoiler', 'boss_spoiler_attack': 'boss_spoiler_attack', 'boss_scissor_idle': 'name:Scissor', 'guest_standing_idle': 'obj_guest_standing'})
 VILLAGERS = {'garrick_SE_idle': ('npc_garrick', 'npc_garrick_ghost'), 'pip_SE_idle': ('npc_pip', 'npc_pip_ghost'), 'maud_SE_idle': ('npc_maud', 'npc_maud_ghost')}
@@ -167,7 +168,9 @@ def main():
     for p, s in data.items():
         for e in s['entities']:
             asset = (e['components'].get('sprite') or {}).get('asset')
-            if asset in animated:
+            # (also what changes into one: an unlit lantern post that will be lit has to be ready to play the flame)
+            becomes = (e['components'].get('script_Flagged') or {}).get('look')
+            if asset in animated or becomes in animated:
                 e['components']['animator'] = {'asset': asset, 'clip': 'idle', 'time': 0, 'speed': 1, 'playing': True, 'frame': 0, 'flip': False, 'pos': 0, 'done': False,
                                                'controller': None, 'state': '', 'params': {}, 'follow': True}
                 n += 1
