@@ -70,17 +70,40 @@ const screen = (name: string, root: W, o: Partial<Screen> = {}): Screen => ({ id
  * The button legend along the bottom of every menu (menu_legend.gd): a dark rounded bar, a key cap and a word per entry.
  * The game's own legend swaps keyboard caps for pad buttons; this one names both.
  */
+/**
+ * What the player sees for a button: the key cap while they use the keyboard, the pad's own button picture (Xbox, PlayStation or Nintendo
+ * names and colours) while they use a pad. The engine says which (`{host.pad}`, `{host.ps}`, `{host.switch}`); each piece is only shown
+ * when it fits. `pad` is the button the Godot game calls A (interact), B (back/dash) or "D-pad".
+ */
+type Pad = 'xbox' | 'ps' | 'switch';
+const PAD_FACE: Record<string, Record<Pad, { t: string; fill: string; color: string }>> = {
+  A: { xbox: { t: 'A', fill: '#58b368', color: '#ffffff' }, ps: { t: '✕', fill: '#5b86d6', color: '#ffffff' }, switch: { t: 'B', fill: '#e9e4d8', color: '#1b1722' } },
+  B: { xbox: { t: 'B', fill: '#d9534f', color: '#ffffff' }, ps: { t: '○', fill: '#d9534f', color: '#ffffff' }, switch: { t: 'A', fill: '#e9e4d8', color: '#1b1722' } },
+};
+const WHEN: Record<'keys' | Pad, string> = {
+  keys: '{host.pad} != 1',
+  xbox: '{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1',
+  ps: '{host.ps} = 1',
+  switch: '{host.switch} = 1',
+};
+function inputGlyphs(id: string, key: string, pad: string | undefined, size: number): W[] {
+  const cap = w('text', `${id}.key`, { wMode: 'auto', hMode: 'auto', visible: pad ? WHEN.keys : '', text: key, padding: 4, style: { fontSize: size, color: C.ink, fill: C.legendText, radius: 5, bold: true } });
+  if (!pad) return [cap];
+  const face = PAD_FACE[pad];
+  if (!face) return [cap, w('text', `${id}.pad`, { wMode: 'auto', hMode: 'auto', visible: '{host.pad} = 1', text: pad, padding: 4, style: { fontSize: size - 2, color: C.ink, fill: C.gold, radius: 9, bold: true } })];
+  const d = Math.round(size * 1.6);
+  const round = (kind: Pad): W => {
+    const f = face[kind];
+    return w('text', `${id}.pad_${kind}`, { wMode: 'fixed', hMode: 'fixed', w: d, h: d, visible: WHEN[kind], text: f.t, style: { fontSize: size, color: f.color, fill: f.fill, radius: d / 2, bold: true, align: 'center' }, padding: Math.round(size * 0.1) });
+  };
+  return [cap, round('xbox'), round('ps'), round('switch')];
+}
 const PAD_BUTTON: Record<string, string> = { 'W A S D': 'D-pad', 'W S': 'D-pad', 'A D': 'D-pad', 'A / D': 'D-pad', E: 'A', Esc: 'B', Tab: 'B', M: 'B' };
 function legend(id: string, entries: [string, string][]): W {
-  const kids = entries.flatMap(([cap, label], i) => {
-    const pad = PAD_BUTTON[cap];
-    return [
-      w('text', `${id}.cap${i}`, { wMode: 'auto', hMode: 'auto', text: cap, style: { fontSize: 17, color: C.ink, fill: C.legendText, radius: 5, bold: true }, padding: 4 }),
-      // the same button on a pad, in gold
-      ...(pad ? [w('text', `${id}.pad${i}`, { wMode: 'auto', hMode: 'auto', text: pad, style: { fontSize: 15, color: C.ink, fill: C.gold, radius: 12, bold: true }, padding: 4 })] : []),
-      w('text', `${id}.label${i}`, { wMode: 'auto', hMode: 'auto', text: label, style: { fontSize: 20, color: C.legendText } }),
-    ];
-  });
+  const kids = entries.flatMap(([cap, label], i) => [
+    ...inputGlyphs(`${id}.in${i}`, cap, PAD_BUTTON[cap], 17),
+    w('text', `${id}.label${i}`, { wMode: 'auto', hMode: 'auto', text: label, style: { fontSize: 20, color: C.legendText } }),
+  ]);
   return w('panel', id, { name: 'Legend', anchor: 'b', x: 0, y: 14, wMode: 'auto', hMode: 'fixed', h: 36, layout: 'row', align: 'center', gap: 10, padding: 6, style: { fill: C.legend, radius: 18 }, children: kids });
 }
 
@@ -433,8 +456,6 @@ const CHAPTERS = [
 export const PROMPT_VERBS = ['Talk', 'Read', 'Open', 'Take', 'Enter', 'Leave', 'Sit', 'Use'] as const;
 export const promptPrefab = (verb: string): string => `Prompt ${verb}`;
 function prompt(verb: string): W {
-  const cap = (id: string, t: string, round = false): W =>
-    w('text', `prompt.${verb}.${id}`, { wMode: 'auto', hMode: 'auto', text: t, padding: round ? 6 : 5, style: { fontSize: 20, bold: true, color: C.ink, fill: C.paperLight, border: C.gold, borderWidth: 2, radius: round ? 14 : 7 } });
   return w('panel', `prompt.${verb}`, {
     name: `Prompt: ${verb}`,
     anchor: 'tl',
@@ -448,7 +469,7 @@ function prompt(verb: string): W {
     padding: 8,
     style: { fill: '#1b1722ea', border: C.gold, borderWidth: 2, radius: 16, shadow: true },
     anim: [{ on: 'show', kind: 'fade', ms: 220, dir: 'up' }],
-    children: [cap('key', 'E'), cap('pad', 'A', true), w('text', `prompt.${verb}.verb`, { wMode: 'auto', hMode: 'auto', text: verb, style: { fontSize: 22, color: C.legendText, bold: true } })],
+    children: [...inputGlyphs(`prompt.${verb}.in`, 'E', 'A', 20), w('text', `prompt.${verb}.verb`, { wMode: 'auto', hMode: 'auto', text: verb, style: { fontSize: 22, color: C.legendText, bold: true } })],
   });
 }
 

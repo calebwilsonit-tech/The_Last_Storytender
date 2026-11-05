@@ -18,6 +18,29 @@ try {
   const labelText = await page.evaluate(() => window.__play.sim.world.all?.().map((e) => e.get('label')?.text).filter((x) => x && /E: /.test(x)) ?? []);
   check('the engine\'s "E: talk" text is not drawn on the object any more', labelText.length === 0, JSON.stringify(labelText).slice(0, 100));
   await shotAs('prompt_garrick.png');
+  // the buttons shown are the ones of the device used last: keys, or the pad's own (Xbox, PlayStation, Switch) names
+  const promptText = () => page.evaluate(() => [...document.querySelectorAll('.tw-world-item *')].filter((x) => x.children.length === 0 && x.getBoundingClientRect().width > 0).map((x) => (x.textContent ?? '').trim()).filter(Boolean));
+  const useDevice = (device, kind) => page.evaluate(([d, k]) => { const src = window.__play.session.source; src.device = d; src.padKind = () => k; }, [device, kind]);
+  await useDevice('keyboard', 'xbox');
+  await page.waitForTimeout(500);
+  t = await promptText();
+  check('on the keyboard the prompt shows the E key and no pad button', t.includes('E') && !t.includes('A') && !t.includes('✕'), t.join('|'));
+  await useDevice('pad', 'xbox');
+  await page.waitForTimeout(500);
+  t = await promptText();
+  check('on an Xbox pad it shows A and no E', t.includes('A') && !t.includes('E') && t.includes('Talk'), t.join('|'));
+  await shotAs('prompt_xbox.png');
+  await useDevice('pad', 'ps');
+  await page.waitForTimeout(500);
+  t = await promptText();
+  check('on a PlayStation pad it shows the cross', t.includes('✕') && !t.includes('E') && !t.includes('A'), t.join('|'));
+  await shotAs('prompt_ps.png');
+  await useDevice('pad', 'switch');
+  await page.waitForTimeout(500);
+  t = await promptText();
+  check('on a Switch pad it shows B (its bottom button)', t.includes('B') && !t.includes('E') && !t.includes('A'), t.join('|'));
+  await useDevice('keyboard', 'xbox');
+  await page.waitForTimeout(400);
   // far from everything the prompt is gone
   await placeAt(garrick.x + 12, garrick.y + 12);
   await page.waitForTimeout(900);

@@ -2466,38 +2466,40 @@
                 "type": "panel",
                 "children": [
                   {
-                    "id": "title.legend.cap0",
-                    "name": "title.legend.cap0",
+                    "id": "title.legend.in0.key",
+                    "name": "title.legend.in0.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "W A S D",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "title.legend.pad0",
-                    "name": "title.legend.pad0",
+                    "id": "title.legend.in0.pad",
+                    "name": "title.legend.in0.pad",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} = 1",
                     "text": "D-pad",
+                    "padding": 4,
                     "style": {
                       "fontSize": 15,
                       "color": "#1b1722",
                       "fill": "#f2b84b",
-                      "radius": 12,
+                      "radius": 9,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
                     "id": "title.legend.label0",
@@ -2513,38 +2515,85 @@
                     }
                   },
                   {
-                    "id": "title.legend.cap1",
-                    "name": "title.legend.cap1",
+                    "id": "title.legend.in1.key",
+                    "name": "title.legend.in1.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "E",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "title.legend.pad1",
-                    "name": "title.legend.pad1",
+                    "id": "title.legend.in1.pad_xbox",
+                    "name": "title.legend.in1.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "A",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#58b368",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "title.legend.in1.pad_ps",
+                    "name": "title.legend.in1.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "✕",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#5b86d6",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "title.legend.in1.pad_switch",
+                    "name": "title.legend.in1.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "B",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "title.legend.label1",
@@ -3382,38 +3431,40 @@
                 "type": "panel",
                 "children": [
                   {
-                    "id": "begin.legend.cap0",
-                    "name": "begin.legend.cap0",
+                    "id": "begin.legend.in0.key",
+                    "name": "begin.legend.in0.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "W A S D",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "begin.legend.pad0",
-                    "name": "begin.legend.pad0",
+                    "id": "begin.legend.in0.pad",
+                    "name": "begin.legend.in0.pad",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} = 1",
                     "text": "D-pad",
+                    "padding": 4,
                     "style": {
                       "fontSize": 15,
                       "color": "#1b1722",
                       "fill": "#f2b84b",
-                      "radius": 12,
+                      "radius": 9,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
                     "id": "begin.legend.label0",
@@ -3429,38 +3480,85 @@
                     }
                   },
                   {
-                    "id": "begin.legend.cap1",
-                    "name": "begin.legend.cap1",
+                    "id": "begin.legend.in1.key",
+                    "name": "begin.legend.in1.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "E",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "begin.legend.pad1",
-                    "name": "begin.legend.pad1",
+                    "id": "begin.legend.in1.pad_xbox",
+                    "name": "begin.legend.in1.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "A",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#58b368",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "begin.legend.in1.pad_ps",
+                    "name": "begin.legend.in1.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "✕",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#5b86d6",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "begin.legend.in1.pad_switch",
+                    "name": "begin.legend.in1.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "B",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "begin.legend.label1",
@@ -3880,38 +3978,40 @@
                 "type": "panel",
                 "children": [
                   {
-                    "id": "diff.legend.cap0",
-                    "name": "diff.legend.cap0",
+                    "id": "diff.legend.in0.key",
+                    "name": "diff.legend.in0.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "W A S D",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "diff.legend.pad0",
-                    "name": "diff.legend.pad0",
+                    "id": "diff.legend.in0.pad",
+                    "name": "diff.legend.in0.pad",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} = 1",
                     "text": "D-pad",
+                    "padding": 4,
                     "style": {
                       "fontSize": 15,
                       "color": "#1b1722",
                       "fill": "#f2b84b",
-                      "radius": 12,
+                      "radius": 9,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
                     "id": "diff.legend.label0",
@@ -3927,38 +4027,85 @@
                     }
                   },
                   {
-                    "id": "diff.legend.cap1",
-                    "name": "diff.legend.cap1",
+                    "id": "diff.legend.in1.key",
+                    "name": "diff.legend.in1.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "E",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "diff.legend.pad1",
-                    "name": "diff.legend.pad1",
+                    "id": "diff.legend.in1.pad_xbox",
+                    "name": "diff.legend.in1.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "A",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#58b368",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "diff.legend.in1.pad_ps",
+                    "name": "diff.legend.in1.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "✕",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#5b86d6",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "diff.legend.in1.pad_switch",
+                    "name": "diff.legend.in1.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "B",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "diff.legend.label1",
@@ -5172,38 +5319,40 @@
                 "type": "panel",
                 "children": [
                   {
-                    "id": "pause.legend.cap0",
-                    "name": "pause.legend.cap0",
+                    "id": "pause.legend.in0.key",
+                    "name": "pause.legend.in0.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "W A S D",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "pause.legend.pad0",
-                    "name": "pause.legend.pad0",
+                    "id": "pause.legend.in0.pad",
+                    "name": "pause.legend.in0.pad",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} = 1",
                     "text": "D-pad",
+                    "padding": 4,
                     "style": {
                       "fontSize": 15,
                       "color": "#1b1722",
                       "fill": "#f2b84b",
-                      "radius": 12,
+                      "radius": 9,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
                     "id": "pause.legend.label0",
@@ -5219,38 +5368,85 @@
                     }
                   },
                   {
-                    "id": "pause.legend.cap1",
-                    "name": "pause.legend.cap1",
+                    "id": "pause.legend.in1.key",
+                    "name": "pause.legend.in1.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "E",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "pause.legend.pad1",
-                    "name": "pause.legend.pad1",
+                    "id": "pause.legend.in1.pad_xbox",
+                    "name": "pause.legend.in1.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "A",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#58b368",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "pause.legend.in1.pad_ps",
+                    "name": "pause.legend.in1.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "✕",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#5b86d6",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "pause.legend.in1.pad_switch",
+                    "name": "pause.legend.in1.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "B",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "pause.legend.label1",
@@ -5266,38 +5462,85 @@
                     }
                   },
                   {
-                    "id": "pause.legend.cap2",
-                    "name": "pause.legend.cap2",
+                    "id": "pause.legend.in2.key",
+                    "name": "pause.legend.in2.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "Esc",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "pause.legend.pad2",
-                    "name": "pause.legend.pad2",
+                    "id": "pause.legend.in2.pad_xbox",
+                    "name": "pause.legend.in2.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "B",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#d9534f",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "pause.legend.in2.pad_ps",
+                    "name": "pause.legend.in2.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "○",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#d9534f",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "pause.legend.in2.pad_switch",
+                    "name": "pause.legend.in2.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "A",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "pause.legend.label2",
@@ -5613,38 +5856,40 @@
                 "type": "panel",
                 "children": [
                   {
-                    "id": "restart.legend.cap0",
-                    "name": "restart.legend.cap0",
+                    "id": "restart.legend.in0.key",
+                    "name": "restart.legend.in0.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "W A S D",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "restart.legend.pad0",
-                    "name": "restart.legend.pad0",
+                    "id": "restart.legend.in0.pad",
+                    "name": "restart.legend.in0.pad",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} = 1",
                     "text": "D-pad",
+                    "padding": 4,
                     "style": {
                       "fontSize": 15,
                       "color": "#1b1722",
                       "fill": "#f2b84b",
-                      "radius": 12,
+                      "radius": 9,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
                     "id": "restart.legend.label0",
@@ -5660,38 +5905,85 @@
                     }
                   },
                   {
-                    "id": "restart.legend.cap1",
-                    "name": "restart.legend.cap1",
+                    "id": "restart.legend.in1.key",
+                    "name": "restart.legend.in1.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "E",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "restart.legend.pad1",
-                    "name": "restart.legend.pad1",
+                    "id": "restart.legend.in1.pad_xbox",
+                    "name": "restart.legend.in1.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "A",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#58b368",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "restart.legend.in1.pad_ps",
+                    "name": "restart.legend.in1.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "✕",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#5b86d6",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "restart.legend.in1.pad_switch",
+                    "name": "restart.legend.in1.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "B",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "restart.legend.label1",
@@ -5707,38 +5999,85 @@
                     }
                   },
                   {
-                    "id": "restart.legend.cap2",
-                    "name": "restart.legend.cap2",
+                    "id": "restart.legend.in2.key",
+                    "name": "restart.legend.in2.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "Esc",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "restart.legend.pad2",
-                    "name": "restart.legend.pad2",
+                    "id": "restart.legend.in2.pad_xbox",
+                    "name": "restart.legend.in2.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "B",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#d9534f",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "restart.legend.in2.pad_ps",
+                    "name": "restart.legend.in2.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "○",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#d9534f",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "restart.legend.in2.pad_switch",
+                    "name": "restart.legend.in2.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "A",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "restart.legend.label2",
@@ -6746,38 +7085,40 @@
                 "type": "panel",
                 "children": [
                   {
-                    "id": "settings.legend.cap0",
-                    "name": "settings.legend.cap0",
+                    "id": "settings.legend.in0.key",
+                    "name": "settings.legend.in0.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "W S",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "settings.legend.pad0",
-                    "name": "settings.legend.pad0",
+                    "id": "settings.legend.in0.pad",
+                    "name": "settings.legend.in0.pad",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} = 1",
                     "text": "D-pad",
+                    "padding": 4,
                     "style": {
                       "fontSize": 15,
                       "color": "#1b1722",
                       "fill": "#f2b84b",
-                      "radius": 12,
+                      "radius": 9,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
                     "id": "settings.legend.label0",
@@ -6793,38 +7134,40 @@
                     }
                   },
                   {
-                    "id": "settings.legend.cap1",
-                    "name": "settings.legend.cap1",
+                    "id": "settings.legend.in1.key",
+                    "name": "settings.legend.in1.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "A D",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "settings.legend.pad1",
-                    "name": "settings.legend.pad1",
+                    "id": "settings.legend.in1.pad",
+                    "name": "settings.legend.in1.pad",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} = 1",
                     "text": "D-pad",
+                    "padding": 4,
                     "style": {
                       "fontSize": 15,
                       "color": "#1b1722",
                       "fill": "#f2b84b",
-                      "radius": 12,
+                      "radius": 9,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
                     "id": "settings.legend.label1",
@@ -6840,38 +7183,85 @@
                     }
                   },
                   {
-                    "id": "settings.legend.cap2",
-                    "name": "settings.legend.cap2",
+                    "id": "settings.legend.in2.key",
+                    "name": "settings.legend.in2.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "E",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "settings.legend.pad2",
-                    "name": "settings.legend.pad2",
+                    "id": "settings.legend.in2.pad_xbox",
+                    "name": "settings.legend.in2.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "A",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#58b368",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "settings.legend.in2.pad_ps",
+                    "name": "settings.legend.in2.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "✕",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#5b86d6",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "settings.legend.in2.pad_switch",
+                    "name": "settings.legend.in2.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "B",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "settings.legend.label2",
@@ -6887,38 +7277,85 @@
                     }
                   },
                   {
-                    "id": "settings.legend.cap3",
-                    "name": "settings.legend.cap3",
+                    "id": "settings.legend.in3.key",
+                    "name": "settings.legend.in3.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "Esc",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "settings.legend.pad3",
-                    "name": "settings.legend.pad3",
+                    "id": "settings.legend.in3.pad_xbox",
+                    "name": "settings.legend.in3.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "B",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#d9534f",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "settings.legend.in3.pad_ps",
+                    "name": "settings.legend.in3.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "○",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#d9534f",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "settings.legend.in3.pad_switch",
+                    "name": "settings.legend.in3.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "A",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "settings.legend.label3",
@@ -11112,38 +11549,40 @@
                 "type": "panel",
                 "children": [
                   {
-                    "id": "binder.legend.cap0",
-                    "name": "binder.legend.cap0",
+                    "id": "binder.legend.in0.key",
+                    "name": "binder.legend.in0.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "W A S D",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "binder.legend.pad0",
-                    "name": "binder.legend.pad0",
+                    "id": "binder.legend.in0.pad",
+                    "name": "binder.legend.in0.pad",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} = 1",
                     "text": "D-pad",
+                    "padding": 4,
                     "style": {
                       "fontSize": 15,
                       "color": "#1b1722",
                       "fill": "#f2b84b",
-                      "radius": 12,
+                      "radius": 9,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
                     "id": "binder.legend.label0",
@@ -11159,38 +11598,85 @@
                     }
                   },
                   {
-                    "id": "binder.legend.cap1",
-                    "name": "binder.legend.cap1",
+                    "id": "binder.legend.in1.key",
+                    "name": "binder.legend.in1.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "E",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "binder.legend.pad1",
-                    "name": "binder.legend.pad1",
+                    "id": "binder.legend.in1.pad_xbox",
+                    "name": "binder.legend.in1.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "A",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#58b368",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "binder.legend.in1.pad_ps",
+                    "name": "binder.legend.in1.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "✕",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#5b86d6",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "binder.legend.in1.pad_switch",
+                    "name": "binder.legend.in1.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "B",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "binder.legend.label1",
@@ -11206,38 +11692,40 @@
                     }
                   },
                   {
-                    "id": "binder.legend.cap2",
-                    "name": "binder.legend.cap2",
+                    "id": "binder.legend.in2.key",
+                    "name": "binder.legend.in2.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "A / D",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "binder.legend.pad2",
-                    "name": "binder.legend.pad2",
+                    "id": "binder.legend.in2.pad",
+                    "name": "binder.legend.in2.pad",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} = 1",
                     "text": "D-pad",
+                    "padding": 4,
                     "style": {
                       "fontSize": 15,
                       "color": "#1b1722",
                       "fill": "#f2b84b",
-                      "radius": 12,
+                      "radius": 9,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
                     "id": "binder.legend.label2",
@@ -11253,38 +11741,85 @@
                     }
                   },
                   {
-                    "id": "binder.legend.cap3",
-                    "name": "binder.legend.cap3",
+                    "id": "binder.legend.in3.key",
+                    "name": "binder.legend.in3.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "Tab",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "binder.legend.pad3",
-                    "name": "binder.legend.pad3",
+                    "id": "binder.legend.in3.pad_xbox",
+                    "name": "binder.legend.in3.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "B",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#d9534f",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "binder.legend.in3.pad_ps",
+                    "name": "binder.legend.in3.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "○",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#d9534f",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "binder.legend.in3.pad_switch",
+                    "name": "binder.legend.in3.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "A",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "binder.legend.label3",
@@ -14688,38 +15223,40 @@
                 "type": "panel",
                 "children": [
                   {
-                    "id": "idx.legend.cap0",
-                    "name": "idx.legend.cap0",
+                    "id": "idx.legend.in0.key",
+                    "name": "idx.legend.in0.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "W A S D",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "idx.legend.pad0",
-                    "name": "idx.legend.pad0",
+                    "id": "idx.legend.in0.pad",
+                    "name": "idx.legend.in0.pad",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} = 1",
                     "text": "D-pad",
+                    "padding": 4,
                     "style": {
                       "fontSize": 15,
                       "color": "#1b1722",
                       "fill": "#f2b84b",
-                      "radius": 12,
+                      "radius": 9,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
                     "id": "idx.legend.label0",
@@ -14735,38 +15272,85 @@
                     }
                   },
                   {
-                    "id": "idx.legend.cap1",
-                    "name": "idx.legend.cap1",
+                    "id": "idx.legend.in1.key",
+                    "name": "idx.legend.in1.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "E",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "idx.legend.pad1",
-                    "name": "idx.legend.pad1",
+                    "id": "idx.legend.in1.pad_xbox",
+                    "name": "idx.legend.in1.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "A",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#58b368",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "idx.legend.in1.pad_ps",
+                    "name": "idx.legend.in1.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "✕",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#5b86d6",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "idx.legend.in1.pad_switch",
+                    "name": "idx.legend.in1.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "B",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "idx.legend.label1",
@@ -14782,38 +15366,85 @@
                     }
                   },
                   {
-                    "id": "idx.legend.cap2",
-                    "name": "idx.legend.cap2",
+                    "id": "idx.legend.in2.key",
+                    "name": "idx.legend.in2.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "Esc",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "idx.legend.pad2",
-                    "name": "idx.legend.pad2",
+                    "id": "idx.legend.in2.pad_xbox",
+                    "name": "idx.legend.in2.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "B",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#d9534f",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "idx.legend.in2.pad_ps",
+                    "name": "idx.legend.in2.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "○",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#d9534f",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "idx.legend.in2.pad_switch",
+                    "name": "idx.legend.in2.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "A",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "idx.legend.label2",
@@ -20785,38 +21416,40 @@
                 "type": "panel",
                 "children": [
                   {
-                    "id": "map.legend.cap0",
-                    "name": "map.legend.cap0",
+                    "id": "map.legend.in0.key",
+                    "name": "map.legend.in0.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "W A S D",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "map.legend.pad0",
-                    "name": "map.legend.pad0",
+                    "id": "map.legend.in0.pad",
+                    "name": "map.legend.in0.pad",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} = 1",
                     "text": "D-pad",
+                    "padding": 4,
                     "style": {
                       "fontSize": 15,
                       "color": "#1b1722",
                       "fill": "#f2b84b",
-                      "radius": 12,
+                      "radius": 9,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
                     "id": "map.legend.label0",
@@ -20832,38 +21465,85 @@
                     }
                   },
                   {
-                    "id": "map.legend.cap1",
-                    "name": "map.legend.cap1",
+                    "id": "map.legend.in1.key",
+                    "name": "map.legend.in1.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "E",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "map.legend.pad1",
-                    "name": "map.legend.pad1",
+                    "id": "map.legend.in1.pad_xbox",
+                    "name": "map.legend.in1.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "A",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#58b368",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "map.legend.in1.pad_ps",
+                    "name": "map.legend.in1.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "✕",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#5b86d6",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "map.legend.in1.pad_switch",
+                    "name": "map.legend.in1.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "B",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "map.legend.label1",
@@ -20879,38 +21559,85 @@
                     }
                   },
                   {
-                    "id": "map.legend.cap2",
-                    "name": "map.legend.cap2",
+                    "id": "map.legend.in2.key",
+                    "name": "map.legend.in2.key",
                     "type": "text",
                     "children": [],
                     "wMode": "auto",
                     "hMode": "auto",
+                    "visible": "{host.pad} != 1",
                     "text": "M",
+                    "padding": 4,
                     "style": {
                       "fontSize": 17,
                       "color": "#1b1722",
                       "fill": "#f4ecd8",
                       "radius": 5,
                       "bold": true
-                    },
-                    "padding": 4
+                    }
                   },
                   {
-                    "id": "map.legend.pad2",
-                    "name": "map.legend.pad2",
+                    "id": "map.legend.in2.pad_xbox",
+                    "name": "map.legend.in2.pad_xbox",
                     "type": "text",
                     "children": [],
-                    "wMode": "auto",
-                    "hMode": "auto",
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
                     "text": "B",
                     "style": {
-                      "fontSize": 15,
-                      "color": "#1b1722",
-                      "fill": "#f2b84b",
-                      "radius": 12,
-                      "bold": true
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#d9534f",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
                     },
-                    "padding": 4
+                    "padding": 2
+                  },
+                  {
+                    "id": "map.legend.in2.pad_ps",
+                    "name": "map.legend.in2.pad_ps",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.ps} = 1",
+                    "text": "○",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#ffffff",
+                      "fill": "#d9534f",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
+                  },
+                  {
+                    "id": "map.legend.in2.pad_switch",
+                    "name": "map.legend.in2.pad_switch",
+                    "type": "text",
+                    "children": [],
+                    "wMode": "fixed",
+                    "hMode": "fixed",
+                    "w": 27,
+                    "h": 27,
+                    "visible": "{host.switch} = 1",
+                    "text": "A",
+                    "style": {
+                      "fontSize": 17,
+                      "color": "#1b1722",
+                      "fill": "#e9e4d8",
+                      "radius": 13.5,
+                      "bold": true,
+                      "align": "center"
+                    },
+                    "padding": 2
                   },
                   {
                     "id": "map.legend.label2",
@@ -21253,42 +21980,85 @@
         "type": "panel",
         "children": [
           {
-            "id": "prompt.Talk.key",
-            "name": "prompt.Talk.key",
+            "id": "prompt.Talk.in.key",
+            "name": "prompt.Talk.in.key",
             "type": "text",
             "children": [],
             "wMode": "auto",
             "hMode": "auto",
+            "visible": "{host.pad} != 1",
             "text": "E",
-            "padding": 5,
+            "padding": 4,
             "style": {
               "fontSize": 20,
-              "bold": true,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 7
+              "fill": "#f4ecd8",
+              "radius": 5,
+              "bold": true
             }
           },
           {
-            "id": "prompt.Talk.pad",
-            "name": "prompt.Talk.pad",
+            "id": "prompt.Talk.in.pad_xbox",
+            "name": "prompt.Talk.in.pad_xbox",
             "type": "text",
             "children": [],
-            "wMode": "auto",
-            "hMode": "auto",
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
             "text": "A",
-            "padding": 6,
             "style": {
               "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#58b368",
+              "radius": 16,
               "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Talk.in.pad_ps",
+            "name": "prompt.Talk.in.pad_ps",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.ps} = 1",
+            "text": "✕",
+            "style": {
+              "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#5b86d6",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Talk.in.pad_switch",
+            "name": "prompt.Talk.in.pad_switch",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.switch} = 1",
+            "text": "B",
+            "style": {
+              "fontSize": 20,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 14
-            }
+              "fill": "#e9e4d8",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
           },
           {
             "id": "prompt.Talk.verb",
@@ -21339,42 +22109,85 @@
         "type": "panel",
         "children": [
           {
-            "id": "prompt.Read.key",
-            "name": "prompt.Read.key",
+            "id": "prompt.Read.in.key",
+            "name": "prompt.Read.in.key",
             "type": "text",
             "children": [],
             "wMode": "auto",
             "hMode": "auto",
+            "visible": "{host.pad} != 1",
             "text": "E",
-            "padding": 5,
+            "padding": 4,
             "style": {
               "fontSize": 20,
-              "bold": true,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 7
+              "fill": "#f4ecd8",
+              "radius": 5,
+              "bold": true
             }
           },
           {
-            "id": "prompt.Read.pad",
-            "name": "prompt.Read.pad",
+            "id": "prompt.Read.in.pad_xbox",
+            "name": "prompt.Read.in.pad_xbox",
             "type": "text",
             "children": [],
-            "wMode": "auto",
-            "hMode": "auto",
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
             "text": "A",
-            "padding": 6,
             "style": {
               "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#58b368",
+              "radius": 16,
               "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Read.in.pad_ps",
+            "name": "prompt.Read.in.pad_ps",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.ps} = 1",
+            "text": "✕",
+            "style": {
+              "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#5b86d6",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Read.in.pad_switch",
+            "name": "prompt.Read.in.pad_switch",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.switch} = 1",
+            "text": "B",
+            "style": {
+              "fontSize": 20,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 14
-            }
+              "fill": "#e9e4d8",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
           },
           {
             "id": "prompt.Read.verb",
@@ -21425,42 +22238,85 @@
         "type": "panel",
         "children": [
           {
-            "id": "prompt.Open.key",
-            "name": "prompt.Open.key",
+            "id": "prompt.Open.in.key",
+            "name": "prompt.Open.in.key",
             "type": "text",
             "children": [],
             "wMode": "auto",
             "hMode": "auto",
+            "visible": "{host.pad} != 1",
             "text": "E",
-            "padding": 5,
+            "padding": 4,
             "style": {
               "fontSize": 20,
-              "bold": true,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 7
+              "fill": "#f4ecd8",
+              "radius": 5,
+              "bold": true
             }
           },
           {
-            "id": "prompt.Open.pad",
-            "name": "prompt.Open.pad",
+            "id": "prompt.Open.in.pad_xbox",
+            "name": "prompt.Open.in.pad_xbox",
             "type": "text",
             "children": [],
-            "wMode": "auto",
-            "hMode": "auto",
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
             "text": "A",
-            "padding": 6,
             "style": {
               "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#58b368",
+              "radius": 16,
               "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Open.in.pad_ps",
+            "name": "prompt.Open.in.pad_ps",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.ps} = 1",
+            "text": "✕",
+            "style": {
+              "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#5b86d6",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Open.in.pad_switch",
+            "name": "prompt.Open.in.pad_switch",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.switch} = 1",
+            "text": "B",
+            "style": {
+              "fontSize": 20,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 14
-            }
+              "fill": "#e9e4d8",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
           },
           {
             "id": "prompt.Open.verb",
@@ -21511,42 +22367,85 @@
         "type": "panel",
         "children": [
           {
-            "id": "prompt.Take.key",
-            "name": "prompt.Take.key",
+            "id": "prompt.Take.in.key",
+            "name": "prompt.Take.in.key",
             "type": "text",
             "children": [],
             "wMode": "auto",
             "hMode": "auto",
+            "visible": "{host.pad} != 1",
             "text": "E",
-            "padding": 5,
+            "padding": 4,
             "style": {
               "fontSize": 20,
-              "bold": true,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 7
+              "fill": "#f4ecd8",
+              "radius": 5,
+              "bold": true
             }
           },
           {
-            "id": "prompt.Take.pad",
-            "name": "prompt.Take.pad",
+            "id": "prompt.Take.in.pad_xbox",
+            "name": "prompt.Take.in.pad_xbox",
             "type": "text",
             "children": [],
-            "wMode": "auto",
-            "hMode": "auto",
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
             "text": "A",
-            "padding": 6,
             "style": {
               "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#58b368",
+              "radius": 16,
               "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Take.in.pad_ps",
+            "name": "prompt.Take.in.pad_ps",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.ps} = 1",
+            "text": "✕",
+            "style": {
+              "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#5b86d6",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Take.in.pad_switch",
+            "name": "prompt.Take.in.pad_switch",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.switch} = 1",
+            "text": "B",
+            "style": {
+              "fontSize": 20,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 14
-            }
+              "fill": "#e9e4d8",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
           },
           {
             "id": "prompt.Take.verb",
@@ -21597,42 +22496,85 @@
         "type": "panel",
         "children": [
           {
-            "id": "prompt.Enter.key",
-            "name": "prompt.Enter.key",
+            "id": "prompt.Enter.in.key",
+            "name": "prompt.Enter.in.key",
             "type": "text",
             "children": [],
             "wMode": "auto",
             "hMode": "auto",
+            "visible": "{host.pad} != 1",
             "text": "E",
-            "padding": 5,
+            "padding": 4,
             "style": {
               "fontSize": 20,
-              "bold": true,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 7
+              "fill": "#f4ecd8",
+              "radius": 5,
+              "bold": true
             }
           },
           {
-            "id": "prompt.Enter.pad",
-            "name": "prompt.Enter.pad",
+            "id": "prompt.Enter.in.pad_xbox",
+            "name": "prompt.Enter.in.pad_xbox",
             "type": "text",
             "children": [],
-            "wMode": "auto",
-            "hMode": "auto",
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
             "text": "A",
-            "padding": 6,
             "style": {
               "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#58b368",
+              "radius": 16,
               "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Enter.in.pad_ps",
+            "name": "prompt.Enter.in.pad_ps",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.ps} = 1",
+            "text": "✕",
+            "style": {
+              "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#5b86d6",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Enter.in.pad_switch",
+            "name": "prompt.Enter.in.pad_switch",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.switch} = 1",
+            "text": "B",
+            "style": {
+              "fontSize": 20,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 14
-            }
+              "fill": "#e9e4d8",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
           },
           {
             "id": "prompt.Enter.verb",
@@ -21683,42 +22625,85 @@
         "type": "panel",
         "children": [
           {
-            "id": "prompt.Leave.key",
-            "name": "prompt.Leave.key",
+            "id": "prompt.Leave.in.key",
+            "name": "prompt.Leave.in.key",
             "type": "text",
             "children": [],
             "wMode": "auto",
             "hMode": "auto",
+            "visible": "{host.pad} != 1",
             "text": "E",
-            "padding": 5,
+            "padding": 4,
             "style": {
               "fontSize": 20,
-              "bold": true,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 7
+              "fill": "#f4ecd8",
+              "radius": 5,
+              "bold": true
             }
           },
           {
-            "id": "prompt.Leave.pad",
-            "name": "prompt.Leave.pad",
+            "id": "prompt.Leave.in.pad_xbox",
+            "name": "prompt.Leave.in.pad_xbox",
             "type": "text",
             "children": [],
-            "wMode": "auto",
-            "hMode": "auto",
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
             "text": "A",
-            "padding": 6,
             "style": {
               "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#58b368",
+              "radius": 16,
               "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Leave.in.pad_ps",
+            "name": "prompt.Leave.in.pad_ps",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.ps} = 1",
+            "text": "✕",
+            "style": {
+              "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#5b86d6",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Leave.in.pad_switch",
+            "name": "prompt.Leave.in.pad_switch",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.switch} = 1",
+            "text": "B",
+            "style": {
+              "fontSize": 20,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 14
-            }
+              "fill": "#e9e4d8",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
           },
           {
             "id": "prompt.Leave.verb",
@@ -21769,42 +22754,85 @@
         "type": "panel",
         "children": [
           {
-            "id": "prompt.Sit.key",
-            "name": "prompt.Sit.key",
+            "id": "prompt.Sit.in.key",
+            "name": "prompt.Sit.in.key",
             "type": "text",
             "children": [],
             "wMode": "auto",
             "hMode": "auto",
+            "visible": "{host.pad} != 1",
             "text": "E",
-            "padding": 5,
+            "padding": 4,
             "style": {
               "fontSize": 20,
-              "bold": true,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 7
+              "fill": "#f4ecd8",
+              "radius": 5,
+              "bold": true
             }
           },
           {
-            "id": "prompt.Sit.pad",
-            "name": "prompt.Sit.pad",
+            "id": "prompt.Sit.in.pad_xbox",
+            "name": "prompt.Sit.in.pad_xbox",
             "type": "text",
             "children": [],
-            "wMode": "auto",
-            "hMode": "auto",
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
             "text": "A",
-            "padding": 6,
             "style": {
               "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#58b368",
+              "radius": 16,
               "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Sit.in.pad_ps",
+            "name": "prompt.Sit.in.pad_ps",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.ps} = 1",
+            "text": "✕",
+            "style": {
+              "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#5b86d6",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Sit.in.pad_switch",
+            "name": "prompt.Sit.in.pad_switch",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.switch} = 1",
+            "text": "B",
+            "style": {
+              "fontSize": 20,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 14
-            }
+              "fill": "#e9e4d8",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
           },
           {
             "id": "prompt.Sit.verb",
@@ -21855,42 +22883,85 @@
         "type": "panel",
         "children": [
           {
-            "id": "prompt.Use.key",
-            "name": "prompt.Use.key",
+            "id": "prompt.Use.in.key",
+            "name": "prompt.Use.in.key",
             "type": "text",
             "children": [],
             "wMode": "auto",
             "hMode": "auto",
+            "visible": "{host.pad} != 1",
             "text": "E",
-            "padding": 5,
+            "padding": 4,
             "style": {
               "fontSize": 20,
-              "bold": true,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 7
+              "fill": "#f4ecd8",
+              "radius": 5,
+              "bold": true
             }
           },
           {
-            "id": "prompt.Use.pad",
-            "name": "prompt.Use.pad",
+            "id": "prompt.Use.in.pad_xbox",
+            "name": "prompt.Use.in.pad_xbox",
             "type": "text",
             "children": [],
-            "wMode": "auto",
-            "hMode": "auto",
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
             "text": "A",
-            "padding": 6,
             "style": {
               "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#58b368",
+              "radius": 16,
               "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Use.in.pad_ps",
+            "name": "prompt.Use.in.pad_ps",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.ps} = 1",
+            "text": "✕",
+            "style": {
+              "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#5b86d6",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Use.in.pad_switch",
+            "name": "prompt.Use.in.pad_switch",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.switch} = 1",
+            "text": "B",
+            "style": {
+              "fontSize": 20,
               "color": "#1b1722",
-              "fill": "#f6ecd2",
-              "border": "#f2b84b",
-              "borderWidth": 2,
-              "radius": 14
-            }
+              "fill": "#e9e4d8",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
           },
           {
             "id": "prompt.Use.verb",
