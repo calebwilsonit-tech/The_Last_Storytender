@@ -7,6 +7,7 @@
  * Bundled and run by run_porter.sh. Inputs come from environment variables: SNAP, ART, TILES, OUT.
  */
 import { buildScreens, equipmentOf, mapNamesFrom, uiTheme, wornBy, type ItemRow, type MapConstants, type MapNames } from './screens';
+import { promptify } from './prompts';
 import { decorateForge, forgeExtras, forgeRows, writeForgePrefabs, writeForgeTalk } from './forge';
 import { decoratePip, pipExtras, pipGapCells, pipMap, writePipTalk, type PipMap } from './pip';
 import { decorateMaud, maudExtras, maudGaps, maudMap, writeMaudTalk, type MaudMap } from './maud';
@@ -785,6 +786,11 @@ function writeInput(): void {
     schemaVersion: CURRENT_SCHEMA_VERSION,
     overrides: {
       interact: ['key:KeyE', 'key:Space', 'key:Enter', 'pad:button0'],
+      // she walks with the left stick and the keys; the D-pad is the styles and the map (as in the Godot game), not also a way to walk
+      move_left: ['key:KeyA', 'key:ArrowLeft', 'pad:axis0-'],
+      move_right: ['key:KeyD', 'key:ArrowRight', 'pad:axis0+'],
+      move_up: ['key:KeyW', 'key:ArrowUp', 'pad:axis1-'],
+      move_down: ['key:KeyS', 'key:ArrowDown', 'pad:axis1+'],
       jump: [], // the Storytender does not jump
       run: [], // Shift is the dash
       dodge: ['key:ShiftLeft', 'key:ShiftRight', 'pad:button1'],
@@ -795,6 +801,12 @@ function writeInput(): void {
       quick_1: [], quick_2: [], quick_3: [], quick_4: [], // the game has two quick slots, on F and G (1 2 3 are the styles)
     },
     actions: [
+      // in menus: B (or Backspace) goes back like Esc does, and the D-pad moves the choice
+      { id: 'ui_back', label: 'Back (menus)', bindings: ['pad:button1', 'key:Backspace'] },
+      { id: 'ui_up', label: 'Menu up', bindings: ['pad:button12'] },
+      { id: 'ui_down', label: 'Menu down', bindings: ['pad:button13'] },
+      { id: 'ui_left', label: 'Menu left', bindings: ['pad:button14'] },
+      { id: 'ui_right', label: 'Menu right', bindings: ['pad:button15'] },
       { id: 'lantern', label: 'Lantern (hold)', bindings: ['key:KeyQ', 'mouse:2', 'pad:axis4+'] },
       { id: 'sneak', label: 'Creep (hold)', bindings: ['key:ControlLeft', 'key:KeyC', 'pad:button10'] },
       { id: 'use_item', label: 'Use quick item', bindings: ['key:KeyF', 'pad:button3'] },
@@ -888,6 +900,7 @@ function main(): void {
   for (const k of order) {
     const scene = buildScene(k, snaps[k]!, art);
     if (k === 'overworld') writeCrystalPrefab(scene);
+    promptify(scene.entities as unknown as { name: string; components: Record<string, unknown> }[]);
     writeFileSync(join(OUT, SCENES[k]!.file), JSON.stringify(scene) + '\n');
     scenes.push(SCENES[k]!.file);
     console.log(`scene ${k}: ${scene.entities.length} objects, map ${scene.map.width} x ${scene.map.height}`);

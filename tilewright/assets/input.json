@@ -7,6 +7,26 @@
       "key:Enter",
       "pad:button0"
     ],
+    "move_left": [
+      "key:KeyA",
+      "key:ArrowLeft",
+      "pad:axis0-"
+    ],
+    "move_right": [
+      "key:KeyD",
+      "key:ArrowRight",
+      "pad:axis0+"
+    ],
+    "move_up": [
+      "key:KeyW",
+      "key:ArrowUp",
+      "pad:axis1-"
+    ],
+    "move_down": [
+      "key:KeyS",
+      "key:ArrowDown",
+      "pad:axis1+"
+    ],
     "jump": [],
     "run": [],
     "dodge": [
@@ -39,6 +59,42 @@
     "quick_4": []
   },
   "actions": [
+    {
+      "id": "ui_back",
+      "label": "Back (menus)",
+      "bindings": [
+        "pad:button1",
+        "key:Backspace"
+      ]
+    },
+    {
+      "id": "ui_up",
+      "label": "Menu up",
+      "bindings": [
+        "pad:button12"
+      ]
+    },
+    {
+      "id": "ui_down",
+      "label": "Menu down",
+      "bindings": [
+        "pad:button13"
+      ]
+    },
+    {
+      "id": "ui_left",
+      "label": "Menu left",
+      "bindings": [
+        "pad:button14"
+      ]
+    },
+    {
+      "id": "ui_right",
+      "label": "Menu right",
+      "bindings": [
+        "pad:button15"
+      ]
+    },
     {
       "id": "lantern",
       "label": "Lantern (hold)",

@@ -70,11 +70,17 @@ const screen = (name: string, root: W, o: Partial<Screen> = {}): Screen => ({ id
  * The button legend along the bottom of every menu (menu_legend.gd): a dark rounded bar, a key cap and a word per entry.
  * The game's own legend swaps keyboard caps for pad buttons; this one names both.
  */
+const PAD_BUTTON: Record<string, string> = { 'W A S D': 'D-pad', 'W S': 'D-pad', 'A D': 'D-pad', 'A / D': 'D-pad', E: 'A', Esc: 'B', Tab: 'B', M: 'B' };
 function legend(id: string, entries: [string, string][]): W {
-  const kids = entries.flatMap(([cap, label], i) => [
-    w('text', `${id}.cap${i}`, { wMode: 'auto', hMode: 'auto', text: cap, style: { fontSize: 17, color: C.ink, fill: C.legendText, radius: 5, bold: true }, padding: 4 }),
-    w('text', `${id}.label${i}`, { wMode: 'auto', hMode: 'auto', text: label, style: { fontSize: 20, color: C.legendText } }),
-  ]);
+  const kids = entries.flatMap(([cap, label], i) => {
+    const pad = PAD_BUTTON[cap];
+    return [
+      w('text', `${id}.cap${i}`, { wMode: 'auto', hMode: 'auto', text: cap, style: { fontSize: 17, color: C.ink, fill: C.legendText, radius: 5, bold: true }, padding: 4 }),
+      // the same button on a pad, in gold
+      ...(pad ? [w('text', `${id}.pad${i}`, { wMode: 'auto', hMode: 'auto', text: pad, style: { fontSize: 15, color: C.ink, fill: C.gold, radius: 12, bold: true }, padding: 4 })] : []),
+      w('text', `${id}.label${i}`, { wMode: 'auto', hMode: 'auto', text: label, style: { fontSize: 20, color: C.legendText } }),
+    ];
+  });
   return w('panel', id, { name: 'Legend', anchor: 'b', x: 0, y: 14, wMode: 'auto', hMode: 'fixed', h: 36, layout: 'row', align: 'center', gap: 10, padding: 6, style: { fill: C.legend, radius: 18 }, children: kids });
 }
 
@@ -198,11 +204,28 @@ function pause(): Screen {
     { id: 'pause.title', label: 'Save and return to title', click: [act('saveGame', { slot: 'autosave' }), setVar('saved_run', '1'), act('music', { name: 'music_title' }), close('role:pause'), open('role:title')] },
     { id: 'pause.quit', label: 'Quit game', click: [act('saveGame', { slot: 'autosave' }), act('quitGame')], visible: '{host.quit}' },
   ];
-  const kids = [
-    text('pause.head', 'Paused', 450, 128, 56, C.paperLight),
-    column('pause.menu', 450, 222, 380, 50, 8, 26, items),
-    legend('pause.legend', [['W A S D', 'Move'], ['E', 'Select'], ['Esc', 'Resume']]),
-  ];
+  // a page of parchment that is as tall as the choices it holds (the memory's extra choices come and go)
+  const card = w('panel', 'pause.card', {
+    name: 'Pause card',
+    anchor: 'c',
+    x: 0,
+    y: -10,
+    w: 520,
+    wMode: 'fixed',
+    hMode: 'auto',
+    layout: 'column',
+    align: 'stretch',
+    gap: 12,
+    padding: 30,
+    style: { fill: C.paper, border: C.inkBrown, borderWidth: 4, radius: 6, shadow: true },
+    children: [
+      w('text', 'pause.head', { name: 'Paused', wMode: 'fill', hMode: 'auto', text: 'Paused', style: { fontSize: 54, color: C.ink, align: 'center', bold: true } }),
+      rule('pause.rule', 0, 0, 100, C.gold, 4),
+      w('panel', 'pause.menu', { name: 'Menu', wMode: 'fill', hMode: 'auto', layout: 'column', align: 'stretch', gap: 8, padding: 0, style: {}, children: column('pause.menu.col', 0, 0, 460, 50, 8, 26, items).children }),
+    ],
+  });
+  Object.assign(card.children[1]!, { wMode: 'fill', hMode: 'fixed', anchor: 'tl', x: 0, y: 0, h: 4 });
+  const kids = [card, legend('pause.legend', [['W A S D', 'Move'], ['E', 'Select'], ['Esc', 'Resume']])];
   return screen('Pause', stage('pause', kids), { id: 'storytender-pause', role: 'pause', dim: 0.6 });
 }
 
@@ -402,6 +425,32 @@ const CHAPTERS = [
   { name: 'Chapter Two', sub: 'Purple Prose Swamp', open: false },
   { name: 'Chapter Three', sub: 'The Final Chapter', open: false },
 ];
+
+/**
+ * The pop-up over something you can use (a person, a sign, a chest, a door): a dark pill with the key and the pad button and what they do.
+ * One prefab per verb; prompts.ts hangs the right one over each object.
+ */
+export const PROMPT_VERBS = ['Talk', 'Read', 'Open', 'Take', 'Enter', 'Leave', 'Sit', 'Use'] as const;
+export const promptPrefab = (verb: string): string => `Prompt ${verb}`;
+function prompt(verb: string): W {
+  const cap = (id: string, t: string, round = false): W =>
+    w('text', `prompt.${verb}.${id}`, { wMode: 'auto', hMode: 'auto', text: t, padding: round ? 6 : 5, style: { fontSize: 20, bold: true, color: C.ink, fill: C.paperLight, border: C.gold, borderWidth: 2, radius: round ? 14 : 7 } });
+  return w('panel', `prompt.${verb}`, {
+    name: `Prompt: ${verb}`,
+    anchor: 'tl',
+    x: 0,
+    y: 0,
+    wMode: 'auto',
+    hMode: 'auto',
+    layout: 'row',
+    align: 'center',
+    gap: 6,
+    padding: 8,
+    style: { fill: '#1b1722ea', border: C.gold, borderWidth: 2, radius: 16, shadow: true },
+    anim: [{ on: 'show', kind: 'fade', ms: 220, dir: 'up' }],
+    children: [cap('key', 'E'), cap('pad', 'A', true), w('text', `prompt.${verb}.verb`, { wMode: 'auto', hMode: 'auto', text: verb, style: { fontSize: 22, color: C.legendText, bold: true } })],
+  });
+}
 
 function lamp(): W {
   return box('lamp', 0, 0, 14, 22, {}, [
@@ -909,6 +958,7 @@ export function buildScreens(itemIds: string[], schemaVersion: number, paperTile
       { name: 'DarkPost', widget: darkPost() },
       { name: 'Door', widget: memoryDoor() },
       { name: 'Blank', widget: blankMark() },
+      ...PROMPT_VERBS.map((v) => ({ name: promptPrefab(v), widget: prompt(v) })),
     ],
     safeArea: 0,
   };
