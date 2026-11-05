@@ -29,6 +29,8 @@ export default defineScript({
     const s = me.state;
     const p = game.player;
     if (!p) return;
+    // it faces her (a screen direction: 0 right, 2 down; a grid step (dx, dy) moves the screen by (dx - dy, (dx + dy) / 2)), so the view of it that fits shows
+    me.facing = (Math.round(Math.atan2((p.x - me.x + (p.y - me.y)) / 2, p.x - me.x - (p.y - me.y)) / (Math.PI / 4)) % 8 + 8) % 8;
     if (v.cutscene_on) return;
     const mult = v.difficulty === 'story' ? 0.6 : 1;
     s.t += game.dt;

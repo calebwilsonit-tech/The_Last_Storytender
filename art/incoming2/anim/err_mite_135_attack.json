@@ -1,0 +1,14 @@
+{
+ "num_frames": 9,
+ "num_cols": 3,
+ "num_rows": 3,
+ "credits": 2.3,
+ "job": {
+  "out": "art/incoming2/anim/err_mite_135_attack",
+  "image": "art/incoming2/directions/err_mite_135_s0.png",
+  "motion": "rearing up and slamming both paws down",
+  "model": "forge",
+  "duration": 1.5,
+  "frames": 9
+ }
+}

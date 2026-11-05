@@ -46,7 +46,8 @@ export default defineScript({
     if (v.lantern_on && me.distanceTo(p) < 320 / K) rate *= 0.45;
     if (s.mode === 'rest') rate *= 0.3;
     s.ang += Math.max(-rate * game.dt, Math.min(rate * game.dt, diff));
-    me.facing = (Math.round((s.ang / Math.PI) * 4) + 8) % 8;
+    // (s.ang is a direction on the grid; the sprite's views are by direction on the screen)
+    me.facing = (Math.round(Math.atan2((Math.cos(s.ang) + Math.sin(s.ang)) / 2, Math.cos(s.ang) - Math.sin(s.ang)) / (Math.PI / 4)) % 8 + 8) % 8;
     // a hit: only from behind (more than 2 rad off its facing) or while it rests
     if (hp && health) {
       if (s.hp === undefined) s.hp = hp.hp;

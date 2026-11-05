@@ -453,7 +453,7 @@ const CHAPTERS = [
  * The pop-up over something you can use (a person, a sign, a chest, a door): a dark pill with the key and the pad button and what they do.
  * One prefab per verb; prompts.ts hangs the right one over each object.
  */
-export const PROMPT_VERBS = ['Talk', 'Read', 'Open', 'Take', 'Enter', 'Leave', 'Sit', 'Use'] as const;
+export const PROMPT_VERBS = ['Talk', 'Read', 'Open', 'Take', 'Enter', 'Leave', 'Sit', 'Use', 'Light'] as const;
 export const promptPrefab = (verb: string): string => `Prompt ${verb}`;
 function prompt(verb: string): W {
   return w('panel', `prompt.${verb}`, {
@@ -469,7 +469,16 @@ function prompt(verb: string): W {
     padding: 8,
     style: { fill: '#1b1722ea', border: C.gold, borderWidth: 2, radius: 16, shadow: true },
     anim: [{ on: 'show', kind: 'fade', ms: 220, dir: 'up' }],
-    children: [...inputGlyphs(`prompt.${verb}.in`, 'E', 'A', 20), w('text', `prompt.${verb}.verb`, { wMode: 'auto', hMode: 'auto', text: verb, style: { fontSize: 22, color: C.legendText, bold: true } })],
+    children: [
+      ...inputGlyphs(`prompt.${verb}.in`, 'E', 'A', 20),
+      // a lantern post: "Light" until it is lit (its picture is the lit one), then "Rest"
+      ...(verb === 'Light'
+        ? [
+            w('text', `prompt.${verb}.light`, { wMode: 'auto', hMode: 'auto', visible: '{self.sprite.asset} != obj_post_lit', text: 'Light', style: { fontSize: 22, color: C.legendText, bold: true } }),
+            w('text', `prompt.${verb}.rest`, { wMode: 'auto', hMode: 'auto', visible: '{self.sprite.asset} = obj_post_lit', text: 'Rest', style: { fontSize: 22, color: C.legendText, bold: true } }),
+          ]
+        : [w('text', `prompt.${verb}.verb`, { wMode: 'auto', hMode: 'auto', text: verb, style: { fontSize: 22, color: C.legendText, bold: true } })]),
+    ],
   });
 }
 

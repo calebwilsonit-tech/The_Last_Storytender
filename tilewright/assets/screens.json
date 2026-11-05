@@ -23003,6 +23003,151 @@
           }
         ]
       }
+    },
+    {
+      "name": "Prompt Light",
+      "widget": {
+        "id": "prompt.Light",
+        "name": "Prompt: Light",
+        "type": "panel",
+        "children": [
+          {
+            "id": "prompt.Light.in.key",
+            "name": "prompt.Light.in.key",
+            "type": "text",
+            "children": [],
+            "wMode": "auto",
+            "hMode": "auto",
+            "visible": "{host.pad} != 1",
+            "text": "E",
+            "padding": 4,
+            "style": {
+              "fontSize": 20,
+              "color": "#1b1722",
+              "fill": "#f4ecd8",
+              "radius": 5,
+              "bold": true
+            }
+          },
+          {
+            "id": "prompt.Light.in.pad_xbox",
+            "name": "prompt.Light.in.pad_xbox",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.pad} = 1 && {host.ps} != 1 && {host.switch} != 1",
+            "text": "A",
+            "style": {
+              "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#58b368",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Light.in.pad_ps",
+            "name": "prompt.Light.in.pad_ps",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.ps} = 1",
+            "text": "✕",
+            "style": {
+              "fontSize": 20,
+              "color": "#ffffff",
+              "fill": "#5b86d6",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Light.in.pad_switch",
+            "name": "prompt.Light.in.pad_switch",
+            "type": "text",
+            "children": [],
+            "wMode": "fixed",
+            "hMode": "fixed",
+            "w": 32,
+            "h": 32,
+            "visible": "{host.switch} = 1",
+            "text": "B",
+            "style": {
+              "fontSize": 20,
+              "color": "#1b1722",
+              "fill": "#e9e4d8",
+              "radius": 16,
+              "bold": true,
+              "align": "center"
+            },
+            "padding": 2
+          },
+          {
+            "id": "prompt.Light.light",
+            "name": "prompt.Light.light",
+            "type": "text",
+            "children": [],
+            "wMode": "auto",
+            "hMode": "auto",
+            "visible": "{self.sprite.asset} != obj_post_lit",
+            "text": "Light",
+            "style": {
+              "fontSize": 22,
+              "color": "#f4ecd8",
+              "bold": true
+            }
+          },
+          {
+            "id": "prompt.Light.rest",
+            "name": "prompt.Light.rest",
+            "type": "text",
+            "children": [],
+            "wMode": "auto",
+            "hMode": "auto",
+            "visible": "{self.sprite.asset} = obj_post_lit",
+            "text": "Rest",
+            "style": {
+              "fontSize": 22,
+              "color": "#f4ecd8",
+              "bold": true
+            }
+          }
+        ],
+        "anchor": "tl",
+        "x": 0,
+        "y": 0,
+        "wMode": "auto",
+        "hMode": "auto",
+        "layout": "row",
+        "align": "center",
+        "gap": 6,
+        "padding": 8,
+        "style": {
+          "fill": "#1b1722ea",
+          "border": "#f2b84b",
+          "borderWidth": 2,
+          "radius": 16,
+          "shadow": true
+        },
+        "anim": [
+          {
+            "on": "show",
+            "kind": "fade",
+            "ms": 220,
+            "dir": "up"
+          }
+        ]
+      }
     }
   ],
   "safeArea": 0

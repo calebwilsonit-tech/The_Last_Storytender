@@ -203,6 +203,7 @@ export function decorateOverworld(e: EntityData, node: { class: string; props: R
     const who = near(cell, [93, 55], 1.5) ? 'garrick' : near(cell, [91, 52], 1.5) ? 'pip' : 'maud';
     e.name = who[0]!.toUpperCase() + who.slice(1);
     e.tags.push('npc', who);
+    w.attach(c, 'script_Face', { radius: 7 }); // they turn to look at her (their pictures show every direction)
     talk(who);
     return;
   }

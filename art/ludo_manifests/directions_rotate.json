@@ -1,0 +1,432 @@
+[
+ {
+  "out": "art/incoming2/directions/err_bare_045",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_bare_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_bare_090",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_bare_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_bare_135",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_bare_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_bare_180",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_bare_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_censor_045",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_censor_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_censor_090",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_censor_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_censor_135",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_censor_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_censor_180",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_censor_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_dangler_045",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_dangler_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_dangler_090",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_dangler_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_dangler_135",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_dangler_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_dangler_180",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_dangler_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_ellipsis_045",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_ellipsis_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_ellipsis_090",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_ellipsis_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_ellipsis_135",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_ellipsis_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_ellipsis_180",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_ellipsis_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_mite_045",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_mite_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_mite_090",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_mite_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_mite_135",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_mite_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_mite_180",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_mite_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_runon_045",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_runon_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_runon_090",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_runon_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_runon_135",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_runon_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/directions/err_runon_180",
+  "kind": "rotate",
+  "image": "art/incoming2/errors/err_runon_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_cold_045",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_cold_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_cold_090",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_cold_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_cold_135",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_cold_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_cold_180",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_cold_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_critic_045",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_critic_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_critic_090",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_critic_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_critic_135",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_critic_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_critic_180",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_critic_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_spoiler_045",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_spoiler_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_spoiler_090",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_spoiler_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_spoiler_135",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_spoiler_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_spoiler_180",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_spoiler_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_scissor_045",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_scissor_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 45
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_scissor_090",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_scissor_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_scissor_135",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_scissor_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 135
+  }
+ },
+ {
+  "out": "art/incoming2/directions/boss_scissor_180",
+  "kind": "rotate",
+  "image": "art/incoming2/bosses/boss_scissor_idle.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 180
+  }
+ },
+ {
+  "out": "art/incoming2/directions/garrick_090",
+  "kind": "rotate",
+  "image": "art/incoming2/characters/garrick_S.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ },
+ {
+  "out": "art/incoming2/directions/pip_090",
+  "kind": "rotate",
+  "image": "art/incoming2/characters/pip_S.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ },
+ {
+  "out": "art/incoming2/directions/maud_090",
+  "kind": "rotate",
+  "image": "art/incoming2/characters/maud_S.png",
+  "n": 1,
+  "rmbg": true,
+  "extra": {
+   "camera_rotation": 90
+  }
+ }
+]

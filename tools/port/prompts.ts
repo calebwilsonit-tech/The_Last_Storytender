@@ -25,6 +25,16 @@ export function verbOf(dialogue: string): string {
 export function promptify(entities: Ent[]): number {
   let n = 0;
   for (const e of entities) {
+    // a lantern post: its own text hint off, "Light" / "Rest" over it instead
+    const post = e.components.checkpoint as { reach: number; hint: boolean } | undefined;
+    if (post) {
+      post.hint = false;
+      const key = `p${++n}`;
+      e.components.script_Prompt = { key, reach: post.reach };
+      e.tags = [...(e.tags ?? []), 'prompt'];
+      e.components.worldUi = { prefab: promptPrefab('Light'), height: 2.9, showWhen: `{prompt_focus} = ${key}`, maxDistance: Math.max(1.5, post.reach) };
+      continue;
+    }
     const t = e.components.npcTalk as { dialogue: string; reach: number; hint: boolean } | undefined;
     if (!t || !t.hint || !t.dialogue) continue;
     t.hint = false;

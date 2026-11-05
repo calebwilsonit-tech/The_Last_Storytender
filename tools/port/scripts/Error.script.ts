@@ -400,7 +400,8 @@ export default defineScript({
         break;
       }
     }
-    const fa = Math.round((Math.atan2(s.face.y, s.face.x) / Math.PI) * 4);
+    // (s.face is a direction on the grid; the sprite's views are by direction on the screen: a grid step (dx, dy) moves the screen by (dx - dy, (dx + dy) / 2))
+    const fa = Math.round(Math.atan2((s.face.x + s.face.y) / 2, s.face.x - s.face.y) / (Math.PI / 4));
     me.facing = ((fa % 8) + 8) % 8;
   },
 });

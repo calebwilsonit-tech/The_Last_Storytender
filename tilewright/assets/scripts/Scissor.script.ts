@@ -58,6 +58,8 @@ export default defineScript({
     const p = game.player;
     const dt = game.dt;
     if (!p) return;
+    // it faces her (a screen direction: 0 right, 2 down; a grid step (dx, dy) moves the screen by (dx - dy, (dx + dy) / 2)), so the view of it that fits shows
+    me.facing = (Math.round(Math.atan2((p.x - me.x + (p.y - me.y)) / 2, p.x - me.x - (p.y - me.y)) / (Math.PI / 4)) % 8 + 8) % 8;
     if (v.cutscene_on) return;
     if (s.finale) {
       finale(me, game);

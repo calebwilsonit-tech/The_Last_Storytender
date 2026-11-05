@@ -33,6 +33,15 @@ try {
     await page.waitForTimeout(900);
     const frames = new Set();
     for (let i = 0; i < 12; i++) { frames.add(await page.evaluate((id) => [...window.__play.sim.world.query('script_Flagged')].find((e) => e.id === id)?.get('animator')?.frame, posts[0].id)); await page.waitForTimeout(150); }
+    // the prompt over it: "Light" until it is lit, then "Rest" (and no text drawn on the post)
+    const ptext = () => page.evaluate(() => [...document.querySelectorAll('.tw-world-item *')].filter((x) => x.children.length === 0 && x.getBoundingClientRect().width > 0).map((x) => (x.textContent ?? '').trim()).filter(Boolean));
+    const lit0 = await page.evaluate((id) => { const e = [...window.__play.sim.world.query('script_Flagged')].find((q) => q.id === id); const k = e.get('script_Flagged').lookWhen; const was = window.__play.sim.runtime.vars[k]; return was; }, posts[0].id);
+    check('the lit post offers to rest', (await ptext()).includes('Rest'), (await ptext()).join('|'));
+    await page.evaluate((id) => { const e = [...window.__play.sim.world.query('script_Flagged')].find((q) => q.id === id); window.__play.sim.runtime.vars[e.get('script_Flagged').lookWhen] = 0; e.set('sprite', { ...e.get('sprite'), asset: 'obj_post_unlit' }); }, posts[0].id);
+    await page.waitForTimeout(700);
+    check('an unlit post offers to light it', (await ptext()).includes('Light'), (await ptext()).join('|') + ' ' + lit0);
+    const texts = await page.evaluate(() => [...window.__play.sim.world.query('label')].map((e) => e.get('label').text).filter((x) => /E: /.test(x)));
+    check('and no "E: ..." text is drawn on the post', texts.length === 0, texts.join('|'));
     check('its flame moves (the animation plays)', frames.size > 2, [...frames].join(','));
   }
 } catch (e) {
